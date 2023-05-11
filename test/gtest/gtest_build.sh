@@ -19,14 +19,6 @@ if [ -d $buildDir ]; then
     fi
 fi
 
-# NOTE: 実行とテストでカレントディレクトリが異なり，テストの際にファイルパスの指定ができないため，テスト用にdatafiles/及びscripts/ディレクトリを作成・コピーする
-mkdir -p build/etrobocon2023/datafiles
-mkdir -p build/etrobocon2023/scripts
-cd build
-# cp ../datafiles/*.csv etrobocon2023/datafiles/ CIでエラーが消えなかったのでいったんコメントアウト
-cp ../scripts/*.sh etrobocon2023/scripts/
-chmod 777 ./etrobocon2023/scripts/*.sh
-
 cmake -DCMAKE_BUILD_TYPE=Coverage ..
 cmake --build .
 export GTEST_COLOR=1
