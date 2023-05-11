@@ -67,16 +67,10 @@ endif()
 # -------------------
 # Google Test のために、ヘッダファイルのあるディレクトリを指定する？
 include_directories(${PROJECT_SOURCE_DIR}/module)
-include_directories(${PROJECT_SOURCE_DIR}/module/API)
-include_directories(${PROJECT_SOURCE_DIR}/module/Calculator)
-include_directories(${PROJECT_SOURCE_DIR}/module/Motion)
-include_directories(${PROJECT_SOURCE_DIR}/module/common)
 include_directories(${PROJECT_SOURCE_DIR}/test/dummy)
-include_directories(${PROJECT_SOURCE_DIR}/test/test_data)
 include_directories(${GTEST_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/module)
 file(GLOB SRC_FILES
   ${PROJECT_SOURCE_DIR}/module/*.cpp
-  ${PROJECT_SOURCE_DIR}/module/*/*.cpp
   ${PROJECT_SOURCE_DIR}/test/dummy/*.cpp
 )
 add_library(etrobocon2023_impl ${SRC_FILES})
