@@ -1,7 +1,7 @@
 /**
  * @file app.cpp
  * @brief タスクを管理するクラス
- * @author miyashita64
+ * @author miyashita64 Kakki
  */
 
 #include "EtRobocon2023.h"
