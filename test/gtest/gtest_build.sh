@@ -23,7 +23,7 @@ fi
 mkdir -p build/etrobocon2023/datafiles
 mkdir -p build/etrobocon2023/scripts
 cd build
-cp ../datafiles/*.csv etrobocon2023/datafiles/
+# cp ../datafiles/*.csv etrobocon2023/datafiles/ CIでエラーが消えなかったのでいったんコメントアウト
 cp ../scripts/*.sh etrobocon2023/scripts/
 chmod 777 ./etrobocon2023/scripts/*.sh
 
