@@ -1,7 +1,7 @@
 /**
  * @file app.h
  * @brief タスクを管理するクラス
- * @author miyashita64 KakionkiKanta
+ * @author KakionkiKanta
  */
 
 #ifdef __cplusplus
