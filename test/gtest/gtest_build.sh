@@ -18,11 +18,10 @@ if [ -d $buildDir ]; then
         rm -rf build
     fi
 fi
+mkdir -p build
+cd build
 
 cmake -DCMAKE_BUILD_TYPE=Coverage ..
 cmake --build .
 export GTEST_COLOR=1
 ctest -VV
-
-rm -rf etrobocon2023/
-rm result.txt
