@@ -6,7 +6,7 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include "Measurer.h"
+// #include "Measurer.h" // TODO 他の人がこのファイルを作成したら、このコメントアウトを消す
 #include "ev3api.h"
 #include "Motor.h"
 #include "Clock.h"
@@ -58,7 +58,7 @@ class Controller {
   ev3api::Motor armMotor;
   ev3api::Clock clock;
 
-  Measurer measurer;
+  // Measurer measurer; // TODO Measurer.hを作成したら、このコメントアウトを消す
 
   /**
    * モータに設定するPWM値の制限
