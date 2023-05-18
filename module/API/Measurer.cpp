@@ -1,5 +1,5 @@
 /**
- * @file Measurer.cpp
+ * @file Measurer.h
  * @brief 計測に用いる関数をまとめたラッパークラス
  * @author YKhm20020
  */
