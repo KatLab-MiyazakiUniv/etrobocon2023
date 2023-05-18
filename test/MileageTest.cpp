@@ -44,4 +44,4 @@ namespace etrobocon2022_test {
     double actual = Mileage::calculateMileage(rightAngle, leftAngle);
     EXPECT_DOUBLE_EQ(expected, actual);
   }
-}
+}  // namespace etrobocon2022_test
