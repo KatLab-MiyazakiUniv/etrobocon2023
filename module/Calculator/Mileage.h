@@ -1,7 +1,11 @@
 /**
  **  @file Mileage.h
  **  @brief 走行距離を計算するクラス
+<<<<<<< HEAD
  **  @author desty505
+=======
+ **  @author TanakaShinnosuke
+>>>>>>> work-4
  **/
 
 #ifndef MILEAGE_H
