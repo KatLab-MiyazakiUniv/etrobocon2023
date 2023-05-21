@@ -10,7 +10,7 @@ using namespace ev3api;
 // コンストラクタ
 SonarSensor::SonarSensor(ePortS port) : distance(100) {}
 
-// RGB値を取得
+// センサーまでの距離を取得
 int SonarSensor::getDistance()
 {
   // 呼び出すたびにdistanceを1引く（0~100）

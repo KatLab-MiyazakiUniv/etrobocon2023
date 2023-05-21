@@ -16,14 +16,13 @@ bool eqRgb(rgb_raw_t rgb1, rgb_raw_t rgb2)
 namespace etrobocon2023_test {
   TEST(MeasurerTest, getRawColor)
   {
-    Measurer measurer;
     rgb_raw_t expected1 = { 8, 9, 10 };       // black
     rgb_raw_t expected2 = { 104, 101, 146 };  // white
     rgb_raw_t expected3 = { 111, 19, 19 };    // red
     rgb_raw_t expected4 = { 120, 108, 71 };   // yellow
     rgb_raw_t expected5 = { 4, 75, 35 };      // green
     rgb_raw_t expected6 = { 81, 92, 144 };    // blue
-    rgb_raw_t actual = measurer.getRawColor();
+    rgb_raw_t actual = Measurer::getRawColor();
 
     ASSERT_TRUE(eqRgb(actual, expected1) || eqRgb(actual, expected2) || eqRgb(actual, expected3)
                 || eqRgb(actual, expected4) || eqRgb(actual, expected5)

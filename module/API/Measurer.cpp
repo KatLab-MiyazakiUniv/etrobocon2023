@@ -1,5 +1,5 @@
 /**
- * @file Measurer.h
+ * @file Measurer.cpp
  * @brief 計測に用いる関数をまとめたラッパークラス
  * @author YKhm20020
  */
@@ -29,27 +29,35 @@ int Measurer::getBrightness()
 // RGB値を取得
 rgb_raw_t Measurer::getRawColor()
 {
+  Measurer measurer;
+
   rgb_raw_t rgb;
-  colorSensor.getRawColor(rgb);
+  measurer.colorSensor.getRawColor(rgb);
   return rgb;
 }
 
 // 左モータ角位置取得
 int Measurer::getLeftCount()
 {
-  return leftWheel.getCount();
+  Measurer measurer;
+
+  return measurer.leftWheel.getCount();
 }
 
 // 右モータ角位置取得
 int Measurer::getRightCount()
 {
-  return rightWheel.getCount();
+  Measurer measurer;
+
+  return measurer.rightWheel.getCount();
 }
 
 // アームモータ角位置取得
 int Measurer::getArmMotorCount()
 {
-  return armMotor.getCount();
+  Measurer measurer;
+
+  return measurer.armMotor.getCount();
 }
 
 // 正面から見て左ボタンの押下状態を取得
@@ -73,7 +81,9 @@ bool Measurer::getEnterButton()
 // 超音波センサからの距離を取得
 int Measurer::getForwardDistance()
 {
-  int distance = sonarSensor.getDistance();
+  Measurer measurer;
+
+  int distance = measurer.sonarSensor.getDistance();
 
   // センサが認識していない時が-1になる
   if(distance == -1) distance = 1000;

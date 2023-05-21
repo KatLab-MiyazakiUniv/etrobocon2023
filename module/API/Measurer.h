@@ -1,5 +1,5 @@
 /**
- * @file Measurer.cpp
+ * @file Measurer.h
  * @brief 計測に用いる関数をまとめたラッパークラス
  * @author YKhm20020
  */
@@ -16,72 +16,69 @@
 class Measurer {
  public:
   /**
-   * コンストラクタ
-   */
-  Measurer();
-
-  /**
    * 明るさを取得
    * @return 反射光の強さ(0-100)
    */
-  int getBrightness();
+  static int getBrightness();
 
   /**
    * RGB値を取得
    * @return RGB値
    */
-  rgb_raw_t getRawColor();
+  static rgb_raw_t getRawColor();
 
   /**
-   * 左モータ角位置取得
+   * 左モータ角位置を取得
    * @return 左モータ角位置[deg]
    */
-  int getLeftCount();
+  static int getLeftCount();
 
   /**
-   * 右モータ角位置取得
+   * 右モータ角位置を取得
    * @return 右モータ角位置[deg]
    */
-  int getRightCount();
+  static int getRightCount();
 
   /**
-   * アームモータ角位置取得
+   * アームモータ角位置を取得
    * @return アームモータ角位置[deg]
    */
-  int getArmMotorCount();
+  static int getArmMotorCount();
 
   /**
    * 正面から見て左ボタンの押下状態を取得
-   * @return 左ボタンの押下状態 true:押されてる, false：押されていない
+   * @return 左ボタンの押下状態 true:押されている, false：押されていない
    */
-  bool getLeftButton();
+  static bool getLeftButton();
 
   /**
    * 正面から見て右ボタンの押下状態を取得
-   * @return 右ボタンの押下状態 true:押されてる, false：押されていない
+   * @return 右ボタンの押下状態 true:押されている, false：押されていない
    */
-  bool getRightButton();
+  static bool getRightButton();
 
   /**
    * 中央ボタンの押下状態を取得
-   * @return 中央ボタンの押下状態 true:押されてる, false：押されていない
+   * @return 中央ボタンの押下状態 true:押されている, false：押されていない
    */
-  bool getEnterButton();
+  static bool getEnterButton();
 
   /**
    * 超音波センサからの距離を取得
    * @return 超音波センサからの距離[cm]
    * @note センサが認識していない時は1000を返す
    */
-  int getForwardDistance();
+  static int getForwardDistance();
 
   /**
    * SPIKEの電圧を取得
    * @return SPIKEの電圧[V]
    */
-  double getVoltage();
+  static double getVoltage();
 
  private:
+  Measurer();  // インスタンス化を禁止する
+
   ev3api::ColorSensor colorSensor;
   ev3api::SonarSensor sonarSensor;
   ev3api::Motor leftWheel;
