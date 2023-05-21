@@ -213,7 +213,7 @@ namespace etrobocon2023_test {
     double targetValue = 70;
     Pid actualPid(kp, ki, kd, targetValue);
     double currentValue = 60;
-    double currentDeviation = (targetValue - currentValue);                  // 現在の偏差
+    double currentDeviation = (targetValue - currentValue);
     double preDeviation = 0;
     double expected = ((preDeviation + currentDeviation) * DELTA / 2) * ki;  // I制御
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
