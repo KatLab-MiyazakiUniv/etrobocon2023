@@ -1,7 +1,11 @@
 /**
  * @file Pid.h
  * @brief PIDを計算するクラス
+<<<<<<< HEAD
  * @author Negihara
+=======
+ * @author Negimarge
+>>>>>>> work-2
  */
 
 #ifndef PID_H
@@ -33,7 +37,11 @@ class Pid {
   Pid(double _kp, double _ki, double _kd, double _targetValue);
 
   /**
+<<<<<<< HEAD
    * @fn void setPidGain(double _kp, double _ki, double _kd);
+=======
+   * void setPidGain(double _kp, double _ki, double _kd);
+>>>>>>> work-2
    * @brief PIDゲインを設定する
    * @param _kp Pゲイン
    * @param _ki Iゲイン
@@ -42,7 +50,11 @@ class Pid {
   void setPidGain(double _kp, double _ki, double _kd);
 
   /**
+<<<<<<< HEAD
    * @fn double calculatePid(double currentValue, double delta = 0.01);
+=======
+   * double calculatePid(double currentValue, double delta = 0.01);
+>>>>>>> work-2
    * @brief PIDを計算する
    * @param currentValue 現在値
    * @param delta 周期[ms](デフォルト値0.01[10ms]、省略可)

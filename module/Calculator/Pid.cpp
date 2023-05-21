@@ -1,7 +1,11 @@
 /**
  * @file Pid.cpp
  * @brief PIDを計算するクラス
+<<<<<<< HEAD
  * @author Negihara
+=======
+ * @author Negimarge
+>>>>>>> work-2
  */
 
 #include "Pid.h"
@@ -22,12 +26,21 @@ void Pid::setPidGain(double _kp, double _ki, double _kd)
 
 double Pid::calculatePid(double currentValue, double delta)
 {
+<<<<<<< HEAD
   // 0除算を避けるために0の場合はデフォルト周期0.01とする
   // delta 周期[ms](デフォルト値0.01[10ms]、省略可)
   if(delta == 0) delta = 0.01;
   // 現在の偏差を求める(目標値と現在値の差)
   double currentDeviation = targetValue - currentValue;
   // 積分の処理を行う
+=======
+  // delta 周期[ms](デフォルト値0.01[10ms]、省略可)
+  // 0除算を避けるために0の場合はデフォルト周期0.01とする
+  if(delta == 0) delta = 0.01;
+  // 現在の偏差を求める(目標値と現在値の差)
+  double currentDeviation = targetValue - currentValue;
+  // 積分の処理を行う(前回の誤差上辺、今回の誤差を下辺とする台形の面積を求める)
+>>>>>>> work-2
   integral += (preDeviation + currentDeviation) * delta / 2;
   // 微分の処理を行う(偏差の時間(delta)に対する傾きを近似)
   double difference = (currentDeviation - preDeviation) / delta;
@@ -42,5 +55,9 @@ double Pid::calculatePid(double currentValue, double delta)
   double d = gain.kd * difference;
 
   // 操作量 = P制御 + I制御 + D制御
+<<<<<<< HEAD
   return (p + i + d);
+=======
+  return p + i + d;
+>>>>>>> work-2
 }
