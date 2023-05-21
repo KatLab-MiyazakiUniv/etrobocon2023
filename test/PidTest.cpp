@@ -188,4 +188,51 @@ namespace etrobocon2023_test {
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
   }
 
+  // calculatePidのテスト(pゲイン以外の値が0の場合)
+  TEST(PidTest, caluclateOnlyP)
+  {
+    constexpr double DELTA = 0.01;
+    double kp = 1.0;
+    double ki = 0.0;
+    double kd = 0.0;
+    double targetValue = 70;
+    Pid actualPid(kp, ki, kd, targetValue);
+    double currentValue = 60;
+    double currentDeviation = (targetValue - currentValue);  // 現在の偏差
+    double expected = currentDeviation * kp;                 // P制御
+    EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
+  }
+
+  // calculatePidのテスト(iゲイン以外の値が0の場合)
+  TEST(PidTest, caluclateOnlyI)
+  {
+    constexpr double DELTA = 0.01;
+    double kp = 0.0;
+    double ki = 1.0;
+    double kd = 0.0;
+    double targetValue = 70;
+    Pid actualPid(kp, ki, kd, targetValue);
+    double currentValue = 60;
+    double currentDeviation = (targetValue - currentValue);                  // 現在の偏差
+    double preDeviation = 0;
+    double expected = ((preDeviation + currentDeviation) * DELTA / 2) * ki;  // I制御
+    EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
+  }
+
+  // calculatePidのテスト(dゲイン以外の値が0の場合)
+  TEST(PidTest, caluclateOnlyD)
+  {
+    constexpr double DELTA = 0.01;
+    double kp = 0.0;
+    double ki = 0.0;
+    double kd = 1.0;
+    double targetValue = 70;
+    Pid actualPid(kp, ki, kd, targetValue);
+    double currentValue = 60;
+    double preDeviation = 0;
+    double currentDeviation = (targetValue - currentValue);            // 現在の偏差
+    double expected = (currentDeviation - preDeviation) * kd / DELTA;  // D制御
+    EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
+  }
+
 }  // namespace etrobocon2023_test
