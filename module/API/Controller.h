@@ -6,17 +6,14 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-// #include "Measurer.h" // TODO 他の人がこのファイルを作成したら、このコメントアウトを消す
 #include "ev3api.h"
 #include "Motor.h"
 #include "Clock.h"
 
 class Controller {
  public:
-  static const int MOTOR_PWM_MAX = 100;
-  static const int MOTOR_PWM_MIN = -100;
-
   Controller();
+  Controller(const Controller&) = delete;  // 明示的にインスタンス化を禁止
 
   /**
    * タイヤのモータにPWM値をセット
@@ -47,18 +44,14 @@ class Controller {
    */
   void sleep(int milliSec = 10);
 
-  // /**
-  //  * シミュレータへ競技の終了を通知する
-  //  */
-  // void notifyCompletedToSimulator();
-
  private:
+  static const int MOTOR_PWM_MAX = 100;
+  static const int MOTOR_PWM_MIN = -100;
+
   ev3api::Motor rightWheel;
   ev3api::Motor leftWheel;
   ev3api::Motor armMotor;
   ev3api::Clock clock;
-
-  // Measurer measurer; // TODO Measurer.hを作成したら、このコメントアウトを消す
 
   /**
    * モータに設定するPWM値の制限
