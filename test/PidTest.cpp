@@ -52,10 +52,10 @@ namespace etrobocon2023_test {
     double currentValue = 20;
     double preDeviation = 0;
     double currentDeviation = (targetValue - currentValue);
-    double expectedP = currentDeviation * kp;
-    double expectedI = ((preDeviation + currentDeviation) * DELTA / 2.0) * ki;
-    double expectedD = (currentDeviation - preDeviation) * kd / DELTA;
-    double expected = expectedP + expectedI + expectedD;
+    double p = currentDeviation * kp;
+    double i = ((preDeviation + currentDeviation) * DELTA / 2.0) * ki;
+    double d = (currentDeviation - preDeviation) * kd / DELTA;
+    double expected = p + i + d;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
   }
 
@@ -70,10 +70,10 @@ namespace etrobocon2023_test {
     double currentValue = 40;
     double preDeviation = 0;
     double currentDeviation = (targetValue - currentValue);
-    double expectedP = currentDeviation * kp;
-    double expectedI = ((preDeviation + currentDeviation) * DELTA / 2.0) * ki;
-    double expectedD = (currentDeviation - preDeviation) * kd / DELTA;
-    double expected = expectedP + expectedI + expectedD;
+    double p = currentDeviation * kp;
+    double i = ((preDeviation + currentDeviation) * DELTA / 2.0) * ki;
+    double d = (currentDeviation - preDeviation) * kd / DELTA;
+    double expected = p + i + d;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
   }
 
@@ -88,10 +88,10 @@ namespace etrobocon2023_test {
     double currentValue = 0;
     double preDeviation = 0;
     double currentDeviation = (targetValue - currentValue);
-    double expectedP = currentDeviation * kp;
-    double expectedI = ((preDeviation + currentDeviation) * DELTA / 2) * ki;
-    double expectedD = (currentDeviation - preDeviation) * kd / DELTA;
-    double expected = expectedP + expectedI + expectedD;
+    double p = currentDeviation * kp;
+    double i = ((preDeviation + currentDeviation) * DELTA / 2) * ki;
+    double d = (currentDeviation - preDeviation) * kd / DELTA;
+    double expected = p + i + d;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
   }
 
@@ -106,10 +106,10 @@ namespace etrobocon2023_test {
     double currentValue = 55;
     double preDeviation = 0;
     double currentDeviation = (targetValue - currentValue);
-    double expectedP = currentDeviation * kp;
-    double expectedI = ((preDeviation + currentDeviation) * DELTA / 2) * ki;
-    double expectedD = (currentDeviation - preDeviation) * kd / DELTA;
-    double expected = expectedP + expectedI + expectedD;
+    double p = currentDeviation * kp;
+    double i = ((preDeviation + currentDeviation) * DELTA / 2) * ki;
+    double d = (currentDeviation - preDeviation) * kd / DELTA;
+    double expected = p + i + d;
     // 第2引数に周期を渡し、周期に応じた計算結果を返すことができるかを確認(デフォルトでは0.01が渡される)
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue, DELTA));
   }
@@ -125,10 +125,10 @@ namespace etrobocon2023_test {
     double currentValue = 55;
     double preDeviation = 0;
     double currentDeviation = (targetValue - currentValue);
-    double expectedP = currentDeviation * kp;
-    double expectedI = ((preDeviation + currentDeviation) * DELTA / 2) * ki;
-    double expectedD = (currentDeviation - preDeviation) * kd / DELTA;
-    double expected = expectedP + expectedI + expectedD;
+    double p = currentDeviation * kp;
+    double i = ((preDeviation + currentDeviation) * DELTA / 2) * ki;
+    double d = (currentDeviation - preDeviation) * kd / DELTA;
+    double expected = p + i + d;
     // 第2引数に周期を渡し、周期に応じた計算結果を返すことができるかを確認(デフォルトでは0.01が渡される)
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue, DELTA));
   }
@@ -146,10 +146,10 @@ namespace etrobocon2023_test {
     double currentValue = 55;
     double preDeviation = 0;
     double currentDeviation = (targetValue - currentValue);
-    double expectedP = currentDeviation * kp;
-    double expectedI = ((preDeviation + currentDeviation) * kdELTA / 2) * ki;
-    double expectedD = (currentDeviation - preDeviation) * kd / kdELTA;
-    double expected = expectedP + expectedI + expectedD;
+    double p = currentDeviation * kp;
+    double i = ((preDeviation + currentDeviation) * kdELTA / 2) * ki;
+    double d = (currentDeviation - preDeviation) * kd / kdELTA;
+    double expected = p + i + d;
     // 第2引数に周期を渡し、周期に応じた計算結果を返すことができるかを確認(デフォルトでは0.01が渡される)
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue, DELTA));
   }
@@ -165,12 +165,11 @@ namespace etrobocon2023_test {
     Pid actualPid(kp, ki, kd, targetValue);
     double currentValue = 60;
     double preDeviation = 0;
-    double currentDeviation = (targetValue - currentValue);      // 現在の偏差
-    double expectedP = currentDeviation * kp;                    // P制御
-    double expectedI
-        = ((preDeviation + currentDeviation) * DELTA / 2) * ki;  // I制御(誤差の累積は0)
-    double expectedD = (currentDeviation - preDeviation) * kd / DELTA;  // D制御(前回の誤差は0)
-    double expected = expectedP + expectedI + expectedD;
+    double currentDeviation = (targetValue - currentValue);           // 現在の偏差
+    double p = currentDeviation * kp;                                 // P制御
+    double i = ((preDeviation + currentDeviation) * DELTA / 2) * ki;  // I制御(誤差の累積は0)
+    double d = (currentDeviation - preDeviation) * kd / DELTA;  // D制御(前回の誤差は0)
+    double expected = p + i + d;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
 
     double integral = (preDeviation + currentDeviation) * DELTA / 2;  // 誤差の累積
@@ -182,10 +181,10 @@ namespace etrobocon2023_test {
     currentValue = 100;
     currentDeviation = (targetValue - currentValue);
     integral += (preDeviation + currentDeviation) * DELTA / 2;
-    expectedP = currentDeviation * kp;
-    expectedI = integral * ki;
-    expectedD = (currentDeviation - preDeviation) / DELTA * kd;
-    expected = expectedP + expectedI + expectedD;
+    p = currentDeviation * kp;
+    i = integral * ki;
+    d = (currentDeviation - preDeviation) / DELTA * kd;
+    expected = p + i + d;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
   }
 
