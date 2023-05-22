@@ -28,4 +28,53 @@ namespace etrobocon2023_test {
                 || eqRgb(actual, expected4) || eqRgb(actual, expected5)
                 || eqRgb(actual, expected6));
   }
+
+  TEST(MeasurerTest, getBrightness)
+  {
+    /**
+    getRawColorの基準となるRGB値
+
+    rgb_raw_t expectedRgb1 = { 8, 9, 10 };       // black
+    rgb_raw_t expectedRgb2 = { 104, 101, 146 };  // white
+    rgb_raw_t expectedRgb3 = { 111, 19, 19 };    // red
+    rgb_raw_t expectedRgb4 = { 120, 108, 71 };   // yellow
+    rgb_raw_t expectedRgb5 = { 4, 75, 35 };      // green
+    rgb_raw_t expectedRgb6 = { 81, 92, 144 };    // blue
+    **/
+
+    // 各色に対応する明度
+    int expected1 = 3;
+    int expected2 = 57;
+    int expected3 = 43;
+    int expected4 = 47;
+    int expected5 = 29;
+    int expected6 = 56;
+    int actual = Measurer::getBrightness();    
+    ASSERT_TRUE((actual, expected1) || (actual, expected2) || (actual, expected3)
+                || (actual, expected4) || (actual, expected5) || (actual, expected6));
+  }
+
+  TEST(MeasurerTest, getLeftCount)
+  {
+    int expected = 0;
+    int actual = Measurer::getLeftCount();
+
+    EXPECT_EQ(expected, actual);
+  }
+
+  TEST(MeasurerTest, getRightCount)
+  {
+    int expected = 0;
+    int actual = Measurer::getRightCount();
+
+    EXPECT_EQ(expected, actual);
+  }
+
+  TEST(MeasurerTest, getArmMotorCount)
+  {
+    int expected = 0;
+    int actual = Measurer::getArmMotorCount();
+
+    EXPECT_EQ(expected, actual);
+  }
 }  // namespace etrobocon2023_test
