@@ -49,9 +49,9 @@ namespace etrobocon2023_test {
     int expected4 = 47;
     int expected5 = 29;
     int expected6 = 56;
-    int actual = Measurer::getBrightness();    
-    ASSERT_TRUE((actual, expected1) || (actual, expected2) || (actual, expected3)
-                || (actual, expected4) || (actual, expected5) || (actual, expected6));
+    int actual = Measurer::getBrightness();
+    ASSERT_TRUE(actual == expected1 || actual == expected2 || actual == expected3
+                || actual == expected4 || actual == expected5 || actual == expected6);
   }
 
   TEST(MeasurerTest, getLeftCount)
