@@ -79,11 +79,11 @@ class Measurer {
   static double getVoltage();
 
  private:
-  static ev3api::ColorSensor colorSensor;
-  static ev3api::SonarSensor sonarSensor;
-  static ev3api::Motor leftWheel;
-  static ev3api::Motor rightWheel;
-  static ev3api::Motor armMotor;
+  static const ePortS colorSensorPort = PORT_2;
+  static const ePortS sonarSensorPort = PORT_3;
+  static const ePortM leftWheelPort = PORT_C;
+  static const ePortM rightWheelPort = PORT_B;
+  static const ePortM armMotorPort = PORT_A;
 };
 
 #endif

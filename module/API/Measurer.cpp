@@ -6,13 +6,6 @@
 
 #include "Measurer.h"
 
-// メンバ変数の定義
-ev3api::ColorSensor Measurer::colorSensor(PORT_2);
-ev3api::SonarSensor Measurer::sonarSensor(PORT_3);
-ev3api::Motor Measurer::leftWheel(PORT_C);
-ev3api::Motor Measurer::rightWheel(PORT_B);
-ev3api::Motor Measurer::armMotor(PORT_A);
-
 // 明るさを取得
 // 参考: https://tomari.org/main/java/color/ccal.html
 int Measurer::getBrightness()
@@ -28,26 +21,26 @@ int Measurer::getBrightness()
 rgb_raw_t Measurer::getRawColor()
 {
   rgb_raw_t rgb;
-  colorSensor.getRawColor(rgb);
+  ev3api::ColorSensor(colorSensorPort).getRawColor(rgb);
   return rgb;
 }
 
 // 左モータ角位置取得
 int Measurer::getLeftCount()
 {
-  return leftWheel.getCount();
+  return ev3api::Motor(leftWheelPort).getCount();
 }
 
 // 右モータ角位置取得
 int Measurer::getRightCount()
 {
-  return rightWheel.getCount();
+  return ev3api::Motor(rightWheelPort).getCount();
 }
 
 // アームモータ角位置取得
 int Measurer::getArmMotorCount()
 {
-  return armMotor.getCount();
+  return ev3api::Motor(armMotorPort).getCount();
 }
 
 // 正面から見て左ボタンの押下状態を取得
@@ -71,7 +64,7 @@ bool Measurer::getEnterButton()
 // 超音波センサからの距離を取得
 int Measurer::getForwardDistance()
 {
-  int distance = sonarSensor.getDistance();
+  int distance = ev3api::SonarSensor(sonarSensorPort).getDistance();
 
   // センサが認識していない時が-1になる
   if(distance == -1) distance = 1000;
