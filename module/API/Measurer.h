@@ -15,6 +15,8 @@
 
 class Measurer {
  public:
+  Measurer() = delete;  // 明示的にインスタンス化を禁止
+
   /**
    * 明るさを取得
    * @return 反射光の強さ(0-100)
@@ -77,13 +79,11 @@ class Measurer {
   static double getVoltage();
 
  private:
-  Measurer();  // インスタンス化を禁止する
-
-  ev3api::ColorSensor colorSensor;
-  ev3api::SonarSensor sonarSensor;
-  ev3api::Motor leftWheel;
-  ev3api::Motor rightWheel;
-  ev3api::Motor armMotor;
+  static ev3api::ColorSensor colorSensor;
+  static ev3api::SonarSensor sonarSensor;
+  static ev3api::Motor leftWheel;
+  static ev3api::Motor rightWheel;
+  static ev3api::Motor armMotor;
 };
 
 #endif
