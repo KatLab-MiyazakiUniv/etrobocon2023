@@ -18,7 +18,6 @@
 KatLabメンバー, 宮崎大学片山徹郎研究室
 
 ## ビルド方法
-### 開発環境(PC)
 ```
 $ cd ~/etrobo
 $ make app=etrobocon2023
@@ -29,4 +28,4 @@ $ cd ~/etrobo/workspace/etrobocon2023
 $ ./make.sh
 ```
 
-走行体のビルド方法については[RasPikeの使用方法](https://github.com/KatLab-MiyazakiUniv/etrobocon2023/wiki/RasPike%E3%81%AE%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95)を参照してください。
+走行体でのビルド方法については[RasPikeの使用方法](https://github.com/KatLab-MiyazakiUniv/etrobocon2023/wiki/RasPike%E3%81%AE%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95)を参照してください。
