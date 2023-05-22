@@ -16,3 +16,22 @@
 
 ## Authors
 KatLabメンバー, 宮崎大学片山徹郎研究室
+
+## ビルド方法
+### 開発環境(PC)
+'''
+$ cd ~/etrobo
+$ make app=etrobocon2023
+'''
+もしくは、
+'''
+$ cd ~/etrobo/workspace/etrobocon2023
+$ ./make.sh
+'''
+
+### 走行体
+'''
+$ cd ~/etrobo/workspace/etrobocon2023
+$ make img=etrobocon2023
+'''
+
