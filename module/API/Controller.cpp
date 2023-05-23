@@ -5,7 +5,10 @@
  */
 #include "Controller.h"
 
-Controller::Controller() : rightWheel(PORT_B), leftWheel(PORT_C), armMotor(PORT_A) {}
+// Controller::rightWheel = PORT_B;
+// Controller::leftWheel = PORT_C
+// Controller::armMotor = PORT_A:
+// Controller::Controller() : rightWheel(PORT_B), leftWheel(PORT_C), armMotor(PORT_A) {}
 
 int Controller::limitPwmValue(const int value)
 {
@@ -20,37 +23,37 @@ int Controller::limitPwmValue(const int value)
 // 右モータにPWM値をセット
 void Controller::setRightMotorPwm(const int pwm)
 {
-  rightWheel.setPWM(limitPwmValue(pwm));
+  ev3api::Motor(rightWheelPort).setPWM(limitPwmValue(pwm));
 }
 
 // 左モータにPWM値をセット
 void Controller::setLeftMotorPwm(const int pwm)
 {
-  leftWheel.setPWM(limitPwmValue(pwm));
+  ev3api::Motor(leftWheelPort).setPWM(limitPwmValue(pwm));
 }
 
 // タイヤのモータを停止する
 void Controller::stopMotor()
 {
-  leftWheel.stop();
-  rightWheel.stop();
+  ev3api::Motor(leftWheelPort).stop();
+  ev3api::Motor(rightWheelPort).stop();
 }
 
 // アームのモータにPWM値をセット
 void Controller::setArmMotorPwm(const int pwm)
 {
-  armMotor.setPWM(limitPwmValue(pwm));
+  ev3api::Motor(armMotorPort).setPWM(limitPwmValue(pwm));
 }
 
 // アームのモータを停止する
 void Controller::stopArmMotor()
 {
-  armMotor.stop();
+  ev3api::Motor(armMotorPort).stop();
 }
 
 // 自タスクスリープ（デフォルトは10ミリ秒）
 void Controller::sleep(int milliSec)
 {
   // clock.sleep()はマイクロ秒指定なので，単位を合わせて呼び出す
-  clock.sleep(milliSec * 1000);
+  Controller::clock.sleep(milliSec * 1000);
 }
