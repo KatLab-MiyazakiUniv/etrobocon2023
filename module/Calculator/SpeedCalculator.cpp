@@ -1,15 +1,14 @@
 /**
- **  @file SpeedCalculator.cpp
- **  @brief 走行距離を計算するクラス
- **  @author miyashita64 bizyutyu
- **/
+ *  @file SpeedCalculator.cpp
+ *  @brief 走行速度を指定するクラス
+ *  @author miyashita64 bizyutyu
+ */
 #include "SpeedCalculator.h"
 
 SpeedCalculator::SpeedCalculator(double _targetSpeed) : pid(0.8, 0.1, 0.01, _targetSpeed){
   int rightAngle = Measurer::getRightCount();
   int leftAngle = Measurer::getLeftCount();
   prevMileage = Mileage::calculateMileage(rightAngle, leftAngle);
-  prevTime = time(NULL);
 }
 
 int SpeedCalculator::calcPwmFromSpeed()
@@ -19,17 +18,13 @@ int SpeedCalculator::calcPwmFromSpeed()
   int leftAngle = Measurer::getLeftCount();
   // 走行距離を算出
   double currentMileage = Mileage::calculateMileage(rightAngle, leftAngle);
-  time_t currentTime = time(NULL);
   double diffMileage = currentMileage - prevMileage;
-  // 走行時間を算出
-  double diffTime = difftime(currentTime, prevTime);
   // メンバを更新
   prevMileage = currentMileage;
-  prevTime = currentTime;
   // 走行速度を算出
-  double currentSpeed = calcSpeed(diffMileage, diffTime);
+  double currentSpeed = calcSpeed(diffMileage, DELTA_TIME);
   // 走行速度に相当するPWM値を算出
-  double pwm = pid.calculatePid(currentSpeed, diffTime);
+  double pwm = pid.calculatePid(currentSpeed, DELTA_TIME);
   return pwm;
 }
 

@@ -11,8 +11,6 @@
 #include "Measurer.h"
 #include "Mileage.h"
 #include "Pid.h"
-#include <time.h>
-#include <sys/time.h>
 
 class SpeedCalculator {
  public:
@@ -33,10 +31,10 @@ class SpeedCalculator {
    * @brief 走行速度を算出する
    * @return 走行速度[Todo]
    */
-  double calcSpeed(double diffMileage, double diffTimed);
+  double calcSpeed(double diffMileage, double diffTime);
   
   Pid pid;
   double prevMileage;
-  time_t prevTime;
+  const int DELTA_TIME = 10;
 };
 #endif
