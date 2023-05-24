@@ -11,7 +11,7 @@
 #include "Measurer.h"
 #include "Mileage.h"
 #include "Pid.h"
-#include <chrono>
+#include <time.h>
 
 class SpeedCalculator {
  public:
@@ -36,6 +36,6 @@ class SpeedCalculator {
   
   Pid pid;
   double prevMileage;
-  std::chrono::high_resolution_clock::time_point prevTime;
+  time_t prevTime;
 };
 #endif

@@ -9,7 +9,7 @@ SpeedCalculator::SpeedCalculator(double _targetSpeed) : pid(0.8, 0.1, 0.01, _tar
   int rightAngle = Measurer::getRightCount();
   int leftAngle = Measurer::getLeftCount();
   prevMileage = Mileage::calculateMileage(rightAngle, leftAngle);
-  prevTime = std::chrono::high_resolution_clock::now();
+  prevTime = time(NULL);
 }
 
 int SpeedCalculator::calcPwmFromSpeed()
@@ -19,11 +19,10 @@ int SpeedCalculator::calcPwmFromSpeed()
   int leftAngle = Measurer::getLeftCount();
   // 走行距離を算出
   double currentMileage = Mileage::calculateMileage(rightAngle, leftAngle);
-  auto currentTime = std::chrono::high_resolution_clock::now();
+  time_t currentTime = time(NULL);
   double diffMileage = currentMileage - prevMileage;
   // 走行時間を算出
-  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - prevTime);
-  double diffTime = duration.count();
+  double diffTime = difftime(currentTime, prevTime);
   // メンバを更新
   prevMileage = currentMileage;
   prevTime = currentTime;
