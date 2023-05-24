@@ -5,11 +5,6 @@
  */
 #include "Controller.h"
 
-// Controller::rightWheel = PORT_B;
-// Controller::leftWheel = PORT_C
-// Controller::armMotor = PORT_A:
-// Controller::Controller() : rightWheel(PORT_B), leftWheel(PORT_C), armMotor(PORT_A) {}
-
 int Controller::limitPwmValue(const int value)
 {
   if(value > MOTOR_PWM_MAX) {

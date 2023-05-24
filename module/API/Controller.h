@@ -50,9 +50,6 @@ class Controller {
   static const ePortM rightWheelPort = PORT_B;
   static const ePortM leftWheelPort = PORT_A;
   static const ePortM armMotorPort = PORT_C;
-  // static ev3api::Motor rightWheel;
-  // static ev3api::Motor leftWheel;
-  // static ev3api::Motor armMotor;
   static ev3api::Clock clock;
 
   /**
