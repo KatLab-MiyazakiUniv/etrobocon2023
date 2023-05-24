@@ -5,7 +5,8 @@
  */
 #include "SpeedCalculator.h"
 
-SpeedCalculator::SpeedCalculator(double _targetSpeed) : pid(0.8, 0.1, 0.01, _targetSpeed){
+SpeedCalculator::SpeedCalculator(double _targetSpeed) : pid(0.8, 0.1, 0.01, _targetSpeed)
+{
   int rightAngle = Measurer::getRightCount();
   int leftAngle = Measurer::getLeftCount();
   prevMileage = Mileage::calculateMileage(rightAngle, leftAngle);
@@ -29,7 +30,7 @@ int SpeedCalculator::calcPwmFromSpeed()
 }
 
 double SpeedCalculator::calcSpeed(double diffMileage, double diffTime)
-{ 
+{
   // 走行時間が0のとき、0を返す
   if(diffTime == 0) return 0;
   // 走行速度を算出

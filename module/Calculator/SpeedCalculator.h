@@ -27,14 +27,16 @@ class SpeedCalculator {
   int calcPwmFromSpeed();
 
  private:
-  /**
-   * @brief 走行速度を算出する
-   * @return 走行速度[Todo]
-   */
-  double calcSpeed(double diffMileage, double diffTime);
-  
   Pid pid;
   double prevMileage;
   const int DELTA_TIME = 10;
+
+  /**
+   * @brief 走行速度を算出する
+   * @param diffMileage 移動距離[Todo]
+   * @param diffTime 移動時間[ms]
+   * @return 走行速度[Todo]
+   */
+  double calcSpeed(double diffMileage, double diffTime);
 };
 #endif
