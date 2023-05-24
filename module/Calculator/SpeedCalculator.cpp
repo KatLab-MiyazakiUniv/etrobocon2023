@@ -3,17 +3,16 @@
  **  @brief 走行距離を計算するクラス
  **  @author miyashita64 bizyutyu
  **/
-#include <chrono>
 #include "SpeedCalculator.h"
 
-SpeedCalculator::SpeedCalculator(double _targetValue) : pid(0.8, 0.1, 0.01, _targetValue){
+SpeedCalculator::SpeedCalculator(double _targetSpeed) : pid(0.8, 0.1, 0.01, _targetSpeed){
   int rightAngle = Measurer::getRightCount();
   int leftAngle = Measurer::getLeftCount();
   prevMileage = Mileage::calculateMileage(rightAngle, leftAngle);
   prevTime = std::chrono::high_resolution_clock::now();
 }
 
-int SpeedCalculator::calcPwmFromSpeed(double _targetSpeed)
+int SpeedCalculator::calcPwmFromSpeed()
 {
   // 左右タイヤの回転角度を取得
   int rightAngle = Measurer::getRightCount();
