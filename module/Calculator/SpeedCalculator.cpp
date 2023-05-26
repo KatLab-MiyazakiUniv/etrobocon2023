@@ -10,6 +10,7 @@ SpeedCalculator::SpeedCalculator(double _targetSpeed) : pid(0.8, 0.1, 0.01, _tar
   int rightAngle = Measurer::getRightCount();
   int leftAngle = Measurer::getLeftCount();
   prevMileage = Mileage::calculateMileage(rightAngle, leftAngle);
+  prevTime = clock.now();
 }
 
 int SpeedCalculator::calcPwmFromSpeed()
@@ -20,12 +21,16 @@ int SpeedCalculator::calcPwmFromSpeed()
   // 走行距離を算出
   double currentMileage = Mileage::calculateMileage(rightAngle, leftAngle);
   double diffMileage = currentMileage - prevMileage;
+  // 走行時間を算出
+  uint64_t currentTime = clock.now();
+  int diffTime = currentTime - prevTime;
+  // 走行速度を算出
+  double currentSpeed = calcSpeed(diffMileage, diffTime);
+  // 走行速度に相当するPWM値を算出
+  double pwm = pid.calculatePid(currentSpeed, diffTime);
   // メンバを更新
   prevMileage = currentMileage;
-  // 走行速度を算出
-  double currentSpeed = calcSpeed(diffMileage, DELTA_TIME);
-  // 走行速度に相当するPWM値を算出
-  double pwm = pid.calculatePid(currentSpeed, DELTA_TIME);
+  prevTime = currentTime;
   return pwm;
 }
 
