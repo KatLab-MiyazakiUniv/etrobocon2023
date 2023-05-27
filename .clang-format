@@ -5,8 +5,8 @@
 # http://pynote.hatenablog.com/entry/clang-format-settings
 #
 
-# Language: Cpp
-# AccessModifierOffset: -1
+Language: Cpp
+AccessModifierOffset: -1
 # AlignAfterOpenBracket:  Align
 # AlignConsecutiveAssignments: false
 # AlignConsecutiveDeclarations: false
