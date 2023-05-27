@@ -50,7 +50,6 @@ class Controller {
   static const ePortM rightWheelPort = PORT_B;
   static const ePortM leftWheelPort = PORT_A;
   static const ePortM armMotorPort = PORT_C;
-  static ev3api::Clock clock;
 
   /**
    * モータに設定するPWM値の制限
