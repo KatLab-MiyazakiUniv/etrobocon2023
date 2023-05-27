@@ -21,4 +21,4 @@ def send():
 
 # ポート番号の設定
 if __name__ == "__main__":
-    app.run(port=8000, debug=True)
+    app.run(host='192.168.11.16', port=8000, debug=True)
