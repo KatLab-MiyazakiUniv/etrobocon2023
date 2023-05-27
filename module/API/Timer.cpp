@@ -12,10 +12,12 @@ Timer::Timer() {}
 void Timer::sleep(int milliSec)
 {
   // clock.sleep()はマイクロ秒指定なので，単位を合わせて呼び出す
-  ev3api::Clock().sleep(milliSec * 1000);
+  clock.sleep(milliSec * 1000);
 }
 
+// 走行時間を測定（ミリ秒）
 int Timer::now()
 {
-  return ev3api::Clock().now() / 1000;  // マイクロ秒をミリ秒になおしてreturn
+  // マイクロ秒をミリ秒になおしてreturn
+  return clock.now() / 1000;
 }
