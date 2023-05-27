@@ -11,7 +11,7 @@
 #include "Measurer.h"
 #include "Mileage.h"
 #include "Pid.h"
-#include "Clock.h"
+#include "Timer.h"
 
 class SpeedCalculator {
  public:
@@ -29,9 +29,9 @@ class SpeedCalculator {
 
  private:
   Pid pid;
-  ev3api::Clock clock;
+  Timer timer;
   double prevMileage;
-  uint64_t prevTime;
+  int prevTime;
 
   /**
    * @brief 走行速度を算出する
