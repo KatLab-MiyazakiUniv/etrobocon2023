@@ -6,6 +6,8 @@
 
 #include "Timer.h"
 
+Timer::Timer() {}
+
 // 自タスクスリープ（デフォルトは10ミリ秒）
 void Timer::sleep(int milliSec)
 {
@@ -15,5 +17,5 @@ void Timer::sleep(int milliSec)
 
 int Timer::now()
 {
-  return ev3api::Clock().now() / 1000;
+  return ev3api::Clock().now() / 1000;  // マイクロ秒をミリ秒になおしてreturn
 }
