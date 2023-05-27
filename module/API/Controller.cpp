@@ -5,6 +5,7 @@
  */
 #include "Controller.h"
 
+Controller::Controller(): rightMotor(rightWheelPort){}
 int Controller::limitPwmValue(const int value)
 {
   if(value > MOTOR_PWM_MAX) {
@@ -18,7 +19,8 @@ int Controller::limitPwmValue(const int value)
 // 右モータにPWM値をセット
 void Controller::setRightMotorPwm(const int pwm)
 {
-  ev3api::Motor(rightWheelPort).setPWM(limitPwmValue(pwm));
+  // ev3api::Motor(rightWheelPort).setPWM(limitPwmValue(pwm));
+  rightMotor.setPWM(limitPwmValue(pwm));
 }
 
 // 左モータにPWM値をセット

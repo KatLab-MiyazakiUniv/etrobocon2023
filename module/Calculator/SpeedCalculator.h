@@ -7,8 +7,8 @@
 #ifndef SPEED_CALCULATOR_H
 #define SPEED_CALCULATOR_H
 
-#include "Controller.h"
 #include "Measurer.h"
+#include "Controller.h"
 #include "Mileage.h"
 #include "Pid.h"
 #include "Timer.h"
@@ -30,6 +30,7 @@ class SpeedCalculator {
  private:
   Pid pid;
   Timer timer;
+  double pwm;
   double prevMileage;
   int prevTime;
 

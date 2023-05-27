@@ -5,6 +5,7 @@
  */
 
 #include "Pid.h"
+#include <stdio.h>
 
 PidGain::PidGain(double _kp, double _ki, double _kd) : kp(_kp), ki(_ki), kd(_kd) {}
 
@@ -40,7 +41,12 @@ double Pid::calculatePid(double currentValue, double delta)
   double i = gain.ki * integral;
   // D制御の計算を行う
   double d = gain.kd * difference;
-
+  
+  printf("targetValue=%f\n", targetValue);
+  printf("currentValue=%f\n", currentValue);
+  printf("currentDeviation=%f\n", currentDeviation);
+  printf("integral=%f\n", integral);
+  printf("difference=%f\n", difference);
   // 操作量 = P制御 + I制御 + D制御
   return p + i + d;
 }

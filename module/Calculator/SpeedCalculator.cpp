@@ -5,8 +5,9 @@
  */
 #include "SpeedCalculator.h"
 
-SpeedCalculator::SpeedCalculator(double _targetSpeed) : pid(0.8, 0.1, 0.01, _targetSpeed)
+SpeedCalculator::SpeedCalculator(double _targetSpeed) : pid(300.0, 0.1, 0.01, _targetSpeed)
 {
+  pwm = 0.0;
   int rightAngle = Measurer::getRightCount();
   int leftAngle = Measurer::getLeftCount();
   prevMileage = Mileage::calculateMileage(rightAngle, leftAngle);
@@ -23,15 +24,21 @@ int SpeedCalculator::calcPwmFromSpeed()
   double diffMileage = currentMileage - prevMileage;
   // 走行時間を算出
   int currentTime = timer.now();
-  int diffTime = currentTime - prevTime;
+  double diffTime = (double)(currentTime - prevTime);
   // 走行速度を算出
   double currentSpeed = calcSpeed(diffMileage, diffTime);
   // 走行速度に相当するPWM値を算出
-  double pwm = pid.calculatePid(currentSpeed, diffTime);
+  pwm += pid.calculatePid(currentSpeed, diffTime);
   // メンバを更新
   prevMileage = currentMileage;
   prevTime = currentTime;
-  return pwm;
+  printf("diffTime=%d\n", diffTime);
+  printf("diffMil=%f\n", diffMileage);
+  printf("speed=%f\n", currentSpeed);
+  printf("MILEAGE=%f\n", currentMileage);
+  printf("PWM=%f\n", pwm);
+
+  return (int)pwm;
 }
 
 double SpeedCalculator::calcSpeed(double diffMileage, double diffTime)

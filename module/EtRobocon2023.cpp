@@ -8,9 +8,23 @@
 // #include "LineTraceArea.h"
 // #include "GameArea.h"
 // #include "Calibrator.h"
+#include "SpeedCalculator.h"
+#include "Timer.h"
+#include "Controller.h"
 
 void EtRobocon2023::start()
 {
+  Timer timer;
+  SpeedCalculator sc(5);
+  Controller controller;
+  while(true){
+  int pwm =  sc.calcPwmFromSpeed();
+  printf("pwm=%d\n", pwm);
+  pwm = 95;
+  controller.setRightMotorPwm(pwm);
+  controller.setLeftMotorPwm(pwm);
+  timer.sleep();
+  }
   // const int BUF_SIZE = 128;
   // char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
   // Logger logger;
