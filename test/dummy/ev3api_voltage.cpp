@@ -12,7 +12,7 @@ int ev3_battery_voltage_mV()
   switch(index) {
     case 0:
       return 7300;  // SPIKEの電圧の標準値[mV]
-    case 1:
+    default:
       return 4196;  // SPIKEの電圧の最大値の半分[mV]
   }
 }
