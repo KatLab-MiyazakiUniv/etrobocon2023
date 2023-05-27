@@ -52,10 +52,10 @@ namespace etrobocon2023_test {
     double currentValue = 20;
     double preDeviation = 0;
     double currentDeviation = (targetValue - currentValue);
-    double p = currentDeviation * kp;
-    double i = ((preDeviation + currentDeviation) * DELTA / 2.0) * ki;
-    double d = (currentDeviation - preDeviation) * kd / DELTA;
-    double expected = p + i + d;
+    double expectedP = currentDeviation * kp;
+    double expectedI = ((preDeviation + currentDeviation) * DELTA / 2.0) * ki;
+    double expectedD = (currentDeviation - preDeviation) * kd / DELTA;
+    double expected = expectedP + expectedI + expectedD;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
   }
 
