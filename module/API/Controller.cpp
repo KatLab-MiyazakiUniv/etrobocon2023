@@ -50,5 +50,5 @@ void Controller::stopArmMotor()
 void Controller::sleep(int milliSec)
 {
   // clock.sleep()はマイクロ秒指定なので，単位を合わせて呼び出す
-  Controller::clock.sleep(milliSec * 1000);
+  ev3api::Clock().sleep(milliSec * 1000);
 }
