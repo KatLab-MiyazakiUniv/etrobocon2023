@@ -8,7 +8,6 @@
 
 #include "ev3api.h"
 #include "Motor.h"
-#include "Clock.h"
 
 class Controller {
  public:
@@ -36,12 +35,6 @@ class Controller {
    * アームのモータを停止する
    */
   static void stopArmMotor();
-
-  /**
-   * 自タスクスリープ（デフォルトは10ミリ秒）
-   * @param milliSec スリープ時間(ミリ秒)
-   */
-  static void sleep(int milliSec = 10);
 
  private:
   static const int MOTOR_PWM_MAX = 100;
