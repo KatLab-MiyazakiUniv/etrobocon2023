@@ -136,7 +136,7 @@ namespace etrobocon2023_test {
   // 周期に0を渡したときに、デフォルト周期0.01として計算されるかをテストする
   TEST(PidTest, calculatePidChangeDeltaZero)
   {
-    constexpr double DELTA = 0;  // 実際に渡す周期
+    constexpr double DELTA = 0;      // 実際に渡す周期
     constexpr double kdELTA = 0.01;  // 期待される周期
     double kp = 0.6;
     double ki = 0.02;
@@ -165,15 +165,15 @@ namespace etrobocon2023_test {
     Pid actualPid(kp, ki, kd, targetValue);
     double currentValue = 60;
     double preDeviation = 0;
-    double currentDeviation = (targetValue - currentValue);  // 現在の偏差
-    double p = currentDeviation * kp;  // P制御
+    double currentDeviation = (targetValue - currentValue);           // 現在の偏差
+    double p = currentDeviation * kp;                                 // P制御
     double i = ((preDeviation + currentDeviation) * DELTA / 2) * ki;  // I制御(誤差の累積は0)
     double d = (currentDeviation - preDeviation) * kd / DELTA;  // D制御(前回の誤差は0)
     double expected = p + i + d;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
 
     double integral = (preDeviation + currentDeviation) * DELTA / 2;  // 誤差の累積
-    preDeviation = currentDeviation;  // 前回の誤差の更新
+    preDeviation = currentDeviation;                                  // 前回の誤差の更新
     kp = 0.1;
     ki = 0.2;
     kd = 0.3;
@@ -199,7 +199,7 @@ namespace etrobocon2023_test {
     Pid actualPid(kp, ki, kd, targetValue);
     double currentValue = 60;
     double currentDeviation = (targetValue - currentValue);  // 現在の偏差
-    double expected = currentDeviation * kp;  // P制御
+    double expected = currentDeviation * kp;                 // P制御
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
   }
 
@@ -230,7 +230,7 @@ namespace etrobocon2023_test {
     Pid actualPid(kp, ki, kd, targetValue);
     double currentValue = 60;
     double preDeviation = 0;
-    double currentDeviation = (targetValue - currentValue);  // 現在の偏差
+    double currentDeviation = (targetValue - currentValue);            // 現在の偏差
     double expected = (currentDeviation - preDeviation) * kd / DELTA;  // D制御
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
   }
