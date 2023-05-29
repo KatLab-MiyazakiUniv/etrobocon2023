@@ -14,13 +14,13 @@
  * @brief ボタンを表す番号
  */
 typedef enum {
-  LEFT_BUTTON = 0,   // 左ボタン
+  LEFT_BUTTON = 0,  // 左ボタン
   RIGHT_BUTTON = 1,  // 右ボタン
-  UP_BUTTON = 2,     // Spikeでは使えないけど一応
-  DOWN_BUTTON = 3,   // Spikeでは使えないけど一応
+  UP_BUTTON = 2,  // Spikeでは使えないけど一応
+  DOWN_BUTTON = 3,  // Spikeでは使えないけど一応
   ENTER_BUTTON = 4,  // 中央ボタン
-  BACK_BUTTON = 5,   // Spikeでは使えないけど一応
-  TNUM_BUTTON = 6    // Spikeでは使えないけど一応
+  BACK_BUTTON = 5,  // Spikeでは使えないけど一応
+  TNUM_BUTTON = 6  // Spikeでは使えないけど一応
 } button_t;
 
 bool ev3_button_is_pressed(button_t button);

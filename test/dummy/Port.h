@@ -11,9 +11,9 @@
  */
 enum ePortS {
   PORT_1 = 0, /**< EV3 センサポート1 */
-  PORT_2,     /**< EV3 センサポート2 */
-  PORT_3,     /**< EV3 センサポート3 */
-  PORT_4      /**< EV3 センサポート4 */
+  PORT_2, /**< EV3 センサポート2 */
+  PORT_3, /**< EV3 センサポート3 */
+  PORT_4 /**< EV3 センサポート4 */
 };
 
 /**
@@ -21,18 +21,18 @@ enum ePortS {
  */
 enum ePortM {
   PORT_A = 0, /**< EV3 モータポートA */
-  PORT_B,     /**< EV3 モータポートB */
-  PORT_C,     /**< EV3 モータポートC */
-  PORT_D      /**< EV3 モータポートD */
+  PORT_B, /**< EV3 モータポートB */
+  PORT_C, /**< EV3 モータポートC */
+  PORT_D /**< EV3 モータポートD */
 };
 
 /**
  * センサポートに対する電源供給状態
  */
 enum ePower {
-  POWER_OFF = 0,         /**< 電源供給なし */
+  POWER_OFF = 0, /**< 電源供給なし */
   POWER_LOWSPEED_9V = 1, /**< 9V電源供給 */
-  POWER_LOWSPEED = 2     /**< I2Cデバイス */
+  POWER_LOWSPEED = 2 /**< I2Cデバイス */
 };
 
 /** センサポート数 */

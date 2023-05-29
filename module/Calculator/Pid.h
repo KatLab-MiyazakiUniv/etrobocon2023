@@ -51,8 +51,8 @@ class Pid {
  private:
   PidGain gain;
   double preDeviation;  // 前回の偏差
-  double integral;      // 偏差の累積
-  double targetValue;   // 目標値
+  double integral;  // 偏差の累積
+  double targetValue;  // 目標値
 };
 
 #endif
