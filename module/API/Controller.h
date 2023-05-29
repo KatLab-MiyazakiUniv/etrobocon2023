@@ -8,7 +8,6 @@
 
 #include "ev3api.h"
 #include "Motor.h"
-#include "Clock.h"
 
 class Controller {
  public:
@@ -37,12 +36,6 @@ class Controller {
    */
   static void stopArmMotor();
 
-  /**
-   * 自タスクスリープ（デフォルトは10ミリ秒）
-   * @param milliSec スリープ時間(ミリ秒)
-   */
-  static void sleep(int milliSec = 10);
-
  private:
   static const int MOTOR_PWM_MAX = 100;
   static const int MOTOR_PWM_MIN = -100;
@@ -50,7 +43,6 @@ class Controller {
   static const ePortM rightWheelPort = PORT_B;
   static const ePortM leftWheelPort = PORT_A;
   static const ePortM armMotorPort = PORT_C;
-  static ev3api::Clock clock;
 
   /**
    * モータに設定するPWM値の制限
