@@ -1,7 +1,7 @@
 /**
  * @file Controller.h
  * @brief モーター制御に用いる関数をまとめたラッパークラス
- * @author aridome222
+ * @author aridome222 miyashita64 bizyutyu
  */
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
@@ -11,6 +11,13 @@
 
 class Controller {
  public:
+  static const ePortM rightWheelPort = PORT_B;
+  static const ePortM leftWheelPort = PORT_C;
+  static const ePortM armMotorPort = PORT_A;
+  static ev3api::Motor* rightMotor;
+  static ev3api::Motor* leftMotor;
+  static ev3api::Motor* armMotor;
+
   Controller() = delete;  // 明示的にインスタンス化を禁止
 
   /**
@@ -39,10 +46,6 @@ class Controller {
  private:
   static const int MOTOR_PWM_MAX = 100;
   static const int MOTOR_PWM_MIN = -100;
-
-  static const ePortM rightWheelPort = PORT_B;
-  static const ePortM leftWheelPort = PORT_A;
-  static const ePortM armMotorPort = PORT_C;
 
   /**
    * モータに設定するPWM値の制限
