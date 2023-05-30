@@ -5,7 +5,8 @@
  */
 #include "SpeedCalculator.h"
 
-SpeedCalculator::SpeedCalculator(double _targetSpeed) : targetSpeed(_targetSpeed), pid(0.001, 0.000000001, 0.0001, _targetSpeed)
+SpeedCalculator::SpeedCalculator(double _targetSpeed)
+  : targetSpeed(_targetSpeed), pid(0.001, 0.000000001, 0.0001, _targetSpeed)
 {
   pwm = 0.0;
   int rightAngle = Measurer::getRightCount();
@@ -26,17 +27,12 @@ int SpeedCalculator::calcPwmFromSpeed()
   int currentTime = timer.now();
   double diffTime = (double)(currentTime - prevTime);
   // 走行速度を算出
-  double currentSpeed = (diffMileage == 0.0)? -targetSpeed : calcSpeed(diffMileage, diffTime);
+  double currentSpeed = (diffMileage == 0.0) ? -targetSpeed : calcSpeed(diffMileage, diffTime);
   // 走行速度に相当するPWM値を算出
   pwm += pid.calculatePid(currentSpeed, diffTime);
   // メンバを更新
   prevMileage = currentMileage;
   prevTime = currentTime;
-  printf("diffTime=%f\n", diffTime);
-  printf("diffMil=%f\n", diffMileage);
-  printf("speed=%f\n", currentSpeed);
-  printf("MILEAGE=%f\n", currentMileage);
-  printf("PWM=%f\n", pwm);
 
   return (int)pwm;
 }
@@ -44,8 +40,8 @@ int SpeedCalculator::calcPwmFromSpeed()
 double SpeedCalculator::calcSpeed(double diffMileage, double diffTime)
 {
   // 走行時間が0のとき、0を返す
-  if(diffTime == 0) return 0;
+  if(diffTime == 0.0) return 0.0;
   // 走行速度を算出
-  double speed = 1000 * diffMileage / diffTime;
+  double speed = 1000.0 * diffMileage / diffTime;
   return speed;
 }

@@ -1,7 +1,7 @@
 /**
  * @file Controller.h
  * @brief モーター制御に用いる関数をまとめたラッパークラス
- * @author aridome222
+ * @author aridome222 miyashita64 bizyutyu
  */
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
@@ -46,7 +46,6 @@ class Controller {
  private:
   static const int MOTOR_PWM_MAX = 100;
   static const int MOTOR_PWM_MIN = -100;
-
 
   /**
    * モータに設定するPWM値の制限

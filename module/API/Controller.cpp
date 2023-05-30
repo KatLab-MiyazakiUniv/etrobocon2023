@@ -1,7 +1,7 @@
 /**
  * @file Controller.cpp
  * @brief モーター制御に用いる関数をまとめたラッパークラス
- * @author aridome222
+ * @author aridome222 miyahita64 bizyutyu
  */
 #include "Controller.h"
 ev3api::Motor* Controller::rightMotor = nullptr;
