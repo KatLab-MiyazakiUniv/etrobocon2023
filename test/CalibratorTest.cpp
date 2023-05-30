@@ -17,7 +17,7 @@ namespace etrobocon2023_test {
   {
     Calibrator calibrator;
     srand(2);  // SPIKEの電圧が標準値でLeftコースを選択する乱数シード
-    testing::internal::CaptureStdout();                      // 標準出力キャプチャ開始
+    testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
     calibrator.run();
     string output = testing::internal::GetCapturedStdout();  // キャプチャ終了
 
@@ -32,7 +32,7 @@ namespace etrobocon2023_test {
   TEST(CalibratorTest, waitForStart)
   {
     Calibrator calibrator;
-    testing::internal::CaptureStdout();                      // 標準出力キャプチャ開始
+    testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
     calibrator.waitForStart();
     string output = testing::internal::GetCapturedStdout();  // キャプチャ終了
 
@@ -68,7 +68,7 @@ namespace etrobocon2023_test {
 
     bool actual = calibrator.getIsLeftCourse();  // 実際のisLeftCourseを取得
 
-    EXPECT_EQ(expected, actual);                 // 出力とゲッタの値が等しいかテスト
+    EXPECT_EQ(expected, actual);  // 出力とゲッタの値が等しいかテスト
   }
 
   TEST(CalibratorTest, getTargetBrightness)
@@ -83,8 +83,8 @@ namespace etrobocon2023_test {
 
     // 出力された目標輝度値を取得
     int index = output.find(targetString) + targetString.length();
-    string expectedStr = output.substr(index);      // 輝度値を取得（文字列）
-    int expected = stoi(expectedStr);               // 文字列を整数値に変換
+    string expectedStr = output.substr(index);  // 輝度値を取得（文字列）
+    int expected = stoi(expectedStr);           // 文字列を整数値に変換
 
     int actual = calibrator.getTargetBrightness();  // 実際の輝度値を取得
 
