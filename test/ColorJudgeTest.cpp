@@ -8,7 +8,7 @@
 #include "RgbData.h"
 #include <gtest/gtest.h>
 
-namespace etrobocon2022_test {
+namespace etrobocon2023_test {
   TEST(ColorJudgeTest, getColorZeroRgb)
   {
     rgb_raw_t rgb = { 0, 0, 0 };
@@ -211,4 +211,4 @@ namespace etrobocon2022_test {
     EXPECT_STREQ(expected, actual);
   }
 
-}  // namespace etrobocon2022_test
+}  // namespace etrobocon2023_test
