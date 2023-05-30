@@ -4,8 +4,10 @@
  * @author aridome222
  */
 #include "Controller.h"
+ev3api::Motor* Controller::rightMotor = nullptr;
+ev3api::Motor* Controller::leftMotor = nullptr;
+ev3api::Motor* Controller::armMotor = nullptr;
 
-Controller::Controller(): rightMotor(rightWheelPort){}
 int Controller::limitPwmValue(const int value)
 {
   if(value > MOTOR_PWM_MAX) {
@@ -19,31 +21,30 @@ int Controller::limitPwmValue(const int value)
 // 右モータにPWM値をセット
 void Controller::setRightMotorPwm(const int pwm)
 {
-  // ev3api::Motor(rightWheelPort).setPWM(limitPwmValue(pwm));
-  rightMotor.setPWM(limitPwmValue(pwm));
+  rightMotor->setPWM(limitPwmValue(pwm));
 }
 
 // 左モータにPWM値をセット
 void Controller::setLeftMotorPwm(const int pwm)
 {
-  ev3api::Motor(leftWheelPort).setPWM(limitPwmValue(pwm));
+  leftMotor->setPWM(limitPwmValue(pwm));
 }
 
 // タイヤのモータを停止する
 void Controller::stopMotor()
 {
-  ev3api::Motor(leftWheelPort).stop();
-  ev3api::Motor(rightWheelPort).stop();
+  rightMotor->stop();
+  leftMotor->stop();
 }
 
 // アームのモータにPWM値をセット
 void Controller::setArmMotorPwm(const int pwm)
 {
-  ev3api::Motor(armMotorPort).setPWM(limitPwmValue(pwm));
+  armMotor->setPWM(limitPwmValue(pwm));
 }
 
 // アームのモータを停止する
 void Controller::stopArmMotor()
 {
-  ev3api::Motor(armMotorPort).stop();
+  armMotor->stop();
 }

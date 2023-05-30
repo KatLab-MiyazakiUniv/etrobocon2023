@@ -11,47 +11,49 @@
 
 class Controller {
  public:
-  Controller();  // 明示的にインスタンス化を禁止
+  static const ePortM rightWheelPort = PORT_B;
+  static const ePortM leftWheelPort = PORT_C;
+  static const ePortM armMotorPort = PORT_A;
+  static ev3api::Motor* rightMotor;
+  static ev3api::Motor* leftMotor;
+  static ev3api::Motor* armMotor;
+
+  Controller() = delete;  // 明示的にインスタンス化を禁止
 
   /**
    * タイヤのモータにPWM値をセット
    * @param pwm PWM値
    */
-  void setRightMotorPwm(const int pwm);
-  void setLeftMotorPwm(const int pwm);
+  static void setRightMotorPwm(const int pwm);
+  static void setLeftMotorPwm(const int pwm);
 
   /**
    * タイヤのモータを停止する
    */
-  void stopMotor();
+  static void stopMotor();
 
   /**
    * アームのモータにPWM値をセット
    * @param pwm PWM値
    */
-  void setArmMotorPwm(const int pwm);
+  static void setArmMotorPwm(const int pwm);
 
   /**
    * アームのモータを停止する
    */
-  void stopArmMotor();
+  static void stopArmMotor();
 
  private:
-  
-  ev3api::Motor rightMotor;
-  int MOTOR_PWM_MAX = 100;
-  int MOTOR_PWM_MIN = -100;
+  static const int MOTOR_PWM_MAX = 100;
+  static const int MOTOR_PWM_MIN = -100;
 
-  ePortM rightWheelPort = PORT_B;
-  ePortM leftWheelPort = PORT_A;
-  ePortM armMotorPort = PORT_C;
 
   /**
    * モータに設定するPWM値の制限
    * @param value 入力されたPWM値
    * @return 制限されたPWM値
    */
-  int limitPwmValue(const int value);
+  static int limitPwmValue(const int value);
 };
 
 #endif

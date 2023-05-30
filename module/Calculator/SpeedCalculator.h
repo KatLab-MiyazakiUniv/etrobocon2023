@@ -17,7 +17,7 @@ class SpeedCalculator {
  public:
   /**
    * @brief コンストラクタ
-   * @param _targetSpeed 目標とする走行速度[Todo]
+   * @param _targetSpeed 目標とする走行速度[mm/s]
    */
   SpeedCalculator(double _targetSpeed);
 
@@ -30,15 +30,16 @@ class SpeedCalculator {
  private:
   Pid pid;
   Timer timer;
+  const double targetSpeed;
   double pwm;
   double prevMileage;
   int prevTime;
 
   /**
    * @brief 走行速度を算出する
-   * @param diffMileage 移動距離[Todo]
+   * @param diffMileage 移動距離[mm/s]
    * @param diffTime 移動時間[ms]
-   * @return 走行速度[Todo]
+   * @return 走行速度[mm/s]
    */
   double calcSpeed(double diffMileage, double diffTime);
 };
