@@ -16,8 +16,10 @@ app = Flask(__name__)
 # server()は"http://"サーバIPアドレス":8000/"にアクセスがされたときに実行される
 def server():
 
-    # 受け取ったbyte型のデータ"request_data"をstr型の文字列"request_data"にデコードを行う
+    # request.get_data()を使って送信されたデータを受け取る
     request_data = request.get_data()
+
+    # byte型のデータ"request_data"をstr型の文字列"request_data"にデコードを行う
     charset = 'UTF-8'
     request_text = request_data.decode(charset, 'replace')
 
