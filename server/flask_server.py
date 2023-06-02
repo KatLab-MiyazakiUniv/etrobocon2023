@@ -4,8 +4,7 @@
 '''
 
 import csv
-from flask import Flask, url_for
-from flask import Flask, request
+from flask import Flask, url_for, request
 import re
 
 app = Flask(__name__)
@@ -22,7 +21,7 @@ def server():
     charset = 'UTF-8'
     request_text = request_data.decode(charset, 'replace')
 
-
+    # データを受け取ったかどうかを判定する
     if len(request_text) != 0:
         
         # 文字列を" "および","で区分けする
