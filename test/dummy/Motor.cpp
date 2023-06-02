@@ -40,6 +40,7 @@ void Motor::reset()
 {
   leftCount = 0;
   rightCount = 0;
+  armCount = 0;
 }
 
 double Motor::leftCount = 0.0;
