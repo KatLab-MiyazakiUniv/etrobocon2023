@@ -11,7 +11,7 @@ app = Flask(__name__)
 # ルーティングを設定
 @app.route('/', methods=["POST", "GET"])
 
-def send():
+def server():
 
     request_data = request.get_data()
     charset = request.mimetype_params.get('charset') or 'UTF-8'
@@ -31,7 +31,7 @@ def send():
 
     open_path = "scripts/data.csv"
 
-# データを取得
+    # データを取得
     file = open(open_path)
     open_data = file.read()
     file.close()
@@ -41,4 +41,4 @@ def send():
 
 # ポート番号の設定
 if __name__ == "__main__":
-    app.run(host='172.26.104.32', port=8000)
+    app.run(host='172.26.104.32', port=8000) 
