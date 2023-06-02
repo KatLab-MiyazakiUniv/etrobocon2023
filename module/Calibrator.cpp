@@ -13,7 +13,7 @@ void Calibrator::run()
   // 左右ボタンでコースのLRを選択する
   selectCourse();
 
-  // 黒と白の輝度を測定して目標輝度を求める
+  // 目標輝度を測定する
   measureTargetBrightness();
 }
 
@@ -75,7 +75,7 @@ void Calibrator::waitForStart()
 
   printf("On standby.\n");  // TODO logger.hを作成したら、printfをlogger.logに変更
   snprintf(buf, BUF_SIZE, "On standby.\n\nSignal within %dcm from Sonar Sensor.", startDistance);
-  printf("%s", buf);  // TODO logger.hを作成したら、printfをlogger.logに変更
+  printf("%s", buf);        // TODO logger.hを作成したら、printfをlogger.logに変更
 
   // startDistance以内の距離に物体がない間待機する
   while(measurer.getForwardDistance() > startDistance) {
