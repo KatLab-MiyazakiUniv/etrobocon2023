@@ -11,7 +11,7 @@ COLOR ColorJudge::getColor(rgb_raw_t const& _rgb)
 {
   rgb_raw_t rgb;
   Hsv hsv;
-  int min;
+  int minValue;
 
   // 環境光による値の偏りを軽減する
   // 事前に測った白が(255,255,255)となるように、RGB値を正規化する
@@ -26,12 +26,12 @@ COLOR ColorJudge::getColor(rgb_raw_t const& _rgb)
   hsv = convertRgbToHsv(rgb);
 
   // RGBの中の最小値を取得
-  min = std::min({ rgb.r, rgb.g, rgb.b });
+  minValue = std::min({ rgb.r, rgb.g, rgb.b });
 
   // 明度が極端に低ければ、黒を返す
   if(hsv.value < BLACK_LIMIT_BORDER) return COLOR::BLACK;
   // 明度が極端に高ければ、白を返す
-  if(min > WHITE_LIMIT_BORDER) return COLOR::WHITE;
+  if(minValue > WHITE_LIMIT_BORDER) return COLOR::WHITE;
   // 彩度が低い場合
   if(hsv.saturation < SATURATION_BORDER) {
     // 明度が低ければ、黒を返す
@@ -55,32 +55,33 @@ Hsv ColorJudge::convertRgbToHsv(rgb_raw_t const& _rgb)
   Hsv hsv{ 0, 0, 0 };
 
   // RGBの中の最大・最小値を求める
-  int max = std::max({ _rgb.r, _rgb.g, _rgb.b });
-  int min = std::min({ _rgb.r, _rgb.g, _rgb.b });
+  int maxValue = std::max({ _rgb.r, _rgb.g, _rgb.b });
+  int minValue = std::min({ _rgb.r, _rgb.g, _rgb.b });
 
-  // maxが0の場合、黒を返す
-  if(max == 0) {
+  // maxValueが0の場合、黒を返す
+  if(maxValue == 0) {
     return hsv;
   }
 
   // 色相
-  if(max == min) {
+  if(maxValue == minValue) {
     hsv.hue = 0;
-  } else if(_rgb.r == max) {
-    hsv.hue = 60 * (_rgb.g - _rgb.b) / (max - min);
-  } else if(_rgb.g == max) {
-    hsv.hue = 60 * (_rgb.b - _rgb.r) / (max - min) + 120;
-  } else if(_rgb.b == max) {
-    hsv.hue = 60 * (_rgb.r - _rgb.g) / (max - min) + 240;
+  } else if(_rgb.r == maxValue) {
+    hsv.hue = 60 * (_rgb.g - _rgb.b) / (maxValue - minValue);
+  } else if(_rgb.g == maxValue) {
+    hsv.hue = 60 * (_rgb.b - _rgb.r) / (maxValue - minValue) + 120;
+  } else if(_rgb.b == maxValue) {
+    hsv.hue = 60 * (_rgb.r - _rgb.g) / (maxValue - minValue) + 240;
   }
+
   // マイナスの場合の補完
   hsv.hue = (hsv.hue + 360) % 360;
 
   // 彩度
-  hsv.saturation = 100 * (max - min) / max;
+  hsv.saturation = 100 * (maxValue - minValue) / maxValue;
 
   // 明度
-  hsv.value = max;
+  hsv.value = maxValue;
 
   return hsv;
 }
