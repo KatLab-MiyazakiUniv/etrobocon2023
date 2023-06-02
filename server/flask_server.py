@@ -2,10 +2,10 @@
  RasPiにWebサーバを設置する 
  @auther  desty505 
 '''
-
+import os
 import csv
-from flask import Flask, url_for, request
 import re
+from flask import Flask, url_for, request
 
 app = Flask(__name__)
 
@@ -49,4 +49,12 @@ def server():
 
 # ポート番号の設定
 if __name__ == "__main__":
-    app.run(host='172.26.104.32', port=8000) 
+
+    ip = "127.0.0.1"
+    
+    host = os.uname()[1]
+    if host == "katlab":
+        ip = "192.168.11.16"
+    elif host == "katlab2":
+        ip = "192.168.11.17"
+    app.run(host=ip, port=8000)
