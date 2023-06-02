@@ -4,6 +4,7 @@
  * @author aridome222 miyahita64 bizyutyu
  */
 #include "Controller.h"
+
 ev3api::Motor* Controller::rightMotor = nullptr;
 ev3api::Motor* Controller::leftMotor = nullptr;
 ev3api::Motor* Controller::armMotor = nullptr;
