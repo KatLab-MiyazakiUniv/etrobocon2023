@@ -1,6 +1,9 @@
-import os
+'''
+ RasPiにWebサーバを設置する 
+ @auther  desty505 
+'''
+
 import csv
-import requests
 from flask import Flask, url_for
 from flask import Flask, request
 import re
