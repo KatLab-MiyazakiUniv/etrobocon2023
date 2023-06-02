@@ -10,7 +10,7 @@ logfiles/
 # カメラシステムへのメッセージファイル
 scripts/message.txt
 
-# vsdode設定ファイル
+# vscode設定ファイル
 .vscode/settings.json
 
 # Created by https://www.toptal.com/developers/gitignore/api/c++,macos,windows
