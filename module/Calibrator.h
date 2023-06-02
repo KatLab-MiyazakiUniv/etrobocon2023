@@ -40,7 +40,7 @@ class Calibrator {
   int getTargetBrightness();
 
  private:
-  bool isLeftCourse;     // true:左コース, false: 右コース
+  bool isLeftCourse;     // true:Lコース, false: Rコース
   int targetBrightness;  // 目標輝度
   static Measurer measurer;
   Timer timer;
