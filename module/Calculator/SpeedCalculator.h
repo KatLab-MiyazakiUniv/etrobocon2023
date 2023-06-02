@@ -23,7 +23,7 @@ class SpeedCalculator {
 
   /**
    * @brief 目標とする走行速度に相当するPWM値を算出する
-   * @return 走行体全体の累計走行距離[mm]
+   * @return 走行速度に相当するPWM値
    */
   int calcPwmFromSpeed();
 
@@ -37,7 +37,7 @@ class SpeedCalculator {
 
   /**
    * @brief 走行速度を算出する
-   * @param diffMileage 移動距離[mm/s]
+   * @param diffMileage 移動距離[mm]
    * @param diffTime 移動時間[ms]
    * @return 走行速度[mm/s]
    */

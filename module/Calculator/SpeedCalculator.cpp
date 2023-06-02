@@ -42,6 +42,6 @@ double SpeedCalculator::calcSpeed(double diffMileage, double diffTime)
   // 走行時間が0のとき、0を返す
   if(diffTime == 0.0) return 0.0;
   // 走行速度を算出
-  double speed = 1000.0 * diffMileage / diffTime;
+  double speed = diffMileage / (diffTime / 1000.0);
   return speed;
 }
