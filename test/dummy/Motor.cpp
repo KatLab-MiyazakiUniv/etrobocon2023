@@ -16,11 +16,11 @@ Motor::Motor(ePortM _port, bool brake, motor_type_t type) : port(_port) {}
 int Motor::getCount()
 {
   if(port == PORT_C) {
-    return static_cast<int>(leftCount);
+    return static_cast<int>(motorCount);
   } else if(port == PORT_B) {
-    return static_cast<int>(rightCount);
+    return static_cast<int>(motorCount);
   } else {
-    return static_cast<int>(armCount);
+    return static_cast<int>(motorCount);
   }
 }
 
@@ -28,21 +28,18 @@ int Motor::getCount()
 void Motor::setPWM(int pwm)
 {
   if(port == PORT_C) {
-    leftCount += pwm * 0.05;
+    motorCount += pwm * 0.05;
   } else if(port == PORT_B) {
-    rightCount += pwm * 0.05;
+    motorCount += pwm * 0.05;
   } else {
-    armCount += pwm * 0.05;
+    motorCount += pwm * 0.05;
   }
 }
 
+// 　motorCountのリセット
 void Motor::reset()
 {
-  leftCount = 0;
-  rightCount = 0;
-  armCount = 0;
+  motorCount = 0;
 }
 
-double Motor::leftCount = 0.0;
-double Motor::rightCount = 0.0;
-double Motor::armCount = 0.0;
+double Motor::motorCount = 0.0;

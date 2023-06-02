@@ -44,9 +44,7 @@ namespace ev3api {
     void reset();
 
    private:
-    static double leftCount;
-    static double rightCount;
-    static double armCount;
+    static double motorCount;
     ePortM port;
   };
 }  // namespace ev3api
