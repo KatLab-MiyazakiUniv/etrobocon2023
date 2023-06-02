@@ -1,7 +1,7 @@
 /**
  * @file Motor.h
  * @brief モータクラス（ダミー）
- * @author YKhm20020
+ * @author YKhm20020 miyashita64 bizyutyu
  */
 
 #ifndef MOTOR_H
