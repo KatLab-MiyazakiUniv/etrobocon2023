@@ -25,11 +25,11 @@ def read():
 
     # データを取得
     file = open(open_path)
-    file_data = file.read()
+    open_data = file.read()
     file.close()
 
     # 値の送信
-    return file_data
+    return open_data
 
 
 # POSTリクエストに対する操作
@@ -70,11 +70,11 @@ def write():
 
     # データを取得
     file = open(open_path)
-    file_data = file.read()
+    open_data = file.read()
     file.close()
 
     # 値の送信
-    return file_data
+    return open_data
 
 
 # ポート番号の設定
