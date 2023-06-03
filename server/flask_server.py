@@ -13,8 +13,16 @@ app = Flask(__name__)
 # ルーティングを設定
 @app.route('/', methods=["POST", "GET"])
 
-# server()は"http://"サーバIPアドレス":8000/"にアクセスがされたときに実行される
+
 def server():
+    """関数の簡単な説明.
+    関数の詳細
+    server()は"http://"サーバIPアドレス":8000/"にアクセスがされたときに実行される
+    
+    Returns:
+        str型:  サーバが持つデータ
+                GETリクエストを受け取った際の返信として送られるデータ
+    """
 
     # request.get_data()を使って送信されたデータを受け取る
     request_data = request.get_data()
