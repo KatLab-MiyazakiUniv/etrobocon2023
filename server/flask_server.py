@@ -9,19 +9,38 @@ from flask import Flask, url_for, request
 
 app = Flask(__name__)
 
-
-# ルーティングを設定
-@app.route('/', methods=["POST", "GET"])
-
-
-def server():
+# GETリクエストに対する操作
+@app.route('/', methods=["GET"])
+def read():
     """関数の簡単な説明.
     関数の詳細
-    server()は"http://"サーバIPアドレス":8000/"にアクセスがされたときに実行される
+    read()は"http://"サーバIPアドレス":8000/"にGETリクエストがされたときに実行される
     
     Returns:
         str型:  サーバが持つデータ
-                GETリクエストを受け取った際の返信として送られるデータ
+    """
+
+    # サーバに持たせるデータファイルのパスを指定
+    open_path = "datafiles/data.csv"
+
+    # データを取得
+    file = open(open_path)
+    file_data = file.read()
+    file.close()
+
+    # 値の送信
+    return file_data
+
+
+# POSTリクエストに対する操作
+@app.route('/', methods=["POST"])
+def write():
+    """関数の簡単な説明.
+    関数の詳細
+    write()は"http://"サーバIPアドレス":8000/"にPOSTリクエストがされたときに実行される
+    
+    Returns:
+        str型:  サーバが持つデータ
     """
 
     # request.get_data()を使って送信されたデータを受け取る
@@ -51,11 +70,12 @@ def server():
 
     # データを取得
     file = open(open_path)
-    open_data = file.read()
+    file_data = file.read()
     file.close()
 
     # 値の送信
-    return open_data
+    return file_data
+
 
 # ポート番号の設定
 if __name__ == "__main__":
