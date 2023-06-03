@@ -30,7 +30,7 @@ def server():
         data_list = re.split('[ ,]', request_text)
 
         # 受け取ったデータで上書きするファイルのパスを指定
-        change_path = "scripts/data.csv"
+        change_path = "datafiles/data.csv"
 
         # 受け取ったデータをファイルに上書きで保存
         with open(change_path, 'w', encoding='utf-8', newline="") as file:
@@ -39,7 +39,7 @@ def server():
             file.close()
 
     # サーバに持たせるデータファイルのパスを指定
-    open_path = "scripts/data.csv"
+    open_path = "datafiles/data.csv"
 
     # データを取得
     file = open(open_path)
