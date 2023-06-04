@@ -16,3 +16,17 @@
 
 ## Authors
 KatLabメンバー, 宮崎大学片山徹郎研究室
+
+## ビルド方法
+
+ビルドする(開発環境、実機共通)
+```
+$ cd ~/etrobo/workspace/etrobocon2023
+$ make build
+```
+
+走行を開始する(実機限定)
+```
+$ cd ~/etrobo/workspace/etrobocon2023
+$ make start
+```
