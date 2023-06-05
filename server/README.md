@@ -11,12 +11,12 @@ $ python3 flask_server.py
 ## データ送信
 csvファイルの内容を送信する場合
 ```
-$ curl -X POST -H "Content-Type: text/plain; charset = utf-8" -d '@scripts/"送信したいcsvファイル"' http://"サーバIPアドレス":8000
+$ curl -X POST -H "Content-Type: text/plain" -d '@scripts/"送信したいcsvファイル"' http://"サーバIPアドレス":8000
 ```
 
 任意の文字列を送信する場合
 ```
-$ curl -X POST -H "Content-Type: text/plain; charset = utf-8" -d '"送信したい文字列"' http://"サーバIPアドレス":8000
+$ curl -X POST -H "Content-Type: text/plain" -d '"送信したい文字列"' http://"サーバIPアドレス":8000
 ```
 
 
