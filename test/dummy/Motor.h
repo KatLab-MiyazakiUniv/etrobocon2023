@@ -1,7 +1,7 @@
 /**
  * @file Motor.h
  * @brief モータクラス（ダミー）
- * @author YKhm20020
+ * @author YKhm20020 miyashita64 bizyutyu
  */
 
 #ifndef MOTOR_H
@@ -44,9 +44,7 @@ namespace ev3api {
     void reset();
 
    private:
-    static double leftCount;
-    static double rightCount;
-    static double armCount;
+    static double motorCount;
     ePortM port;
   };
 }  // namespace ev3api

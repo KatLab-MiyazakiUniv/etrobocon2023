@@ -1,15 +1,13 @@
 /**
  * @file   EtRobocon2023.h
  * @brief  全体を制御するクラス
- * @author KakinokiKanta
+ * @author KakinokiKanta miyashita64 bizyutyu
  */
 
 #ifndef ETROBOCON2023_H
 #define ETROBOCON2023_H
 
 // ev3api.hを読み込むヘッダは.cppに記述する
-// #include "SystemInfo.h"
-// #include "Logger.h"
 #include <signal.h>
 #include <unistd.h>
 
