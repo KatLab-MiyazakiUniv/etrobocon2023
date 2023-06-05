@@ -7,6 +7,9 @@ import csv
 import re
 from flask import Flask, url_for, request
 
+# サーバが扱うファイルの設定
+FILE_PATH = "datafiles/data.csv"
+
 app = Flask(__name__)
 
 # GETリクエストに対する操作
@@ -19,11 +22,8 @@ def read():
         str:  サーバが持つcsvファイルの内容
     """
 
-    # サーバに持たせるデータファイルのパスを指定
-    open_path = "datafiles/data.csv"
-
     # データを取得
-    file = open(open_path)
+    file = open(FILE_PATH)
     open_data = file.read()
     file.close()
 
@@ -54,20 +54,14 @@ def write():
         # 文字列を" "および","で区分けする
         data_list = re.split('[ ,]', request_text)
 
-        # 受け取ったデータで上書きするファイルのパスを指定
-        change_path = "datafiles/data.csv"
-
         # 受け取ったデータをファイルに上書きで保存
-        with open(change_path, 'w', encoding='utf-8', newline="") as file:
+        with open(FILE_PATH, 'w', encoding='utf-8', newline="") as file:
             writer = csv.writer(file)
             writer.writerow(data_list)
             file.close()
 
-    # サーバに持たせるデータファイルのパスを指定
-    open_path = "datafiles/data.csv"
-
     # データを取得
-    file = open(open_path)
+    file = open(FILE_PATH)
     open_data = file.read()
     file.close()
 
