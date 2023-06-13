@@ -1,39 +1,35 @@
 /**
- * @file   Rotation.h
- * @brief  回頭動作
- * @author desty505
+ * @file   Motion.h
+ * @brief  動作の親クラス
+ * @author kodama0720 mutotaka0426
  */
 
-#ifndef ROTATION_H
-#define ROTATION_H
+#ifndef MOTION_H
+#define MOTION_H
 
-#include "Motion.h"
-#include "Mileage.h"
-#include "SystemInfo.h"
+#include "Controller.h"
+#include "Measurer.h"
+#include "Logger.h"
 
-class Rotation : public Motion {
+class Motion {
  public:
   /**
    * コンストラクタ
-   * @param _angle 回転角度(deg) 0~360
-   * @param _targetSpeed 目標速度
-   * @param _isClockwise 回頭方向 ture:時計回り, false:反時計回り
    */
-  Rotation(int _angle, double _targetSpeed, bool _isClockwise);
+  Motion();
 
   /**
-   * @brief 回頭する
+   * @brief 動作を実行する抽象メソッド
    */
-  void run();
+  virtual void run() = 0;
 
   /**
-   * @brief 実行のログを取る
+   * @brief 実行のログを取る抽象メソッド
    */
-  void logRunning();
+  virtual void logRunning() = 0;
 
- private:
-  int angle;         // 回転角度(deg) 0~360
-  int targetSpeed;   // 目標速度
-  bool isClockwise;  // 回頭方向 ture:時計回り, false:反時計回り
+ protected:
+  Logger logger;
 };
+
 #endif
