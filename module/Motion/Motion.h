@@ -1,6 +1,6 @@
 /**
- * @file   AngleRotation.h
- * @brief  角度指定による回頭動作
+ * @file   Rotation.h
+ * @brief  回頭動作
  * @author desty505
  */
 
@@ -11,7 +11,7 @@
 #include "Mileage.h"
 #include "SystemInfo.h"
 
-class AngleRotation : public Rotation {
+class Rotation : public Motion {
  public:
   /**
    * コンストラクタ
@@ -19,7 +19,7 @@ class AngleRotation : public Rotation {
    * @param _targetSpeed 目標速度
    * @param _isClockwise 回頭方向 ture:時計回り, false:反時計回り
    */
-  AngleRotation(int _angle, double _targetSpeed, bool _isClockwise);
+  Rotation(int _angle, double _targetSpeed, bool _isClockwise);
 
   /**
    * @brief 回頭する
