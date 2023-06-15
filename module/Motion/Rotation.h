@@ -16,11 +16,11 @@ class Rotation : public Motion {
  public:
   /**
    * コンストラクタ
-   * @param _angle 回転角度(deg) 0~360
+   * @param _targetValue 回転角度(deg) 0~360
    * @param _targetSpeed 目標速度
    * @param _isClockwise 回頭方向 ture:時計回り, false:反時計回り
    */
-  rotation(int _angle, double _targetSpeed, bool _isClockwise);
+  Rotation(int _targetValue, double _targetSpeed, bool _isClockwise);
 
   /**
    * @brief 回頭する
@@ -30,7 +30,7 @@ class Rotation : public Motion {
   /**
    * オーバーライド必須
    * @brief 直進する際の事前条件判定をする
-   * @param targetValue 回頭の
+   * @param targetValue 回頭の条件値　色または回頭角度
    */
   virtual bool run_precondition_judgement(int targetValue);
 
@@ -40,7 +40,7 @@ class Rotation : public Motion {
    * @param leftMileage   回頭を始めた時点での左車輪の走行距離
    * @param rightMileage  回頭を始めた時点での右車輪の走行距離
    */
-  virtual bool run_postcondition_judgement(int leftMileage, int rightMileage);
+  virtual bool run_postcondition_judgement(double leftMileage, double rightMileage);
 
   /**
    * @brief 実行のログを取る

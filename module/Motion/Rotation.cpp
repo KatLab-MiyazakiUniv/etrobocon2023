@@ -8,7 +8,7 @@
 
 using namespace std;
 
-Rotation::rotation(int _targetValue, double _targetSpeed, bool _isClockwise)
+Rotation::Rotation(int _targetValue, double _targetSpeed, bool _isClockwise)
   : targetValue(_targetValue), targetSpeed(_targetSpeed), isClockwise(_isClockwise)
 {
 }
@@ -34,28 +34,28 @@ void Rotation::run()
   int leftSign = isClockwise ? 1 : -1;
   int rightSign = isClockwise ? -1 : 1;
   double targetDistance
-      = M_PI * TREAD * angle / 360;  // 指定した角度に対する目標の走行距離(弧の長さ)
+      = M_PI * TREAD * targetValue / 360;  // 指定した角度に対する目標の走行距離(弧の長さ)
 
   // 現在の走行距離
-  double leftMileage = Mileage::calculateWheelMileage(measurer.getLeftCount());
-  double rightMileage = Mileage::calculateWheelMileage(measurer.getRightCount());
+  double leftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
+  double rightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
 
   // 目標距離（呼び出し時の走行距離 ± 指定された回転量に必要な距離）
   double targetLeftDistance = leftMileage + targetDistance * leftSign;
   double targetRightDistance = rightMileage + targetDistance * rightSign;
 
+
   // 両輪が目標距離に到達するまでループ
   while(true) {
     // 残りの移動距離
     double diffLeftDistance
-        = (targetLeftDistance - Mileage::calculateWheelMileage(measurer.getLeftCount())) * leftSign;
+        = (targetLeftDistance - Mileage::calculateWheelMileage(Measurer::getLeftCount())) * leftSign;
     double diffRightDistance
-        = (targetRightDistance - Mileage::calculateWheelMileage(measurer.getRightCount()))
+        = (targetRightDistance - Mileage::calculateWheelMileage(Measurer::getRightCount()))
           * rightSign;
 
     // 事後条件を判定する
-    if(run_postcondition_judgement(leftMileage, rightMileage, targetLeftDistance,
-                                   targetRightDistance)
+    if(run_postcondition_judgement(leftMileage, rightMileage)
        != true) {
       break;
     }
@@ -65,23 +65,21 @@ void Rotation::run()
     int pwm = SpeedCalculator.calcPwmFromSpeed();
 
     // モータにPWM値をセット
-    controller.setLeftMotorPwm(pwm * leftSign);
-    controller.setRightMotorPwm(pwm * rightSign);
+    Controller::setLeftMotorPwm(pwm * leftSign);
+    Controller::setRightMotorPwm(pwm * rightSign);
 
-    // 10ミリ秒待機
-    controller.sleep();
   }
 
   // モータの停止
-  controller.stopMotor();
+  Controller::stopMotor();
 }
 
-bool Straight::run_precondition_judgement(int targetValue)
+bool Rotation::run_precondition_judgement(int targetValue)
 {
   return true;
 }
 
-bool Straight::run_postcondition_judgement(double leftMileage, double rightMileage)
+bool Rotation::run_postcondition_judgement(double leftMileage, double rightMileage)
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
@@ -91,9 +89,9 @@ bool Straight::run_postcondition_judgement(double leftMileage, double rightMilea
 
   // 回頭を初めてからの走行距離を求める
   double currentLeftDistance
-      = Mileage::calculateWheelMileage(measurer.getLeftCount()) - leftMileage;
+      = Mileage::calculateWheelMileage(Measurer::getLeftCount()) - leftMileage;
   double currentRightDistance
-      = Mileage::calculateWheelMileage(measurer.getRightCount()) - rightMileage;
+      = Mileage::calculateWheelMileage(Measurer::getRightCount()) - rightMileage;
 
   // 1周分回頭していたらfalseを返す
   if(currentLeftDistance > rotateDistance || currentRightDistance > rotateDistance) {
@@ -108,6 +106,6 @@ void Rotation::logRunning()
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
   const char* str = isClockwise ? "true" : "false";
 
-  snprintf(buf, BUF_SIZE, "Run Rotation (angle: %d, pwm: %d, isClockwise: %s)", angle, pwm, str);
+  snprintf(buf, BUF_SIZE, "Run Rotation (targetValue: %d, targetSpeed: %d, isClockwise: %s)", targetValue, targetSpeed, str);
   logger.log(buf);
 }
