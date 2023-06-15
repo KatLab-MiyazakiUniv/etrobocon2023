@@ -1,6 +1,6 @@
 /**
  * @file   Rotation.h
- * @brief  回頭動作
+ * @brief  回頭動作の中間クラス
  * @author desty505
  */
 

@@ -1,6 +1,6 @@
 /**
  * @file   Rotation.cpp
- * @brief  回頭動作
+ * @brief  回頭動作の中間クラス
  * @author desty505
  */
 
@@ -99,7 +99,6 @@ bool Straight::run_postcondition_judgement(double leftMileage, double rightMilea
   if(currentLeftDistance > rotateDistance || currentRightDistance > rotateDistance) {
     return false;
   }
-
   return true;
 }
 
