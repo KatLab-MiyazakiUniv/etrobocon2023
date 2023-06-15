@@ -20,7 +20,7 @@ class Rotation : public Motion {
    * @param _targetSpeed 目標速度
    * @param _isClockwise 回頭方向 ture:時計回り, false:反時計回り
    */
-  Rotation(int _angle, double _targetSpeed, bool _isClockwise);
+  rotation(int _angle, double _targetSpeed, bool _isClockwise);
 
   /**
    * @brief 回頭する
