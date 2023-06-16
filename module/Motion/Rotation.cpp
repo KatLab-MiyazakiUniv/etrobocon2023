@@ -44,21 +44,18 @@ void Rotation::run()
   double targetLeftDistance = leftMileage + targetDistance * leftSign;
   double targetRightDistance = rightMileage + targetDistance * rightSign;
 
-
   // 両輪が目標距離に到達するまでループ
   while(true) {
     // 残りの移動距離
     double diffLeftDistance
-        = (targetLeftDistance - Mileage::calculateWheelMileage(Measurer::getLeftCount())) * leftSign;
+        = (targetLeftDistance - Mileage::calculateWheelMileage(Measurer::getLeftCount()))
+          * leftSign;
     double diffRightDistance
         = (targetRightDistance - Mileage::calculateWheelMileage(Measurer::getRightCount()))
           * rightSign;
 
     // 事後条件を判定する
-    if(run_postcondition_judgement(leftMileage, rightMileage)
-       != true) {
-      break;
-    }
+    if(run_postcondition_judgement(leftMileage, rightMileage) != true) break;
 
     // PWM値を設定する
     SpeedCalculator SpeedCalculator(targetSpeed);
@@ -67,7 +64,6 @@ void Rotation::run()
     // モータにPWM値をセット
     Controller::setLeftMotorPwm(pwm * leftSign);
     Controller::setRightMotorPwm(pwm * rightSign);
-
   }
 
   // モータの停止
@@ -106,6 +102,7 @@ void Rotation::logRunning()
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
   const char* str = isClockwise ? "true" : "false";
 
-  snprintf(buf, BUF_SIZE, "Run Rotation (targetValue: %d, targetSpeed: %d, isClockwise: %s)", targetValue, targetSpeed, str);
+  snprintf(buf, BUF_SIZE, "Run Rotation (targetValue: %d, targetSpeed: %d, isClockwise: %s)",
+           targetValue, targetSpeed, str);
   logger.log(buf);
 }
