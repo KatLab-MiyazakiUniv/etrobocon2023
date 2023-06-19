@@ -38,14 +38,7 @@ void Rotation::run()
 
   // 両輪が目標距離に到達するまでループ
   while(true) {
-    // 残りの移動距離
-    double diffLeftDistance
-        = (targetLeftDistance - Mileage::calculateWheelMileage(Measurer::getLeftCount()))
-          * leftSign;
-    double diffRightDistance
-        = (targetRightDistance - Mileage::calculateWheelMileage(Measurer::getRightCount()))
-          * rightSign;
-
+    
     // 事後条件を判定する
     if(runPostconditionJudgement()) break;
 
