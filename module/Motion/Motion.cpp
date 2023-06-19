@@ -1,7 +1,7 @@
 /**
  * @file   Motion.cpp
  * @brief  動作の親クラス
- * @author kodama0720 mutotaka0426
+ * @author desty505
  */
 
 #include "Motion.h"

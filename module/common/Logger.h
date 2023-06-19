@@ -1,7 +1,7 @@
 /**
  * @file Logger.h
  * @brief 動作確認に用いるprintf()関数を所持するクラス
- * @author sap2368 mutotaka0426
+ * @author desty505
  */
 #ifndef LOGGER_H
 #define LOGGER_H
