@@ -8,8 +8,8 @@
 
 using namespace std;
 
-Rotation::Rotation(int _targetValue, double _targetSpeed, bool _isClockwise)
-  : targetValue(_targetValue), targetSpeed(_targetSpeed), isClockwise(_isClockwise)
+Rotation::Rotation(double _targetSpeed, bool _isClockwise)
+  : targetSpeed(_targetSpeed), isClockwise(_isClockwise)
 {
 }
 
@@ -18,23 +18,15 @@ void Rotation::run()
   const int BUF_SIZE = 128;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
 
-  // targetSpeed値が0以下の場合はwarningを出して終了する
-  if(targetSpeed <= 0) {
-    snprintf(buf, BUF_SIZE, "The targetSpeed value passed to Rotation is %d", targetSpeed);
-    logger.logWarning(buf);
-    return;
-  }
-
   // 事前条件を判定する
-  if(runPreconditionJudgement(targetValue) != true) {
+  if(runPreconditionJudgement(targetSpeed)) {
     return;
   }
 
   // isClockwiseがtrueなら時計回り，falseなら反時計回り
   int leftSign = isClockwise ? 1 : -1;
   int rightSign = isClockwise ? -1 : 1;
-  double targetDistance
-      = M_PI * TREAD * targetValue / 360;  // 指定した角度に対する目標の走行距離(弧の長さ)
+  double targetDistance = M_PI * TREAD / 360;  // 指定した角度に対する目標の走行距離(弧の長さ)
 
   // 現在の走行距離
   double leftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
@@ -55,7 +47,7 @@ void Rotation::run()
           * rightSign;
 
     // 事後条件を判定する
-    if(runPostconditionJudgement(leftMileage, rightMileage) != false) break;
+    if(runPostconditionJudgement()) break;
 
     // PWM値を設定する
     SpeedCalculator SpeedCalculator(targetSpeed);
@@ -70,9 +62,19 @@ void Rotation::run()
   Controller::stopMotor();
 }
 
-bool Rotation::runPreconditionJudgement(int targetValue)
+bool Rotation::runPreconditionJudgement(double targetSpeed)
 {
-  return true;
+  const int BUF_SIZE = 256;
+  char buf[BUF_SIZE];
+
+  // targetSpeed値が0以下の場合はwarningを出して終了する
+  if(targetSpeed <= 0) {
+    snprintf(buf, BUF_SIZE, "The targetSpeed value passed to Rotation is %d", targetSpeed);
+    logger.logWarning(buf);
+    return true;
+  }
+
+  return false;
 }
 
 bool Rotation::runPostconditionJudgement(double leftMileage, double rightMileage)
