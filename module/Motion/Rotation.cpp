@@ -55,7 +55,7 @@ void Rotation::run()
           * rightSign;
 
     // 事後条件を判定する
-    if(runPostconditionJudgement(leftMileage, rightMileage) != true) break;
+    if(runPostconditionJudgement(leftMileage, rightMileage) != false) break;
 
     // PWM値を設定する
     SpeedCalculator SpeedCalculator(targetSpeed);
@@ -89,11 +89,11 @@ bool Rotation::runPostconditionJudgement(double leftMileage, double rightMileage
   double currentRightDistance
       = Mileage::calculateWheelMileage(Measurer::getRightCount()) - rightMileage;
 
-  // 1周分回頭していたらfalseを返す
+  // 1周分回頭していたらtrueを返す
   if(currentLeftDistance > rotateDistance || currentRightDistance > rotateDistance) {
-    return false;
+    return true;
   }
-  return true;
+  return false;
 }
 
 void Rotation::logRunning()
