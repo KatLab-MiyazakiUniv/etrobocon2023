@@ -15,9 +15,6 @@ Rotation::Rotation(double _targetSpeed, bool _isClockwise)
 
 void Rotation::run()
 {
-  const int BUF_SIZE = 128;
-  char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
-
   // 事前条件を判定する
   if(runPreconditionJudgement(targetSpeed)) {
     return;
@@ -38,7 +35,7 @@ void Rotation::run()
 
   // 両輪が目標距離に到達するまでループ
   while(true) {
-    
+
     // 事後条件を判定する
     if(runPostconditionJudgement()) break;
 
