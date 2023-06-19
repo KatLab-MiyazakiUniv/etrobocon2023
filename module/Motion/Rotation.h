@@ -20,7 +20,7 @@ class Rotation : public Motion {
    * @param _targetSpeed 目標速度
    * @param _isClockwise 回頭方向 ture:時計回り, false:反時計回り
    */
-  Rotation(int _targetValue, double _targetSpeed, bool _isClockwise);
+  Rotation(double _targetSpeed, bool _isClockwise);
 
   /**
    * @brief 回頭する
@@ -29,10 +29,10 @@ class Rotation : public Motion {
 
   /**
    * @brief 直進する際の事前条件判定をする
-   * @param targetValue 回頭の条件値　色または回頭角度
+   * @param targetSpeed 目標速度
    * @note オーバーライド必須
    */
-  virtual bool runPreconditionJudgement(int targetValue);
+  virtual bool runPreconditionJudgement(double targetSpeed);
 
   /**
    * @brief 直進する際の事後条件判定をする　返り値が真でモーターが止まる

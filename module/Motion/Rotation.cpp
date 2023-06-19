@@ -23,21 +23,15 @@ void Rotation::run()
   // isClockwiseがtrueなら時計回り，falseなら反時計回り
   int leftSign = isClockwise ? 1 : -1;
   int rightSign = isClockwise ? -1 : 1;
-  double targetDistance = M_PI * TREAD / 360;  // 指定した角度に対する目標の走行距離(弧の長さ)
 
-  // 現在の走行距離
+  // 呼び出し時の走行距離
   double leftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
   double rightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
 
-  // 目標距離（呼び出し時の走行距離 ± 指定された回転量に必要な距離）
-  double targetLeftDistance = leftMileage + targetDistance * leftSign;
-  double targetRightDistance = rightMileage + targetDistance * rightSign;
-
   // 両輪が目標距離に到達するまでループ
   while(true) {
-
     // 事後条件を判定する
-    if(runPostconditionJudgement()) break;
+    if(runPostconditionJudgement(leftMileage, rightMileage)) break;
 
     // PWM値を設定する
     SpeedCalculator SpeedCalculator(targetSpeed);
@@ -59,7 +53,7 @@ bool Rotation::runPreconditionJudgement(double targetSpeed)
 
   // targetSpeed値が0以下の場合はwarningを出して終了する
   if(targetSpeed <= 0) {
-    snprintf(buf, BUF_SIZE, "The targetSpeed value passed to Rotation is %d", targetSpeed);
+    snprintf(buf, BUF_SIZE, "The targetSpeed value passed to Rotation is %lf", targetSpeed);
     logger.logWarning(buf);
     return true;
   }
@@ -82,7 +76,7 @@ bool Rotation::runPostconditionJudgement(double leftMileage, double rightMileage
       = Mileage::calculateWheelMileage(Measurer::getRightCount()) - rightMileage;
 
   // 1周分回頭していたらtrueを返す
-  if(currentLeftDistance > rotateDistance || currentRightDistance > rotateDistance) {
+  if(currentLeftDistance >= rotateDistance || currentRightDistance >= rotateDistance) {
     return true;
   }
   return false;
