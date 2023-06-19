@@ -28,19 +28,19 @@ class Rotation : public Motion {
   void run();
 
   /**
-   * オーバーライド必須
    * @brief 直進する際の事前条件判定をする
    * @param targetValue 回頭の条件値　色または回頭角度
+   * @note オーバーライド必須
    */
-  virtual bool run_precondition_judgement(int targetValue);
+  virtual bool runPreconditionJudgement(int targetValue);
 
   /**
-   * オーバーライド必須
    * @brief 直進する際の事後条件判定をする　返り値が真でモーターが止まる
    * @param leftMileage   回頭を始めた時点での左車輪の走行距離
    * @param rightMileage  回頭を始めた時点での右車輪の走行距離
+   * @note オーバーライド必須
    */
-  virtual bool run_postcondition_judgement(double leftMileage, double rightMileage);
+  virtual bool runPostconditionJudgement(double leftMileage, double rightMileage);
 
   /**
    * @brief 実行のログを取る

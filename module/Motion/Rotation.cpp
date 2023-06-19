@@ -26,7 +26,7 @@ void Rotation::run()
   }
 
   // 事前条件を判定する
-  if(run_precondition_judgement(targetValue) != true) {
+  if(runPreconditionJudgement(targetValue) != true) {
     return;
   }
 
@@ -55,7 +55,7 @@ void Rotation::run()
           * rightSign;
 
     // 事後条件を判定する
-    if(run_postcondition_judgement(leftMileage, rightMileage) != true) break;
+    if(runPostconditionJudgement(leftMileage, rightMileage) != true) break;
 
     // PWM値を設定する
     SpeedCalculator SpeedCalculator(targetSpeed);
@@ -70,12 +70,12 @@ void Rotation::run()
   Controller::stopMotor();
 }
 
-bool Rotation::run_precondition_judgement(int targetValue)
+bool Rotation::runPreconditionJudgement(int targetValue)
 {
   return true;
 }
 
-bool Rotation::run_postcondition_judgement(double leftMileage, double rightMileage)
+bool Rotation::runPostconditionJudgement(double leftMileage, double rightMileage)
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
