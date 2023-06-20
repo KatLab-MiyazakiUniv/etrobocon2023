@@ -48,8 +48,10 @@ class Rotation : public Motion {
   void logRunning();
 
  private:
-  int targetValue;   // 回転角度(deg) 0~360 もしくは 指定色
-  int targetSpeed;   // 目標速度
-  bool isClockwise;  // 回頭方向 ture:時計回り, false:反時計回り
+  int targetValue;      // 回転角度(deg) 0~360 もしくは 指定色
+  int targetSpeed;      // 目標速度
+  bool isClockwise;     // 回頭方向 ture:時計回り, false:反時計回り
+  double leftMileage;   // クラス呼び出し時の左車輪の走行距離
+  double rightMileage;  // クラス呼び出し時の右車輪の走行距離
 };
 #endif
