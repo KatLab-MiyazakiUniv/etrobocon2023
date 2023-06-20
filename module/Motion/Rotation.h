@@ -16,7 +16,6 @@ class Rotation : public Motion {
  public:
   /**
    * コンストラクタ
-   * @param _targetValue 回転角度(deg) 0~360
    * @param _targetSpeed 目標速度
    * @param _isClockwise 回頭方向 ture:時計回り, false:反時計回り
    */
