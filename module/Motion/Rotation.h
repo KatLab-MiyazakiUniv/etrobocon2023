@@ -27,14 +27,14 @@ class Rotation : public Motion {
   void run();
 
   /**
-   * @brief 直進する際の事前条件判定をする
+   * @brief 回頭する際の事前条件判定をする
    * @param targetSpeed 目標速度
    * @note オーバーライド必須
    */
   virtual bool runPreconditionJudgement(double targetSpeed);
 
   /**
-   * @brief 直進する際の事後条件判定をする　返り値が真でモーターが止まる
+   * @brief 回頭する際の事後条件判定をする　返り値が真でモーターが止まる
    * @param leftMileage   回頭を始めた時点での左車輪の走行距離
    * @param rightMileage  回頭を始めた時点での右車輪の走行距離
    * @note オーバーライド必須
