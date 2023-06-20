@@ -39,7 +39,7 @@ class Rotation : public Motion {
    * @param rightMileage  回頭を始めた時点での右車輪の走行距離
    * @note オーバーライド必須
    */
-  virtual bool isMetcondition(double leftMileage, double rightMileage);
+  virtual bool isMetPostcondition(double leftMileage, double rightMileage);
 
   /**
    * @brief 実行のログを取る

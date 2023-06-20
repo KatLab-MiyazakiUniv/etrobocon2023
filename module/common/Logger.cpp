@@ -20,11 +20,11 @@ void Logger::log(const char* logMessage)
 void Logger::logWarning(const char* warningMessage)
 {
   const int BUF_SIZE = 128;
-  char message[BUF_SIZE];  // 表示するメッセージ
+  char message[BUF_SIZE];                // 表示するメッセージ
   snprintf(message, BUF_SIZE, "%s\n", warningMessage);
-  printf("\x1b[36m"); /* 文字色をシアンに */
+  printf("\x1b[36m");                    /* 文字色をシアンに */
   printf("Warning: %s", message);
-  printf("\x1b[39m"); /* 文字色をデフォルトに戻す */
+  printf("\x1b[39m");                    /* 文字色をデフォルトに戻す */
 
   strncat(logs, message, sizeof(logs));  // logsとmessageを結合する
 }
@@ -32,11 +32,11 @@ void Logger::logWarning(const char* warningMessage)
 void Logger::logError(const char* errorMessage)
 {
   const int BUF_SIZE = 128;
-  char message[BUF_SIZE];  // 表示するメッセージ
+  char message[BUF_SIZE];                // 表示するメッセージ
   snprintf(message, BUF_SIZE, "%s\n", errorMessage);
-  printf("\x1b[35m"); /* 文字色をマゼンタに */
+  printf("\x1b[35m");                    /* 文字色をマゼンタに */
   printf("Error: %s", message);
-  printf("\x1b[39m"); /* 文字色をデフォルトに戻す */
+  printf("\x1b[39m");                    /* 文字色をデフォルトに戻す */
 
   strncat(logs, message, sizeof(logs));  // logsとmessageを結合する
 }
@@ -44,11 +44,11 @@ void Logger::logError(const char* errorMessage)
 void Logger::logHighlight(const char* highlightLog)
 {
   const int BUF_SIZE = 128;
-  char message[BUF_SIZE];  // 表示するメッセージ
+  char message[BUF_SIZE];                // 表示するメッセージ
   snprintf(message, BUF_SIZE, "%s\n", highlightLog);
-  printf("\x1b[32m"); /* 文字色を緑色に */
+  printf("\x1b[32m");                    /* 文字色を緑色に */
   printf("%s", message);
-  printf("\x1b[39m"); /* 文字色をデフォルトに戻す */
+  printf("\x1b[39m");                    /* 文字色をデフォルトに戻す */
 
   strncat(logs, message, sizeof(logs));  // logsとmessageを結合する
 }
@@ -62,7 +62,7 @@ void Logger::outputToFile()
     logWarning("cannot open file");
     return;
   }
-  fprintf(outputFile, logs);  // logsの内容をlogfile.txtに書き込む
+  fprintf(outputFile, "%s", logs);  // logsの内容をlogfile.txtに書き込む
   fclose(outputFile);
 
   /*
