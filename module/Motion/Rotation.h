@@ -31,7 +31,7 @@ class Rotation : public Motion {
    * @param targetSpeed 目標速度
    * @note オーバーライド必須
    */
-  virtual bool runPreconditionJudgement(double targetSpeed);
+  virtual bool isMetPrecondition(double targetSpeed);
 
   /**
    * @brief 回頭する際の事後条件判定をする　返り値が真でモーターが止まる
@@ -39,7 +39,7 @@ class Rotation : public Motion {
    * @param rightMileage  回頭を始めた時点での右車輪の走行距離
    * @note オーバーライド必須
    */
-  virtual bool runPostconditionJudgement(double leftMileage, double rightMileage);
+  virtual bool isMetcondition(double leftMileage, double rightMileage);
 
   /**
    * @brief 実行のログを取る

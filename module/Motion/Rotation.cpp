@@ -16,7 +16,7 @@ Rotation::Rotation(double _targetSpeed, bool _isClockwise)
 void Rotation::run()
 {
   // 事前条件を判定する
-  if(runPreconditionJudgement(targetSpeed)) {
+  if(!isMetPrecondition(targetSpeed)) {
     return;
   }
 
@@ -31,7 +31,7 @@ void Rotation::run()
   // 両輪が目標距離に到達するまでループ
   while(true) {
     // 事後条件を判定する
-    if(runPostconditionJudgement(leftMileage, rightMileage)) break;
+    if(!isMetPostcondition(leftMileage, rightMileage)) break;
 
     // PWM値を設定する
     SpeedCalculator SpeedCalculator(targetSpeed);
@@ -46,7 +46,7 @@ void Rotation::run()
   Controller::stopMotor();
 }
 
-bool Rotation::runPreconditionJudgement(double targetSpeed)
+bool Rotation::isMetPrecondition(double targetSpeed)
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
@@ -55,13 +55,13 @@ bool Rotation::runPreconditionJudgement(double targetSpeed)
   if(targetSpeed <= 0) {
     snprintf(buf, BUF_SIZE, "The targetSpeed value passed to Rotation is %lf", targetSpeed);
     logger.logWarning(buf);
-    return true;
+    return false;
   }
 
-  return false;
+  return true;
 }
 
-bool Rotation::runPostconditionJudgement(double leftMileage, double rightMileage)
+bool Rotation::isMetPostcondition(double leftMileage, double rightMileage)
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
@@ -77,9 +77,9 @@ bool Rotation::runPostconditionJudgement(double leftMileage, double rightMileage
 
   // 1周分回頭していたらtrueを返す
   if(currentLeftDistance >= rotateDistance || currentRightDistance >= rotateDistance) {
-    return true;
+    return false;
   }
-  return false;
+  return true;
 }
 
 void Rotation::logRunning()
