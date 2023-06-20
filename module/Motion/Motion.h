@@ -1,7 +1,7 @@
 /**
  * @file   Motion.h
  * @brief  動作の親クラス
- * @author desty505s
+ * @author desty505
  */
 
 #ifndef MOTION_H
