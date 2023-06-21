@@ -1,4 +1,0 @@
-log text
-log warning-text
-log error-text
-log highlight-text
