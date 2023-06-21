@@ -60,7 +60,7 @@ bool Rotation::isMetPrecondition(double targetSpeed)
 
 bool Rotation::isMetPostcondition(double initLeftMileage, double initRightMileage)
 {
-  return true;
+  return false;
 }
 
 void Rotation::logRunning()
