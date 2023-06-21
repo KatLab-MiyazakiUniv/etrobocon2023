@@ -18,10 +18,19 @@ if [ -d $buildDir ]; then
         rm -rf build
     fi
 fi
+
+# NOTE: 実行とテストでカレントディレクトリが異なり，テストの際にファイルパスの指定ができないため，テスト用にdatafiles/及びscripts/ディレクトリを作成・コピーする
 mkdir -p build
+mkdir -p build/etrobocon2023/logfiles
+mkdir -p build/etrobocon2023/scripts
 cd build
+cp ../scripts/*.sh etrobocon2023/logfiles/
+cp ../scripts/*.sh etrobocon2023/scripts/
+chmod 777 ./etrobocon2023/scripts/*.sh
 
 cmake -DCMAKE_BUILD_TYPE=Coverage ..
 cmake --build .
 export GTEST_COLOR=1
 ctest -VV
+
+rm -rf etrobocon2023/
