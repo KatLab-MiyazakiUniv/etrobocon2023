@@ -21,7 +21,7 @@ void Rotation::run()
   }
 
   // isClockwiseがtrueなら時計回り，falseなら反時計回り
-  // isClockwiseは回転方向の係数を表している
+  // isClockwiseは回転方向の係数
   int leftSign = isClockwise ? 1 : -1;
   int rightSign = isClockwise ? -1 : 1;
 
