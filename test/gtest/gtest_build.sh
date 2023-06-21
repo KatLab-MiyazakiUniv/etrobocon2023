@@ -19,7 +19,7 @@ if [ -d $buildDir ]; then
     fi
 fi
 
-# NOTE: 実行とテストでカレントディレクトリが異なり，テストの際にファイルパスの指定ができないため，テスト用にdatafiles/及びscripts/ディレクトリを作成・コピーする
+# NOTE: 実行とテストでカレントディレクトリが異なり，テストの際にファイルパスの指定ができないため，テスト用にlogfiles/及びscripts/ディレクトリを作成・コピーする
 mkdir -p build
 mkdir -p build/etrobocon2023/logfiles
 mkdir -p build/etrobocon2023/scripts
