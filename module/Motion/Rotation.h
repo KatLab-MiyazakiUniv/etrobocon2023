@@ -34,12 +34,12 @@ class Rotation : public Motion {
   virtual bool isMetPrecondition(double targetSpeed);
 
   /**
-   * @brief 回頭する際の事後条件判定をする　返り値が真でモーターが止まる
-   * @param leftMileage   回頭を始めた時点での左車輪の走行距離
-   * @param rightMileage  回頭を始めた時点での右車輪の走行距離
+   * @brief 回頭する際の継続条件判定をする　返り値がfalseでモーターが止まる
+   * @param initLeftMileage   回頭を始めた時点での左車輪の走行距離
+   * @param initRightMileage  回頭を始めた時点での右車輪の走行距離
    * @note オーバーライド必須
    */
-  virtual bool isMetPostcondition(double leftMileage, double rightMileage);
+  virtual bool isMetPostcondition(double initLeftMileage, double initRightMileage);
 
   /**
    * @brief 実行のログを取る
