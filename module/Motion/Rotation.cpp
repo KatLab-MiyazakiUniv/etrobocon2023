@@ -25,8 +25,8 @@ void Rotation::run()
   int rightSign = isClockwise ? -1 : 1;
 
   // 呼び出し時の走行距離
-  double leftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
-  double rightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
+  leftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
+  rightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
 
   // 両輪が目標距離に到達するまでループ
   while(true) {
