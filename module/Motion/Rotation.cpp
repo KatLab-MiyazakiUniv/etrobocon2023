@@ -25,13 +25,13 @@ void Rotation::run()
   int rightSign = isClockwise ? -1 : 1;
 
   // 呼び出し時の走行距離
-  leftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
-  rightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
+  initLeftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
+  initRightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
 
   // 両輪が目標距離に到達するまでループ
   while(true) {
     // 事後条件を判定する
-    if(!isMetPostcondition(leftMileage, rightMileage)) break;
+    if(!isMetPostcondition(initLeftMileage, initRightMileage)) break;
 
     // PWM値を設定する
     SpeedCalculator SpeedCalculator(targetSpeed);
@@ -61,7 +61,7 @@ bool Rotation::isMetPrecondition(double targetSpeed)
   return true;
 }
 
-bool Rotation::isMetPostcondition(double leftMileage, double rightMileage)
+bool Rotation::isMetPostcondition(double initLeftMileage, double initRightMileage)
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
@@ -71,9 +71,9 @@ bool Rotation::isMetPostcondition(double leftMileage, double rightMileage)
 
   // 回頭を初めてからの走行距離を求める
   double currentLeftDistance
-      = Mileage::calculateWheelMileage(Measurer::getLeftCount()) - leftMileage;
+      = Mileage::calculateWheelMileage(Measurer::getLeftCount()) - initLeftMileage;
   double currentRightDistance
-      = Mileage::calculateWheelMileage(Measurer::getRightCount()) - rightMileage;
+      = Mileage::calculateWheelMileage(Measurer::getRightCount()) - initRightMileage;
 
   // 1周分回頭していたらtrueを返す
   if(currentLeftDistance >= rotateDistance || currentRightDistance >= rotateDistance) {
