@@ -1,6 +1,6 @@
 #!/bin/sh
 
-mkdir -p logfiles
+mkdir -p etrobocon2023/logfiles
 oldName="logfile.txt"
 newName=`date +"%m%d-%H:%M.txt"`
 
