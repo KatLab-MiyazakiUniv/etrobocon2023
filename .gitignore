@@ -2,7 +2,8 @@
 build/
 
 # ディレクトリ
-logfiles/
+logfiles/*
+!logfiles/.gitkeep
 
 # シミュレータ自動実行ツール関係
 .cancel-sim-test
