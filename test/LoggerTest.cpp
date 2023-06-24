@@ -1,7 +1,7 @@
 /**
  * @file LoggerTest.cpp
  * @brief Loggerクラスをテストする
- * @author sap268 mutotaka0426
+ * @author desty505
  */
 
 #include "Logger.h"
@@ -25,7 +25,7 @@ namespace etrobocon2023_test {
   {
     Logger logger;
     std::string logMsg = "WarningMessage test.";
-    std::string expected = "\x1b[36m";  // 文字色をシアンに
+    std::string expected = "\x1b[36m";   // 文字色をシアンに
     expected += "Warning: " + logMsg + "\n";
     expected += "\x1b[39m";              // 文字色をデフォルトに戻す
     testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
@@ -38,7 +38,7 @@ namespace etrobocon2023_test {
   {
     Logger logger;
     std::string logMsg = "ErrorMessage test.";
-    std::string expected = "\x1b[35m";  // 文字色をマゼンタに
+    std::string expected = "\x1b[35m";   // 文字色をマゼンタに
     expected += "Error: " + logMsg + "\n";
     expected += "\x1b[39m";              // 文字色をデフォルトに戻す
     testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
@@ -51,7 +51,7 @@ namespace etrobocon2023_test {
   {
     Logger logger;
     std::string logMsg = "HighlightLog test.";
-    std::string expected = "\x1b[32m";  // 文字色を緑色に
+    std::string expected = "\x1b[32m";   // 文字色を緑色に
     expected += logMsg + "\n";
     expected += "\x1b[39m";              // 文字色をデフォルトに戻す
     testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
@@ -90,10 +90,10 @@ namespace etrobocon2023_test {
     if((fp = popen(cmdline, "r")) == NULL) {
       err(EXIT_FAILURE, "%s", cmdline);
     }
-    fgets(fileName, BUF_SIZE, fp);  // コマンドの実行結果をfileNameにセット
+    fgets(fileName, BUF_SIZE, fp);            // コマンドの実行結果をfileNameにセット
     pclose(fp);
-    char* endPoint = strchr(fileName, '\n');        // 改行があるポインタを取得
-    if(endPoint != NULL) *endPoint = '\0';          // 改行を削除
+    char* endPoint = strchr(fileName, '\n');  // 改行があるポインタを取得
+    if(endPoint != NULL) *endPoint = '\0';    // 改行を削除
     strncat(filePath, fileName, sizeof(filePath));  // filePathとfileNameを結合する
 
     const int LINE_SIZE = 256;
