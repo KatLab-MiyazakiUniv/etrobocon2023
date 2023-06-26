@@ -7,7 +7,8 @@
 #include "LineTracing.h"
 using namespace std;
 
-LineTracing::LineTracing(double _targetDistance, int _targetBrightness, int _pwm, const PidGain& _gain, bool& _isLeftEdge)
+LineTracing::LineTracing(double _targetDistance, int _targetBrightness, int _pwm,
+                         const PidGain& _gain, bool& _isLeftEdge)
   : targetDistance(_targetDistance),
     targetBrightness(_targetBrightness),
     pwm(_pwm),
@@ -72,7 +73,8 @@ bool LineTracing::isMetPrecondition(int pwm, double targetDistance)
   return true;
 }
 
-bool LineTracing::isMetPostcondition(double initLeftMileage, double initRightMileage){
+bool LineTracing::isMetPostcondition(double initLeftMileage, double initRightMileage)
+{
   return false;
 }
 
@@ -85,7 +87,6 @@ void LineTracing::logRunning()
   snprintf(buf, BUF_SIZE,
            "Run LineTracing (targetDistance: %.2f, targetBrightness: %d, pwm: %d, gain: "
            "(%.2f,%.2f,%.2f), isLeftEdge: %s)",
-           targetDistance, targetBrightness, pwm, gain.kp, gain.ki, gain.kd,
-           str);
+           targetDistance, targetBrightness, pwm, gain.kp, gain.ki, gain.kd, str);
   logger.log(buf);
 }
