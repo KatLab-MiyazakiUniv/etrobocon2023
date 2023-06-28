@@ -7,8 +7,8 @@
 #include "LineTracing.h"
 using namespace std;
 
-LineTracing::LineTracing(double _targetSpeed, int _targetBrightness, int _pwm,
-                         const PidGain& _gain, bool& _isLeftEdge)
+LineTracing::LineTracing(double _targetSpeed, int _targetBrightness, int _pwm, const PidGain& _gain,
+                         bool& _isLeftEdge)
   : targetSpeed(_targetSpeed),
     targetBrightness(_targetBrightness),
     pwm(_pwm),
