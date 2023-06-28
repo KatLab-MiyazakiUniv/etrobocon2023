@@ -10,18 +10,19 @@
 #include "Motion.h"
 #include "Mileage.h"
 #include "Pid.h"
+#include "SpeedCalculator.h"
 
 class LineTracing : public Motion {
  public:
   /**
    * コンストラクタ
-   * @param _targetDistance 目標距離 0~
+   * @param _targetSpeed 目標速度 0~
    * @param _targetBrightness 目標輝度 0~
    * @param _pwm PWM値 -100~100
    * @param _gain PIDゲイン
    * @param _isLeftEdge エッジの左右判定(true:左エッジ, false:右エッジ)
    */
-  LineTracing(double _targetDistance, int _targetBrightness, int _pwm, const PidGain& _gain,
+  LineTracing(double _targetSpeed, int _targetBrightness, int _pwm, const PidGain& _gain,
               bool& _isLeftEdge);
 
   /**
@@ -32,18 +33,16 @@ class LineTracing : public Motion {
   /**
    * @brief ライントレースする際の事前条件判定をする
    * @param pwm PWM値
-   * @param targetDistance 目標距離
+   * @param targetSpeed 目標速度
    * @note オーバーライド必須
    */
-  virtual bool isMetPrecondition(int pwm, double targetDistance) = 0;
+  virtual bool isMetPrecondition(int pwm, double targetSpeed) = 0;
 
   /**
    * @brief ライントレースする際の継続条件判定をする　返り値がfalseでモーターが止まる
-   * @param initLeftMileage   ライントレースを始めた時点での左車輪の走行距離
-   * @param initRightMileage  ライントレースを始めた時点での右車輪の走行距離
    * @note オーバーライド必須
    */
-  virtual bool isMetPostcondition(double initLeftMileage, double initRightMileage) = 0;
+  virtual bool isMetPostcondition() = 0;
 
   /**
    * @brief 実行のログを取る
@@ -51,7 +50,7 @@ class LineTracing : public Motion {
   void logRunning();
 
  private:
-  double targetDistance;    // 目標距離 0~
+  double targetSpeed;       // 目標速度 0~
   int targetBrightness;     // 目標輝度 0~
   int pwm;                  // PWM値 -100~100
   PidGain gain;             // PIDゲイン
