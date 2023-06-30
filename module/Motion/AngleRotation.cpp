@@ -8,6 +8,9 @@
 
 using namespace std;
 
+AngleRotation::AngleRotation(int _targetAngle, double _targetSpeed, bool _isClockwise)
+  : Rotation(_targetAngle, _targetSpeed, _isClockwise){};
+
 bool AngleRotation::isMetPrecondition(int targetAngle, double targetSpeed)
 {
   const int BUF_SIZE = 256;
@@ -45,6 +48,8 @@ bool AngleRotation::isMetPostcondition(int targetAngle, double initLeftMileage,
   double diffRightDistance
       = (targetRightDistance - Mileage::calculateWheelMileage(Measurer::getRightCount()))
         * rightSign;
+
+  printf("right:%d left:%d\n", rightSign, leftSign);
 
   // 目標距離に到達した場合
   if(diffLeftDistance <= 0 || diffRightDistance <= 0) {

@@ -22,7 +22,7 @@ class AngleRotation : public Rotation {
   /**
    * @brief 回頭する
    */
-  void run();
+  using Rotation::run;
 
   /**
    * @brief 回頭する際の事前条件判定をする
