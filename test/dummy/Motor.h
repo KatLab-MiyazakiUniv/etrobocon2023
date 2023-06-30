@@ -41,11 +41,13 @@ namespace ev3api {
      */
     void stop(){};
 
+    /**
+     * モータカウントを初期化する
+     */
     void reset();
 
    private:
-    static double motorCount;
-    ePortM port;
+    double motorCount;
   };
 }  // namespace ev3api
 

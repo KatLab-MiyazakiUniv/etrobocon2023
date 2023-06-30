@@ -6,29 +6,44 @@
 
 #include "ev3api.h"
 #include "Controller.h"
+#include "Measurer.h"
 #include <gtest/gtest.h>
 
 namespace etrobocon2023_test {
   TEST(ControllerTest, setRightMotorPwm)
   {
     const int pwm = 50;
-    ev3api::Motor _rightWheel(Controller::rightWheelPort);
-    ev3api::Motor _leftWheel(Controller::leftWheelPort);
-    ev3api::Motor _armMotor(Controller::armMotorPort);
-    Controller::rightMotor = &_rightWheel;
-    Controller::leftMotor = &_leftWheel;
-    Controller::armMotor = &_armMotor;
+    int initCount = Measurer::getRightCount();
     Controller::setRightMotorPwm(pwm);
-    Controller::rightMotor->reset();
-    SUCCEED();
+    int currentCount = Measurer::getRightCount();
+    EXPECT_LT(initCount, currentCount);
+  }
+
+  TEST(ControllerTest, setRightMotorMinusPwm)
+  {
+    const int pwm = -30;
+    int initCount = Measurer::getRightCount();
+    Controller::setRightMotorPwm(pwm);
+    int currentCount = Measurer::getRightCount();
+    EXPECT_GT(initCount, currentCount);
   }
 
   TEST(ControllerTest, setLeftMotorPwm)
   {
     const int pwm = 50;
+    int initCount = Measurer::getLeftCount();
     Controller::setLeftMotorPwm(pwm);
-    Controller::leftMotor->reset();
-    SUCCEED();
+    int currentCount = Measurer::getLeftCount();
+    EXPECT_LT(initCount, currentCount);
+  }
+
+  TEST(ControllerTest, setLeftMotorMinusPwm)
+  {
+    const int pwm = -150;
+    int initCount = Measurer::getLeftCount();
+    Controller::setLeftMotorPwm(pwm);
+    int currentCount = Measurer::getLeftCount();
+    EXPECT_GT(initCount, currentCount);
   }
 
   TEST(ControllerTest, stopMotor)
@@ -40,9 +55,10 @@ namespace etrobocon2023_test {
   TEST(ControllerTest, setArmMotorPwm)
   {
     const int pwm = 50;
+    int initCount = Measurer::getArmMotorCount();
     Controller::setArmMotorPwm(pwm);
-    Controller::armMotor->reset();
-    SUCCEED();
+    int currentCount = Measurer::getArmMotorCount();
+    EXPECT_LT(initCount, currentCount);
   }
 
   TEST(ControllerTest, stopArmMotor)

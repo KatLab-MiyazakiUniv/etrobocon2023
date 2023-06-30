@@ -1,10 +1,16 @@
 /**
  * @file Measurer.cpp
  * @brief 計測に用いる関数をまとめたラッパークラス
- * @author YKhm20020
+ * @author YKhm20020 miyashita64
  */
 
 #include "Measurer.h"
+
+ev3api::ColorSensor* Measurer::colorSensor = nullptr;
+ev3api::SonarSensor* Measurer::sonarSensor = nullptr;
+ev3api::Motor* Measurer::rightMotor = nullptr;
+ev3api::Motor* Measurer::leftMotor = nullptr;
+ev3api::Motor* Measurer::armMotor = nullptr;
 
 // 明るさを取得
 // 参考: https://tomari.org/main/java/color/ccal.html
@@ -21,26 +27,26 @@ int Measurer::getBrightness()
 rgb_raw_t Measurer::getRawColor()
 {
   rgb_raw_t rgb;
-  ev3api::ColorSensor(colorSensorPort).getRawColor(rgb);
+  colorSensor->getRawColor(rgb);
   return rgb;
 }
 
 // 左モータ角位置取得
 int Measurer::getLeftCount()
 {
-  return ev3api::Motor(leftWheelPort).getCount();
+  return leftMotor->getCount();
 }
 
 // 右モータ角位置取得
 int Measurer::getRightCount()
 {
-  return ev3api::Motor(rightWheelPort).getCount();
+  return rightMotor->getCount();
 }
 
 // アームモータ角位置取得
 int Measurer::getArmMotorCount()
 {
-  return ev3api::Motor(armMotorPort).getCount();
+  return armMotor->getCount();
 }
 
 // 正面から見て左ボタンの押下状態を取得
@@ -64,7 +70,7 @@ bool Measurer::getEnterButton()
 // 超音波センサからの距離を取得
 int Measurer::getForwardDistance()
 {
-  int distance = ev3api::SonarSensor(sonarSensorPort).getDistance();
+  int distance = sonarSensor->getDistance();
 
   // センサが認識していない時が-1になる
   if(distance == -1) distance = 1000;
