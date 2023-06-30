@@ -1,26 +1,23 @@
 /**
- * @file   Rotation.h
- * @brief  回頭動作の中間クラス
+ * @file   AngleRotation.h
+ * @brief  角度指定による回頭動作
  * @author desty505
  */
 
-#ifndef ROTATION_H
-#define ROTATION_H
+#ifndef ANGLEROTATION_H
+#define ANGLEROTATION_H
 
-#include "Motion.h"
-#include "Mileage.h"
-#include "SpeedCalculator.h"
-#include "SystemInfo.h"
+#include "Rotation.h"
 
-class Rotation : public Motion {
+class AngleRotation : public Rotation {
  public:
   /**
    * コンストラクタ
-   * @param _targetValue 目標値
+   * @param _targetAngle 目標角度
    * @param _targetSpeed 目標速度
    * @param _isClockwise 回頭方向 ture:時計回り, false:反時計回り
    */
-  Rotation(int _targetValue, double _targetSpeed, bool _isClockwise);
+  AngleRotation(int _targetAngle, double _targetSpeed, bool _isClockwise);
 
   /**
    * @brief 回頭する
@@ -29,31 +26,31 @@ class Rotation : public Motion {
 
   /**
    * @brief 回頭する際の事前条件判定をする
-   * @param targetValue
+   * @param targetAngle 目標角度
    * @param targetSpeed 目標速度
    * @note オーバーライド必須
    */
-  virtual bool isMetPrecondition(int targetValue, double targetSpeed);
+  bool isMetPrecondition(int targetAngle, double targetSpeed) override;
 
   /**
    * @brief 回頭する際の継続条件判定をする　返り値がfalseでモーターが止まる
-   * @param targetValue 目標値
+   * @param targetAngle 目標角度
    * @param initLeftMileage   回頭を始めた時点での左車輪の走行距離
    * @param initRightMileage  回頭を始めた時点での右車輪の走行距離
    * @param leftSign 左車輪の回転方向
    * @param rightSign 右車輪の回転方向
    * @note オーバーライド必須
    */
-  virtual bool isMetPostcondition(int targetValue, double initLeftMileage, double initRightMileage,
-                                  int leftSign, int rightSign);
+  bool isMetPostcondition(int targetAngle, double initLeftMileage, double initRightMileage,
+                          int leftSign, int rightSign) override;
 
   /**
    * @brief 実行のログを取る
    */
-  virtual void logRunning();
+  void logRunning() override;
 
  private:
-  int targetValue;          // 回転角度(deg) 0~360 もしくは 指定色
+  int targetAngle;          // 目標角度
   double targetSpeed;       // 目標速度
   bool isClockwise;         // 回頭方向 ture:時計回り, false:反時計回り
   double initLeftMileage;   // クラス呼び出し時の左車輪の走行距離
