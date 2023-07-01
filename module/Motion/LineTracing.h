@@ -18,12 +18,10 @@ class LineTracing : public Motion {
    * コンストラクタ
    * @param _targetSpeed 目標速度 0~
    * @param _targetBrightness 目標輝度 0~
-   * @param _pwm PWM値 -100~100
    * @param _gain PIDゲイン
    * @param _isLeftEdge エッジの左右判定(true:左エッジ, false:右エッジ)
    */
-  LineTracing(double _targetSpeed, int _targetBrightness, int _pwm, const PidGain& _gain,
-              bool& _isLeftEdge);
+  LineTracing(double _targetSpeed, int _targetBrightness, const PidGain& _gain, bool& _isLeftEdge);
 
   /**
    * @brief ライントレースする
@@ -32,11 +30,11 @@ class LineTracing : public Motion {
 
   /**
    * @brief ライントレースする際の事前条件判定をする
-   * @param pwm PWM値
+   * @param basePwm 初期PWM値
    * @param targetSpeed 目標速度
    * @note オーバーライド必須
    */
-  virtual bool isMetPrecondition(int pwm, double targetSpeed) = 0;
+  bool isMetPrecondition(int basePwm, double targetSpeed);
 
   /**
    * @brief ライントレースする際の継続条件判定をする　返り値がfalseでモーターが止まる
@@ -50,10 +48,11 @@ class LineTracing : public Motion {
   void logRunning();
 
  private:
-  double targetSpeed;       // 目標速度 0~
-  int targetBrightness;     // 目標輝度 0~
-  int pwm;                  // PWM値 -100~100
-  PidGain gain;             // PIDゲイン
+  double targetSpeed;    // 目標速度 0~
+  int targetBrightness;  // 目標輝度 0~
+  int basePwm;           // 初期PWM値 -100~100
+  PidGain gain;          // PIDゲイン
+  class Timer timer;
   bool& isLeftEdge;         // エッジの左右判定(true:左エッジ, false:右エッジ)
   double initLeftMileage;   // クラス呼び出し時の左車輪の走行距離
   double initRightMileage;  // クラス呼び出し時の右車輪の走行距離
