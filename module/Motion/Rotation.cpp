@@ -62,12 +62,6 @@ bool Rotation::isMetPrecondition(double targetSpeed)
   return true;
 }
 
-bool Rotation::isMetPostcondition(double initLeftMileage, double initRightMileage, int leftSign,
-                                  int rightSign)
-{
-  return false;
-}
-
 void Rotation::logRunning()
 {
   const int BUF_SIZE = 256;

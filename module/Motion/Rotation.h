@@ -30,7 +30,6 @@ class Rotation : public Motion {
 
   /**
    * @brief 回頭する際の事前条件判定をする
-   * @param targetValue
    * @param targetSpeed 目標速度
    * @note オーバーライド必須
    */
@@ -38,7 +37,6 @@ class Rotation : public Motion {
 
   /**
    * @brief 回頭する際の継続条件判定をする　返り値がfalseでモーターが止まる
-   * @param targetValue 目標値
    * @param initLeftMileage   回頭を始めた時点での左車輪の走行距離
    * @param initRightMileage  回頭を始めた時点での右車輪の走行距離
    * @param leftSign 左車輪の回転方向
@@ -46,7 +44,7 @@ class Rotation : public Motion {
    * @note オーバーライド必須
    */
   virtual bool isMetPostcondition(double initLeftMileage, double initRightMileage, int leftSign,
-                                  int rightSign);
+                                  int rightSign) = 0;
 
   /**
    * @brief 実行のログを取る
