@@ -50,7 +50,6 @@ class Straight : public Motion {
   // 目標値は継承後に追加する
   static constexpr int MIN_PWM = 40;  // 静止時から走行体がモーターを動かせないPWM値
   double targetSpeed;                 // 目標速度[mm/s]
-  int targetValue;                    // 目標値 目標距離か目標色
   int initialRightMotorCount;         // 初期右輪モーター距離
   int initialLeftMotorCount;          // 初期左輪モーター距離
   class Timer Timer;
