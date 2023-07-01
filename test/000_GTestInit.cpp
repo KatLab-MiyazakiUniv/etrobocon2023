@@ -23,8 +23,8 @@ namespace etrobocon2023_test {
     const ePortM rightMotorPort = PORT_B;
     const ePortM leftMotorPort = PORT_C;
 
-    ev3api::ColorSensor _colorSensor(PORT_2);
-    ev3api::SonarSensor _sonarSensor(PORT_3);
+    ev3api::ColorSensor _colorSensor(colorSensorPort);
+    ev3api::SonarSensor _sonarSensor(sonarSensorPort);
     ev3api::Motor _rightMotor(rightMotorPort);
     ev3api::Motor _leftMotor(leftMotorPort);
     ev3api::Motor _armMotor(armMotorPort);
