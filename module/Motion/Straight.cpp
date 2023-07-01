@@ -8,21 +8,18 @@
 #include "Straight.h"
 using namespace std;
 
-Straight::Straight(int _targetValue, double _targetSpeed)
-  : targetValue(_targetValue), targetSpeed(_targetSpeed)
-{
-}
+Straight::Straight(double _targetSpeed) : targetSpeed(_targetSpeed) {}
 
 void Straight::run()
 {
   // 事前条件判定が真でないときは終了する
-  if(runPreconditionJudgement() != true) {
+  if(!isRunPreconditionJudgement()) {
     return;
   }
 
   // 直進前の走行距離
-  int initialRightMotorCount = Measurer::getRightCount();
-  int initialLeftMotorCount = Measurer::getLeftCount();
+  initialRightMotorCount = Measurer::getRightCount();
+  initialLeftMotorCount = Measurer::getLeftCount();
 
   int currentPwm = 0;           // 現在のpwd値
   int error = 0;                // 左右の回転数の誤差
@@ -31,25 +28,14 @@ void Straight::run()
 
   // 走行距離が目標値に到達するまで繰り返す
   while(true) {
-    // 現在の距離を取得する
-    int currentRightMotorCount = Measurer::getRightCount();
-    int currentLeftMotorCount = Measurer::getLeftCount();
-
     // 事後条件が満たされたときループから抜ける オーバーライド必須
-    if(runPostconditionJudgement(initialRightMotorCount, initialLeftMotorCount,
-                                 currentRightMotorCount, currentLeftMotorCount)
-       == true) {
+    if(isRunPostconditionJudgement() == true) {
       break;
     }
 
     // PWM値を目標速度値に合わせる
     SpeedCalculator SpeedCalculator(targetSpeed);
     currentPwm = SpeedCalculator.calcPwmFromSpeed();
-
-    // 左右のモーターカウントを合わせるための補正値計算
-    error = (currentLeftMotorCount - initialLeftMotorCount)
-            - (currentRightMotorCount - initialRightMotorCount);
-    adjustmentPwm = static_cast<int>(pid.calculatePid(error));
 
     // モータにPWM値をセット
     Controller::setLeftMotorPwm(currentPwm + adjustmentPwm);
@@ -62,7 +48,7 @@ void Straight::run()
   Controller::stopMotor();
 }
 
-bool Straight::runPreconditionJudgement()
+bool Straight::isRunPreconditionJudgement()
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
