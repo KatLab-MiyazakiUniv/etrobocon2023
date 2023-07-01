@@ -12,6 +12,12 @@ from flask import Flask, request
 FILE_PATH = "datafiles/data.csv"
 
 # サーバが扱うロボットの情報
+# state
+#   - notReady: 通信未確立
+#   - wait: 開始合図待ち
+#   - start: 走行開始
+#   - lap: LAPゲート通過
+#   - finish: 処理停止
 robot_info = {
     "state": "notReady"
 }
