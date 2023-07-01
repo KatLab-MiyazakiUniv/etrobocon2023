@@ -5,7 +5,7 @@
 import os
 import csv
 import re
-from flask import Flask, url_for, request
+from flask import Flask, request
 
 
 # サーバが扱うファイルの設定
@@ -21,7 +21,7 @@ app = Flask(__name__)
 
 # '/'へのGETリクエストに対する操作
 @app.route('/', methods=["GET"])
-def read():
+def read() -> str:
     """GETリクエストに対しcsvファイルの内容を返す.
     "http://サーバIPアドレス:8000/"にGETリクエストされたときに実行される
     
@@ -40,12 +40,12 @@ def read():
 
 # '/robot_info/state'へのGETリクエストに対する操作
 @app.route('/robot_info/state', methods=["GET"])
-def send():
+def send() -> str:
     """GETリクエストに対しロボットの状況を返す.
     "http://サーバIPアドレス:8000/robot_info/state"にGETリクエストされたときに実行される
     
     Returns:
-        robot_info["state"]:  サーバが持つロボットの状況
+        robot_info["state"] (str):  サーバが持つロボットの状況
     """
 
     # 値の送信
@@ -54,7 +54,7 @@ def send():
 
 # '/'へのPOSTリクエストに対する操作
 @app.route('/', methods=["POST"])
-def write():
+def write() -> str:
     """POSTリクエストに対しcsvファイルの内容を更新して、返す.
     "http://サーバIPアドレス:8000/"にPOSTリクエストされたときに実行される
     
@@ -92,12 +92,12 @@ def write():
 
 # '/robot_info/state'へのPOSTリクエストに対する操作
 @app.route('/robot_info/state', methods=["POST"])
-def update():
+def update() -> str:
     """POSTリクエストに対しロボットの状況を返す.
     "http://サーバIPアドレス:8000/robot_info/state"にPOSTリクエストされたときに実行される
     
     Returns:
-        robot_info["state"]:  サーバが持つロボットの状況
+        robot_info["state"] (str):  サーバが持つロボットの状況
     """
 
     # request.get_data()を使って送信されたデータを受け取る
