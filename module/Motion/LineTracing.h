@@ -45,7 +45,7 @@ class LineTracing : public Motion {
   /**
    * @brief 実行のログを取る
    */
-  void logRunning();
+  virtual void logRunning();
 
  private:
   double targetSpeed;       // 目標速度 0~
