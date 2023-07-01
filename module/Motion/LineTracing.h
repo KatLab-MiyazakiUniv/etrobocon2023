@@ -50,12 +50,11 @@ class LineTracing : public Motion {
  private:
   double targetSpeed;    // 目標速度 0~
   int targetBrightness;  // 目標輝度 0~
-  int basePwm;           // 初期PWM値 -100~100
   PidGain gain;          // PIDゲイン
-  class Timer timer;
   bool& isLeftEdge;         // エッジの左右判定(true:左エッジ, false:右エッジ)
   double initLeftMileage;   // クラス呼び出し時の左車輪の走行距離
   double initRightMileage;  // クラス呼び出し時の右車輪の走行距離
+  class Timer timer;
 };
 
 #endif
