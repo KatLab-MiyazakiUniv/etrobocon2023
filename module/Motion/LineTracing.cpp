@@ -18,8 +18,8 @@ LineTracing::LineTracing(double _targetSpeed, int _targetBrightness, const PidGa
 
 void LineTracing::run()
 {
-  int basePwm = 0;  // 初期PWM値 -100~100
-  int turnPwm = 0;  // 目標速度に対するpwm値を計算
+  basePwm = 0;      // 初期PWM値 -100~100
+  int turnPwm = 0;  // 目標速度に対するpwm値
   int edgeSign = 0;
   Pid pid(gain.kp, gain.ki, gain.kd, targetBrightness);
 
