@@ -19,7 +19,7 @@ LineTracing::LineTracing(double _targetSpeed, int _targetBrightness, const PidGa
 void LineTracing::run()
 {
   basePwm = 0;      // 初期PWM値 -100~100
-  int turnPwm = 0;  // 目標速度に対するpwm値
+  int turnPwm = 0;  // 旋回値を計算
   int edgeSign = 0;
   Pid pid(gain.kp, gain.ki, gain.kd, targetBrightness);
 
@@ -41,7 +41,7 @@ void LineTracing::run()
     SpeedCalculator SpeedCalculator(targetSpeed);
     basePwm = SpeedCalculator.calcPwmFromSpeed();
 
-    // 目標速度に対するpwm値を計算
+    // PIDで旋回値を計算
     turnPwm = pid.calculatePid(Measurer::getBrightness()) * edgeSign;
 
     // モータのPWM値をセット（0を超えないようにセット）
