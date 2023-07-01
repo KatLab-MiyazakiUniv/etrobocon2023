@@ -21,8 +21,7 @@ void Straight::run()
   initialRightMotorCount = Measurer::getRightCount();
   initialLeftMotorCount = Measurer::getLeftCount();
 
-  int currentPwm = 0;           // 現在のpwd値
-  Pid pid(0.5, 0.3, 0.001, 0);  // 左右の回転数を合わせるためのPID
+  int currentPwm = 0;  // 現在のpwd値
 
   // 走行距離が目標値に到達するまで繰り返す
   while(true) {
