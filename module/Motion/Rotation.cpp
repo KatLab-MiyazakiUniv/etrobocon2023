@@ -8,15 +8,15 @@
 
 using namespace std;
 
-Rotation::Rotation(double _targetSpeed, bool _isClockwise)
-  : targetSpeed(_targetSpeed), isClockwise(_isClockwise)
+Rotation::Rotation(int _targetValue, double _targetSpeed, bool _isClockwise)
+  : targetValue(_targetValue), targetSpeed(_targetSpeed), isClockwise(_isClockwise)
 {
 }
 
 void Rotation::run()
 {
   // 事前条件を判定する
-  if(!isMetPrecondition(targetSpeed)) {
+  if(!isMetPrecondition()) {
     return;
   }
 
@@ -30,7 +30,7 @@ void Rotation::run()
   initRightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
 
   // 継続条件を満たしている間ループ
-  while(isMetPostcondition(initLeftMileage, initRightMileage)) {
+  while(isMetPostcondition()) {
     // PWM値を設定する
     SpeedCalculator SpeedCalculator(targetSpeed);
     int pwm = SpeedCalculator.calcPwmFromSpeed();
@@ -38,13 +38,16 @@ void Rotation::run()
     // モータにPWM値をセット
     Controller::setLeftMotorPwm(pwm * leftSign);
     Controller::setRightMotorPwm(pwm * rightSign);
+
+    // 10ミリ秒待機
+    Timer.sleep(10);
   }
 
   // モータの停止
   Controller::stopMotor();
 }
 
-bool Rotation::isMetPrecondition(double targetSpeed)
+bool Rotation::isMetPrecondition()
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
@@ -59,7 +62,7 @@ bool Rotation::isMetPrecondition(double targetSpeed)
   return true;
 }
 
-bool Rotation::isMetPostcondition(double initLeftMileage, double initRightMileage)
+bool Rotation::isMetPostcondition()
 {
   return false;
 }
@@ -70,7 +73,7 @@ void Rotation::logRunning()
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
   const char* str = isClockwise ? "true" : "false";
 
-  snprintf(buf, BUF_SIZE, "Run Rotation (targetValue: %d, targetSpeed: %d, isClockwise: %s)",
+  snprintf(buf, BUF_SIZE, "Run Rotation (targetValue: %d, targetSpeed: %lf, isClockwise: %s)",
            targetValue, targetSpeed, str);
   logger.log(buf);
 }
