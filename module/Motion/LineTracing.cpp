@@ -8,7 +8,7 @@
 using namespace std;
 
 LineTracing::LineTracing(double _targetSpeed, int _targetBrightness, const PidGain& _gain,
-                         bool& _isLeftEdge)
+                         bool _isLeftEdge)
   : targetSpeed(_targetSpeed),
     targetBrightness(_targetBrightness),
     gain(_gain),

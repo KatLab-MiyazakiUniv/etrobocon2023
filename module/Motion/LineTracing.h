@@ -21,7 +21,7 @@ class LineTracing : public Motion {
    * @param _gain PIDゲイン
    * @param _isLeftEdge エッジの左右判定(true:左エッジ, false:右エッジ)
    */
-  LineTracing(double _targetSpeed, int _targetBrightness, const PidGain& _gain, bool& _isLeftEdge);
+  LineTracing(double _targetSpeed, int _targetBrightness, const PidGain& _gain, bool _isLeftEdge);
 
   /**
    * @brief ライントレースする
@@ -52,7 +52,7 @@ class LineTracing : public Motion {
   int targetBrightness;     // 目標輝度 0~
   int basePwm;              // 初期PWM値 -100~100
   PidGain gain;             // PIDゲイン
-  bool& isLeftEdge;         // エッジの左右判定(true:左エッジ, false:右エッジ)
+  bool isLeftEdge;          // エッジの左右判定(true:左エッジ, false:右エッジ)
   double initLeftMileage;   // クラス呼び出し時の左車輪の走行距離
   double initRightMileage;  // クラス呼び出し時の右車輪の走行距離
   class Timer timer;
