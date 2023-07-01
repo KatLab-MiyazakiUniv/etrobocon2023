@@ -11,9 +11,6 @@
 
 class Controller {
  public:
-  static const ePortM rightWheelPort = PORT_B;
-  static const ePortM leftWheelPort = PORT_C;
-  static const ePortM armMotorPort = PORT_A;
   static ev3api::Motor* rightMotor;
   static ev3api::Motor* leftMotor;
   static ev3api::Motor* armMotor;

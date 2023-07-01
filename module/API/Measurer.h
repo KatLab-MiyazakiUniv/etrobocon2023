@@ -1,7 +1,7 @@
 /**
  * @file Measurer.h
  * @brief 計測に用いる関数をまとめたラッパークラス
- * @author YKhm20020
+ * @author YKhm20020 miyashita64
  */
 
 #ifndef MEASURER_H
@@ -15,6 +15,12 @@
 
 class Measurer {
  public:
+  static ev3api::ColorSensor* colorSensor;
+  static ev3api::SonarSensor* sonarSensor;
+  static ev3api::Motor* rightMotor;
+  static ev3api::Motor* leftMotor;
+  static ev3api::Motor* armMotor;
+
   Measurer() = delete;  // 明示的にインスタンス化を禁止
 
   /**
@@ -77,13 +83,6 @@ class Measurer {
    * @return SPIKEの電圧[V]
    */
   static double getVoltage();
-
- private:
-  static const ePortS colorSensorPort = PORT_2;
-  static const ePortS sonarSensorPort = PORT_3;
-  static const ePortM leftWheelPort = PORT_C;
-  static const ePortM rightWheelPort = PORT_B;
-  static const ePortM armMotorPort = PORT_A;
 };
 
 #endif
