@@ -38,20 +38,6 @@ def read() -> str:
     return open_data
 
 
-# '/robot_info/state'へのGETリクエストに対する操作
-@app.route('/robot_info/state', methods=["GET"])
-def send() -> str:
-    """GETリクエストに対しロボットの状況を返す.
-    "http://サーバIPアドレス:8000/robot_info/state"にGETリクエストされたときに実行される
-    
-    Returns:
-        robot_info["state"] (str):  サーバが持つロボットの状況
-    """
-
-    # 値の送信
-    return robot_info["state"]
-
-
 # '/'へのPOSTリクエストに対する操作
 @app.route('/', methods=["POST"])
 def write() -> str:
@@ -88,6 +74,20 @@ def write() -> str:
 
     # 値の送信
     return open_data
+
+
+# '/robot_info/state'へのGETリクエストに対する操作
+@app.route('/robot_info/state', methods=["GET"])
+def send() -> str:
+    """GETリクエストに対しロボットの状況を返す.
+    "http://サーバIPアドレス:8000/robot_info/state"にGETリクエストされたときに実行される
+    
+    Returns:
+        robot_info["state"] (str):  サーバが持つロボットの状況
+    """
+
+    # 値の送信
+    return robot_info["state"]
 
 
 # '/robot_info/state'へのPOSTリクエストに対する操作
