@@ -8,15 +8,15 @@
 
 using namespace std;
 
-Rotation::Rotation(int _targetValue, double _targetSpeed, bool _isClockwise)
-  : targetValue(_targetValue), targetSpeed(_targetSpeed), isClockwise(_isClockwise)
+Rotation::Rotation(double _targetSpeed, bool _isClockwise)
+  : targetSpeed(_targetSpeed), isClockwise(_isClockwise)
 {
 }
 
 void Rotation::run()
 {
   // 事前条件を判定する
-  if(!isMetPrecondition()) {
+  if(!isMetPrecondition(targetSpeed)) {
     return;
   }
 
@@ -26,11 +26,11 @@ void Rotation::run()
   int rightSign = isClockwise ? -1 : 1;
 
   // 呼び出し時の走行距離
-  initLeftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
-  initRightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
+  double initLeftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
+  double initRightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
 
   // 継続条件を満たしている間ループ
-  while(isMetPostcondition()) {
+  while(isMetPostcondition(initLeftMileage, initRightMileage, leftSign, rightSign)) {
     // PWM値を設定する
     SpeedCalculator SpeedCalculator(targetSpeed);
     int pwm = SpeedCalculator.calcPwmFromSpeed();
@@ -47,7 +47,7 @@ void Rotation::run()
   Controller::stopMotor();
 }
 
-bool Rotation::isMetPrecondition()
+bool Rotation::isMetPrecondition(double targetSpeed)
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
@@ -62,7 +62,8 @@ bool Rotation::isMetPrecondition()
   return true;
 }
 
-bool Rotation::isMetPostcondition()
+bool Rotation::isMetPostcondition(double initLeftMileage, double initRightMileage, int leftSign,
+                                  int rightSign)
 {
   return false;
 }
@@ -73,7 +74,6 @@ void Rotation::logRunning()
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
   const char* str = isClockwise ? "true" : "false";
 
-  snprintf(buf, BUF_SIZE, "Run Rotation (targetValue: %d, targetSpeed: %lf, isClockwise: %s)",
-           targetValue, targetSpeed, str);
+  snprintf(buf, BUF_SIZE, "Run Rotation (targetSpeed: %lf, isClockwise: %s)", targetSpeed, str);
   logger.log(buf);
 }

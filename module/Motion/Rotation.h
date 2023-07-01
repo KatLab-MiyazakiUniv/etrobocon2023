@@ -21,7 +21,7 @@ class Rotation : public Motion {
    * @param _targetSpeed 目標速度
    * @param _isClockwise 回頭方向 ture:時計回り, false:反時計回り
    */
-  Rotation(int _targetValue, double _targetSpeed, bool _isClockwise);
+  Rotation(double _targetSpeed, bool _isClockwise);
 
   /**
    * @brief 回頭する
@@ -34,7 +34,7 @@ class Rotation : public Motion {
    * @param targetSpeed 目標速度
    * @note オーバーライド必須
    */
-  virtual bool isMetPrecondition();
+  virtual bool isMetPrecondition(double targetSpeed);
 
   /**
    * @brief 回頭する際の継続条件判定をする　返り値がfalseでモーターが止まる
@@ -45,19 +45,20 @@ class Rotation : public Motion {
    * @param rightSign 右車輪の回転方向
    * @note オーバーライド必須
    */
-  virtual bool isMetPostcondition();
+  virtual bool isMetPostcondition(double initLeftMileage, double initRightMileage, int leftSign,
+                                  int rightSign);
 
   /**
    * @brief 実行のログを取る
    */
   virtual void logRunning();
 
+ private:
+  // class Timer Timer;
+
  protected:
-  int targetValue;          // 回転角度(deg) 0~360 もしくは 指定色
   double targetSpeed;       // 目標速度
   bool isClockwise;         // 回頭方向 ture:時計回り, false:反時計回り
-  int leftSign;             // 左車輪の回転方向
-  int rightSign;            // 右車輪の回転方向
   double initLeftMileage;   // クラス呼び出し時の左車輪の走行距離
   double initRightMileage;  // クラス呼び出し時の右車輪の走行距離
   class Timer Timer;
