@@ -11,7 +11,7 @@ using namespace std;
 AngleRotation::AngleRotation(int _targetAngle, double _targetSpeed, bool _isClockwise)
   : Rotation(_targetSpeed, _isClockwise), targetAngle(_targetAngle){};
 
-bool AngleRotation::isMetPrecondition(double targetSpeed)
+bool AngleRotation::isMetPrecondition()
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
@@ -33,8 +33,7 @@ bool AngleRotation::isMetPrecondition(double targetSpeed)
   return true;
 }
 
-bool AngleRotation::isMetPostcondition(double initLeftMileage, double initRightMileage,
-                                       int leftSign, int rightSign)
+bool AngleRotation::isMetPostcondition(int leftSign, int rightSign)
 {
   double targetDistance
       = M_PI * TREAD * targetAngle / 360;  // 指定した角度に対する目標の走行距離(弧の長さ)

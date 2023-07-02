@@ -16,7 +16,7 @@ Rotation::Rotation(double _targetSpeed, bool _isClockwise)
 void Rotation::run()
 {
   // 事前条件を判定する
-  if(!isMetPrecondition(targetSpeed)) {
+  if(!isMetPrecondition()) {
     return;
   }
 
@@ -32,7 +32,7 @@ void Rotation::run()
   SpeedCalculator speedCalculator(targetSpeed);
 
   // 継続条件を満たしている間ループ
-  while(isMetPostcondition(initLeftMileage, initRightMileage, leftSign, rightSign)) {
+  while(isMetPostcondition(leftSign, rightSign)) {
     // PWM値を設定する
     int pwm = speedCalculator.calcPwmFromSpeed();
 
@@ -48,7 +48,7 @@ void Rotation::run()
   Controller::stopMotor();
 }
 
-bool Rotation::isMetPrecondition(double targetSpeed)
+bool Rotation::isMetPrecondition()
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];

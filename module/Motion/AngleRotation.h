@@ -27,13 +27,14 @@ class AngleRotation : public Rotation {
   /**
    * @brief 回頭する際の事前条件判定をする
    */
-  bool isMetPrecondition(double targetSpeed) override;
+  bool isMetPrecondition() override;
 
   /**
    * @brief 回頭する際の継続条件判定をする　返り値がfalseでモーターが止まる
+   * @param leftSign 左車輪の回転方向
+   * @param rightSign 右車輪の回転方向
    */
-  bool isMetPostcondition(double initLeftMileage, double initRightMileage, int leftSign,
-                          int rightSign) override;
+  bool isMetPostcondition(int leftSign, int rightSign) override;
 
   /**
    * @brief 実行のログを取る
@@ -41,7 +42,6 @@ class AngleRotation : public Rotation {
   void logRunning() override;
 
  private:
-  int targetAngle;   // 目標角度
-  bool isClockwise;  // 回頭方向 ture:時計回り, false:反時計回り
+  int targetAngle;  // 目標角度
 };
 #endif
