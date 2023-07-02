@@ -41,8 +41,7 @@ class AngleRotation : public Rotation {
   void logRunning() override;
 
  private:
-  int targetAngle;     // 目標角度
-  double targetSpeed;  // 目標速度
-  bool isClockwise;    // 回頭方向 ture:時計回り, false:反時計回り
+  int targetAngle;   // 目標角度
+  bool isClockwise;  // 回頭方向 ture:時計回り, false:反時計回り
 };
 #endif

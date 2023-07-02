@@ -9,7 +9,7 @@
 using namespace std;
 
 Rotation::Rotation(double _targetSpeed, bool _isClockwise)
-  : targetSpeed(_targetSpeed), isClockwise(_isClockwise)
+  : speedCalculator(_targetSpeed), isClockwise(_isClockwise)
 {
 }
 
@@ -32,8 +32,7 @@ void Rotation::run()
   // 継続条件を満たしている間ループ
   while(isMetPostcondition(initLeftMileage, initRightMileage, leftSign, rightSign)) {
     // PWM値を設定する
-    SpeedCalculator SpeedCalculator(targetSpeed);
-    int pwm = SpeedCalculator.calcPwmFromSpeed();
+    int pwm = speedCalculator.calcPwmFromSpeed();
 
     // モータにPWM値をセット
     Controller::setLeftMotorPwm(pwm * leftSign);
