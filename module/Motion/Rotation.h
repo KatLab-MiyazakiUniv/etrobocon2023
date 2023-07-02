@@ -32,7 +32,7 @@ class Rotation : public Motion {
    * @brief 回頭する際の事前条件判定をする
    * @note オーバーライド必須
    */
-  virtual bool isMetPrecondition();
+  virtual bool isMetPrecondition() = 0;
 
   /**
    * @brief 回頭する際の継続条件判定をする　返り値がfalseでモーターが止まる
@@ -45,7 +45,7 @@ class Rotation : public Motion {
   /**
    * @brief 実行のログを取る
    */
-  virtual void logRunning();
+  virtual void logRunning() = 0;
 
  private:
   // class Timer Timer;

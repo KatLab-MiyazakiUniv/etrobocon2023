@@ -47,28 +47,3 @@ void Rotation::run()
   // モータの停止
   Controller::stopMotor();
 }
-
-bool Rotation::isMetPrecondition()
-{
-  const int BUF_SIZE = 256;
-  char buf[BUF_SIZE];
-
-  // targetSpeed値が0以下の場合はwarningを出して終了する
-  if(targetSpeed <= 0) {
-    snprintf(buf, BUF_SIZE, "The targetSpeed value passed to Rotation is %lf", targetSpeed);
-    logger.logWarning(buf);
-    return false;
-  }
-
-  return true;
-}
-
-void Rotation::logRunning()
-{
-  const int BUF_SIZE = 256;
-  char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
-  const char* str = isClockwise ? "true" : "false";
-
-  snprintf(buf, BUF_SIZE, "Run Rotation (targetSpeed: %lf, isClockwise: %s)", targetSpeed, str);
-  logger.log(buf);
-}
