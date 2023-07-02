@@ -44,7 +44,8 @@ class Rotation : public Motion {
    * @note オーバーライド必須
    */
   virtual bool isMetPostcondition(double initLeftMileage, double initRightMileage, int leftSign,
-                                  int rightSign) = 0;
+                                  int rightSign)
+      = 0;
 
   /**
    * @brief 実行のログを取る
