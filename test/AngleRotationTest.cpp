@@ -20,7 +20,7 @@ namespace etrobocon2023_test {
   TEST(AngleRotationTest, runRight)
   {
     int angle = 180;
-    double targetSpeed = 100.0;
+    double targetSpeed = 60.0;
     bool isClockwise = true;
     AngleRotation rotation(angle, targetSpeed, isClockwise);
 
@@ -47,7 +47,7 @@ namespace etrobocon2023_test {
   TEST(AngleRotationTest, runLeft)
   {
     int angle = 180;
-    double targetSpeed = 100.0;
+    double targetSpeed = 60.0;
     bool isClockwise = false;
     AngleRotation rotation(angle, targetSpeed, isClockwise);
     double expected = angle;  // 指定した回頭角度を期待値とする

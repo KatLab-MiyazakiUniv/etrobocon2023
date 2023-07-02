@@ -26,8 +26,8 @@ void Rotation::run()
   int rightSign = isClockwise ? -1 : 1;
 
   // 呼び出し時の走行距離
-  double initLeftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
-  double initRightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
+  initLeftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
+  initRightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
 
   SpeedCalculator speedCalculator(targetSpeed);
 
