@@ -44,6 +44,7 @@ class Rotation : public Motion {
 
   /**
    * @brief 実行のログを取る
+   * @note オーバーライド必須
    */
   virtual void logRunning() = 0;
 
