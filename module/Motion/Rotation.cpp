@@ -40,7 +40,7 @@ void Rotation::run()
     Controller::setRightMotorPwm(pwm * rightSign);
 
     // 10ミリ秒待機
-    Timer.sleep(10);
+    timer.sleep(10);
   }
 
   // モータの停止
