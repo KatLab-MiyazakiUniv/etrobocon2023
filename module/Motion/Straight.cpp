@@ -20,6 +20,12 @@ void Straight::run()
   // 直進前の走行距離
   initialRightMotorCount = Measurer::getRightCount();
   initialLeftMotorCount = Measurer::getLeftCount();
+  initialDistance = Mileage::calculateMileage(initialRightMotorCount, initialLeftMotorCount);
+
+  // 直進中の走行距離
+  currentRightMotorCount = initialRightMotorCount;
+  currentLeftMotorCount = initialLeftMotorCount;
+  currentDistance = initialDistance;
 
   int currentPwm = 0;  // 現在のpwd値
 
