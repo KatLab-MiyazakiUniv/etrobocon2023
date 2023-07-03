@@ -53,7 +53,7 @@ class Rotation : public Motion {
 
  protected:
   double targetSpeed;       // 目標速度
-  bool isClockwise;         // 回頭方向 ture:時計回り, false:反時計回り
+  bool isClockwise;         // 回頭方向 true:時計回り, false:反時計回り
   double initLeftMileage;   // クラス呼び出し時の左車輪の走行距離
   double initRightMileage;  // クラス呼び出し時の右車輪の走行距離
   Timer timer;
