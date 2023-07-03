@@ -27,6 +27,9 @@ void Straight::run()
   currentLeftMotorCount = initialLeftMotorCount;
   currentDistance = initialDistance;
 
+  // SpeedCalculatorの実体化
+  SpeedCalculator SpeedCalculator(targetSpeed);
+
   int currentPwm = 0;  // 現在のpwd値
 
   // 走行距離が目標値に到達するまで繰り返す
@@ -37,7 +40,6 @@ void Straight::run()
     }
 
     // PWM値を目標速度値に合わせる
-    SpeedCalculator SpeedCalculator(targetSpeed);
     currentPwm = SpeedCalculator.calcPwmFromSpeed();
 
     // モータにPWM値をセット
@@ -45,7 +47,7 @@ void Straight::run()
     Controller::setRightMotorPwm(currentPwm);
 
     // 10ミリ秒待機
-    Timer.sleep(10);
+    timer.sleep(10);
   }
   // モータの停止
   Controller::stopMotor();

@@ -19,11 +19,6 @@ class DistanceStraight : public Straight {
   DistanceStraight(double _targetDiatance, double _speed);
 
   /**
-   * @brief 直進する
-   */
-  void run();
-
-  /**
    * @brief 直進する際の事前条件判定をする
    */
   virtual bool isRunPreconditionJudgement() override;

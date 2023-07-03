@@ -1,282 +1,160 @@
 /**
- *  @file   DistanceStraightTest.cpp
- j  @brief  DistanceStraightクラスのテスト
+ *  @file   ColorStraightTest.cpp
+ *  @brief  ColorStraightクラスのテスト
  *  @author Negimarge
  */
 
-#include "DistanceStraight.h"
 #include <gtest/gtest.h>
-#include "Controller.h"
 #include "Measurer.h"
+#include "Mileage.h"
+#include "ColorStraight.h"
 
 using namespace std;
 
-namespace etrobocon2022_test {
+namespace etrobocon2023_test {
 
-  TEST(DistanceStraightTest, run)
+  // 最初の色取得で指定色を取得するテストケース
+  TEST(ColorStraightTest, runToGetFirst)
   {
-    double targetDistance = 350;
-    int pwm = 50;
-    DistanceStraight ds(targetDistance, pwm);
+    COLOR targetColor = COLOR::GREEN;
+    int targetSpeed = 100;
+    ColorStraight cs(targetColor, targetSpeed);
 
-    // 初期値
-    int leftCount = Measurer::getLeftCount();
+    // 初期値から期待する走行距離を求める
+    int initialRightCount = Measurer::getRightCount();
+    int initialLeftCount = Measurer::getLeftCount();
+    int expected = Mileage::calculateMileage(initialRightCount, initialLeftCount);
+
+    srand(9037);  // 最初に緑を取得する乱数シード
+    cs.run();     // 緑まで直進を実行
+
+    // 直進後の走行距離
     int rightCount = Measurer::getRightCount();
-    double leftInitial = Mileage::calculateWheelMileage(leftCount);
-    double rightInitial = Mileage::calculateWheelMileage(rightCount);
-    // 期待する走行距離
-    double expectedDistance = Mileage::calculateMileage(rightCount, leftCount) + targetDistance;
+    int leftCount = Measurer::getLeftCount();
+    int actual = Mileage::calculateMileage(rightCount, leftCount);
 
-    /**
-     * 一回のsetPWM()でダミーのモータカウントに加算される値はpwm * 0.05
-     * StraightRunnerのPWM値は100まで加速するので，許容誤差のpwmは100で計算する
-     */
-    double distanceError = Mileage::calculateMileage(100 * 0.05, 100 * 0.05);  // 許容誤差
-    double expectedError = 1;  // タイヤの走行距離の誤差の期待値
-
-    ds.run();                  // 直進を実行
-
-    // 関数実行後の走行距離
-    leftCount = Measurer::getLeftCount();
-    rightCount = Measurer::getRightCount();
-    double leftActual = Mileage::calculateWheelMileage(leftCount);
-    double rightActual = Mileage::calculateWheelMileage(rightCount);
-    double actualDistance = Mileage::calculateMileage(rightCount, leftCount);
-
-    // タイヤごとの走行距離
-    double leftDifference = std::abs(leftActual - leftInitial);
-    double rightDifference = std::abs(rightActual - rightInitial);
-    // タイヤの走行距離の誤差
-    double actualError = std::abs(leftDifference - rightDifference);
-
-    // 走行距離のテスト
-    EXPECT_LE(expectedDistance, actualDistance);
-    EXPECT_GE(expectedDistance + distanceError, actualDistance);
-
-    // 直進できているかのテスト
-    EXPECT_GE(expectedError, actualError);
+    EXPECT_EQ(expected, actual);  // 直進前後で走行距離に変化はない
   }
 
-  TEST(DistanceStraightTest, runFullPwm)
+  // 少し走ってから指定色を取得するテストケース
+  TEST(ColorStraightTest, run)
   {
-    double targetDistance = 350;
-    int pwm = 100;
-    DistanceStraight ds(targetDistance, pwm);
+    COLOR targetColor = COLOR::BLUE;
+    int targetSpeed = 100;
+    ColorStraight cs(targetColor, targetSpeed);
 
-    // 初期値
-    int leftCount = Measurer::getLeftCount();
-    int rightCount = Measurer::getRightCount();
-    double leftInitial = Mileage::calculateWheelMileage(leftCount);
-    double rightInitial = Mileage::calculateWheelMileage(rightCount);
-    // 期待する走行距離
-    double expectedDistance = Mileage::calculateMileage(rightCount, leftCount) + targetDistance;
+    // 初期値から期待する走行距離を求める
+    int initialRightCount = Measurer::getRightCount();
+    int initialLeftCount = Measurer::getLeftCount();
+    int expected = Mileage::calculateMileage(initialRightCount, initialLeftCount);
 
     /**
-     * 一回のsetPWM()でダミーのモータカウントに加算される値はpwm * 0.05
-     * StraightRunnerのPWM値は100まで加速するので，許容誤差のpwmは100で計算する
+     * 最初10回の色取得分の走行距離を許容誤差とする
+     * 一回のsetPWM()でダミーのモータカウントに加算される値はtargetSpeed * 0.05
+     * StraightRunnerのPWM値は100まで加速するので，許容誤差のtargetSpeedは100で計算する
      */
-    double distanceError = Mileage::calculateMileage(100 * 0.05, 100 * 0.05);  // 許容誤差
-    double expectedError = 1;  // タイヤの走行距離の誤差の期待値
+    int error = Mileage::calculateMileage(100 * 0.05 * 10, 100 * 0.05 * 10);  // 許容誤差
 
-    ds.run();                  // 直進を実行
+    srand(89);  // 最初10回が青を取得しない乱数シード
+    cs.run();   // 青まで直進を実行
 
-    // 関数実行後の走行距離
-    leftCount = Measurer::getLeftCount();
-    rightCount = Measurer::getRightCount();
-    double leftActual = Mileage::calculateWheelMileage(leftCount);
-    double rightActual = Mileage::calculateWheelMileage(rightCount);
-    double actualDistance = Mileage::calculateMileage(rightCount, leftCount);
+    // 直進後の走行距離
+    int rightCount = Measurer::getRightCount();
+    int leftCount = Measurer::getLeftCount();
+    int actual = Mileage::calculateMileage(rightCount, leftCount);
 
-    // タイヤごとの走行距離
-    double leftDifference = std::abs(leftActual - leftInitial);
-    double rightDifference = std::abs(rightActual - rightInitial);
-    // タイヤの走行距離の誤差
-    double actualError = std::abs(leftDifference - rightDifference);
-
-    // 走行距離のテスト
-    EXPECT_LE(expectedDistance, actualDistance);
-    EXPECT_GE(expectedDistance + distanceError, actualDistance);
-
-    // 直進できているかのテスト
-    EXPECT_GE(expectedError, actualError);
+    EXPECT_LT(expected, actual);          // 実行後に少しでも進んでいる
+    EXPECT_GE(expected + error, actual);  // 直進後の走行距離が許容誤差以内である
   }
 
-  TEST(DistanceStraightTest, runMinusDistance)
+  // 少し走ってから指定色を取得するテストケース
+  TEST(ColorStraightTest, runBack)
   {
-    double targetDistance = -350;
-    int pwm = 100;
-    DistanceStraight ds(targetDistance, pwm);
+    COLOR targetColor = COLOR::RED;
+    int targetSpeed = -100;
+    ColorStraight cs(targetColor, targetSpeed);
 
-    // 初期値
-    int leftCount = Measurer::getLeftCount();
+    // 初期値から期待する走行距離を求める
+    int initialRightCount = Measurer::getRightCount();
+    int initialLeftCount = Measurer::getLeftCount();
+    int expected = Mileage::calculateMileage(initialRightCount, initialLeftCount);
+
+    /**
+     * 最初10回の色取得分の走行距離を許容誤差とする
+     * 一回のsetPWM()でダミーのモータカウントに加算される値はtargetSpeed * 0.05
+     * StraightRunnerのPWM値は-100まで加速するので，許容誤差のtargetSpeedは-100で計算する
+     */
+    int error = Mileage::calculateMileage(-100 * 0.05 * 10, -100 * 0.05 * 10);  // 許容誤差
+
+    srand(0);  // 最初10回が赤を取得しない乱数シード
+    cs.run();  // 赤まで直進を実行
+
+    // 直進後の走行距離
     int rightCount = Measurer::getRightCount();
-    // 期待する走行距離
-    double expectedDistance = Mileage::calculateMileage(rightCount, leftCount);
+    int leftCount = Measurer::getLeftCount();
+    int actual = Mileage::calculateMileage(rightCount, leftCount);
+
+    EXPECT_GT(expected, actual);          // 実行後に少しでも進んでいる
+    EXPECT_LE(expected + error, actual);  // 直進後の走行距離が許容誤差以内である
+  }
+
+  TEST(ColorStraightTest, runZeroPWM)
+  {
+    COLOR targetColor = COLOR::YELLOW;
+    int targetSpeed = 0;
+    ColorStraight cs(targetColor, targetSpeed);
+
+    // 初期値から期待する走行距離を求める
+    int initialRightCount = Measurer::getRightCount();
+    int initialLeftCount = Measurer::getLeftCount();
+    int expected = Mileage::calculateMileage(initialRightCount, initialLeftCount);
 
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
-    expectedOutput += "Warning: The targetDistance value passed to DistanceStraight is -350.00";
+    expectedOutput += "Warning: The targetSpeed value passed to ColorStraight is 0";
     expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
 
+    srand(0);                            // 最初に黄を取得しない乱数シード
     testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
-    ds.run();                            // 直進を実行
+    cs.run();                            // 黄まで直進を実行
     string actualOutput = testing::internal::GetCapturedStdout();  // キャプチャ終了
 
-    // 関数実行後の走行距離
-    leftCount = Measurer::getLeftCount();
-    rightCount = Measurer::getRightCount();
-    double actualDistance = Mileage::calculateMileage(rightCount, leftCount);
+    // 直進後の走行距離
+    int rightCount = Measurer::getRightCount();
+    int leftCount = Measurer::getLeftCount();
+    int actual = Mileage::calculateMileage(rightCount, leftCount);
 
-    EXPECT_EQ(expectedOutput, actualOutput);      // 標準出力でWarningを出している
-    EXPECT_EQ(expectedDistance, actualDistance);  // 直進前後で走行距離に変化はない
+    EXPECT_EQ(expectedOutput, actualOutput);  // 標準出力でWarningを出している
+    EXPECT_EQ(expected, actual);              // 直進前後で走行距離に変化はない
   }
 
-  TEST(DistanceStraightTest, runBack)
+  TEST(ColorStraightTest, runNoneColor)
   {
-    double targetDistance = 350;
-    int pwm = -50;
-    DistanceStraight ds(targetDistance, pwm);
+    COLOR targetColor = COLOR::NONE;
+    int targetSpeed = 100;
+    ColorStraight cs(targetColor, targetSpeed);
 
-    // 初期値
-    int leftCount = Measurer::getLeftCount();
-    int rightCount = Measurer::getRightCount();
-    double leftInitial = Mileage::calculateWheelMileage(leftCount);
-    double rightInitial = Mileage::calculateWheelMileage(rightCount);
-    // 期待する走行距離
-    double expectedDistance = Mileage::calculateMileage(rightCount, leftCount) - targetDistance;
-
-    /**
-     * 一回のsetPWM()でダミーのモータカウントに加算される値はpwm * 0.05
-     * StraightRunnerのPWM値は-100まで加速するので，許容誤差のpwmは-100で計算する
-     */
-    double distanceError = Mileage::calculateMileage(-100 * 0.05, -100 * 0.05);  // 許容誤差
-    double expectedError = 1;  // タイヤの走行距離の誤差の期待値
-
-    ds.run();                  // 直進を実行
-
-    // 関数実行後の走行距離
-    leftCount = Measurer::getLeftCount();
-    rightCount = Measurer::getRightCount();
-    double leftActual = Mileage::calculateWheelMileage(leftCount);
-    double rightActual = Mileage::calculateWheelMileage(rightCount);
-    double actualDistance = Mileage::calculateMileage(rightCount, leftCount);
-
-    // タイヤごとの走行距離
-    double leftDifference = std::abs(leftActual - leftInitial);
-    double rightDifference = std::abs(rightActual - rightInitial);
-    // タイヤの走行距離の誤差
-    double actualError = std::abs(leftDifference - rightDifference);
-
-    // 走行距離のテスト
-    EXPECT_GE(expectedDistance, actualDistance);
-    EXPECT_LE(expectedDistance + distanceError, actualDistance);
-
-    // 直進できているかのテスト
-    EXPECT_GE(expectedError, actualError);
-  }
-
-  TEST(DistanceStraightTest, runBackFullPwm)
-  {
-    double targetDistance = 350;
-    int pwm = -100;
-    DistanceStraight ds(targetDistance, pwm);
-
-    // 初期値
-    int leftCount = Measurer::getLeftCount();
-    int rightCount = Measurer::getRightCount();
-    double leftInitial = Mileage::calculateWheelMileage(leftCount);
-    double rightInitial = Mileage::calculateWheelMileage(rightCount);
-    // 期待する走行距離
-    double expectedDistance = Mileage::calculateMileage(rightCount, leftCount) - targetDistance;
-
-    /**
-     * 一回のsetPWM()でダミーのモータカウントに加算される値はpwm * 0.05
-     * StraightRunnerのPWM値は-100まで加速するので，許容誤差のpwmは-100で計算する
-     */
-    double distanceError = Mileage::calculateMileage(-100 * 0.05, -100 * 0.05);  // 許容誤差
-    double expectedError = 1;  // タイヤの走行距離の誤差の期待値
-
-    ds.run();                  // 直進を実行
-
-    // 関数実行後の走行距離
-    leftCount = Measurer::getLeftCount();
-    rightCount = Measurer::getRightCount();
-    double leftActual = Mileage::calculateWheelMileage(leftCount);
-    double rightActual = Mileage::calculateWheelMileage(rightCount);
-    double actualDistance = Mileage::calculateMileage(rightCount, leftCount);
-
-    // タイヤごとの走行距離
-    double leftDifference = std::abs(leftActual - leftInitial);
-    double rightDifference = std::abs(rightActual - rightInitial);
-    // タイヤの走行距離の誤差
-    double actualError = std::abs(leftDifference - rightDifference);
-
-    // 走行距離のテスト
-    EXPECT_GE(expectedDistance, actualDistance);
-    EXPECT_LE(expectedDistance + distanceError, actualDistance);
-
-    // 直進できているかのテスト
-    EXPECT_GE(expectedError, actualError);
-  }
-
-  TEST(DistanceStraightTest, runZeroPwm)
-  {
-    double targetDistance = 350;
-    int pwm = 0;
-    DistanceStraight ds(targetDistance, pwm);
-
-    // 初期値
-    int leftCount = Measurer::getLeftCount();
-    int rightCount = Measurer::getRightCount();
-    // 期待する走行距離
-    double expectedDistance = Mileage::calculateMileage(rightCount, leftCount);
+    // 初期値から期待する走行距離を求める
+    int initialRightCount = Measurer::getRightCount();
+    int initialLeftCount = Measurer::getLeftCount();
+    int expected = Mileage::calculateMileage(initialRightCount, initialLeftCount);
 
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
-    expectedOutput += "Warning: The pwm value passed to DistanceStraight is 0";
+    expectedOutput += "Warning: The targetColor passed to ColorStraight is NONE";
     expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
 
     testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
-    ds.run();                            // 直進を実行
+    cs.run();                            // 黄まで直進を実行
     string actualOutput = testing::internal::GetCapturedStdout();  // キャプチャ終了
 
-    // 関数実行後の走行距離
-    leftCount = Measurer::getLeftCount();
-    rightCount = Measurer::getRightCount();
-    double actualDistance = Mileage::calculateMileage(rightCount, leftCount);
-
-    EXPECT_EQ(expectedOutput, actualOutput);      // 標準出力でWarningを出している
-    EXPECT_EQ(expectedDistance, actualDistance);  // 直進前後で走行距離に変化はない
-  }
-
-  TEST(DistanceStraightTest, runMinusDistanceZeroPwm)
-  {
-    double targetDistance = -350;
-    int pwm = 0;
-    DistanceStraight ds(targetDistance, pwm);
-
-    // 初期値
-    int leftCount = Measurer::getLeftCount();
+    // 直進後の走行距離
     int rightCount = Measurer::getRightCount();
-    // 期待する走行距離
-    double expectedDistance = Mileage::calculateMileage(rightCount, leftCount);
+    int leftCount = Measurer::getLeftCount();
+    int actual = Mileage::calculateMileage(rightCount, leftCount);
 
-    // Warning文
-    string expectedOutput = "\x1b[36m";  // 文字色をシアンに
-    expectedOutput += "Warning: The pwm value passed to DistanceStraight is 0";
-    expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
-
-    testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
-    ds.run();                            // 直進を実行
-    string actualOutput = testing::internal::GetCapturedStdout();  // キャプチャ終了
-
-    // 関数実行後の走行距離
-    leftCount = Measurer::getLeftCount();
-    rightCount = Measurer::getRightCount();
-    double actualDistance = Mileage::calculateMileage(rightCount, leftCount);
-
-    EXPECT_EQ(expectedOutput, actualOutput);      // 標準出力でWarningを出している
-    EXPECT_EQ(expectedDistance, actualDistance);  // 直進前後で走行距離に変化はない
+    EXPECT_EQ(expectedOutput, actualOutput);  // 標準出力でWarningを出している
+    EXPECT_EQ(expected, actual);              // 直進前後で走行距離に変化はない
   }
 
-}  // namespace etrobocon2022_test
+}  // namespace etrobocon2023_test

@@ -12,8 +12,6 @@ ColorStraight::ColorStraight(COLOR _targetColor, double _targetSpeed)
 {
 }
 
-void ColorStraight::run(){};
-
 bool ColorStraight::isRunPostconditionJudgement()
 {
   COLOR color = ColorJudge::getColor(Measurer::getRawColor());
@@ -30,15 +28,8 @@ bool ColorStraight::isRunPreconditionJudgement()
   char buf[BUF_SIZE];
   // 目標速度値が0の場合は終了する
   if(targetSpeed == 0) {
-    logger.logWarning("The speed value passed to ColorStraight is 0");
+    logger.logWarning("The targetSpeed value passed to ColorStraight is 0");
     return false;
-  }
-  // pwmの絶対値がMIN_PWMより小さい場合はwarningを出す
-  SpeedCalculator SpeedCalculator(targetSpeed);
-  int pwm = SpeedCalculator.calcPwmFromSpeed();
-  if(abs(pwm) < MIN_PWM) {
-    snprintf(buf, BUF_SIZE, "The pwm value passed to ColorStraight is %d", pwm);
-    logger.logWarning(buf);
   }
   // 目標の色がNoneのときwarningを出して終了する
   if(targetColor == COLOR::NONE) {

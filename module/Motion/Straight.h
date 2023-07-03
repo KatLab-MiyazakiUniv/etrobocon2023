@@ -56,7 +56,7 @@ class Straight : public Motion {
   int currentRightMotorCount;         // 現在右輪モーター距離
   int currentLeftMotorCount;          // 現在左輪モーター距離
   double currentDistance;             // 現在距離
-  class Timer Timer;
+  Timer timer;
 };
 
 #endif
