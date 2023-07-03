@@ -40,7 +40,9 @@ class Rotation : public Motion {
    * @param rightSign 右車輪の回転方向
    * @note オーバーライド必須
    */
-  virtual bool isMetPostcondition(int leftSign, int rightSign) = 0;
+  virtual bool isMetPostcondition(double initLeftMileage, double initRightMileage, int leftSign,
+                                  int rightSign)
+      = 0;
 
   /**
    * @brief 実行のログを取る
@@ -48,14 +50,9 @@ class Rotation : public Motion {
    */
   virtual void logRunning() = 0;
 
- private:
-  // class Timer Timer;
-
  protected:
-  double targetSpeed;       // 目標速度
-  bool isClockwise;         // 回頭方向 true:時計回り, false:反時計回り
-  double initLeftMileage;   // クラス呼び出し時の左車輪の走行距離
-  double initRightMileage;  // クラス呼び出し時の右車輪の走行距離
+  double targetSpeed;  // 目標速度
+  bool isClockwise;    // 回頭方向 true:時計回り, false:反時計回り
   Timer timer;
 };
 #endif

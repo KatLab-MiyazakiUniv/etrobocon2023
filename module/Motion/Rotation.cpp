@@ -26,13 +26,13 @@ void Rotation::run()
   int rightSign = isClockwise ? -1 : 1;
 
   // 呼び出し時の走行距離
-  initLeftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
-  initRightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
+  double initLeftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
+  double initRightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
 
   SpeedCalculator speedCalculator(targetSpeed);
 
   // 継続条件を満たしている間ループ
-  while(isMetPostcondition(leftSign, rightSign)) {
+  while(isMetPostcondition(initLeftMileage, initRightMileage, leftSign, rightSign)) {
     // PWM値を設定する
     int pwm = speedCalculator.calcPwmFromSpeed();
 

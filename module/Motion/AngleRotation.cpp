@@ -33,7 +33,8 @@ bool AngleRotation::isMetPrecondition()
   return true;
 }
 
-bool AngleRotation::isMetPostcondition(int leftSign, int rightSign)
+bool AngleRotation::isMetPostcondition(double initLeftMileage, double initRightMileage,
+                                       int leftSign, int rightSign)
 {
   double targetDistance
       = M_PI * TREAD * targetAngle / 360;  // 指定した角度に対する目標の走行距離(弧の長さ)
@@ -42,6 +43,7 @@ bool AngleRotation::isMetPostcondition(int leftSign, int rightSign)
   double targetLeftDistance = initLeftMileage + targetDistance * leftSign;
   double targetRightDistance = initRightMileage + targetDistance * rightSign;
 
+  // 残りの移動距離を算出
   double diffLeftDistance
       = (targetLeftDistance - Mileage::calculateWheelMileage(Measurer::getLeftCount())) * leftSign;
   double diffRightDistance

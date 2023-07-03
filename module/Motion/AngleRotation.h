@@ -34,7 +34,8 @@ class AngleRotation : public Rotation {
    * @param leftSign 左車輪の回転方向
    * @param rightSign 右車輪の回転方向
    */
-  bool isMetPostcondition(int leftSign, int rightSign) override;
+  bool isMetPostcondition(double initLeftMileage, double initRightMileage, int leftSign,
+                          int rightSign) override;
 
   /**
    * @brief 実行のログを取る
