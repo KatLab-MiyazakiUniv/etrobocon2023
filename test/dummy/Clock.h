@@ -13,6 +13,9 @@ namespace ev3api {
    public:
     void sleep(int duration);
     uint64_t now();
+
+   private:
+    uint64_t microTime = 0;
   };
 }  // namespace ev3api
 
