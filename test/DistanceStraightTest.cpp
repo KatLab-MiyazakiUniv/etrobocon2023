@@ -12,37 +12,14 @@
 using namespace std;
 
 namespace etrobocon2023_test {
-  TEST(DistanceStraightTest, init)
-  {
-    const ePortS colorSensorPort = PORT_2;
-    const ePortS sonarSensorPort = PORT_3;
-    const ePortM armMotorPort = PORT_A;
-    const ePortM rightMotorPort = PORT_B;
-    const ePortM leftMotorPort = PORT_C;
-
-    ev3api::ColorSensor _colorSensor(colorSensorPort);
-    ev3api::SonarSensor _sonarSensor(sonarSensorPort);
-    ev3api::Motor _rightMotor(rightMotorPort);
-    ev3api::Motor _leftMotor(leftMotorPort);
-    ev3api::Motor _armMotor(armMotorPort);
-
-    Controller::rightMotor = &_rightMotor;
-    Controller::leftMotor = &_leftMotor;
-    Controller::armMotor = &_armMotor;
-    Measurer::colorSensor = &_colorSensor;
-    Measurer::sonarSensor = &_sonarSensor;
-    Measurer::rightMotor = &_rightMotor;
-    Measurer::leftMotor = &_leftMotor;
-    Measurer::armMotor = &_armMotor;
-
-    SUCCEED();
-  }
-
   TEST(DistanceStraightTest, run)
   {
     double targetDistance = 350;
     double targetSpeed = 50;
     DistanceStraight ds(targetDistance, targetSpeed);
+
+    Measurer::rightMotor->reset();
+    Measurer::leftMotor->reset();
 
     // 初期値
     int leftCount = Measurer::getLeftCount();
@@ -87,6 +64,9 @@ namespace etrobocon2023_test {
     double targetDistance = 350;
     double targetSpeed = 100;
     DistanceStraight ds(targetDistance, targetSpeed);
+
+    Measurer::rightMotor->reset();
+    Measurer::leftMotor->reset();
 
     // 初期値
     int leftCount = Measurer::getLeftCount();
@@ -162,6 +142,9 @@ namespace etrobocon2023_test {
     double targetSpeed = -50;
     DistanceStraight ds(targetDistance, targetSpeed);
 
+    Measurer::rightMotor->reset();
+    Measurer::leftMotor->reset();
+
     // 初期値
     int leftCount = Measurer::getLeftCount();
     int rightCount = Measurer::getRightCount();
@@ -205,6 +188,9 @@ namespace etrobocon2023_test {
     double targetDistance = 350;
     double targetSpeed = -100;
     DistanceStraight ds(targetDistance, targetSpeed);
+
+    Measurer::rightMotor->reset();
+    Measurer::leftMotor->reset();
 
     // 初期値
     int leftCount = Measurer::getLeftCount();
