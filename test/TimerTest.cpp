@@ -1,7 +1,7 @@
 /**
  * @file TimerTest.cpp
  * @brief Timerクラスをテストする
- * @author YKhm20020
+ * @author YKhm20020 miyashita64
  */
 
 #include "Timer.h"
@@ -14,18 +14,20 @@ namespace etrobocon2023_test {
     timer.sleep();
   }
 
-  TEST(TimerTest, sleep50)
-  {
-    Timer timer;
-    timer.sleep(50);
-  }
-
   TEST(TimerTest, now)
   {
     Timer timer;
-    int expected = 0;
-    int actual = timer.now();
+    timer.now();
+  }
 
-    EXPECT_EQ(expected, actual);
+  TEST(TimerTest, sleep50)
+  {
+    Timer timer;
+    int sleepTime = 50;
+    int initTime = timer.now();
+    timer.sleep(sleepTime);
+    int actualTime = timer.now();
+    int expectedTime = initTime + sleepTime;
+    EXPECT_EQ(actualTime, expectedTime);
   }
 }  // namespace etrobocon2023_test

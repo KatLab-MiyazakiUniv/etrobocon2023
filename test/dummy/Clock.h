@@ -11,8 +11,10 @@
 namespace ev3api {
   class Clock {
    public:
-    void sleep(int duration);
+    void sleep(int miliSec);
     uint64_t now();
+   private:
+    uint64_t microTime = 0;
   };
 }  // namespace ev3api
 

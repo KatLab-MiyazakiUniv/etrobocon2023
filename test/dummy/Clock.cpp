@@ -7,9 +7,11 @@
 #include "Clock.h"
 using namespace ev3api;
 
-void Clock::sleep(int dulation) {}
+void Clock::sleep(int dulation) {
+  microTime += dulation;
+}
 
 uint64_t Clock::now()
 {
-  return 50;
+  return microTime;
 }
