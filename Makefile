@@ -6,7 +6,7 @@ make = make --no-print-directory
 help:
 	@echo ビルドする
 	@echo " $$ make build"
-	@echo ビルドファイルを消してからブル度する
+	@echo ビルドファイルを消してからビルドする
 	@echo " $$ make rebuild"
 	@echo 走行を開始する\(実機限定\)
 	@echo " $$ make start"
