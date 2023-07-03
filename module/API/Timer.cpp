@@ -19,5 +19,5 @@ void Timer::sleep(int milliSec)
 int Timer::now()
 {
   // マイクロ秒をミリ秒になおしてreturn
-  return clock.now() / 1000;
+  return int(clock.now()) / 1000;
 }
