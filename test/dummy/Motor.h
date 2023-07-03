@@ -47,7 +47,7 @@ namespace ev3api {
     void reset();
 
    private:
-    double motorCount;
+    int motorCount;
   };
 }  // namespace ev3api
 

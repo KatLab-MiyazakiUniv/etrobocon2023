@@ -12,11 +12,8 @@ DistanceStraight::DistanceStraight(double _targetDistance, double _targetSpeed)
 {
 }
 
-void DistanceStraight::run() {}
-
 bool DistanceStraight::isRunPostconditionJudgement()
 {
-  initialDistance = Mileage::calculateMileage(initialRightMotorCount, initialLeftMotorCount);
   // 現在の距離を取得する
   currentRightMotorCount = Measurer::getRightCount();
   currentLeftMotorCount = Measurer::getLeftCount();

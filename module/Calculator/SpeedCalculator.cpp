@@ -13,6 +13,8 @@ SpeedCalculator::SpeedCalculator(double _targetSpeed)
   int leftAngle = Measurer::getLeftCount();
   prevMileage = Mileage::calculateMileage(rightAngle, leftAngle);
   prevTime = timer.now();
+  // printf("right: %d\n", rightAngle);
+  // printf("left: %d\n", leftAngle);
 }
 
 int SpeedCalculator::calcPwmFromSpeed()

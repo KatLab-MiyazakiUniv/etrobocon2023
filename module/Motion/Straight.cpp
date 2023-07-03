@@ -30,6 +30,7 @@ void Straight::run()
   int currentPwm = 0;  // 現在のpwd値
 
   // 走行距離が目標値に到達するまで繰り返す
+  SpeedCalculator SpeedCalculator(targetSpeed);
   while(true) {
     // 終了条件が満たされたときループから抜ける オーバーライド必須
     if(isRunPostconditionJudgement() == true) {
@@ -37,7 +38,6 @@ void Straight::run()
     }
 
     // PWM値を目標速度値に合わせる
-    SpeedCalculator SpeedCalculator(targetSpeed);
     currentPwm = SpeedCalculator.calcPwmFromSpeed();
 
     // モータにPWM値をセット
