@@ -19,7 +19,7 @@ class Rotation : public Motion {
    * コンストラクタ
    * @param _targetValue 目標値
    * @param _targetSpeed 目標速度
-   * @param _isClockwise 回頭方向 ture:時計回り, false:反時計回り
+   * @param _isClockwise 回頭方向 true:時計回り, false:反時計回り
    */
   Rotation(double _targetSpeed, bool _isClockwise);
 

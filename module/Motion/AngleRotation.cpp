@@ -23,7 +23,7 @@ bool AngleRotation::isMetPrecondition()
     return false;
   }
 
-  // angleが0以下の場合はwarningを出して終了する
+  // targetAngleが0以下の場合はwarningを出して終了する
   if(targetAngle <= 0 || targetAngle >= 360) {
     snprintf(buf, BUF_SIZE, "The targetAngle value passed to Rotation is %d", targetAngle);
     logger.logWarning(buf);

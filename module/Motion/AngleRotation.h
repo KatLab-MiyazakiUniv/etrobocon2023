@@ -15,7 +15,7 @@ class AngleRotation : public Rotation {
    * コンストラクタ
    * @param _targetAngle 目標角度
    * @param _targetSpeed 目標速度
-   * @param _isClockwise 回頭方向 ture:時計回り, false:反時計回り
+   * @param _isClockwise 回頭方向 true:時計回り, false:反時計回り
    */
   AngleRotation(int _targetAngle, double _targetSpeed, bool _isClockwise);
 
