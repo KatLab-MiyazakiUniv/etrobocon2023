@@ -28,6 +28,6 @@ namespace etrobocon2023_test {
     timer.sleep(sleepTime);
     int actualTime = timer.now();
     int expectedTime = initTime + sleepTime;
-    EXPECT_EQ(actualTime, expectedTime);
+    EXPECT_EQ(expectedTime, actualTime);
   }
 }  // namespace etrobocon2023_test
