@@ -43,7 +43,7 @@ namespace etrobocon2023_test {
   TEST(ColorStraightTest, run)
   {
     COLOR targetColor = COLOR::BLUE;
-    int targetSpeed = 100;
+    int targetSpeed = 100000;
     ColorStraight cs(targetColor, targetSpeed);
 
     Measurer::rightMotor->reset();
@@ -77,7 +77,7 @@ namespace etrobocon2023_test {
   TEST(ColorStraightTest, runBack)
   {
     COLOR targetColor = COLOR::RED;
-    int targetSpeed = -100;
+    int targetSpeed = -1000000;
     ColorStraight cs(targetColor, targetSpeed);
 
     Measurer::rightMotor->reset();
@@ -121,7 +121,7 @@ namespace etrobocon2023_test {
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
     expectedOutput += "Warning: The targetSpeed value passed to ColorStraight is 0";
-    expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
+    expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
 
     srand(0);                            // 最初に黄を取得しない乱数シード
     testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
@@ -151,7 +151,7 @@ namespace etrobocon2023_test {
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
     expectedOutput += "Warning: The targetColor passed to ColorStraight is NONE";
-    expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
+    expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
 
     testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
     cs.run();                            // 黄まで直進を実行
