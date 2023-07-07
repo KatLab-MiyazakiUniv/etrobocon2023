@@ -6,8 +6,8 @@
 
 #include "DistanceStraight.h"
 #include <gtest/gtest.h>
-#include "Controller.h"
 #include "Measurer.h"
+#include "Controller.h"
 
 using namespace std;
 
@@ -36,7 +36,7 @@ namespace etrobocon2023_test {
     double distanceError = Mileage::calculateMileage(100 * 0.05, 100 * 0.05);  // 許容誤差
     double expectedError = 1;  // タイヤの走行距離の誤差の期待値
 
-    ds.run();  // 直進を実行
+    ds.run();                  // 直進を実行
 
     // 関数実行後の走行距離
     leftCount = Measurer::getLeftCount();
@@ -83,7 +83,7 @@ namespace etrobocon2023_test {
     double distanceError = Mileage::calculateMileage(100 * 0.05, 100 * 0.05);  // 許容誤差
     double expectedError = 1;  // タイヤの走行距離の誤差の期待値
 
-    ds.run();  // 直進を実行
+    ds.run();                  // 直進を実行
 
     // 関数実行後の走行距離
     leftCount = Measurer::getLeftCount();
@@ -121,7 +121,7 @@ namespace etrobocon2023_test {
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
     expectedOutput += "Warning: The targetDistance value passed to DistanceStraight is -350.00";
-    expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
+    expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
 
     testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
     ds.run();                            // 直進を実行
@@ -160,7 +160,7 @@ namespace etrobocon2023_test {
     double distanceError = Mileage::calculateMileage(-100 * 0.05, -100 * 0.05);  // 許容誤差
     double expectedError = 1;  // タイヤの走行距離の誤差の期待値
 
-    ds.run();  // 直進を実行
+    ds.run();                  // 直進を実行
 
     // 関数実行後の走行距離
     leftCount = Measurer::getLeftCount();
@@ -207,7 +207,7 @@ namespace etrobocon2023_test {
     double distanceError = Mileage::calculateMileage(-100 * 0.05, -100 * 0.05);  // 許容誤差
     double expectedError = 1;  // タイヤの走行距離の誤差の期待値
 
-    ds.run();  // 直進を実行
+    ds.run();                  // 直進を実行
 
     // 関数実行後の走行距離
     leftCount = Measurer::getLeftCount();
@@ -245,7 +245,7 @@ namespace etrobocon2023_test {
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
     expectedOutput += "Warning: The targetSpeed value passed to DistanceStraight is 0";
-    expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
+    expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
 
     testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
     ds.run();                            // 直進を実行
@@ -275,7 +275,7 @@ namespace etrobocon2023_test {
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
     expectedOutput += "Warning: The targetSpeed value passed to DistanceStraight is 0";
-    expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
+    expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
 
     testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
     ds.run();                            // 直進を実行
