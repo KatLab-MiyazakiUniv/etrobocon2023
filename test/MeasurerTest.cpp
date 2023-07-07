@@ -56,6 +56,7 @@ namespace etrobocon2023_test {
 
   TEST(MeasurerTest, getLeftCount)
   {
+    Measurer::leftMotor->reset();
     int expected = 0;
     int actual = Measurer::getLeftCount();
 
@@ -64,6 +65,7 @@ namespace etrobocon2023_test {
 
   TEST(MeasurerTest, getRightCount)
   {
+    Measurer::rightMotor->reset();
     int expected = 0;
     int actual = Measurer::getRightCount();
 
@@ -72,6 +74,7 @@ namespace etrobocon2023_test {
 
   TEST(MeasurerTest, getArmMotorCount)
   {
+    Measurer::armMotor->reset();
     int expected = 0;
     int actual = Measurer::getArmMotorCount();
 
