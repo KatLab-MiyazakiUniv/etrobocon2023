@@ -4,6 +4,7 @@
  * @author desty505
  */
 
+#include "Measurer.h"
 #include "AngleRotation.h"
 #include <gtest/gtest.h>
 #include <cmath>
@@ -27,6 +28,9 @@ namespace etrobocon2023_test {
     double expected = angle;  // 指定した回頭角度を期待値とする
 
     double error = targetSpeed * 0.05 * TRANSFORM;  // 許容誤差[deg]
+
+    Measurer::rightMotor->reset();
+    Measurer::leftMotor->reset();
 
     // 回頭前のモータカウント
     int initialRightMotorCount = Measurer::getRightCount();
@@ -53,6 +57,9 @@ namespace etrobocon2023_test {
     double expected = angle;  // 指定した回頭角度を期待値とする
 
     double error = targetSpeed * 0.05 * TRANSFORM;  // 許容誤差[deg]
+
+    Measurer::rightMotor->reset();
+    Measurer::leftMotor->reset();
 
     // 回頭前のモータカウント
     int initialRightMotorCount = Measurer::getRightCount();

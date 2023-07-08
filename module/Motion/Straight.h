@@ -35,7 +35,7 @@ class Straight : public Motion {
   virtual bool isRunPreconditionJudgement();
 
   /**
-   * @brief 直進する際の事後条件判定をする　返り値が真でモーターが止まる
+   * @brief 直進する際の終了条件判定をする　返り値が真でモーターが止まる
    * @note オーバーライド必須
    */
   virtual bool isRunPostconditionJudgement() = 0;
@@ -52,7 +52,11 @@ class Straight : public Motion {
   double targetSpeed;                 // 目標速度[mm/s]
   int initialRightMotorCount;         // 初期右輪モーター距離
   int initialLeftMotorCount;          // 初期左輪モーター距離
-  class Timer Timer;
+  double initialDistance;             // 初期距離
+  int currentRightMotorCount;         // 現在右輪モーター距離
+  int currentLeftMotorCount;          // 現在左輪モーター距離
+  double currentDistance;             // 現在距離
+  Timer timer;
 };
 
 #endif
