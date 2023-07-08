@@ -35,7 +35,7 @@ class Straight : public Motion {
   virtual bool isRunPreconditionJudgement();
 
   /**
-   * @brief 直進する際の事後条件判定をする　返り値が真でモーターが止まる
+   * @brief 直進する際の終了条件判定をする　返り値が真でモーターが止まる
    * @note オーバーライド必須
    */
   virtual bool isRunPostconditionJudgement() = 0;
