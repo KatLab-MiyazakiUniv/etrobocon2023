@@ -24,7 +24,7 @@ class DistanceStraight : public Straight {
   virtual bool isRunPreconditionJudgement() override;
 
   /**
-   * @brief 直進する際の事後条件判定をする　返り値が真でモーターが止まる
+   * @brief 直進する際の終了条件判定をする　返り値が真でモーターが止まる
    */
   virtual bool isRunPostconditionJudgement() override;
 
