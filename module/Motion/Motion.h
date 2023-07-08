@@ -7,8 +7,8 @@
 #ifndef MOTION_H
 #define MOTION_H
 
-#include "Controller.h"
 #include "Measurer.h"
+#include "Controller.h"
 #include "Logger.h"
 
 class Motion {
