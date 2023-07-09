@@ -34,12 +34,12 @@ void Rotation::run()
   // 継続条件を満たしている間ループ
   while(isMetPostcondition(initLeftMileage, initRightMileage, leftSign, rightSign)) {
     // PWM値を設定する
-    int rightPwm = speedCalculator.calcRightPwmFromSpeed();
     int leftPwm = speedCalculator.calcLeftPwmFromSpeed();
+    int rightPwm = speedCalculator.calcRightPwmFromSpeed();
 
     // モータにPWM値をセット
-    Controller::setLeftMotorPwm(rightPwm * leftSign);
-    Controller::setRightMotorPwm(leftPwm * rightSign);
+    Controller::setLeftMotorPwm(leftPwm * leftSign);
+    Controller::setRightMotorPwm(rightPwm * rightSign);
 
     // 10ミリ秒待機
     timer.sleep(10);

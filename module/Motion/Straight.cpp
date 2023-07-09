@@ -40,12 +40,12 @@ void Straight::run()
     }
 
     // PWM値を目標速度値に合わせる
-    currentRightPwm = SpeedCalculator.calcRightPwmFromSpeed();
     currentLeftPwm = SpeedCalculator.calcLeftPwmFromSpeed();
+    currentRightPwm = SpeedCalculator.calcRightPwmFromSpeed();
 
     // モータにPWM値をセット
-    Controller::setLeftMotorPwm(currentRightPwm);
-    Controller::setRightMotorPwm(currentLeftPwm);
+    Controller::setLeftMotorPwm(currentLeftPwm);
+    Controller::setRightMotorPwm(currentRightPwm);
 
     // 10ミリ秒待機
     timer.sleep(10);
