@@ -39,7 +39,7 @@ void Rotation::run()
 
     // モータにPWM値をセット
     Controller::setLeftMotorPwm(leftPwm * leftSign);
-    Controller::setRightMotorPwm(rightPwm * rightSign);
+    Controller::setRightMotorPwm(leftPwm * rightSign);
 
     // 10ミリ秒待機
     timer.sleep(10);

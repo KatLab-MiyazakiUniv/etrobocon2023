@@ -17,10 +17,12 @@ bool DistanceStraight::isRunPostconditionJudgement()
   // 現在の距離を取得する
   currentRightMotorCount = Measurer::getRightCount();
   currentLeftMotorCount = Measurer::getLeftCount();
-  currentDistance = Mileage::calculateMileage(currentLeftMotorCount, currentRightMotorCount);
+  currentRightDistance = Mileage::calculateWheelMileage(currentRightMotorCount);
+  currentLeftDistance = Mileage::calculateWheelMileage(currentLeftMotorCount);
 
   // 現在の距離が目標距離に到達したらループを終了する
-  if(abs(currentDistance - initialDistance) >= targetDistance) {
+  if((abs(currentRightDistance - initialRightDistance) >= targetDistance)
+     || (abs(currentLeftDistance - initialLeftDistance) >= targetDistance)) {
     return true;
   }
 

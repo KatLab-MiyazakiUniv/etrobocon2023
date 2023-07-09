@@ -19,12 +19,14 @@ void Straight::run()
   // 直進前の走行距離
   initialRightMotorCount = Measurer::getRightCount();
   initialLeftMotorCount = Measurer::getLeftCount();
-  initialDistance = Mileage::calculateMileage(initialRightMotorCount, initialLeftMotorCount);
+  initialRightDistance = Mileage::calculateWheelMileage(initialRightMotorCount);
+  initialLeftDistance = Mileage::calculateWheelMileage(initialLeftMotorCount);
 
   // 直進中の走行距離
   currentRightMotorCount = initialRightMotorCount;
   currentLeftMotorCount = initialLeftMotorCount;
-  currentDistance = initialDistance;
+  currentRightDistance = initialRightDistance;
+  currentLeftDistance = initialLeftDistance;
 
   // SpeedCalculatorの実体化
   SpeedCalculator SpeedCalculator(targetSpeed);
