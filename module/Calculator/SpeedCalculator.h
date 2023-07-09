@@ -37,8 +37,6 @@ class SpeedCalculator {
   Pid pid;
   Timer timer;
   const double targetSpeed;
-  double rightPwm;
-  double leftPwm;
   double prevRightMileage;
   double prevLeftMileage;
   int prevRightTime;
