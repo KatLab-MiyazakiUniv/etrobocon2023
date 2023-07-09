@@ -55,8 +55,9 @@ void DistanceLineTracing::logRunning()
 
   snprintf(buf, BUF_SIZE,
            "Run DistanceLineTracing (targetDistance: %.2f, targetSpeed: %.2f, targetBrightness: "
-           "%d, basePwm: %d, gain: "
+           "%d, baseRightPwm: %d, baseLeftPwm: %d, gain: "
            "(%.2f,%.2f,%.2f), isLeftEdge: %s)",
-           targetDistance, targetSpeed, targetBrightness, basePwm, gain.kp, gain.ki, gain.kd, str);
+           targetDistance, targetSpeed, targetBrightness, baseRightPwm, baseRightPwm, gain.kp,
+           gain.ki, gain.kd, str);
   logger.log(buf);
 }

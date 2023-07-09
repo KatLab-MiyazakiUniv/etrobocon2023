@@ -44,7 +44,8 @@ void LineTracing::run()
   // 継続条件を満たしている間ループ
   while(isMetPostcondition()) {
     // 初期pwm値を計算
-    basePwm = speedCalculator.calcPwmFromSpeed();
+    baseRightPwm = speedCalculator.calcRightPwmFromSpeed();
+    baseLeftPwm = speedCalculator.calcLeftPwmFromSpeed();
 
     // PIDで旋回値を計算
     turnPwm = pid.calculatePid(Measurer::getBrightness()) * edgeSign;

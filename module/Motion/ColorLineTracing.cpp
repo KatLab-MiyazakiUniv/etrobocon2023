@@ -55,11 +55,13 @@ void ColorLineTracing::logRunning()
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
   const char* str = isLeftEdge ? "true" : "false";
 
-  snprintf(buf, BUF_SIZE,
-           "Run ColorLineTracing (targetColor: %s, targetSpeed: %.2f, targetBrightness: %d, pwm: "
-           "%d, gain: "
-           "(%.2f,%.2f,%.2f), isLeftEdge: %s)",
-           ColorJudge::colorToString(targetColor), targetSpeed, targetBrightness, basePwm, gain.kp,
-           gain.ki, gain.kd, str);
+  snprintf(
+      buf, BUF_SIZE,
+      "Run ColorLineTracing (targetColor: %s, targetSpeed: %.2f, targetBrightness: %d, rightPwm: "
+      "%d, leftPwm: "
+      "%d, gain: "
+      "(%.2f,%.2f,%.2f), isLeftEdge: %s)",
+      ColorJudge::colorToString(targetColor), targetSpeed, targetBrightness, baseRightPwm,
+      baseLeftPwm, gain.kp, gain.ki, gain.kd, str);
   logger.log(buf);
 }
