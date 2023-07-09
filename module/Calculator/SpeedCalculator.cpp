@@ -8,33 +8,58 @@
 SpeedCalculator::SpeedCalculator(double _targetSpeed)
   : targetSpeed(_targetSpeed), pid(0.001, 0.000000001, 0.0001, _targetSpeed)
 {
-  pwm = 0.0;
+  rightPwm = 0.0;
+  leftPwm = 0.0;
   int rightAngle = Measurer::getRightCount();
   int leftAngle = Measurer::getLeftCount();
-  prevMileage = Mileage::calculateMileage(rightAngle, leftAngle);
-  prevTime = timer.now();
+  prevRightMileage = Mileage::calculateWheelMileage(rightAngle);
+  prevLeftMileage = Mileage::calculateWheelMileage(leftAngle);
+  prevRightTime = timer.now();
+  prevLeftTime = timer.now();
 }
 
-int SpeedCalculator::calcPwmFromSpeed()
+int SpeedCalculator::calcRightPwmFromSpeed()
 {
-  // 左右タイヤの回転角度を取得
+  // 右タイヤの回転角度を取得
   int rightAngle = Measurer::getRightCount();
-  int leftAngle = Measurer::getLeftCount();
-  // 走行距離を算出
-  double currentMileage = Mileage::calculateMileage(rightAngle, leftAngle);
-  double diffMileage = currentMileage - prevMileage;
+  // 右タイヤの走行距離を算出
+  double currentRightMileage = Mileage::calculateWheelMileage(rightAngle);
+  double diffRightMileage = currentRightMileage - prevRightMileage;
   // 走行時間を算出
-  int currentTime = timer.now();
-  double diffTime = (double)(currentTime - prevTime);
-  // 走行速度を算出
-  double currentSpeed = (diffMileage == 0.0) ? -targetSpeed : calcSpeed(diffMileage, diffTime);
-  // 走行速度に相当するPWM値を算出
-  pwm += pid.calculatePid(currentSpeed, diffTime);
+  int currentRightTime = timer.now();
+  double diffRightTime = (double)(currentRightTime - prevRightTime);
+  // 右タイヤの走行速度を算出
+  double currentRightSpeed
+      = (diffRightMileage == 0.0) ? -targetSpeed : calcSpeed(diffRightMileage, diffRightTime);
+  // 走行速度に相当する右タイヤのPWM値を算出
+  rightPwm += pid.calculatePid(currentRightSpeed, diffRightTime);
   // メンバを更新
-  prevMileage = currentMileage;
-  prevTime = currentTime;
+  prevRightMileage = currentRightMileage;
+  prevRightTime = currentRightTime;
 
-  return (int)pwm;
+  return (int)rightPwm;
+}
+
+int SpeedCalculator::calcLeftPwmFromSpeed()
+{
+  // 左タイヤの回転角度を取得
+  int leftAngle = Measurer::getLeftCount();
+  // 左タイヤの走行距離を算出
+  double currentLeftMileage = Mileage::calculateWheelMileage(leftAngle);
+  double diffLeftMileage = currentLeftMileage - prevLeftMileage;
+  // 走行時間を算出
+  int currentLeftTime = timer.now();
+  double diffLeftTime = (double)(currentLeftTime - prevLeftTime);
+  // 左タイヤの走行速度を算出
+  double currentLeftSpeed
+      = (diffLeftMileage == 0.0) ? -targetSpeed : calcSpeed(diffLeftMileage, diffLeftTime);
+  // 走行速度に相当する左タイヤのPWM値を算出
+  leftPwm += pid.calculatePid(currentLeftSpeed, diffLeftTime);
+  // メンバを更新
+  prevLeftMileage = currentLeftMileage;
+  prevLeftTime = currentLeftTime;
+
+  return (int)leftPwm;
 }
 
 double SpeedCalculator::calcSpeed(double diffMileage, double diffTime)
