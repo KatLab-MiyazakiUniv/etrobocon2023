@@ -8,7 +8,7 @@
 using namespace std;
 
 LineTracing::LineTracing(double _targetSpeed, int _targetBrightness, const PidGain& _gain,
-                         bool _isLeftEdge)
+                         bool& _isLeftEdge)
   : targetSpeed(_targetSpeed),
     targetBrightness(_targetBrightness),
     gain(_gain),
@@ -18,13 +18,17 @@ LineTracing::LineTracing(double _targetSpeed, int _targetBrightness, const PidGa
 
 void LineTracing::run()
 {
-  basePwm = 0;      // 初期PWM値 -100~100
-  int turnPwm = 0;  // 旋回値を計算
+  int turnPwm = 0;        // 旋回値を計算
+  initialDistance = 0.0;  // 実行前の走行距離
+  currentDistance = 0.0;  // 現在の走行距離
   int edgeSign = 0;
   Pid pid(gain.kp, gain.ki, gain.kd, targetBrightness);
 
+  // 初期値を代入
+  initialDistance = Mileage::calculateMileage(Measurer::getRightCount(), Measurer::getLeftCount());
+
   // 事前条件を判定する
-  if(!isMetPrecondition(basePwm, targetSpeed)) {
+  if(!isMetPrecondition(targetSpeed)) {
     return;
   }
 
@@ -35,11 +39,12 @@ void LineTracing::run()
   initLeftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
   initRightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
 
+  SpeedCalculator speedCalculator(targetSpeed);
+
   // 継続条件を満たしている間ループ
   while(isMetPostcondition()) {
     // 初期pwm値を計算
-    SpeedCalculator SpeedCalculator(targetSpeed);
-    basePwm = SpeedCalculator.calcPwmFromSpeed();
+    basePwm = speedCalculator.calcPwmFromSpeed();
 
     // PIDで旋回値を計算
     turnPwm = pid.calculatePid(Measurer::getBrightness()) * edgeSign;
@@ -56,27 +61,6 @@ void LineTracing::run()
 
   // モータの停止
   Controller::stopMotor();
-}
-
-bool LineTracing::isMetPrecondition(int basePwm, double targetSpeed)
-{
-  const int BUF_SIZE = 256;
-  char buf[BUF_SIZE];
-
-  // 初期pwm値が0の場合はwarningを出して終了する
-  if(basePwm == 0) {
-    logger.logWarning("The basePwm value passed to LineTracing is 0");
-    return false;
-  }
-
-  // targetSpeed値が0以下の場合はwarningを出して終了する
-  if(targetSpeed <= 0) {
-    snprintf(buf, BUF_SIZE, "The targetSpeed value passed to LineTracing is %lf", targetSpeed);
-    logger.logWarning(buf);
-    return false;
-  }
-
-  return true;
 }
 
 void LineTracing::logRunning()

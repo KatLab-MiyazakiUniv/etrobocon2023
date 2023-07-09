@@ -9,6 +9,7 @@
 
 #include "Motion.h"
 #include "Mileage.h"
+#include "Timer.h"
 #include "Pid.h"
 #include "SpeedCalculator.h"
 
@@ -21,7 +22,7 @@ class LineTracing : public Motion {
    * @param _gain PIDゲイン
    * @param _isLeftEdge エッジの左右判定(true:左エッジ, false:右エッジ)
    */
-  LineTracing(double _targetSpeed, int _targetBrightness, const PidGain& _gain, bool _isLeftEdge);
+  LineTracing(double _targetSpeed, int _targetBrightness, const PidGain& _gain, bool& _isLeftEdge);
 
   /**
    * @brief ライントレースする
@@ -34,7 +35,7 @@ class LineTracing : public Motion {
    * @param targetSpeed 目標速度
    * @note オーバーライド必須
    */
-  bool isMetPrecondition(int basePwm, double targetSpeed);
+  virtual bool isMetPrecondition(double targetSpeed) = 0;
 
   /**
    * @brief ライントレースする際の継続条件判定をする　返り値がfalseでモーターが止まる
@@ -47,7 +48,7 @@ class LineTracing : public Motion {
    */
   virtual void logRunning();
 
- private:
+ protected:
   double targetSpeed;       // 目標速度 0~
   int targetBrightness;     // 目標輝度 0~
   int basePwm;              // 初期PWM値 -100~100
@@ -55,7 +56,9 @@ class LineTracing : public Motion {
   bool isLeftEdge;          // エッジの左右判定(true:左エッジ, false:右エッジ)
   double initLeftMileage;   // クラス呼び出し時の左車輪の走行距離
   double initRightMileage;  // クラス呼び出し時の右車輪の走行距離
-  class Timer timer;
+  double initialDistance;   // 実行前の走行距離
+  double currentDistance;   // 現在の走行距離
+  Timer timer;
 };
 
 #endif
