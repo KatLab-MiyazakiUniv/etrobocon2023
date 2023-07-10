@@ -6,7 +6,6 @@
 
 #include "Motor.h"
 using namespace ev3api;
-using namespace std;
 
 // コンストラクタ
 Motor::Motor(ePortM _port, bool brake, motor_type_t type)
