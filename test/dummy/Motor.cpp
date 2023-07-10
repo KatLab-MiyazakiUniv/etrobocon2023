@@ -24,7 +24,8 @@ int Motor::getCount()
 // pwm値設定
 void Motor::setPWM(int pwm)
 {
-  motorCount += pwm * 0.05;
+  int _pwm = (pwm > 100) ? 100 : (pwm < -100) ? -100 : pwm;
+  motorCount += static_cast<double>(_pwm) * 0.05;
 }
 
 // motorCountのリセット

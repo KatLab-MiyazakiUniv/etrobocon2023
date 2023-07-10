@@ -23,20 +23,20 @@ namespace etrobocon2023_test {
     const ePortM rightMotorPort = PORT_B;
     const ePortM leftMotorPort = PORT_C;
 
-    ev3api::ColorSensor _colorSensor(colorSensorPort);
-    ev3api::SonarSensor _sonarSensor(sonarSensorPort);
-    ev3api::Motor _rightMotor(rightMotorPort);
-    ev3api::Motor _leftMotor(leftMotorPort);
-    ev3api::Motor _armMotor(armMotorPort);
+    ev3api::ColorSensor* _colorSensorPtr = new ev3api::ColorSensor(colorSensorPort);
+    ev3api::SonarSensor* _sonarSensorPtr = new ev3api::SonarSensor(sonarSensorPort);
+    ev3api::Motor* _rightMotorPtr = new ev3api::Motor(rightMotorPort);
+    ev3api::Motor* _leftMotorPtr = new ev3api::Motor(leftMotorPort);
+    ev3api::Motor* _armMotorPtr = new ev3api::Motor(armMotorPort);
 
-    Controller::rightMotor = &_rightMotor;
-    Controller::leftMotor = &_leftMotor;
-    Controller::armMotor = &_armMotor;
-    Measurer::colorSensor = &_colorSensor;
-    Measurer::sonarSensor = &_sonarSensor;
-    Measurer::rightMotor = &_rightMotor;
-    Measurer::leftMotor = &_leftMotor;
-    Measurer::armMotor = &_armMotor;
+    Controller::rightMotor = _rightMotorPtr;
+    Controller::leftMotor = _leftMotorPtr;
+    Controller::armMotor = _armMotorPtr;
+    Measurer::colorSensor = _colorSensorPtr;
+    Measurer::sonarSensor = _sonarSensorPtr;
+    Measurer::rightMotor = _rightMotorPtr;
+    Measurer::leftMotor = _leftMotorPtr;
+    Measurer::armMotor = _armMotorPtr;
 
     SUCCEED();
   }
