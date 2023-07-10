@@ -6,18 +6,20 @@
 
 #include "Timer.h"
 
+ev3api::Clock* Timer::clock = nullptr;
+
 Timer::Timer() {}
 
 // 自タスクスリープ（デフォルトは10ミリ秒）
 void Timer::sleep(int milliSec)
 {
-  // clock.sleep()はマイクロ秒指定なので，単位を合わせて呼び出す
-  clock.sleep(milliSec * 1000);
+  // clock->sleep()はマイクロ秒指定なので，単位を合わせて呼び出す
+  clock->sleep(milliSec * 1000);
 }
 
 // 走行時間を測定（ミリ秒）
 int Timer::now()
 {
   // マイクロ秒をミリ秒になおしてreturn
-  return int(clock.now()) / 1000;
+  return int(clock->now()) / 1000;
 }

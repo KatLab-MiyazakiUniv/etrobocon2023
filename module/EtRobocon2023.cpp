@@ -10,8 +10,10 @@
 #include "ColorSensor.h"
 #include "SonarSensor.h"
 #include "Motor.h"
+#include "Clock.h"
 #include "Controller.h"
 #include "Measurer.h"
+#include "Timer.h"
 
 void EtRobocon2023::start()
 {
@@ -26,6 +28,7 @@ void EtRobocon2023::start()
   ev3api::Motor* _rightMotorPtr = new ev3api::Motor(rightMotorPort);
   ev3api::Motor* _leftMotorPtr = new ev3api::Motor(leftMotorPort);
   ev3api::Motor* _armMotorPtr = new ev3api::Motor(armMotorPort);
+  ev3api::Clock* _clockPtr = new ev3api::Clock();
 
   Controller::rightMotor = _rightMotorPtr;
   Controller::leftMotor = _leftMotorPtr;
@@ -35,4 +38,5 @@ void EtRobocon2023::start()
   Measurer::rightMotor = _rightMotorPtr;
   Measurer::leftMotor = _leftMotorPtr;
   Measurer::armMotor = _armMotorPtr;
+  Timer::clock = _clockPtr;
 }
