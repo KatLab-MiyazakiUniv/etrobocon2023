@@ -4,12 +4,12 @@
  * @author miyashita64
  */
 
+#include "Measurer.h"
+#include "Controller.h"
 #include "ColorSensor.h"
 #include "SonarSensor.h"
 #include "Motor.h"
 #include "Clock.h"
-#include "Controller.h"
-#include "Measurer.h"
 #include "Timer.h"
 #include <gtest/gtest.h>
 
