@@ -27,14 +27,15 @@ void AreaMaster::run()
   vector<Motion*> motionList;
 
   // コマンドファイルパスを作成する
-  std::string commandFilePath = std::string(basePath) + commandFileNames[static_cast<int>(area)]
-                                + (isLeftCourse ? "Left" : "Right") + ".csv";
+  char commandFilePath[BUF_SIZE];
+  snprintf(commandFilePath, BUF_SIZE, "%s%s%s.csv", basePath,
+           commandFileNames[static_cast<int>(area)], (isLeftCourse ? "Left" : "Right"));
 
   // 動作インスタンスのリストを生成する
-  motionList = MotionParser::createMotions(commandFilePath.c_str(), targetBrightness, isLeftEdge);
+  motionList = MotionParser::createMotions(commandFilePath, targetBrightness, isLeftEdge);
 
   // 動作実行のメッセージログを出す
-  snprintf(buf, BUF_SIZE, "\nRun the commands in '%s'\n", commandFilePath.c_str());
+  snprintf(buf, BUF_SIZE, "\nRun the commands in '%s'\n", commandFilePath);
   logger.logHighlight(buf);
 
   // 各動作を実行する
