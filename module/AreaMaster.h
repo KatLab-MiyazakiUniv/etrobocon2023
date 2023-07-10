@@ -13,7 +13,8 @@
 #include "MotionParser.h"
 #include "Logger.h"
 
-enum Area { LineTrace, DoubleLoop, BlockDeTresure };
+// エリア名を持つ列挙型変数（LineTrace = 0, DoubleLoop = 1, BlockDeTreasure = 2）
+enum Area { LineTrace, DoubleLoop, BlockDeTreasure };
 
 class AreaMaster {
  public:

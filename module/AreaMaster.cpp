@@ -26,6 +26,7 @@ void AreaMaster::run()
   // ファイルから受け取る動作リスト
   vector<Motion*> motionList;
 
+  // コマンドファイルパスを作成する
   std::string commandFilePath = std::string(basePath) + commandFileNames[static_cast<int>(area)]
                                 + (isLeftCourse ? "Left" : "Right") + ".csv";
 
