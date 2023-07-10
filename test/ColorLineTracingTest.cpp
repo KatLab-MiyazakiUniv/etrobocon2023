@@ -166,7 +166,7 @@ namespace etrobocon2023_test {
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
     expectedOutput += "Warning: The targetSpeed value passed to ColorLineTracing is 0";
-    expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
+    expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
 
     srand(0);  // 最初に識別する色が青ではない乱数シード
     testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
@@ -200,7 +200,7 @@ namespace etrobocon2023_test {
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
     expectedOutput += "Warning: The targetColor passed to ColorLineTracing is NONE";
-    expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
+    expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
 
     testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
     cl.run();                            // ライントレースを実行

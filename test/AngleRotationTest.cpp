@@ -25,7 +25,7 @@ namespace etrobocon2023_test {
     bool isClockwise = true;
     AngleRotation rotation(angle, targetSpeed, isClockwise);
 
-    double expected = angle;                        // 指定した回頭角度を期待値とする
+    double expected = angle;  // 指定した回頭角度を期待値とする
 
     double error = targetSpeed * 0.05 * TRANSFORM;  // 許容誤差[deg]
 
@@ -51,7 +51,7 @@ namespace etrobocon2023_test {
     double targetSpeed = 60.0;
     bool isClockwise = false;
     AngleRotation rotation(angle, targetSpeed, isClockwise);
-    double expected = angle;                        // 指定した回頭角度を期待値とする
+    double expected = angle;  // 指定した回頭角度を期待値とする
 
     double error = targetSpeed * 0.05 * TRANSFORM;  // 許容誤差[deg]
 
@@ -147,7 +147,7 @@ namespace etrobocon2023_test {
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
     expectedOutput += "Warning: The targetAngle value passed to Rotation is 0";
-    expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
+    expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
 
     // 回頭前のモータカウント
     int initialRightMotorCount = Measurer::getRightCount();
@@ -178,7 +178,7 @@ namespace etrobocon2023_test {
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
     expectedOutput += "Warning: The targetAngle value passed to Rotation is " + to_string(angle);
-    expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
+    expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
 
     // 回頭前のモータカウント
     int initialRightMotorCount = Measurer::getRightCount();
@@ -209,7 +209,7 @@ namespace etrobocon2023_test {
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
     expectedOutput += "Warning: The targetAngle value passed to Rotation is " + to_string(angle);
-    expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
+    expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
 
     // 回頭前のモータカウント
     int initialRightMotorCount = Measurer::getRightCount();

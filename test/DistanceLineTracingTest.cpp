@@ -152,7 +152,7 @@ namespace etrobocon2023_test {
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
     expectedOutput += "Warning: The targetSpeed value passed to DistanceLineTracing is 0";
-    expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
+    expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
 
     testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
     dl.run();                            // ライントレースを実行
@@ -185,7 +185,7 @@ namespace etrobocon2023_test {
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
     expectedOutput += "Warning: The targetDistance value passed to DistanceLineTracing is -1000.00";
-    expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
+    expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
 
     testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
     dl.run();                            // ライントレースを実行
