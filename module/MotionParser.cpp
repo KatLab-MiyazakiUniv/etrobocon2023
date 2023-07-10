@@ -28,8 +28,9 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
   }
 
   char row[BUF_SIZE];           // 各行の文字を一時的に保持する領域
-  const char* separator = ",";  // 行ごとにパラメータを読み込む
+  const char* separator = ",";  // 区切り文字
 
+  // 行ごとにパラメータを読み込む
   while(fgets(row, BUF_SIZE, fp) != NULL) {
     vector<char*> params;
     // separatorを区切り文字にしてrowを分解し，paramに代入する

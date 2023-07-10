@@ -20,7 +20,7 @@ class AreaMaster {
  public:
   /**
    * コンストラクタ
-   * @param area エリア名
+   * @param area エリアの指定(Area型のEnum)
    * @param isLeftCourse コースのLR判定(true:Lコース, false:Rコース)
    * @param isLeftEdge エッジのLR判定(true:左エッジ, false:右エッジ)
    * @param targetBrightness 目標輝度
@@ -41,7 +41,7 @@ class AreaMaster {
   // 各エリアのコマンドファイルベースパス
   const char* basePath = "etrobocon2023/datafiles/";
   // コマンドファイル名（各エリア名）
-  const char* commandFileNames[3] = { "LineTrace", "DoubleLoop", "BlockDeTresure" };
+  const char* commandFileNames[3] = { "LineTrace", "DoubleLoop", "BlockDeTreasure" };
 };
 
 #endif

@@ -4,7 +4,6 @@
  * @author aridome222
  */
 
-#include <string>
 #include "AreaMaster.h"
 
 using namespace std;
