@@ -22,7 +22,7 @@ bool DistanceStraight::isRunPostconditionJudgement()
 
   // 現在の距離が目標距離に到達したらループを終了する
   if((abs(currentRightDistance - initialRightDistance) >= targetDistance)
-     || (abs(currentLeftDistance - initialLeftDistance) >= targetDistance)) {
+     && (abs(currentLeftDistance - initialLeftDistance) >= targetDistance)) {
     return true;
   }
 

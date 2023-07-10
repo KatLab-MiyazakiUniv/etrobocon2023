@@ -34,7 +34,8 @@ class SpeedCalculator {
   int calcLeftPwmFromSpeed();
 
  private:
-  Pid pid;
+  Pid rightPid;
+  Pid leftPid;
   Timer timer;
   const double targetSpeed;
   double rightPwm;
@@ -43,6 +44,9 @@ class SpeedCalculator {
   double prevLeftMileage;
   int prevRightTime;
   int prevLeftTime;
+  static constexpr int K_P = 0.001;
+  static constexpr int K_I = 0.000000001;
+  static constexpr int K_D = 0.0001;
 
   /**
    * @brief 走行速度を算出する

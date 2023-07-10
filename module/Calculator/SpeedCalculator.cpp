@@ -6,7 +6,9 @@
 #include "SpeedCalculator.h"
 
 SpeedCalculator::SpeedCalculator(double _targetSpeed)
-  : targetSpeed(_targetSpeed), pid(0.001, 0.000000001, 0.0001, _targetSpeed)
+  : targetSpeed(_targetSpeed),
+    rightPid(K_P, K_I, K_D, _targetSpeed),
+    leftPid(K_P, K_I, K_D, _targetSpeed)
 {
   rightPwm = 0.0;
   leftPwm = 0.0;
@@ -32,7 +34,7 @@ int SpeedCalculator::calcRightPwmFromSpeed()
   // 右タイヤの走行速度を算出
   double currentRightSpeed = calcSpeed(diffRightMileage, diffRightTime);
   // 走行速度に相当する右タイヤのPWM値を算出
-  rightPwm += pid.calculatePid(currentRightSpeed, diffRightTime);
+  rightPwm += rightPid.calculatePid(currentRightSpeed, diffRightTime);
   // メンバを更新
   prevRightMileage = currentRightMileage;
   prevRightTime = currentRightTime;
@@ -53,7 +55,7 @@ int SpeedCalculator::calcLeftPwmFromSpeed()
   // 左タイヤの走行速度を算出
   double currentLeftSpeed = calcSpeed(diffLeftMileage, diffLeftTime);
   // 走行速度に相当する左タイヤのPWM値を算出
-  leftPwm += pid.calculatePid(currentLeftSpeed, diffLeftTime);
+  leftPwm += leftPid.calculatePid(currentLeftSpeed, diffLeftTime);
   // メンバを更新
   prevLeftMileage = currentLeftMileage;
   prevLeftTime = currentLeftTime;
