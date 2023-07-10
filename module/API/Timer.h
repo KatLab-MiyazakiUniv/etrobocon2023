@@ -12,6 +12,8 @@
 
 class Timer {
  public:
+  static ev3api::Clock* clock;
+
   /**
    * コンストラクタ
    */
@@ -28,9 +30,6 @@ class Timer {
    * @return 走行時間(ミリ秒)
    */
   int now();
-
- private:
-  ev3api::Clock clock;
 };
 
 #endif

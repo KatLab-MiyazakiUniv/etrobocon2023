@@ -1,4 +1,3 @@
-
 /**
  * @file   Straight.cpp
  * @brief  直進動作の抽象クラス
@@ -74,7 +73,6 @@ bool Straight::isRunPreconditionJudgement()
   // \"target\"に応じたエラー処理が必須
   // オーバーライド必須
   if(false) {
-    // logger.logWarning("");
     return false;
   }
 

@@ -29,9 +29,6 @@ namespace etrobocon2023_test {
 
     double error = targetSpeed * 0.05 * TRANSFORM;  // 許容誤差[deg]
 
-    Measurer::rightMotor->reset();
-    Measurer::leftMotor->reset();
-
     // 回頭前のモータカウント
     int initialRightMotorCount = Measurer::getRightCount();
     int initialLeftMotorCount = Measurer::getLeftCount();
@@ -57,9 +54,6 @@ namespace etrobocon2023_test {
     double expected = angle;  // 指定した回頭角度を期待値とする
 
     double error = targetSpeed * 0.05 * TRANSFORM;  // 許容誤差[deg]
-
-    Measurer::rightMotor->reset();
-    Measurer::leftMotor->reset();
 
     // 回頭前のモータカウント
     int initialRightMotorCount = Measurer::getRightCount();

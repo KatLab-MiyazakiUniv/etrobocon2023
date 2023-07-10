@@ -46,7 +46,7 @@ ifdef FILES
 	clang-format -i -style=file $(FILES)
 # ない場合、変更されたファイルのうち、cpp、hファイルにclang-formatを適用する
 else
-	git status -s | awk '/\.cpp$$|\.h$$/ {print $$2}' | xargs clang-format -i -style=file
+	git diff origin/main --name-only | awk '/\.cpp$$|\.h$$/ {print $$1}' | xargs clang-format -i -style=file
 endif
 
 format-check:

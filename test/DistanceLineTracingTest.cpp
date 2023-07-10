@@ -22,10 +22,6 @@ namespace etrobocon2023_test {
     bool isLeftEdge = true;
     DistanceLineTracing dl(targetDistance, targetSpeed, targetBrightness, gain, isLeftEdge);
 
-    // モータカウントをリセット
-    Measurer::leftMotor->reset();
-    Measurer::rightMotor->reset();
-
     // 初期値から期待する走行距離を求める
     int initialRightCount = Measurer::getRightCount();
     int initialLeftCount = Measurer::getLeftCount();
@@ -56,10 +52,6 @@ namespace etrobocon2023_test {
     bool isLeftEdge = false;
     DistanceLineTracing dl(targetDistance, targetSpeed, targetBrightness, gain, isLeftEdge);
 
-    // モータカウントをリセット
-    Measurer::leftMotor->reset();
-    Measurer::rightMotor->reset();
-
     // 初期値から期待する走行距離を求める
     int initialRightCount = Measurer::getRightCount();
     int initialLeftCount = Measurer::getLeftCount();
@@ -89,10 +81,6 @@ namespace etrobocon2023_test {
     PidGain gain = { 0.1, 0.05, 0.05 };
     bool isLeftEdge = true;
     DistanceLineTracing dl(targetDistance, targetSpeed, targetBrightness, gain, isLeftEdge);
-
-    // モータカウントをリセット
-    Measurer::leftMotor->reset();
-    Measurer::rightMotor->reset();
 
     // 初期値から期待する走行距離を求める
     int initialRightCount = Measurer::getRightCount();
@@ -125,10 +113,6 @@ namespace etrobocon2023_test {
     bool isLeftEdge = false;
     DistanceLineTracing dl(targetDistance, targetSpeed, targetBrightness, gain, isLeftEdge);
 
-    // モータカウントをリセット
-    Measurer::leftMotor->reset();
-    Measurer::rightMotor->reset();
-
     // 初期値から期待する走行距離を求める
     int initialRightCount = Measurer::getRightCount();
     int initialLeftCount = Measurer::getLeftCount();
@@ -159,10 +143,6 @@ namespace etrobocon2023_test {
     PidGain gain = { 0.1, 0.05, 0.05 };
     bool isLeftEdge = true;
     DistanceLineTracing dl(targetDistance, targetSpeed, targetBrightness, gain, isLeftEdge);
-
-    // モータカウントをリセット
-    Measurer::leftMotor->reset();
-    Measurer::rightMotor->reset();
 
     // 初期値から期待する走行距離を求める
     int initialRightCount = Measurer::getRightCount();
@@ -196,10 +176,6 @@ namespace etrobocon2023_test {
     PidGain gain = { 0.1, 0.05, 0.05 };
     bool isLeftEdge = true;
     DistanceLineTracing dl(targetDistance, targetSpeed, targetBrightness, gain, isLeftEdge);
-
-    // モータカウントをリセット
-    Measurer::leftMotor->reset();
-    Measurer::rightMotor->reset();
 
     // 初期値から期待する走行距離を求める
     int initialRightCount = Measurer::getRightCount();

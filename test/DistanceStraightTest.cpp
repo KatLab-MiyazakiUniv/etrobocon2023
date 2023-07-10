@@ -18,9 +18,6 @@ namespace etrobocon2023_test {
     double targetSpeed = 50;
     DistanceStraight ds(targetDistance, targetSpeed);
 
-    Measurer::rightMotor->reset();
-    Measurer::leftMotor->reset();
-
     // 初期値
     int leftCount = Measurer::getLeftCount();
     int rightCount = Measurer::getRightCount();
@@ -64,9 +61,6 @@ namespace etrobocon2023_test {
     double targetDistance = 350;
     double targetSpeed = 100;
     DistanceStraight ds(targetDistance, targetSpeed);
-
-    Measurer::rightMotor->reset();
-    Measurer::leftMotor->reset();
 
     // 初期値
     int leftCount = Measurer::getLeftCount();
@@ -142,9 +136,6 @@ namespace etrobocon2023_test {
     double targetSpeed = -50;
     DistanceStraight ds(targetDistance, targetSpeed);
 
-    Measurer::rightMotor->reset();
-    Measurer::leftMotor->reset();
-
     // 初期値
     int leftCount = Measurer::getLeftCount();
     int rightCount = Measurer::getRightCount();
@@ -188,9 +179,6 @@ namespace etrobocon2023_test {
     double targetDistance = 350;
     double targetSpeed = -100;
     DistanceStraight ds(targetDistance, targetSpeed);
-
-    Measurer::rightMotor->reset();
-    Measurer::leftMotor->reset();
 
     // 初期値
     int leftCount = Measurer::getLeftCount();

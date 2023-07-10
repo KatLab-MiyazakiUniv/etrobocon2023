@@ -20,9 +20,6 @@ namespace etrobocon2023_test {
     int targetSpeed = 100;
     ColorStraight cs(targetColor, targetSpeed);
 
-    Measurer::rightMotor->reset();
-    Measurer::leftMotor->reset();
-
     // 初期値から期待する走行距離を求める
     int initialRightCount = Measurer::getRightCount();
     int initialLeftCount = Measurer::getLeftCount();
@@ -43,11 +40,8 @@ namespace etrobocon2023_test {
   TEST(ColorStraightTest, run)
   {
     COLOR targetColor = COLOR::BLUE;
-    int targetSpeed = 100000;
+    int targetSpeed = 1000;
     ColorStraight cs(targetColor, targetSpeed);
-
-    Measurer::rightMotor->reset();
-    Measurer::leftMotor->reset();
 
     // 初期値から期待する走行距離を求める
     int initialRightCount = Measurer::getRightCount();
@@ -77,11 +71,8 @@ namespace etrobocon2023_test {
   TEST(ColorStraightTest, runBack)
   {
     COLOR targetColor = COLOR::RED;
-    int targetSpeed = -1000000;
+    int targetSpeed = -100;
     ColorStraight cs(targetColor, targetSpeed);
-
-    Measurer::rightMotor->reset();
-    Measurer::leftMotor->reset();
 
     // 初期値から期待する走行距離を求める
     int initialRightCount = Measurer::getRightCount();

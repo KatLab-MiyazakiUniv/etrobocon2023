@@ -24,8 +24,6 @@ bool ColorStraight::isRunPostconditionJudgement()
 
 bool ColorStraight::isRunPreconditionJudgement()
 {
-  const int BUF_SIZE = 256;
-  char buf[BUF_SIZE];
   // 目標速度値が0の場合は終了する
   if(targetSpeed == 0) {
     logger.logWarning("The targetSpeed value passed to ColorStraight is 0");
