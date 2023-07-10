@@ -30,7 +30,7 @@ class SpeedCalculator {
  private:
   Pid pid;
   Timer timer;
-  const double targetSpeed;
+  double targetSpeed;
   double pwm;
   double prevMileage;
   int prevTime;
