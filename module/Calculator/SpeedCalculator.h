@@ -34,10 +34,10 @@ class SpeedCalculator {
   int calcLeftPwmFromSpeed();
 
  private:
+  const double targetSpeed;
   Pid rightPid;
   Pid leftPid;
   Timer timer;
-  const double targetSpeed;
   double rightPwm;
   double leftPwm;
   double prevRightMileage;
