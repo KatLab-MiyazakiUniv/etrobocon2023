@@ -28,16 +28,18 @@ class AreaMaster {
 
   /**
    * @brief エリアを走行する
-   * @param area エリア名
-   * @param isLeftCourse コースのLR判定(true:Lコース, false:Rコース)
-   * @param isLeftEdge エッジのLR判定(true:左エッジ, false:右エッジ)
-   * @param targetBrightness 目標輝度
    */
-  void run(Area area, bool isLeftCourse, bool& isLeftEdge, int targetBrightness);
+  void run();
 
  private:
+  enum Area area;
+  bool isLeftCourse;
+  bool isLeftEdge;
+  int targetBrightness;
+
   // 各エリアのコマンドファイルベースパス
   const char* basePath = "etrobocon2023/datafiles/";
+  // コマンドファイル名（各エリア名）
   const char* commandFileNames[3] = { "LineTrace", "DoubleLoop", "BlockDeTresure" };
 };
 

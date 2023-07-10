@@ -72,9 +72,9 @@ namespace etrobocon2023_test {
     std::vector<Motion*> expectedList;
 
     // Warning文
-    string expectedOutput = "\x1b[36m";       // 文字色をシアンに
+    string expectedOutput = "\x1b[36m";  // 文字色をシアンに
     expectedOutput += "Warning: ../test/test_data/non_existent_file.csv file not open!\n";
-    expectedOutput += "\n\x1b[39m";           // 文字色をデフォルトに戻す
+    expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
 
     EXPECT_EQ(expectedOutput, actualOutput);  // 標準出力でWarningを出している
     EXPECT_EQ(expectedList, actualList);  // ファイルを読み込めないためリストは空のまま

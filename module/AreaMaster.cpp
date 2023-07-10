@@ -9,9 +9,15 @@
 
 using namespace std;
 
-AreaMaster::AreaMaster(Area area, bool isLeftCourse, bool& isLeftEdge, int targetBrightness) {}
+AreaMaster::AreaMaster(Area _area, bool _isLeftCourse, bool& _isLeftEdge, int _targetBrightness)
+  : area(_area),
+    isLeftCourse(_isLeftCourse),
+    isLeftEdge(_isLeftEdge),
+    targetBrightness(_targetBrightness)
+{
+}
 
-void AreaMaster::run(Area area, bool isLeftCourse, bool& isLeftEdge, int targetBrightness)
+void AreaMaster::run()
 {
   const int BUF_SIZE = 128;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域

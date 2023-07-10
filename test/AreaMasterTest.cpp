@@ -21,9 +21,9 @@ namespace etrobocon2023_test {
 
     testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
     AreaMaster areaMaster(area, isLeftCourse, isLeftEdge, targetBrightness);
-    areaMaster.run(area, isLeftCourse, isLeftEdge, targetBrightness);
+    areaMaster.run();
     string output = testing::internal::GetCapturedStdout();  // キャプチャ終了
-    printf("%s", output.c_str());
+
     // find("str")はstrが見つからない場合string::nposを返す
     bool actual = output.find("Warning") == string::npos && output.find("Error") == string::npos;
     EXPECT_TRUE(actual);  // WarningやErrorが出ていないかテスト
@@ -38,7 +38,7 @@ namespace etrobocon2023_test {
 
     testing::internal::CaptureStdout();  // 標準出力キャプチャ開始
     AreaMaster areaMaster(area, isLeftCourse, isLeftEdge, targetBrightness);
-    areaMaster.run(area, isLeftCourse, isLeftEdge, targetBrightness);
+    areaMaster.run();
     string output = testing::internal::GetCapturedStdout();  // キャプチャ終了
 
     // find("str")はstrが見つからない場合string::nposを返す
