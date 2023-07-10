@@ -6,6 +6,7 @@
 
 #include "Motor.h"
 using namespace ev3api;
+using namespace std;
 
 // コンストラクタ
 Motor::Motor(ePortM _port, bool brake, motor_type_t type)
@@ -24,7 +25,13 @@ int Motor::getCount()
 // pwm値設定
 void Motor::setPWM(int pwm)
 {
-  int _pwm = (pwm > 100) ? 100 : (pwm < -100) ? -100 : pwm;
+  int _pwm = pwm;
+  if(pwm > 100) {
+    _pwm = 100;
+  } else if(pwm < -100) {
+    _pwm = -100;
+  }
+
   motorCount += static_cast<double>(_pwm) * 0.05;
 }
 
