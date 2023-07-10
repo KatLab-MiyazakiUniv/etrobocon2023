@@ -44,8 +44,8 @@ void LineTracing::run()
   // 継続条件を満たしている間ループ
   while(isMetPostcondition()) {
     // 初期pwm値を計算
-    baseRightPwm = speedCalculator.calcRightPwmFromSpeed();
-    baseLeftPwm = speedCalculator.calcLeftPwmFromSpeed();
+    int baseRightPwm = speedCalculator.calcRightPwmFromSpeed();
+    int baseLeftPwm = speedCalculator.calcLeftPwmFromSpeed();
 
     // PIDで旋回値を計算
     turnPwm = pid.calculatePid(Measurer::getBrightness()) * edgeSign;
@@ -75,9 +75,8 @@ void LineTracing::logRunning()
   // targetValueと%~のオーバーライド必須
   snprintf(buf, BUF_SIZE,
            "Run \"targetValue\" LineTracing (\"targetValue\": , targetSpeed: %.2f, "
-           "targetBrightness: %d, baseRightPwm: %d, baseLeftPwm: %d, gain: "
+           "targetBrightness: %d, gain: "
            "(%.2f,%.2f,%.2f), isLeftEdge: %s)",
-           targetSpeed, targetBrightness, baseRightPwm, baseLeftPwm, gain.kp, gain.ki, gain.kd,
-           str);
+           targetSpeed, targetBrightness, gain.kp, gain.ki, gain.kd, str);
   logger.log(buf);
 }

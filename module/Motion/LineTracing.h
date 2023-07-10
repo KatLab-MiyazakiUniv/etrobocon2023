@@ -31,8 +31,6 @@ class LineTracing : public Motion {
 
   /**
    * @brief ライントレースする際の事前条件判定をする
-   * @param baseRightPwm 右タイヤの初期PWM値
-   * @param baseLeftPwm 左タイヤの初期PWM値
    * @param targetSpeed 目標速度
    * @note オーバーライド必須
    */
@@ -52,8 +50,6 @@ class LineTracing : public Motion {
  protected:
   double targetSpeed;       // 目標速度 0~
   int targetBrightness;     // 目標輝度 0~
-  int baseRightPwm;         // 右タイヤの初期PWM値 -100~100
-  int baseLeftPwm;          // 左タイヤの初期PWM値 -100~100
   PidGain gain;             // PIDゲイン
   bool isLeftEdge;          // エッジの左右判定(true:左エッジ, false:右エッジ)
   double initLeftMileage;   // クラス呼び出し時の左車輪の走行距離
