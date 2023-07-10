@@ -44,9 +44,9 @@ class SpeedCalculator {
   double prevLeftMileage;
   int prevRightTime;
   int prevLeftTime;
-  static constexpr int K_P = 0.001;
-  static constexpr int K_I = 0.000000001;
-  static constexpr int K_D = 0.0001;
+  static constexpr double K_P = 0.001;
+  static constexpr double K_I = 0.000000001;
+  static constexpr double K_D = 0.0001;
 
   /**
    * @brief 走行速度を算出する
