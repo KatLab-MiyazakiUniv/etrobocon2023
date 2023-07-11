@@ -1,7 +1,7 @@
 /**
  * @file   DistanceLineTracing.cpp
  * @brief  指定距離ライントレース動作
- * @author YKhm20020
+ * @author YKhm20020 bizyutyu
  */
 
 #include "DistanceLineTracing.h"
@@ -55,8 +55,8 @@ void DistanceLineTracing::logRunning()
 
   snprintf(buf, BUF_SIZE,
            "Run DistanceLineTracing (targetDistance: %.2f, targetSpeed: %.2f, targetBrightness: "
-           "%d, basePwm: %d, gain: "
+           "%d, gain: "
            "(%.2f,%.2f,%.2f), isLeftEdge: %s)",
-           targetDistance, targetSpeed, targetBrightness, basePwm, gain.kp, gain.ki, gain.kd, str);
+           targetDistance, targetSpeed, targetBrightness, gain.kp, gain.ki, gain.kd, str);
   logger.log(buf);
 }

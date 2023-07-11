@@ -1,7 +1,7 @@
 /**
  * @file   Rotation.cpp
  * @brief  回頭動作の中間クラス
- * @author desty505
+ * @author desty505 bizyutyu
  */
 
 #include "Rotation.h"
@@ -34,11 +34,12 @@ void Rotation::run()
   // 継続条件を満たしている間ループ
   while(isMetPostcondition(initLeftMileage, initRightMileage, leftSign, rightSign)) {
     // PWM値を設定する
-    int pwm = speedCalculator.calcPwmFromSpeed();
+    int leftPwm = speedCalculator.calcLeftPwmFromSpeed();
+    int rightPwm = speedCalculator.calcRightPwmFromSpeed();
 
     // モータにPWM値をセット
-    Controller::setLeftMotorPwm(pwm * leftSign);
-    Controller::setRightMotorPwm(pwm * rightSign);
+    Controller::setLeftMotorPwm(leftPwm * leftSign);
+    Controller::setRightMotorPwm(rightPwm * rightSign);
 
     // 10ミリ秒待機
     timer.sleep(10);

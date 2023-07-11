@@ -1,7 +1,7 @@
 /**
  * @file   Straight.h
  * @brief  直進動作の抽象クラス
- * @author Negimarge
+ * @author Negimarge bizyutyu
  */
 
 #ifndef STRAIGHT_H
@@ -52,10 +52,12 @@ class Straight : public Motion {
   double targetSpeed;                 // 目標速度[mm/s]
   int initialRightMotorCount;         // 初期右輪モーター距離
   int initialLeftMotorCount;          // 初期左輪モーター距離
-  double initialDistance;             // 初期距離
+  double initialRightDistance;        // 初期右輪距離
+  double initialLeftDistance;         // 初期左輪距離
   int currentRightMotorCount;         // 現在右輪モーター距離
   int currentLeftMotorCount;          // 現在左輪モーター距離
-  double currentDistance;             // 現在距離
+  double currentRightDistance;        // 現在右輪距離
+  double currentLeftDistance;         // 現在左輪距離
   Timer timer;
 };
 

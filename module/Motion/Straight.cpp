@@ -1,7 +1,7 @@
 /**
  * @file   Straight.cpp
  * @brief  直進動作の抽象クラス
- * @author Negimarge
+ * @author Negimarge bizyutyu
  */
 
 #include "Straight.h"
@@ -19,17 +19,20 @@ void Straight::run()
   // 直進前の走行距離
   initialRightMotorCount = Measurer::getRightCount();
   initialLeftMotorCount = Measurer::getLeftCount();
-  initialDistance = Mileage::calculateMileage(initialRightMotorCount, initialLeftMotorCount);
+  initialRightDistance = Mileage::calculateWheelMileage(initialRightMotorCount);
+  initialLeftDistance = Mileage::calculateWheelMileage(initialLeftMotorCount);
 
   // 直進中の走行距離
   currentRightMotorCount = initialRightMotorCount;
   currentLeftMotorCount = initialLeftMotorCount;
-  currentDistance = initialDistance;
+  currentRightDistance = initialRightDistance;
+  currentLeftDistance = initialLeftDistance;
 
   // SpeedCalculatorの実体化
   SpeedCalculator SpeedCalculator(targetSpeed);
 
-  int currentPwm = 0;  // 現在のpwd値
+  int currentLeftPwm = 0;   // 現在の左タイヤpwd値
+  int currentRightPwm = 0;  // 現在の右タイヤpwd値
 
   // 走行距離が目標値に到達するまで繰り返す
   while(true) {
@@ -39,11 +42,12 @@ void Straight::run()
     }
 
     // PWM値を目標速度値に合わせる
-    currentPwm = SpeedCalculator.calcPwmFromSpeed();
+    currentLeftPwm = SpeedCalculator.calcLeftPwmFromSpeed();
+    currentRightPwm = SpeedCalculator.calcRightPwmFromSpeed();
 
     // モータにPWM値をセット
-    Controller::setLeftMotorPwm(currentPwm);
-    Controller::setRightMotorPwm(currentPwm);
+    Controller::setLeftMotorPwm(currentLeftPwm);
+    Controller::setRightMotorPwm(currentRightPwm);
 
     // 10ミリ秒待機
     timer.sleep(10);
@@ -63,11 +67,14 @@ bool Straight::isRunPreconditionJudgement()
     return false;
   }
   // \"target\"をオーバーライド必須
-  // pwmの絶対値がMIN_PWMより小さい場合はwarningを出す
+  // rightPwmとleftPwmの絶対値がMIN_PWMより小さい場合はwarningを出す
   SpeedCalculator SpeedCalculator(targetSpeed);
-  int pwm = SpeedCalculator.calcPwmFromSpeed();
-  if(abs(pwm) < MIN_PWM) {
-    snprintf(buf, BUF_SIZE, "The pwm value passed to \"target\" Straight is %d", pwm);
+  int rightPwm = SpeedCalculator.calcRightPwmFromSpeed();
+  int leftPwm = SpeedCalculator.calcLeftPwmFromSpeed();
+  if(abs(rightPwm) < MIN_PWM || abs(leftPwm) < MIN_PWM) {
+    snprintf(buf, BUF_SIZE,
+             "The pwm value passed to \"target\" Straight is rightPwm = %d and leftPwm = %d",
+             rightPwm, leftPwm);
     logger.logWarning(buf);
   }
   // \"target\"に応じたエラー処理が必須

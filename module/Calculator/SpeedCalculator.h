@@ -22,18 +22,31 @@ class SpeedCalculator {
   SpeedCalculator(double _targetSpeed);
 
   /**
-   * @brief 目標とする走行速度に相当するPWM値を算出する
-   * @return 走行速度に相当するPWM値
+   * @brief 目標とする走行速度に相当する右車輪のPWM値を算出する
+   * @return 走行速度に相当する右タイヤのPWM値
    */
-  int calcPwmFromSpeed();
+  int calcRightPwmFromSpeed();
+
+  /**
+   * @brief 目標とする走行速度に相当する左車輪のPWM値を算出する
+   * @return 走行速度に相当する左タイヤのPWM値
+   */
+  int calcLeftPwmFromSpeed();
 
  private:
-  Pid pid;
-  Timer timer;
   const double targetSpeed;
-  double pwm;
-  double prevMileage;
-  int prevTime;
+  Pid rightPid;
+  Pid leftPid;
+  Timer timer;
+  double rightPwm;
+  double leftPwm;
+  double prevRightMileage;
+  double prevLeftMileage;
+  int prevRightTime;
+  int prevLeftTime;
+  static constexpr double K_P = 0.001;
+  static constexpr double K_I = 0.000000001;
+  static constexpr double K_D = 0.0001;
 
   /**
    * @brief 走行速度を算出する

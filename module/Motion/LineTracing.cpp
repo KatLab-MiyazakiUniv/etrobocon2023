@@ -1,7 +1,7 @@
 /**
  * @file   LineTracing.cpp
  * @brief  ライントレース動作の中間クラス
- * @author YKhm20020
+ * @author YKhm20020 bizyutyu
  */
 
 #include "LineTracing.h"
@@ -44,14 +44,17 @@ void LineTracing::run()
   // 継続条件を満たしている間ループ
   while(isMetPostcondition()) {
     // 初期pwm値を計算
-    basePwm = speedCalculator.calcPwmFromSpeed();
+    int baseRightPwm = speedCalculator.calcRightPwmFromSpeed();
+    int baseLeftPwm = speedCalculator.calcLeftPwmFromSpeed();
 
     // PIDで旋回値を計算
     turnPwm = pid.calculatePid(Measurer::getBrightness()) * edgeSign;
 
     // モータのPWM値をセット（0を超えないようにセット）
-    int rightPwm = basePwm > 0 ? max(basePwm - (int)turnPwm, 0) : min(basePwm + (int)turnPwm, 0);
-    int leftPwm = basePwm > 0 ? max(basePwm + (int)turnPwm, 0) : min(basePwm - (int)turnPwm, 0);
+    int rightPwm = baseRightPwm > 0 ? max(baseRightPwm - (int)turnPwm, 0)
+                                    : min(baseRightPwm + (int)turnPwm, 0);
+    int leftPwm
+        = baseLeftPwm > 0 ? max(baseLeftPwm + (int)turnPwm, 0) : min(baseLeftPwm - (int)turnPwm, 0);
     Controller::setRightMotorPwm(rightPwm);
     Controller::setLeftMotorPwm(leftPwm);
 
@@ -72,8 +75,8 @@ void LineTracing::logRunning()
   // targetValueと%~のオーバーライド必須
   snprintf(buf, BUF_SIZE,
            "Run \"targetValue\" LineTracing (\"targetValue\": , targetSpeed: %.2f, "
-           "targetBrightness: %d, basePwm: %d, gain: "
+           "targetBrightness: %d, gain: "
            "(%.2f,%.2f,%.2f), isLeftEdge: %s)",
-           targetSpeed, targetBrightness, basePwm, gain.kp, gain.ki, gain.kd, str);
+           targetSpeed, targetBrightness, gain.kp, gain.ki, gain.kd, str);
   logger.log(buf);
 }
