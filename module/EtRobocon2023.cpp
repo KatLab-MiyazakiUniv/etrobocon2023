@@ -6,8 +6,6 @@
 
 #include "EtRobocon2023.h"
 // ev3api.hをインクルードしているものは.cppに書く
-#include "Measurer.h"
-#include "Controller.h"
 #include "ev3api.h"
 #include "ColorSensor.h"
 #include "SonarSensor.h"
@@ -25,12 +23,11 @@ void EtRobocon2023::start()
   const ePortM rightMotorPort = PORT_B;
   const ePortM leftMotorPort = PORT_C;
 
-  ev3api::ColorSensor* _colorSensorPtr = new ev3api::ColorSensor(colorSensorPort);
-  ev3api::SonarSensor* _sonarSensorPtr = new ev3api::SonarSensor(sonarSensorPort);
-  ev3api::Motor* _rightMotorPtr = new ev3api::Motor(rightMotorPort);
-  ev3api::Motor* _leftMotorPtr = new ev3api::Motor(leftMotorPort);
-  ev3api::Motor* _armMotorPtr = new ev3api::Motor(armMotorPort);
-  ev3api::Clock* _clockPtr = new ev3api::Clock();
+  ev3api::ColorSensor _colorSensor(colorSensorPort);
+  ev3api::SonarSensor _sonarSensor(sonarSensorPort);
+  ev3api::Motor _rightMotor(rightMotorPort);
+  ev3api::Motor _leftMotor(leftMotorPort);
+  ev3api::Motor _armMotor(armMotorPort);
 
   Controller::rightMotor = &_rightMotor;
   Controller::leftMotor = &_leftMotor;
