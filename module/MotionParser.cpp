@@ -154,12 +154,12 @@ COMMAND MotionParser::convertCommand(char* str)
   }
 }
 
-bool MotionParser::convertBool(char* command, char* binaryParameter)
+bool MotionParser::convertBool(char* command, char* StringParameter)
 {
   Logger logger;
 
   // 末尾の改行を削除
-  char* param = StringOperator::removeEOL(binaryParameter);
+  char* param = StringOperator::removeEOL(StringParameter);
 
   if(strcmp(command, "AR") == 0) {         //  コマンドがARの場合
     if(strcmp(param, "clockwise") == 0) {  // パラメータがclockwiseの場合

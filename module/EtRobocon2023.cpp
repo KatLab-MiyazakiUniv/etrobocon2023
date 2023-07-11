@@ -46,8 +46,8 @@ void EtRobocon2023::start()
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
   Logger logger;
 
-  bool isLeftCourse = true;
-  bool isLeftEdge = true;
+  bool isLeftCourse = false;
+  bool isLeftEdge = false;
   int targetBrightness = (WHITE_BRIGHTNESS + BLACK_BRIGHTNESS) / 2;
   Calibrator calibrator;
 
