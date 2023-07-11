@@ -6,13 +6,15 @@
 
 #include "EtRobocon2023.h"
 // ev3api.hをインクルードしているものは.cppに書く
+#include "Controller.h"
+#include "Measurer.h"
+#include "Calibrator.h"
 #include "ev3api.h"
 #include "ColorSensor.h"
 #include "SonarSensor.h"
 #include "Motor.h"
-#include "Controller.h"
-#include "Measurer.h"
-#include "Calibrator.h"
+#include "Clock.h"
+#include "Timer.h"
 #include "AreaMaster.h"
 
 void EtRobocon2023::start()
@@ -23,20 +25,22 @@ void EtRobocon2023::start()
   const ePortM rightMotorPort = PORT_B;
   const ePortM leftMotorPort = PORT_C;
 
-  ev3api::ColorSensor _colorSensor(colorSensorPort);
-  ev3api::SonarSensor _sonarSensor(sonarSensorPort);
-  ev3api::Motor _rightMotor(rightMotorPort);
-  ev3api::Motor _leftMotor(leftMotorPort);
-  ev3api::Motor _armMotor(armMotorPort);
+  ev3api::ColorSensor* _colorSensorPtr = new ev3api::ColorSensor(colorSensorPort);
+  ev3api::SonarSensor* _sonarSensorPtr = new ev3api::SonarSensor(sonarSensorPort);
+  ev3api::Motor* _rightMotorPtr = new ev3api::Motor(rightMotorPort);
+  ev3api::Motor* _leftMotorPtr = new ev3api::Motor(leftMotorPort);
+  ev3api::Motor* _armMotorPtr = new ev3api::Motor(armMotorPort);
+  ev3api::Clock* _clockPtr = new ev3api::Clock();
 
-  Controller::rightMotor = &_rightMotor;
-  Controller::leftMotor = &_leftMotor;
-  Controller::armMotor = &_armMotor;
-  Measurer::colorSensor = &_colorSensor;
-  Measurer::sonarSensor = &_sonarSensor;
-  Measurer::rightMotor = &_rightMotor;
-  Measurer::leftMotor = &_leftMotor;
-  Measurer::armMotor = &_armMotor;
+  Controller::rightMotor = _rightMotorPtr;
+  Controller::leftMotor = _leftMotorPtr;
+  Controller::armMotor = _armMotorPtr;
+  Measurer::colorSensor = _colorSensorPtr;
+  Measurer::sonarSensor = _sonarSensorPtr;
+  Measurer::rightMotor = _rightMotorPtr;
+  Measurer::leftMotor = _leftMotorPtr;
+  Measurer::armMotor = _armMotorPtr;
+  Timer::clock = _clockPtr;
 
   const int BUF_SIZE = 128;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域

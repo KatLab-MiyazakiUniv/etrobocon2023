@@ -25,8 +25,6 @@ enum class COMMAND {
   DS,  // 指定距離直進
   CS,  // 指定色直進
   AR,  // 指定角度回頭
-  EC,  // エッジ切り替え
-  SL,  // 自タスクスリープ
   NONE
 };
 
