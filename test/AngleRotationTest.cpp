@@ -141,7 +141,7 @@ namespace etrobocon2023_test {
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
     expectedOutput += "Warning: The targetAngle value passed to Rotation is 0";
-    expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
+    expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
 
     // 回頭前のモータカウント
     int initialRightMotorCount = Measurer::getRightCount();
@@ -172,7 +172,7 @@ namespace etrobocon2023_test {
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
     expectedOutput += "Warning: The targetAngle value passed to Rotation is " + to_string(angle);
-    expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
+    expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
 
     // 回頭前のモータカウント
     int initialRightMotorCount = Measurer::getRightCount();
@@ -203,7 +203,7 @@ namespace etrobocon2023_test {
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
     expectedOutput += "Warning: The targetAngle value passed to Rotation is " + to_string(angle);
-    expectedOutput += "\n\x1b[39m";      // 文字色をデフォルトに戻す
+    expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
 
     // 回頭前のモータカウント
     int initialRightMotorCount = Measurer::getRightCount();
