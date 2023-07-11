@@ -6,6 +6,7 @@
 
 #include "EtRobocon2023.h"
 // ev3api.hをインクルードしているものは.cppに書く
+#include "AreaMaster.h"
 #include "Measurer.h"
 #include "Controller.h"
 #include "Calibrator.h"
@@ -15,7 +16,6 @@
 #include "Motor.h"
 #include "Clock.h"
 #include "Timer.h"
-#include "AreaMaster.h"
 
 void EtRobocon2023::start()
 {
