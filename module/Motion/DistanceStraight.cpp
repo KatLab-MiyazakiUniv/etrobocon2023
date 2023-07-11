@@ -1,7 +1,7 @@
 /**
  * @file   DistanceStraight.cpp
  * @brief  目標距離まで直進するクラス
- * @author Negimarge
+ * @author Negimarge bizyutyu
  */
 
 #include "DistanceStraight.h"

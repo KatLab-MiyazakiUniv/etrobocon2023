@@ -1,7 +1,7 @@
 /**
  * @file   Straight.h
  * @brief  直進動作の抽象クラス
- * @author Negimarge
+ * @author Negimarge bizyutyu
  */
 
 #ifndef STRAIGHT_H

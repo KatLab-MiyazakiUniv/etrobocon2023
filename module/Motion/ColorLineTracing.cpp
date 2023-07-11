@@ -1,7 +1,7 @@
 /**
  * @file   ColorLineTracing.cpp
  * @brief  指定色ライントレース動作
- * @author YKhm20020
+ * @author YKhm20020 bizyutyu
  */
 
 #include "ColorLineTracing.h"

@@ -1,7 +1,7 @@
 /**
  * @file   AngleRotation.cpp
  * @brief  角度指定による回頭動作
- * @author desty505
+ * @author desty505 bizyutyu
  */
 
 #include "AngleRotation.h"

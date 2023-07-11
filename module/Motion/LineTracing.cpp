@@ -1,7 +1,7 @@
 /**
  * @file   LineTracing.cpp
  * @brief  ライントレース動作の中間クラス
- * @author YKhm20020
+ * @author YKhm20020 bizyutyu
  */
 
 #include "LineTracing.h"

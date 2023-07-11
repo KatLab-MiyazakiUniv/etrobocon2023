@@ -1,7 +1,7 @@
 /**
  * @file   LineTracing.h
  * @brief  ライントレース動作
- * @author YKhm20020
+ * @author YKhm20020 bizyutyu
  */
 
 #ifndef LINE_TRACING_H

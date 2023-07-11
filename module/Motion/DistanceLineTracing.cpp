@@ -1,7 +1,7 @@
 /**
  * @file   DistanceLineTracing.cpp
  * @brief  指定距離ライントレース動作
- * @author YKhm20020
+ * @author YKhm20020 bizyutyu
  */
 
 #include "DistanceLineTracing.h"

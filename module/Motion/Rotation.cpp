@@ -1,7 +1,7 @@
 /**
  * @file   Rotation.cpp
  * @brief  回頭動作の中間クラス
- * @author desty505
+ * @author desty505 bizyutyu
  */
 
 #include "Rotation.h"
