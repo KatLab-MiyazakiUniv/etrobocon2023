@@ -61,10 +61,10 @@ class MotionParser {
   /**
    * @brief 文字列をbool型に変換する
    * @param command 文字列のコマンド
-   * @param binaryParameter 文字列のパラメータ
+   * @param stringParameter 文字列のパラメータ
    * @return bool値
    */
-  static bool convertBool(char* command, char* binaryParameter);
+  static bool convertBool(char* command, char* stringParameter);
 };
 
 #endif
