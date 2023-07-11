@@ -20,7 +20,7 @@ class AreaMaster {
  public:
   /**
    * コンストラクタ
-   * @param area エリアの指定(Area型のEnum)
+   * @param area エリアの指定(Enum型のArea)
    * @param isLeftCourse コースのLR判定(true:Lコース, false:Rコース)
    * @param isLeftEdge エッジのLR判定(true:左エッジ, false:右エッジ)
    * @param targetBrightness 目標輝度
