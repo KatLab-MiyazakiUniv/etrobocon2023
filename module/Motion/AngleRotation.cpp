@@ -51,7 +51,7 @@ bool AngleRotation::isMetPostcondition(double initLeftMileage, double initRightM
         * rightSign;
 
   // 目標距離に到達した場合
-  if(diffLeftDistance <= 0 || diffRightDistance <= 0) {
+  if(diffLeftDistance <= 0 && diffRightDistance <= 0) {
     return false;
   }
   return true;

@@ -27,8 +27,6 @@ namespace etrobocon2023_test {
 
     double expected = angle;  // 指定した回頭角度を期待値とする
 
-    double error = targetSpeed * 0.05 * TRANSFORM;  // 許容誤差[deg]
-
     // 回頭前のモータカウント
     int initialRightMotorCount = Measurer::getRightCount();
     int initialLeftMotorCount = Measurer::getLeftCount();
@@ -40,8 +38,7 @@ namespace etrobocon2023_test {
     int leftMotorCount = abs(Measurer::getLeftCount() - initialLeftMotorCount);
     double actual = ((rightMotorCount + leftMotorCount) * TRANSFORM) / 2;
 
-    // EXPECT_LE(expected, actual);
-    EXPECT_GE(expected + error, actual);
+    EXPECT_LE(expected, actual);
   }
 
   // 左回頭のテスト
@@ -52,8 +49,6 @@ namespace etrobocon2023_test {
     bool isClockwise = false;
     AngleRotation rotation(angle, targetSpeed, isClockwise);
     double expected = angle;  // 指定した回頭角度を期待値とする
-
-    double error = targetSpeed * 0.05 * TRANSFORM;  // 許容誤差[deg]
 
     // 回頭前のモータカウント
     int initialRightMotorCount = Measurer::getRightCount();
@@ -67,8 +62,7 @@ namespace etrobocon2023_test {
 
     double actual = ((rightMotorCount + leftMotorCount) * TRANSFORM) / 2;
 
-    // EXPECT_LE(expected, actual);
-    EXPECT_GE(expected + error, actual);
+    EXPECT_LE(expected, actual);
   }
 
   TEST(AngleRotationTest, runZeroPWM)
