@@ -21,6 +21,7 @@ void Calibrator::selectCourse()
 {
   const int BUF_SIZE = 128;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
+  Logger logger;
   bool _isLeftCourse = true;
 
   logger.log("Select a Course");
@@ -45,7 +46,7 @@ void Calibrator::selectCourse()
   isLeftCourse = _isLeftCourse;
   const char* course = isLeftCourse ? "Left" : "Right";
   snprintf(buf, BUF_SIZE, "\nWill Run on the %s Course\n", course);
-  logger.logHighlight("%s", buf);
+  logger.logHighlight(buf);
 
   timer.sleep(1000);  // 1秒スリープ
 }
@@ -54,6 +55,7 @@ void Calibrator::measureTargetBrightness()
 {
   const int BUF_SIZE = 128;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
+  Logger logger;
 
   // ライン上で中央ボタンを押して、黒と白の中間色の輝度を取得する
   logger.log("Press the Center Button on the Line");
@@ -63,18 +65,19 @@ void Calibrator::measureTargetBrightness()
   }
   targetBrightness = measurer.getBrightness();
   snprintf(buf, BUF_SIZE, ">> Target Brightness Value is %d", targetBrightness);
-  logger.log("%s", buf);
+  logger.log(buf);
 }
 
 void Calibrator::waitForStart()
 {
   const int BUF_SIZE = 128;
-  char buf[BUF_SIZE];               // log用にメッセージを一時保持する領域
+  char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
+  Logger logger;
   constexpr int startDistance = 5;  // 手などでスタート合図を出す距離[cm]
 
   logger.log("On standby.\n");
   snprintf(buf, BUF_SIZE, "On standby.\n\nSignal within %dcm from Sonar Sensor.", startDistance);
-  logger.log("%s", buf);
+  logger.log(buf);
 
   // startDistance以内の距離に物体がない間待機する
   while(measurer.getForwardDistance() > startDistance) {
