@@ -17,6 +17,8 @@
 #include "DistanceStraight.h"
 #include "ColorStraight.h"
 #include "AngleRotation.h"
+#include "Sleeping.h"
+#include "EdgeChanging.h"
 #include "StringOperator.h"
 
 enum class COMMAND {
@@ -25,6 +27,12 @@ enum class COMMAND {
   DS,  // 指定距離直進
   CS,  // 指定色直進
   AR,  // 指定角度回頭
+  DT,  // 旋回
+  EC,  // エッジ切り替え
+  SL,  // 自タスクスリープ
+  AU,  // アームを上げる
+  AD,  // アームを下げる
+  XR,  // 角度補正回頭
   NONE
 };
 

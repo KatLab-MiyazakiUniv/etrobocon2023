@@ -6,8 +6,8 @@
 
 #include "EtRobocon2023.h"
 // ev3api.hをインクルードしているものは.cppに書く
-#include "Controller.h"
 #include "Measurer.h"
+#include "Controller.h"
 #include "Calibrator.h"
 #include "ev3api.h"
 #include "ColorSensor.h"

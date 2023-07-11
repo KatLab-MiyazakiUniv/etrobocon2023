@@ -78,8 +78,40 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
                                             atof(params[2]),  // 目標速度
                                             convertBool(params[0], params[3]));  // 回頭方向
 
-      motionList.push_back(ar);  // 動作リストに追加
-    } else {                     // 未定義のコマンドの場合
+      motionList.push_back(ar);                        // 動作リストに追加
+    } else if(command == COMMAND::EC) {                // エッジ切り替えの生成
+      EdgeChanging* ec = new EdgeChanging(isLeftEdge,  // エッジ
+                                          convertBool(params[0], params[1]));  // 切り替え後のエッジ
+
+      motionList.push_back(ec);          // 動作リストに追加
+    } else if(command == COMMAND::SL) {  // 自タスクスリープの生成
+      Sleeping* sl = new Sleeping(atoi(params[1]));
+
+      motionList.push_back(sl);  // 動作リストに追加
+    }
+    // TODO: 後で作成する
+    /*else if(command == COMMAND::DT) {  // 距離指定旋回動作の生成
+      DistanceTurning* dt = new DistanceTurning(atof(params[1]),   // 目標距離
+                                                atoi(params[2]),   // 左モータのPWM値
+                                                atoi(params[3]));  // 右モータのPWM値
+
+      motionList.push_back(dt);                                    // 動作リストに追加
+    } else if(command == COMMAND::AU) {  // アームを上げる
+      ArmUpping* au = new ArmUpping(atoi(params[1]), atoi(params[2]));
+
+      motionList.push_back(au);          // 動作リストに追加
+    } else if(command == COMMAND::AD) {  // アームを下げる
+      ArmDownning* ad = new ArmDownnig(atoi(params[1]), atoi(params[2]));
+
+      motionList.push_back(ad);          // 動作リストに追加
+    } else if(command == COMMAND::XR) {  // 角度補正回頭の追加
+      CorrectingRotation* xr = new CorrectingRotation(atoi(params[1]),   // 目標角度
+                                                      atoi(params[2]));  // 目標速度
+
+      motionList.push_back(xr);                                          // 動作リストに追加
+    }
+    */
+    else {  // 未定義のコマンドの場合
       snprintf(buf, BUF_SIZE, "%s:%d: '%s' is undefined command", commandFilePath, lineNum,
                params[0]);
       logger.logWarning(buf);
@@ -105,6 +137,18 @@ COMMAND MotionParser::convertCommand(char* str)
     return COMMAND::CS;
   } else if(strcmp(str, "AR") == 0) {  // 文字列がARの場合
     return COMMAND::AR;
+  } else if(strcmp(str, "DT") == 0) {  // 文字列がDTの場合
+    return COMMAND::DT;
+  } else if(strcmp(str, "EC") == 0) {  // 文字列がECの場合
+    return COMMAND::EC;
+  } else if(strcmp(str, "SL") == 0) {  // 文字列がSLの場合
+    return COMMAND::SL;
+  } else if(strcmp(str, "AU") == 0) {  // 文字列がAUの場合
+    return COMMAND::AU;
+  } else if(strcmp(str, "AD") == 0) {  // 文字列がADの場合
+    return COMMAND::AD;
+  } else if(strcmp(str, "XR") == 0) {  // 文字列がXRの場合
+    return COMMAND::XR;
   } else {  // 想定していない文字列が来た場合
     return COMMAND::NONE;
   }
@@ -117,12 +161,25 @@ bool MotionParser::convertBool(char* command, char* binaryParameter)
   // 末尾の改行を削除
   char* param = StringOperator::removeEOL(binaryParameter);
 
-  if(strcmp(param, "clockwise") == 0) {  // パラメータがclockwiseの場合
-    return true;
-  } else if(strcmp(param, "anticlockwise") == 0) {  // パラメータがanticlockwiseの場合
-    return false;
-  } else {  // 想定していないパラメータが来た場合
-    logger.logWarning("Parameter before conversion must be 'clockwise' or 'anticlockwise'");
-    return true;
+  if(strcmp(command, "AR") == 0) {         //  コマンドがARの場合
+    if(strcmp(param, "clockwise") == 0) {  // パラメータがclockwiseの場合
+      return true;
+    } else if(strcmp(param, "anticlockwise") == 0) {  // パラメータがanticlockwiseの場合
+      return false;
+    } else {  // 想定していないパラメータが来た場合
+      logger.logWarning("Parameter before conversion must be 'clockwise' or 'anticlockwise'");
+      return true;
+    }
+  }
+
+  if(strcmp(command, "EC") == 0) {    //  コマンドがECの場合
+    if(strcmp(param, "left") == 0) {  // パラメータがleftの場合
+      return true;
+    } else if(strcmp(param, "right") == 0) {  // パラメータがrightの場合
+      return false;
+    } else {  // 想定していないパラメータが来た場合
+      logger.logWarning("Parameter before conversion must be 'left' or 'right'");
+      return true;
+    }
   }
 }
