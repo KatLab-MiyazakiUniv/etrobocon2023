@@ -75,8 +75,7 @@ void LineTracing::logRunning()
   // targetValueと%~のオーバーライド必須
   snprintf(buf, BUF_SIZE,
            "Run \"targetValue\" LineTracing (\"targetValue\": , targetSpeed: %.2f, "
-           "targetBrightness: %d, gain: "
-           "(%.2f,%.2f,%.2f), isLeftEdge: %s)",
+           "targetBrightness: %d, gain: (%.2f,%.2f,%.2f), isLeftEdge: %s)",
            targetSpeed, targetBrightness, gain.kp, gain.ki, gain.kd, str);
   logger.log(buf);
 }

@@ -21,22 +21,23 @@ void Calibrator::selectCourse()
 {
   const int BUF_SIZE = 128;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
+  Logger logger;
   bool _isLeftCourse = true;
 
-  printf("Select a Course");     // TODO logger.hを作成したら、printfをlogger.logに変更
-  printf(">> Set Left Course");  // TODO logger.hを作成したら、printfをlogger.logに変更
+  logger.log("Select a Course");
+  logger.log(">> Set Left Course");
   // 中央ボタンが押されたら確定する
   while(!measurer.getEnterButton()) {
     // 左ボタンが押されたらLコースをセットする
     if(measurer.getLeftButton() && !_isLeftCourse) {
       _isLeftCourse = true;
-      printf(">> Set Left Course");  // TODO logger.hを作成したら、printfをlogger.logに変更
+      logger.log(">> Set Left Course");
     }
 
     // 右ボタンが押されたらRコースをセットする
     if(measurer.getRightButton() && _isLeftCourse) {
       _isLeftCourse = false;
-      printf(">> Set Right Course");  // TODO logger.hを作成したら、printfをlogger.logに変更
+      logger.log(">> Set Right Course");
     }
 
     timer.sleep();  // 10ミリ秒スリープ
@@ -45,7 +46,7 @@ void Calibrator::selectCourse()
   isLeftCourse = _isLeftCourse;
   const char* course = isLeftCourse ? "Left" : "Right";
   snprintf(buf, BUF_SIZE, "\nWill Run on the %s Course\n", course);
-  printf("%s", buf);  // TODO logger.hを作成したら、printfをlogger.logHighlightに変更
+  logger.logHighlight(buf);
 
   timer.sleep(1000);  // 1秒スリープ
 }
@@ -54,28 +55,29 @@ void Calibrator::measureTargetBrightness()
 {
   const int BUF_SIZE = 128;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
+  Logger logger;
 
   // ライン上で中央ボタンを押して、黒と白の中間色の輝度を取得する
-  printf("Press the Center Button on the Line");  // TODO
-                                                  // logger.hを作成したら、printfをlogger.logに変更
+  logger.log("Press the Center Button on the Line");
   // 中央ボタンが押されるまで待機
   while(!measurer.getEnterButton()) {
     timer.sleep();  // 10ミリ秒スリープ
   }
   targetBrightness = measurer.getBrightness();
   snprintf(buf, BUF_SIZE, ">> Target Brightness Value is %d", targetBrightness);
-  printf("%s", buf);  // TODO logger.hを作成したら、printfをlogger.logに変更
+  logger.log(buf);
 }
 
 void Calibrator::waitForStart()
 {
   const int BUF_SIZE = 128;
-  char buf[BUF_SIZE];               // log用にメッセージを一時保持する領域
+  char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
+  Logger logger;
   constexpr int startDistance = 5;  // 手などでスタート合図を出す距離[cm]
 
-  printf("On standby.\n");  // TODO logger.hを作成したら、printfをlogger.logに変更
+  logger.log("On standby.\n");
   snprintf(buf, BUF_SIZE, "On standby.\n\nSignal within %dcm from Sonar Sensor.", startDistance);
-  printf("%s", buf);  // TODO logger.hを作成したら、printfをlogger.logに変更
+  logger.log(buf);
 
   // startDistance以内の距離に物体がない間待機する
   while(measurer.getForwardDistance() > startDistance) {

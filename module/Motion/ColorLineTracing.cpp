@@ -56,8 +56,8 @@ void ColorLineTracing::logRunning()
   const char* str = isLeftEdge ? "true" : "false";
 
   snprintf(buf, BUF_SIZE,
-           "Run ColorLineTracing (targetColor: %s, targetSpeed: %.2f, targetBrightness: %d, gain: "
-           "(%.2f,%.2f,%.2f), isLeftEdge: %s)",
+           "Run ColorLineTracing (targetColor: %s, targetSpeed: %.2f, targetBrightness: %d, "
+           "gain: (%.2f,%.2f,%.2f), isLeftEdge: %s)",
            ColorJudge::colorToString(targetColor), targetSpeed, targetBrightness, gain.kp, gain.ki,
            gain.kd, str);
   logger.log(buf);

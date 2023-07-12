@@ -9,6 +9,7 @@
 
 #include "Measurer.h"
 #include "Timer.h"
+#include "Logger.h"
 
 class Calibrator {
  public:

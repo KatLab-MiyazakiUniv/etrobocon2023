@@ -23,9 +23,10 @@ fi
 mkdir -p build
 mkdir -p build/etrobocon2023/logfiles
 mkdir -p build/etrobocon2023/scripts
+mkdir -p build/etrobocon2023/datafiles
 cd build
-cp ../scripts/*.sh etrobocon2023/logfiles/
 cp ../scripts/*.sh etrobocon2023/scripts/
+cp ../datafiles/*.csv etrobocon2023/datafiles/
 chmod 777 ./etrobocon2023/scripts/*.sh
 
 cmake -DCMAKE_BUILD_TYPE=Coverage ..
