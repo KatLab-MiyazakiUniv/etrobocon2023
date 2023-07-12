@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "etrobocon2022/rear-camera-py"
+version = "0.1.0"
+description = ""
+authors = ["kawanoichi <kawakawaichi1001@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+opencv-contrib-python = "^4.8.0.74"
+pycodestyle = "^2.10.0"
+autopep8 = "^2.0.2"
+pydocstyle = "^6.3.0"
+pytest = "^7.4.0"
+numpy = "^1.25.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
