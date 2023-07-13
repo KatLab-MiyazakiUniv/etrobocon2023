@@ -1,7 +1,7 @@
 /**
  * @file Calibrator.cpp
  * @brief キャリブレーションからスタートまでを担当するクラス
- * @author aridome222
+ * @author aridome222 KakinokiKanta
  */
 
 #include "Calibrator.h"
@@ -26,21 +26,21 @@ void Calibrator::selectCourse()
 
   logger.log("Select a Course");
   logger.log(">> Set Left Course");
-  // 中央ボタンが押されたら確定する
-  while(!measurer.getEnterButton()) {
-    // 左ボタンが押されたらLコースをセットする
-    if(measurer.getLeftButton() && !_isLeftCourse) {
+  // 右ボタンが押されたら確定する
+  while(!Measurer::getRightButton()) {
+    if(Measurer::getLeftButton() && !_isLeftCourse) {
+      // 左ボタンが押されたときRコースがセットされていれば、Lコースをセットする
       _isLeftCourse = true;
       logger.log(">> Set Left Course");
-    }
-
-    // 右ボタンが押されたらRコースをセットする
-    if(measurer.getRightButton() && _isLeftCourse) {
+      timer.sleep(500);  // 500ミリ秒スリープ
+    } else if(Measurer::getLeftButton() && _isLeftCourse) {
+      // 左ボタンが押されたときLコースがセットされていれば、Rコースをセットする
       _isLeftCourse = false;
       logger.log(">> Set Right Course");
+      timer.sleep(500);  // 500ミリ秒スリープ
+    } else {
+      timer.sleep(10);  // 10ミリ秒スリープ
     }
-
-    timer.sleep();  // 10ミリ秒スリープ
   }
 
   isLeftCourse = _isLeftCourse;
@@ -57,13 +57,13 @@ void Calibrator::measureTargetBrightness()
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
   Logger logger;
 
-  // ライン上で中央ボタンを押して、黒と白の中間色の輝度を取得する
-  logger.log("Press the Center Button on the Line");
-  // 中央ボタンが押されるまで待機
-  while(!measurer.getEnterButton()) {
+  // ライン上で右ボタンを押して、黒と白の中間色の輝度を取得する
+  logger.log("Press the Right Button on the Line");
+  // 右ボタンが押されるまで待機
+  while(!Measurer::getRightButton()) {
     timer.sleep();  // 10ミリ秒スリープ
   }
-  targetBrightness = measurer.getBrightness();
+  targetBrightness = Measurer::getBrightness();
   snprintf(buf, BUF_SIZE, ">> Target Brightness Value is %d", targetBrightness);
   logger.log(buf);
 }
@@ -80,7 +80,7 @@ void Calibrator::waitForStart()
   logger.log(buf);
 
   // startDistance以内の距離に物体がない間待機する
-  while(measurer.getForwardDistance() > startDistance) {
+  while(Measurer::getForwardDistance() > startDistance) {
     timer.sleep();  // 10ミリ秒スリープ
   }
 }
