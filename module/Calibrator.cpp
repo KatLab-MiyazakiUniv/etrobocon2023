@@ -28,14 +28,12 @@ void Calibrator::selectCourse()
   logger.log(">> Set Left Course");
   // 右ボタンが押されたら確定する
   while(!Measurer::getRightButton()) {
-    // 左ボタンが押されたときRコースがセットされていれば、Lコースをセットする
     if(Measurer::getLeftButton() && !_isLeftCourse) {
+      // 左ボタンが押されたときRコースがセットされていれば、Lコースをセットする
       _isLeftCourse = true;
       logger.log(">> Set Left Course");
-    }
-
-    // 左ボタンが押されたときLコースがセットされていれば、Rコースをセットする
-    if(Measurer::getLeftButton() && _isLeftCourse) {
+    } else if(Measurer::getLeftButton() && _isLeftCourse) {
+      // 左ボタンが押されたときLコースがセットされていれば、Rコースをセットする
       _isLeftCourse = false;
       logger.log(">> Set Right Course");
     }
