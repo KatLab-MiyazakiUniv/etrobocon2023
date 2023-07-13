@@ -32,13 +32,15 @@ void Calibrator::selectCourse()
       // 左ボタンが押されたときRコースがセットされていれば、Lコースをセットする
       _isLeftCourse = true;
       logger.log(">> Set Left Course");
+      timer.sleep(500);  // 500ミリ秒スリープ
     } else if(Measurer::getLeftButton() && _isLeftCourse) {
       // 左ボタンが押されたときLコースがセットされていれば、Rコースをセットする
       _isLeftCourse = false;
       logger.log(">> Set Right Course");
+      timer.sleep(500);  // 500ミリ秒スリープ
+    } else {
+      timer.sleep(10);  // 10ミリ秒スリープ
     }
-
-    timer.sleep();  // 10ミリ秒スリープ
   }
 
   isLeftCourse = _isLeftCourse;
