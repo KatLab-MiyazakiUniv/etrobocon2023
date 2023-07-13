@@ -9,7 +9,7 @@
 
 
 import argparse
-from rear_camera.camera_interface import CameraInterface
+from camera_interface import CameraInterface
 
 
 def main():
