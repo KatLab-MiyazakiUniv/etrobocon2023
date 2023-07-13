@@ -39,7 +39,7 @@ void Calibrator::selectCourse()
       logger.log(">> Set Right Course");
       timer.sleep(500);  // 500ミリ秒スリープ
     } else {
-      timer.sleep(10);  // 10ミリ秒スリープ
+      timer.sleep();  // 10ミリ秒スリープ
     }
   }
 
@@ -59,13 +59,21 @@ void Calibrator::measureTargetBrightness()
 
   // ライン上で右ボタンを押して、黒と白の中間色の輝度を取得する
   logger.log("Press the Right Button on the Line");
-  // 右ボタンが押されるまで待機
-  while(!Measurer::getRightButton()) {
+  targetBrightness = -1;
+
+  // 左ボタンで輝度を取得し、右ボタンで待機状態に入る
+  while(targetBrightness < 0 || !Measurer::getRightButton()) {
+    // 左ボタンが押されるまで待機
+    while (!Measurer::getLeftButton()) {
+      timer.sleep();  // 10ミリ秒スリープ
+    }
+    
+    // 輝度取得
+    targetBrightness = Measurer::getBrightness();
+    snprintf(buf, BUF_SIZE, ">> Target Brightness Value is %d", targetBrightness);
+    logger.log(buf);
     timer.sleep();  // 10ミリ秒スリープ
   }
-  targetBrightness = Measurer::getBrightness();
-  snprintf(buf, BUF_SIZE, ">> Target Brightness Value is %d", targetBrightness);
-  logger.log(buf);
 }
 
 void Calibrator::waitForStart()
