@@ -67,7 +67,7 @@ void Calibrator::measureTargetBrightness()
     while(!Measurer::getLeftButton()) {
       timer.sleep();  // 10ミリ秒スリープ
     }
-    
+
     // 輝度取得
     targetBrightness = Measurer::getBrightness();
     snprintf(buf, BUF_SIZE, ">> Target Brightness Value is %d", targetBrightness);
