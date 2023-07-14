@@ -10,10 +10,12 @@
 
 import argparse
 from camera_interface import CameraInterface
-
+from datetime import datetime
 
 def main():
     """リアカメラシステム."""
+    now = datetime.now()
+    now_time = now.strftime("%Y-%m-%d %H:%M:%S")
     parser = argparse.ArgumentParser(description="リアカメラに関するプログラム")
     parser.add_argument("--camera-num", type=int, default=0,
                         help="カメラID")
@@ -21,6 +23,9 @@ def main():
 
     camera = CameraInterface(args.camera_num)
     camera.start_camera()
+    # 画像を取得
+    img = camera.capture_image()
+    img.save(now_time)
 
 
 if __name__ == "__main__":
