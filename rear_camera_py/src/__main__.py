@@ -9,7 +9,7 @@
 
 
 import argparse
-from camera_interface import CameraInterface
+from rear_camera import RearCamera
 from datetime import datetime
 from PIL import Image
 
@@ -22,7 +22,7 @@ def main():
                         help="カメラID")
     args = parser.parse_args()
 
-    camera = CameraInterface(args.camera_num)
+    camera = RearCamera(args.camera_num)
     camera.start_camera()
     # 画像を取得
     img = camera.capture_image()

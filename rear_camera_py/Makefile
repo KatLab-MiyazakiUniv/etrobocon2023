@@ -5,20 +5,10 @@ help:
 run:
 	python3 src/__main__.py
 
-image:
-	python3 src/experiment.py i
 
-movie:
-	python3 src/experiment.py
-	
+format:
+	autopep8 --in-place --recursive src/ tests/
 
-# format:
-# 	poetry run python -m autopep8 -i -r src/ tests/
-
-# check_style:
-# 	poetry run python -m pycodestyle src/ tests/
-# 	poetry run python -m pydocstyle src/ tests/
-
-# coverage:
-# 	poetry run coverage run -m pytest
-# 	poetry run coverage report
+check_style:
+	pycodestyle src/ tests/
+	pydocstyle src/ tests/

@@ -1,6 +1,7 @@
 """カメラインターフェースモジュール.
 
 CameraInterfaceインスタンスを利用することでカメラ画像を取得することができる.
+参考: https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
 @author kawanoichi
 """
 
@@ -8,15 +9,16 @@ from typing import Tuple, Union
 
 from picamera2 import Picamera2
 import numpy as np
+from PIL import Image
+from datetime import datetime
 
 
-class CameraInterface:
+class RearCamera:
     """カメラインターフェースクラス."""
 
     def __init__(
         self,
         camera_id: int = 0,
-        data_format: str = 'RGB888',
         size: Tuple[int, int] = (1640, 1232)
     ) -> None:
         """カメラインターフェースのコンストラクタ.
@@ -32,7 +34,6 @@ class CameraInterface:
             さらに処理中にCameraInterfaceをインスタンス化した際に発生する可能性がある.
         """
         self.__camera_id = camera_id
-        self.__format = data_format
         self.__size = size
         self.__picam2 = None
 
@@ -54,9 +55,26 @@ class CameraInterface:
         """
         return self.__picam2.capture_array()
     
-    def capture_movie():
-        """カメラで動画を取得する関数.
+    def capture_save_image(self, save_path) -> None:
+        """カメラで画像を取得し、保存する関数.
 
-        現在のゲーム攻略で動画をとる必要はないが、試走会用で作成する.
+        Args:
+            save_path (int): 画像の保存先パス(拡張子込み)
         """
-        return 
+        img = self.capture_image()
+        # カラーチャンネルの順序を変換（BGRからRGB）
+        img_rgb = img[:, :, ::-1]
+
+        # NumPyの配列をPILの画像オブジェクトに変換
+        pil_img = Image.fromarray(img_rgb)
+        pil_img.save(save_path)
+
+if __name__ == "__main__":
+    """試走会用に、このファイルを呼び出して画像を保存できるようにする。"""
+    now = datetime.now()
+    data_name = now.strftime("%Y-%m-%d_%H:%M:%S")
+    camera = RearCamera()
+    camera.start_camera()
+    camera.capture_save_image()
+
+
