@@ -11,6 +11,7 @@
 import argparse
 from camera_interface import CameraInterface
 from datetime import datetime
+from PIL import Image
 
 def main():
     """リアカメラシステム."""
@@ -25,9 +26,14 @@ def main():
     camera.start_camera()
     # 画像を取得
     img = camera.capture_image()
-    img.save(now_time)
+
+    # カラーチャンネルの順序を変換（BGRからRGB）
+    image_data_rgb = img[:, :, ::-1]
+
+    pil_img = Image.fromarray(image_data_rgb)
+    pil_img.save(now_time+".png")
 
 
 if __name__ == "__main__":
     print("Rear Camera Start!!")
-    # main()
+    main()
