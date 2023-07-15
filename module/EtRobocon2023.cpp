@@ -73,9 +73,9 @@ void EtRobocon2023::start()
   AreaMaster doubleLoopAreaMaster(Area::DoubleLoop, isLeftCourse, isLeftEdge, targetBrightness);
   AreaMaster blockDeTreasureAreaMaster(Area::BlockDeTreasure, isLeftCourse, isLeftEdge,
                                        targetBrightness);
-  lineTraceAreaMaster.run();
+  // lineTraceAreaMaster.run();
   doubleLoopAreaMaster.run();
-  blockDeTreasureAreaMaster.run();
+  // blockDeTreasureAreaMaster.run();
 
   // 走行終了のメッセージログを出す
   logger.logHighlight("The run has been completed\n");
