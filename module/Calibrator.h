@@ -1,7 +1,7 @@
 /**
  * @file Calibrator.h
  * @brief キャリブレーションからスタートまでを担当するクラス
- * @author aridome222
+ * @author aridome222 KakinokiKanta
  */
 
 #ifndef CALIBRATOR_H
@@ -43,7 +43,6 @@ class Calibrator {
  private:
   bool isLeftCourse;     // true:Lコース, false: Rコース
   int targetBrightness;  // 目標輝度
-  static Measurer measurer;
   Timer timer;
 
   /**
