@@ -1,6 +1,5 @@
-"""カメラインターフェースモジュール.
+"""カメラ取得モジュール.
 
-CameraInterfaceインスタンスを利用することでカメラ画像を取得することができる.
 参考: https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
 @author kawanoichi
 """
