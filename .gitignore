@@ -113,3 +113,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/c++,macos,windows
+
+# rear camera
+image_data/*
+.png
