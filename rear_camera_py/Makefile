@@ -1,14 +1,12 @@
 help:
-	@echo "カメラシステムを実行する"
-	@echo " $$ make run"
-
-run:
-	python3 src/__main__.py
-
+	@echo "フォーマットする"
+	@echo " $$ make format"
+	@echo "スタイルチェックを行う"
+	@echo " $$ make check_style"
 
 format:
-	autopep8 --in-place --recursive src/ tests/
+	autopep8 --in-place --recursive src/
 
 check_style:
-	pycodestyle src/ tests/
-	pydocstyle src/ tests/
+	pycodestyle src/
+	pydocstyle src/

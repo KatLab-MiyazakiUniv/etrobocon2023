@@ -1,5 +1,6 @@
-"""カメラ取得モジュール.
+"""カメラインターフェースモジュール.
 
+CameraInterfaceインスタンスを利用することでカメラ画像を取得することができる.
 参考: https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
 @author kawanoichi
 """
@@ -12,7 +13,8 @@ from datetime import datetime
 import os
 import argparse
 
-class RearCamera:
+
+class CameraInterface:
     """カメラインターフェースクラス."""
 
     def __init__(
@@ -53,7 +55,7 @@ class RearCamera:
             Union[np.ndarray, None]: カメラ画像データ
         """
         return self.__picam2.capture_array()
-    
+
     def capture_save_image(self, save_path) -> None:
         """カメラで画像を取得し、保存する関数.
 
@@ -68,13 +70,13 @@ class RearCamera:
         pil_img = Image.fromarray(img_rgb)
         pil_img.save(save_path)
 
+
 if __name__ == "__main__":
     """試走会用に、このファイルを呼び出して画像を保存できるようにする。"""
     parser = argparse.ArgumentParser(description="リアカメラに関するプログラム")
     parser.add_argument("--camera-num", type=int, default=0,
                         help="カメラID")
     args = parser.parse_args()
-
 
     # 保存フォルダの作成
     current_path = os.path.dirname(os.path.abspath(__file__))
@@ -88,7 +90,6 @@ if __name__ == "__main__":
     data_name = now.strftime("%Y-%m-%d_%H-%M-%S")
 
     # 画像の取得
-    camera = RearCamera(args.camera_num)
+    camera = CameraInterface(args.camera_num)
     camera.start_camera()
     camera.capture_save_image()
-
