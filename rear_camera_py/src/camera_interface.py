@@ -20,6 +20,7 @@ class CameraInterface:
     def __init__(
         self,
         camera_id: int = 0,
+        data_format: str = 'RGB888',
         size: Tuple[int, int] = (1640, 1232)
     ) -> None:
         """カメラインターフェースのコンストラクタ.
@@ -35,6 +36,7 @@ class CameraInterface:
             さらに処理中にCameraInterfaceをインスタンス化した際に発生する可能性がある.
         """
         self.__camera_id = camera_id
+        self.__format = data_format
         self.__size = size
         self.__picam2 = None
 
@@ -92,4 +94,4 @@ if __name__ == "__main__":
     # 画像の取得
     camera = CameraInterface(args.camera_num)
     camera.start_camera()
-    camera.capture_save_image()
+    camera.capture_save_image(folder_path+"/"+data_name+".png")
