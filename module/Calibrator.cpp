@@ -63,15 +63,13 @@ void Calibrator::measureTargetBrightness()
 
   // 左ボタンで輝度を取得し、右ボタンで待機状態に入る
   while(targetBrightness < 0 || !Measurer::getRightButton()) {
-    // 左ボタンが押されるまで待機
-    while(!Measurer::getLeftButton()) {
-      timer.sleep();  // 10ミリ秒スリープ
+    if(Measurer::getLeftButton()) {
+      // 輝度取得
+      targetBrightness = Measurer::getBrightness();
+      snprintf(buf, BUF_SIZE, ">> Target Brightness Value is %d", targetBrightness);
+      logger.log(buf);
+      timer.sleep(1000); // 1秒スリープ
     }
-
-    // 輝度取得
-    targetBrightness = Measurer::getBrightness();
-    snprintf(buf, BUF_SIZE, ">> Target Brightness Value is %d", targetBrightness);
-    logger.log(buf);
     timer.sleep();  // 10ミリ秒スリープ
   }
 }
