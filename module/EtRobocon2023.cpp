@@ -73,7 +73,6 @@ void EtRobocon2023::start()
   AreaMaster doubleLoopAreaMaster(Area::DoubleLoop, isLeftCourse, isLeftEdge, targetBrightness);
   AreaMaster blockDeTreasureAreaMaster(Area::BlockDeTreasure, isLeftCourse, isLeftEdge,
                                        targetBrightness);
-  
   // lineTraceAreaMaster.run();
   doubleLoopAreaMaster.run();
   // blockDeTreasureAreaMaster.run();
