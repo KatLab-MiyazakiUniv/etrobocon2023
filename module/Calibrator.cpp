@@ -56,24 +56,45 @@ void Calibrator::measureTargetBrightness()
   const int BUF_SIZE = 128;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
   Logger logger;
+  // 黒と白の輝度
+  int blackBrightness = -1;
+  int whiteBrightness = -1;
 
-  // ライン上で右ボタンを押して、黒と白の中間色の輝度を取得する
-  logger.log("Press the Right Button on the Line");
-  targetBrightness = -1;
+  // 黒線で右ボタンを押して、黒の輝度を取得する
+  logger.log("Press the Right Button on the Black");
 
   // 左ボタンで輝度を取得し、右ボタンで待機状態に入る
-  while(targetBrightness < 0 || !Measurer::getRightButton()) {
-    // 左ボタンが押されるまで待機
-    while(targetBrightness < 0 && !Measurer::getLeftButton()) {
-      timer.sleep();  // 10ミリ秒スリープ
+  while(blackBrightness < 0 || !Measurer::getRightButton()) {
+    if(Measurer::getLeftButton()) {
+      // 輝度取得
+      blackBrightness = Measurer::getBrightness();
+      snprintf(buf, BUF_SIZE, ">> Black Brightness Value is %d", blackBrightness);
+      logger.log(buf);
+      timer.sleep(1000); // 1秒スリープ
     }
-
-    // 輝度取得
-    targetBrightness = Measurer::getBrightness();
-    snprintf(buf, BUF_SIZE, ">> Target Brightness Value is %d", targetBrightness);
-    logger.log(buf);
     timer.sleep();  // 10ミリ秒スリープ
   }
+
+  // 白線で右ボタンを押して、白の輝度を取得する
+  logger.log("Press the Right Button on the White");
+
+  // 左ボタンで輝度を取得し、右ボタンで待機状態に入る
+  while(whiteBrightness < 0 || !Measurer::getRightButton()) {
+    if(Measurer::getLeftButton()) {
+      // 輝度取得
+      whiteBrightness = Measurer::getBrightness();
+      snprintf(buf, BUF_SIZE, ">> White Brightness Value is %d", whiteBrightness);
+      logger.log(buf);
+      timer.sleep(1000); // 1秒スリープ
+    }
+    timer.sleep();  // 10ミリ秒スリープ
+  }
+  timer.sleep(1000); // 1秒スリープ
+
+  // 黒と白の平均値を目標輝度とする
+  targetBrightness = (whiteBrightness + blackBrightness) / 2;
+  snprintf(buf, BUF_SIZE, "\nTarget Brightness is %d", targetBrightness);
+  logger.log(buf);
 }
 
 void Calibrator::waitForStart()
