@@ -6,9 +6,27 @@
 #include "SpeedCalculator.h"
 
 SpeedCalculator::SpeedCalculator(double _targetSpeed)
-  : targetSpeed(_targetSpeed),
+  : rightTargetSpeed(_targetSpeed),
+    leftTargetSpeed(_targetSpeed),
     rightPid(K_P, K_I, K_D, _targetSpeed),
     leftPid(K_P, K_I, K_D, _targetSpeed)
+{
+  rightPwm = 0.0;
+  leftPwm = 0.0;
+  int rightAngle = Measurer::getRightCount();
+  int leftAngle = Measurer::getLeftCount();
+  prevRightMileage = Mileage::calculateWheelMileage(rightAngle);
+  prevLeftMileage = Mileage::calculateWheelMileage(leftAngle);
+  int currentTime = timer.now();
+  prevRightTime = currentTime;
+  prevLeftTime = currentTime;
+}
+
+SpeedCalculator::SpeedCalculator(double _rightTargetSpeed, double _leftTargetSpeed)
+  : rightTargetSpeed(_rightTargetSpeed),
+    leftTargetSpeed(_leftTargetSpeed),
+    rightPid(K_P, K_I, K_D, _rightTargetSpeed),
+    leftPid(K_P, K_I, K_D, _leftTargetSpeed)
 {
   rightPwm = 0.0;
   leftPwm = 0.0;
