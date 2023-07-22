@@ -15,3 +15,6 @@ format:
 check_style:
 	pycodestyle src/
 	pydocstyle src/
+
+rm:
+	rm -rf image_data/

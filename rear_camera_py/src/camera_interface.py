@@ -12,6 +12,7 @@ from PIL import Image
 from datetime import datetime
 import os
 import argparse
+import time
 
 
 class CameraInterface:
@@ -88,10 +89,13 @@ if __name__ == "__main__":
         os.mkdir(folder_path)
 
     # 画像の名前
-    now = datetime.now()
-    data_name = now.strftime("%Y-%m-%d_%H-%M-%S")
 
     # 画像の取得
     camera = CameraInterface(args.camera_num)
     camera.start_camera()
-    camera.capture_save_image(folder_path+"/"+data_name+".png")
+    while True:
+        now = datetime.now()
+        data_name = now.strftime("%Y-%m-%d_%H-%M-%S")
+        camera.capture_save_image(folder_path+"/"+data_name+".png")
+        time.sleep(1)
+
