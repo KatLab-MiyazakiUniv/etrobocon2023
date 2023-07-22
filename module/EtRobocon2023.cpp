@@ -75,10 +75,6 @@ void EtRobocon2023::start()
                                        targetBrightness);
   lineTraceAreaMaster.run();
   doubleLoopAreaMaster.run();
-
-
-
-
   blockDeTreasureAreaMaster.run();
 
   // 走行終了のメッセージログを出す
