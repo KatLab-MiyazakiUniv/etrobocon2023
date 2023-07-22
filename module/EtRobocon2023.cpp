@@ -42,7 +42,7 @@ void EtRobocon2023::start()
   Measurer::armMotor = _armMotorPtr;
   Timer::clock = _clockPtr;
 
-  const int BUF_SIZE = 128;
+  const int BUF_SIZE = 1024 * 1024;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
   Logger logger;
 
@@ -54,31 +54,36 @@ void EtRobocon2023::start()
   // 強制終了(CTRL+C)のシグナルを登録する
   signal(SIGINT, sigint);
 
-  // キャリブレーションする
-  calibrator.run();
-  isLeftCourse = calibrator.getIsLeftCourse();
-  isLeftEdge = isLeftCourse;
-  targetBrightness = calibrator.getTargetBrightness();
+  while(true){
+    rgb_raw_t rgb = Measurer::getRawColor();
+    snprintf(buf, BUF_SIZE, "%d,%d,%d\n", rgb.r, rgb.g, rgb.b);
+    logger.log(buf);
+  }
+  // // キャリブレーションする
+  // calibrator.run();
+  // isLeftCourse = calibrator.getIsLeftCourse();
+  // isLeftEdge = isLeftCourse;
+  // targetBrightness = calibrator.getTargetBrightness();
 
-  // 合図を送るまで待機する
-  calibrator.waitForStart();
+  // // 合図を送るまで待機する
+  // calibrator.waitForStart();
 
-  // スタートのメッセージログを出す
-  const char* course = isLeftCourse ? "Left" : "Right";
-  snprintf(buf, BUF_SIZE, "\nRun on the %s Course\n", course);
-  logger.logHighlight(buf);
+  // // スタートのメッセージログを出す
+  // const char* course = isLeftCourse ? "Left" : "Right";
+  // snprintf(buf, BUF_SIZE, "\nRun on the %s Course\n", course);
+  // logger.logHighlight(buf);
 
-  // 各エリアを走行する
-  AreaMaster lineTraceAreaMaster(Area::LineTrace, isLeftCourse, isLeftEdge, targetBrightness);
-  AreaMaster doubleLoopAreaMaster(Area::DoubleLoop, isLeftCourse, isLeftEdge, targetBrightness);
-  AreaMaster blockDeTreasureAreaMaster(Area::BlockDeTreasure, isLeftCourse, isLeftEdge,
-                                       targetBrightness);
-  lineTraceAreaMaster.run();
-  doubleLoopAreaMaster.run();
-  blockDeTreasureAreaMaster.run();
+  // // 各エリアを走行する
+  // AreaMaster lineTraceAreaMaster(Area::LineTrace, isLeftCourse, isLeftEdge, targetBrightness);
+  // AreaMaster doubleLoopAreaMaster(Area::DoubleLoop, isLeftCourse, isLeftEdge, targetBrightness);
+  // AreaMaster blockDeTreasureAreaMaster(Area::BlockDeTreasure, isLeftCourse, isLeftEdge,
+  //                                      targetBrightness);
+  // lineTraceAreaMaster.run();
+  // doubleLoopAreaMaster.run();
+  // blockDeTreasureAreaMaster.run();
 
-  // 走行終了のメッセージログを出す
-  logger.logHighlight("The run has been completed\n");
+  // // 走行終了のメッセージログを出す
+  // logger.logHighlight("The run has been completed\n");
 
   // ログファイルを生成する
   logger.outputToFile();
