@@ -16,10 +16,17 @@
 class SpeedCalculator {
  public:
   /**
-   * @brief コンストラクタ
+   * @brief 引数１つの場合のコンストラクタ
    * @param _targetSpeed 目標とする走行速度[mm/s]
    */
   SpeedCalculator(double _targetSpeed);
+
+  /**
+   * @brief 引数２つの場合のコンストラクタ
+   * @param _rightTargetSpeed 目標とする右タイヤ走行速度[mm/s]
+   * @param _leftTargetSpeed 目標とする左タイヤ走行速度[mm/s]
+   */
+  SpeedCalculator(double _rightTargetSpeed, double _leftTargetSpeed);
 
   /**
    * @brief 目標とする走行速度に相当する右車輪のPWM値を算出する
@@ -34,7 +41,8 @@ class SpeedCalculator {
   int calcLeftPwmFromSpeed();
 
  private:
-  const double targetSpeed;
+  const double rightTargetSpeed;
+  const double leftTargetSpeed;
   Pid rightPid;
   Pid leftPid;
   Timer timer;

@@ -57,8 +57,8 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
     } else if(command == COMMAND::CL) {  // 指定色ライントレース動作の生成
       ColorLineTracing* cl = new ColorLineTracing(
           ColorJudge::stringToColor(params[1]),                        // 目標色
-          atof(params[2]),                          // 目標速度
-          targetBrightness + atoi(params[3]),                                             // 目標輝度 + 調整
+          atof(params[2]),                                             // 目標速度
+          targetBrightness + atoi(params[3]),                          // 目標輝度 + 調整
           PidGain(atof(params[4]), atof(params[5]), atof(params[6])),  // PIDゲイン
           isLeftEdge);                                                 // エッジ
 

@@ -29,20 +29,38 @@ void Rotation::run()
   double initLeftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
   double initRightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
 
-  SpeedCalculator speedCalculator(targetSpeed);
+  if(isClockwise == true) {
+    SpeedCalculator speedCalculator(-targetSpeed, targetSpeed);
 
-  // 継続条件を満たしている間ループ
-  while(isMetPostcondition(initLeftMileage, initRightMileage, leftSign, rightSign)) {
-    // PWM値を設定する
-    int leftPwm = speedCalculator.calcLeftPwmFromSpeed();
-    int rightPwm = speedCalculator.calcRightPwmFromSpeed();
+    // 継続条件を満たしている間ループ
+    while(isMetPostcondition(initLeftMileage, initRightMileage, leftSign, rightSign)) {
+      // PWM値を設定する
+      int leftPwm = speedCalculator.calcLeftPwmFromSpeed();
+      int rightPwm = speedCalculator.calcRightPwmFromSpeed();
 
-    // モータにPWM値をセット
-    Controller::setLeftMotorPwm(leftPwm * leftSign);
-    Controller::setRightMotorPwm(rightPwm * rightSign);
+      // モータにPWM値をセット
+      Controller::setLeftMotorPwm(leftPwm);
+      Controller::setRightMotorPwm(rightPwm);
 
-    // 10ミリ秒待機
-    timer.sleep(10);
+      // 10ミリ秒待機
+      timer.sleep(10);
+    }
+  } else {
+    SpeedCalculator speedCalculator(targetSpeed, -targetSpeed);
+
+    // 継続条件を満たしている間ループ
+    while(isMetPostcondition(initLeftMileage, initRightMileage, leftSign, rightSign)) {
+      // PWM値を設定する
+      int leftPwm = speedCalculator.calcLeftPwmFromSpeed();
+      int rightPwm = speedCalculator.calcRightPwmFromSpeed();
+
+      // モータにPWM値をセット
+      Controller::setLeftMotorPwm(leftPwm);
+      Controller::setRightMotorPwm(rightPwm);
+
+      // 10ミリ秒待機
+      timer.sleep(10);
+    }
   }
 
   // モータの停止
