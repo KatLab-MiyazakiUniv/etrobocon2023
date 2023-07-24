@@ -1,7 +1,10 @@
 """カメラインターフェースモジュール.
 
 CameraInterfaceインスタンスを利用することでカメラ画像を取得することができる.
-参考: https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
+参考:
+https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
+https://github.com/raspberrypi/picamera2
+
 @author kawanoichi
 """
 from typing import Tuple, Union
@@ -75,13 +78,14 @@ class CameraInterface:
 
 
 if __name__ == "__main__":
-    """試走会用に、このファイルを呼び出して画像を保存できるようにする。"""
     parser = argparse.ArgumentParser(description="リアカメラに関するプログラム")
     parser.add_argument("--camera-num", type=int, default=0,
-                        help="カメラID")
+                        help="カメラIDを指定する")
+    parser.add_argument('-s', '--images',
+                        help='1秒ごとに画像を取得する', action='store_true')
     args = parser.parse_args()
 
-    # 保存フォルダの作成
+    # 保存用フォルダの作成
     current_path = os.path.dirname(os.path.abspath(__file__))
     parent_path = os.path.dirname(current_path)
     folder_path = parent_path + '/image_data'
@@ -92,15 +96,16 @@ if __name__ == "__main__":
     camera = CameraInterface(args.camera_num)
     camera.start_camera()
 
-    """
-    while True:
+    # 1秒ごとに画像を取得する
+    if args.images:
+        while True:
+            now = datetime.now()
+            data_name = now.strftime("%Y-%m-%d_%H-%M-%S")
+            camera.capture_save_image(folder_path+"/"+data_name+".png")
+            time.sleep(1)
+
+    # 1枚の画像を取得する
+    else:
         now = datetime.now()
         data_name = now.strftime("%Y-%m-%d_%H-%M-%S")
         camera.capture_save_image(folder_path+"/"+data_name+".png")
-        time.sleep(1)
-    # """
-    # """
-    now = datetime.now()
-    data_name = now.strftime("%Y-%m-%d_%H-%M-%S")
-    camera.capture_save_image(folder_path+"/"+data_name+".png")
-    # """
