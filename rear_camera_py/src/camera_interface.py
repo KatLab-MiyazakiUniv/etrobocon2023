@@ -88,14 +88,19 @@ if __name__ == "__main__":
     if not os.path.exists(folder_path):
         os.mkdir(folder_path)
 
-    # 画像の名前
-
     # 画像の取得
     camera = CameraInterface(args.camera_num)
     camera.start_camera()
+
+    """
     while True:
         now = datetime.now()
         data_name = now.strftime("%Y-%m-%d_%H-%M-%S")
         camera.capture_save_image(folder_path+"/"+data_name+".png")
         time.sleep(1)
-
+    # """
+    # """
+    now = datetime.now()
+    data_name = now.strftime("%Y-%m-%d_%H-%M-%S")
+    camera.capture_save_image(folder_path+"/"+data_name+".png")
+    # """
