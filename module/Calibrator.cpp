@@ -60,14 +60,14 @@ void Calibrator::measureTargetBrightness()
   int blackBrightness = -1;
   targetBrightness = -1;
 
-  // 黒線上で右ボタンを押して、黒の輝度を取得する
-  logger.log("Press the Right Button on the Black");
+  // 黒線上で左ボタンを押して黒の輝度を取得し、右ボタンで決定する
+  logger.log("Press the Left Button on the Black");
 
   // 黒
-  // 左ボタンで輝度を取得し、右ボタンで待機状態に入る
+  // 左ボタンで輝度を取得し、右ボタンで黒の輝度を決定する
   while(blackBrightness < 0 || !Measurer::getRightButton()) {
     // 左ボタンが押されるまで待機
-    while(!Measurer::getLeftButton()) {
+    while(blackBrightness < 0 && !Measurer::getLeftButton()) {
       timer.sleep();  // 10ミリ秒スリープ
     }
     // 輝度取得
@@ -77,14 +77,14 @@ void Calibrator::measureTargetBrightness()
     timer.sleep();  // 10ミリ秒スリープ
   }
 
-  // 白線上で右ボタンを押して、白の輝度を取得する
-  logger.log("Press the Right Button on the White");
+  // 白線上で左ボタンを押して白の輝度を取得し、右ボタンで決定する
+  logger.log("Press the Left Button on the White");
 
   // 白
-  // 左ボタンで輝度を取得し、右ボタンで待機状態に入る
+  // 左ボタンで輝度を取得し、右ボタンで白の輝度を決定する
   while(whiteBrightness < 0 || !Measurer::getRightButton()) {
     // 左ボタンが押されるまで待機
-    while(!Measurer::getLeftButton()) {
+    while(whiteBrightness < 0 && !Measurer::getLeftButton()) {
       timer.sleep();  // 10ミリ秒スリープ
     }
     // 輝度取得
