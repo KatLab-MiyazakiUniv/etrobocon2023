@@ -29,7 +29,7 @@ void Rotation::run()
   double initLeftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
   double initRightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
 
-  SpeedCalculator speedCalculator(targetSpeed);
+  SpeedCalculator speedCalculator(targetSpeed * rightSign, targetSpeed * leftSign);
 
   // 継続条件を満たしている間ループ
   while(isMetPostcondition(initLeftMileage, initRightMileage, leftSign, rightSign)) {
@@ -38,8 +38,8 @@ void Rotation::run()
     int rightPwm = speedCalculator.calcRightPwmFromSpeed();
 
     // モータにPWM値をセット
-    Controller::setLeftMotorPwm(leftPwm * leftSign);
-    Controller::setRightMotorPwm(rightPwm * rightSign);
+    Controller::setLeftMotorPwm(leftPwm);
+    Controller::setRightMotorPwm(rightPwm);
 
     // 10ミリ秒待機
     timer.sleep(10);
