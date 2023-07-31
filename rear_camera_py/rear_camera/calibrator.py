@@ -22,7 +22,7 @@ class Calibrator:
         self, camera_interface: CameraInterface,
         trans_mat_file: str = "rear_camera_param.npy",
         distance_file: str = "rear_camera_distance_param.json",
-        debug: bool = False,
+        debug: bool = True,
         debug_dir="debug"
     ) -> None:
         """コンストラクタ.
