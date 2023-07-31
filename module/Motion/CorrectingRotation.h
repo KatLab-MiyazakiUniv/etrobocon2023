@@ -9,6 +9,8 @@
 
 #include "Motion.h"
 #include "Mileage.h"
+#include "Timer.h"
+#include "SpeedCalculator.h"
 #include "StringOperator.h"
 #include "SystemInfo.h"
 
@@ -17,7 +19,7 @@ class CorrectingRotation : public Motion {
   /**
    * コンストラクタ
    * @param _targetAngle 目標角度(deg) 0~89
-   * @param _targetSpeed 目標速度[mm/s] 0~
+   * @param _targetSpeed 目標速度[mm/s]
    */
   CorrectingRotation(int _targetAngle, double _targetSpeed);
 
@@ -34,7 +36,8 @@ class CorrectingRotation : public Motion {
  private:
   static constexpr int NO_CORRECTION_ANGLE = 2;  // 補正免除角度(deg)
   int targetAngle;                               // 目標角度(deg) 0~89
-  double targetSpeed;                               // 目標速度[mm/s] 0~
+  int targetSpeed;                               // 目標速度[mm/s]
+  Timer timer;
 };
 
 #endif

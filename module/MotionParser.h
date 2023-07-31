@@ -19,6 +19,7 @@
 #include "AngleRotation.h"
 #include "Sleeping.h"
 #include "EdgeChanging.h"
+#include "CorrectingRotation.h"
 #include "StringOperator.h"
 
 enum class COMMAND {

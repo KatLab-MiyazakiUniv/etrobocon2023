@@ -15,16 +15,17 @@ CorrectingRotation::CorrectingRotation(int _targetAngle, double _targetSpeed)
 
 void CorrectingRotation::run()
 {
-  const int BUF_SIZE = 128;
+  const int BUF_SIZE = 256;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
 
-  // 目標速度が0.0の場合はwarningを出して終了する
-  if(targetSpeed == 0.0) {
+  // 目標速度が0.0以下の場合はwarningを出して終了する
+  if(targetSpeed <= 0.0) {
     snprintf(buf, BUF_SIZE, "The targetSpeed value passed to CorrectingRotation is %d",
              targetSpeed);
     logger.logWarning(buf);
     return;
   }
+
   // 目標角度が0未満or90以上の場合はwarningを出して終了する
   if(targetAngle < 0 || targetAngle >= 90) {
     snprintf(buf, BUF_SIZE, "The targetAngle value passed to CorrectingRotation is %d",
@@ -96,43 +97,49 @@ void CorrectingRotation::run()
 
   // 以降はRotation::run()と同様
   // isClockwiseがtrueなら時計回り，falseなら反時計回り
+  // isClockwiseは回転方向の係数
   int leftSign = isClockwise ? 1 : -1;
   int rightSign = isClockwise ? -1 : 1;
   double targetDistance
       = M_PI * TREAD * angle / 360;  // 指定した角度に対する目標の走行距離(弧の長さ)
+
   // 目標距離（呼び出し時の走行距離 ± 指定された回転量に必要な距離）
   double targetLeftDistance
-      = Mileage::calculateWheelMileage(measurer.getLeftCount()) + targetDistance * leftSign;
+      = Mileage::calculateWheelMileage(Measurer::getLeftCount()) + targetDistance * leftSign;
   double targetRightDistance
-      = Mileage::calculateWheelMileage(measurer.getRightCount()) + targetDistance * rightSign;
+      = Mileage::calculateWheelMileage(Measurer::getRightCount()) + targetDistance * rightSign;
 
-  // 両輪が目標距離に到達するまでループ
-  while(leftSign != 0 || rightSign != 0) {
-    // 残りの移動距離
+  SpeedCalculator speedCalculator(targetSpeed * rightSign, targetSpeed * leftSign);
+
+  // 継続条件を満たしている間ループ
+  while(1) {
+    // 残りの移動距離を算出
     double diffLeftDistance
-        = (targetLeftDistance - Mileage::calculateWheelMileage(measurer.getLeftCount())) * leftSign;
+        = (targetLeftDistance - Mileage::calculateWheelMileage(Measurer::getLeftCount()))
+          * leftSign;
     double diffRightDistance
-        = (targetRightDistance - Mileage::calculateWheelMileage(measurer.getRightCount()))
+        = (targetRightDistance - Mileage::calculateWheelMileage(Measurer::getRightCount()))
           * rightSign;
 
     // 目標距離に到達した場合
-    if(diffLeftDistance <= 0) {
-      leftSign = 0;
-    }
-    if(diffRightDistance <= 0) {
-      rightSign = 0;
+    if(diffLeftDistance <= 0 && diffRightDistance <= 0) {
+      break;
     }
 
-    // モータにtargetSpeed値をセット
-    controller.setLeftMotortargetSpeed(targetSpeed * leftSign);
-    controller.setRightMotortargetSpeed(targetSpeed * rightSign);
+    // PWM値を設定する
+    int leftPwm = speedCalculator.calcLeftPwmFromSpeed();
+    int rightPwm = speedCalculator.calcRightPwmFromSpeed();
+
+    // モータにPWM値をセット
+    Controller::setLeftMotorPwm(leftPwm);
+    Controller::setRightMotorPwm(rightPwm);
 
     // 10ミリ秒待機
-    controller.sleep();
+    timer.sleep(10);
   }
 
   // モータの停止
-  controller.stopMotor();
+  Controller::stopMotor();
 }
 
 void CorrectingRotation::logRunning()
