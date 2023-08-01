@@ -15,6 +15,7 @@ void BlockPivotTurn::setBlockPivotTurn(bool isClockwise)
   int runFirstSpeed = 10;         // 最初に直進する際の速度
   int rotateFirstAngle = 10;      // 最初に回頭する角度
   int rotateFirstPwm = 10;        // 最初に回頭するPwm
+  int rotateFirstPwm = 10;        // 最初に回頭する際の速度
   int pivotAngle = 50;            // ピボットターンの角度
   int pivotPwm = 40;              // ピボットターンのPwm値
   int rotateSecondAngle = 88;     // 二回目の回頭の角度
@@ -32,19 +33,19 @@ void BlockPivotTurn::setBlockPivotTurn(bool isClockwise)
   // ピボットターンする
   if(isClockwise) {
     ds.run(runDistance, runFirstSpeed);
-    rotation.run(rotateFirstAngle, rotateFirstPwm);
+    rotation.run(rotateFirstAngle, rotateFirstSpeed, isClockwise);
     rotation.turnForwardRightPivot(pivotAngle - 2, pivotPwm);
-    controller.sleep();
+    timer.sleep();
     rotation.rotateRight(rotateSecondAngle - 20, rotateSecondPwm - 2);
-    ds.runStraightToDistance(forwardDistance, runPwm);
-    ds.runStraightToDistance(backDistance, -(runPwm - 10));
+    ds.run(forwardDistance, runPwm);
+    ds.run(backDistance, -(runPwm - 10));
   } else {
-    straightRunner.runStraightToDistance(runDistance, runPwm);
+    ds.run(runDistance, runPwm);
     rotation.rotateRight(rotateFirstAngle, rotateFirstPwm);
     rotation.turnForwardLeftPivot(pivotAngle, pivotAngle);
     rotation.rotateLeft(rotateSecondAngle - 10, rotateSecondPwm);
-    straightRunner.runStraightToDistance(forwardDistance, runPwm);
-    straightRunner.runStraightToDistance(backDistance, -(runPwm - 10));
+    ds.run(forwardDistance, runPwm);
+    ds.run(backDistance, -(runPwm - 10));
   }
-  controller.sleep(500);
+  timer.sleep(500);
 }

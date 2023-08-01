@@ -8,14 +8,14 @@
 #define BLOCK_PIVOT_TURN_H
 
 #include "DistanceStraight.h"
-#include "Rotation.h"
+#include "AngleRotation.h"
 #include "BlockMotion.h"
-#include "ArmMotion.h"
+// #include "ArmMotion.h"
 // #include "BlockThrower.h"
 #include "InCrossLeft.h"
 #include "InCrossRight.h"
 #include "Measurer.h"
-#include "Controller.h"
+#include "Timer.h"
 
 class BlockPivotTurn : public BlockMotion {
  public:
@@ -30,7 +30,7 @@ class BlockPivotTurn : public BlockMotion {
 
  private:
   // BlockThrower blockThrower;
-  Controller controller;
+  Timer timer;
 
   const double TREAD = 140;  // 走行体のトレッド幅（両輪の間の距離）[mm]
   const int MIN_PWM = 10;    // モーターパワーの最小値

@@ -19,8 +19,7 @@ void ToCrossMotion::runToCross(void)
   int targetSpeed = 40;        // 要調整
   PidGain gain(1.0, 0.0, 0.23);
 
-  DistanceStraight ds(targetDistance, targetSpeed);
-
   // 白黒以外までライントレース
+  // 実装方法を探す
   lineTracer.runToColor(targetBrightness, pwm, gain);
 }

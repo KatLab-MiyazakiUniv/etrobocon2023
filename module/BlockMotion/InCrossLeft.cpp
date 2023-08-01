@@ -11,9 +11,7 @@ InCrossLeft::InCrossLeft() : BlockMotion(1.23, 1.09) {}
 void InCrossLeft::runLeft(void)
 {
   double targetDistance = 25.0;
-  int runPwm = 30;
   int angle = 74;
-  int turnPwm = 90;
   bool isClockwise = false;  // ピボットターンの方向を左回りに
   bool isLeftEdge = true;    // ピボットターン前のエッジを左に
   bool nextEdge = false;     // ピボットターン後のエッジを右に
