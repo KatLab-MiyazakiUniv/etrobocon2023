@@ -4,6 +4,7 @@ build/
 # ディレクトリ
 logfiles/*
 !logfiles/.gitkeep
+image_data/
 
 # シミュレータ自動実行ツール関係
 .cancel-sim-test
@@ -113,3 +114,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/c++,macos,windows
+
