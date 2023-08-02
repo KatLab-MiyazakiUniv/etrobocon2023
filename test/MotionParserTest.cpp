@@ -31,10 +31,10 @@ namespace etrobocon2023_test {
      * 順にインスタンス化したものをexpectedListに追加する
      */
     std::vector<Motion*> expectedList;
-    DistanceLineTracing* dl = new DistanceLineTracing(1080, targetBrightness + 10, 70,
+    DistanceLineTracing* dl = new DistanceLineTracing(1080, 70, targetBrightness + 10,
                                                       PidGain(0.2, 0.8, 0.1), isLeftEdge);
     expectedList.push_back(dl);
-    ColorLineTracing* cl = new ColorLineTracing(COLOR::RED, targetBrightness + 0, 30,
+    ColorLineTracing* cl = new ColorLineTracing(COLOR::RED, 30, targetBrightness + 0,
                                                 PidGain(0.1, 0.2, 0.3), isLeftEdge);
     expectedList.push_back(cl);
     DistanceStraight* ds = new DistanceStraight(100.2, 100);
