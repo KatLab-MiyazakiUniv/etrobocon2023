@@ -14,7 +14,7 @@ char* StringOperator::removeEOL(const char* _str)
   int endIndex;            // strの末尾のインデックス
   int len = strlen(_str);  // 文字列長
 
-  str = (char*)malloc(sizeof(char) * len);
+  str = (char*)malloc(sizeof(char) * (len + 1));
   strcpy(str, _str);
 
   if(len > 0) {
