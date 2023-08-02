@@ -13,9 +13,9 @@ void InCrossRight::runRight(void)
   double targetDistance = 25.0;
   int targetSpeed = 30;  // 要調整
   int angle = 74;
-  bool isClockwise = true;  // ピボットターンの方向を右回りに
-  bool isLeftEdge = false;  // ピボットターン前のエッジを右に
-  bool nextEdge = true;     // ピボットターン後のエッジを左に
+  bool isClockwise = true;  // ピボットターンの方向は右回り
+  bool isLeftEdge = false;  // ピボットターン前のエッジは右
+  bool nextEdge = true;     // ピボットターン後のエッジを左に変更
 
   DistanceStraight ds(targetDistance, targetSpeed);
   AngleRotation rotation(angle, targetSpeed, isClockwise);

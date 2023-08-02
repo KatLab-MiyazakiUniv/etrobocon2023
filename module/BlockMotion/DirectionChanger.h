@@ -9,7 +9,10 @@
 
 #include "AngleRotation.h"
 #include "DistanceStraight.h"
+#include "ColorStraight.h"
 #include "EdgeChanging.h"
+#include "ColorJudge.h"
+#include "Measurer.h"
 #include "BlockMotion.h"
 
 class DirectionChanger : public BlockMotion {
@@ -18,7 +21,7 @@ class DirectionChanger : public BlockMotion {
 
   /**
    * @brief 方向転換する
-   * @param ratateAngle 回転角度（deg） -180 < angle <= 180 45度刻み
+   * @param rotateAngle 回転角度（deg） -180 < angle <= 180 45度刻み
    * @param changeAngle 設置動作の直前方向から見て回頭する角度
    */
   void changeDirection(int rotateAngle, int changeAngle);

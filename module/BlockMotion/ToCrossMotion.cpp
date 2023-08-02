@@ -6,20 +6,29 @@
 
 #include "ToCrossMotion.h"
 
-ToCrossMotion::ToCrossMotion(LineTracer& _lineTracer)
-  : BlockMotion(1.02, 1.01), lineTracer(_lineTracer)
+ToCrossMotion::ToCrossMotion(bool& _isLeftEdge) : BlockMotion(1.02, 1.01), isLeftEdge(_isLeftEdge)
 {
 }
 
-void ToCrossMotion::runToCross(void)
+void ToCrossMotion::runToCross()
 {
+  COLOR targetColor = COLOR::NONE;
+  COLOR currentColor = COLOR::NONE;
+  int targetSpeed = 40;  // 要調整
   int targetBrightness = 12;
-  int pwm = 40;
-  double targetDistance = 40;  // 要調整
-  int targetSpeed = 40;        // 要調整
   PidGain gain(1.0, 0.0, 0.23);
 
   // 白黒以外までライントレース
-  // 実装方法を探す
-  lineTracer.runToColor(targetBrightness, pwm, gain);
+  currentColor = ColorJudge::getColor(Measurer::getRawColor());
+  while(!(currentColor == COLOR::WHITE || currentColor == COLOR::BLACK)) {
+    if(currentColor == COLOR::WHITE) {
+      targetColor = COLOR::WHITE;
+      ColorLineTracing cl(targetColor, targetSpeed, targetBrightness, gain, isLeftEdge);
+      cl.run();
+    } else if(currentColor == COLOR::BLACK) {
+      targetColor = COLOR::BLACK;
+      ColorLineTracing cl2(targetColor, targetSpeed, targetBrightness, gain, isLeftEdge);
+      cl2.run();
+    }
+  }
 }
