@@ -70,11 +70,17 @@ class Calibrator:
 
         h, w = img.shape[:2]
         top_coordinate = self.__get_marker_mean(ids, corners, 1)
-        bottom_coordinate = self.__get_marker_mean(ids, corners, 6)
-        left_coordinate = self.__get_marker_mean(ids, corners, 3)
-        right_coordinate = self.__get_marker_mean(ids, corners, 4)
-        frame_coordinates = np.float32(
-            [top_coordinate, bottom_coordinate, left_coordinate, right_coordinate])
+        
+        for i, id in enumerate(ids):
+            # マーカーのインデックス検索
+            if (id[0] == 1):
+                frame_coordinates = corners[i][0]
+                break
+        # bottom_coordinate = self.__get_marker_mean(ids, corners, 6)
+        # left_coordinate = self.__get_marker_mean(ids, corners, 3)
+        # right_coordinate = self.__get_marker_mean(ids, corners, 4)
+        # frame_coordinates = np.float32(
+        #     [top_coordinate, bottom_coordinate, left_coordinate, right_coordinate])
 
         # NOTE: 射影変換後の画像において、4つのArUcoマーカの中心点と各辺の中点が一致する正方形を考える.
         # - distance_from_center_52_5mm
@@ -96,6 +102,8 @@ class Calibrator:
              [cx, cy+distance_from_center_52_5mm],
              [cx-distance_from_center_52_5mm, cy],
              [cx+distance_from_center_52_5mm, cy]])
+        # trans_mat = cv2.getPerspectiveTransform(
+        #     frame_coordinates, target_coordinates)
         trans_mat = cv2.getPerspectiveTransform(
             frame_coordinates, target_coordinates)
         return trans_mat, distance_from_center_52_5mm, height_offset_from_center
