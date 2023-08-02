@@ -99,13 +99,11 @@ if __name__ == "__main__":
     # 1秒ごとに画像を取得する
     if args.images:
         while True:
-            now = datetime.now()
-            data_name = now.strftime("%Y-%m-%d_%H-%M-%S")
+            data_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             camera.capture_save_image(folder_path+"/"+data_name+".png")
             time.sleep(1)
 
     # 1枚の画像を取得する
     else:
-        now = datetime.now()
-        data_name = now.strftime("%Y-%m-%d_%H-%M-%S")
+        data_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         camera.capture_save_image(folder_path+"/"+data_name+".png")
