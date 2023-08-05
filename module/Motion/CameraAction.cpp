@@ -29,8 +29,9 @@ void CameraAction::run()
     preAR.run();
 
     // リアカメラで画像を取得する
+    // 撮影に際してディレクトリ移動も行う
     char cmd[256];
-    snprintf(cmd, 256, "make image");
+    snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make image && cd ../..");
     system(cmd);
 
     // 黒線復帰のための回頭をする
