@@ -1,7 +1,7 @@
 /**
  * @file   AngleRotation.h
  * @brief  角度指定による回頭動作
- * @author desty505
+ * @author bizyutyu
  */
 
 #ifndef ANGLEROTATION_H
