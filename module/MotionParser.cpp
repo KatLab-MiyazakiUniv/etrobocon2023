@@ -108,7 +108,7 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
     */
     else if(command == COMMAND::XR) {  // 角度補正回頭の追加
       CorrectingRotation* xr = new CorrectingRotation(atoi(params[1]),   // 目標角度
-                                                      atoi(params[2]));  // 目標速度
+                                                      atof(params[2]));  // 目標速度
 
       motionList.push_back(xr);  // 動作リストに追加
     } else {                     // 未定義のコマンドの場合
