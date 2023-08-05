@@ -156,7 +156,7 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
                            atoi(params[7]),  // 回転角度（deg） -180 < angle <= 180 45度刻み
                            atoi(params[8]));  // 設置動作の直前方向から見て回頭する角度
 
-      motionList.push_back(cm);          // 動作リストに追加
+      motionList.push_back(cm);  // 動作リストに追加
     } else if(command == COMMAND::MM) {  // サークル間直線の中点から別の直線の中点へ移動
       MidToMid* mm
           = new MidToMid(ColorJudge::stringToColor(params[1]),  // 目標色
