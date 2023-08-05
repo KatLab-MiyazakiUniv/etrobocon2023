@@ -8,7 +8,13 @@
 
 using namespace std;
 
-InCrossLeft::InCrossLeft(double _targetDistance, double _targetSpeed, int _targetAngle) : BlockMotion(1.23, 1.09), targetDistance(_targetDistance), targetSpeed(_targetSpeed), targetAngle(_targetAngle) {}
+InCrossLeft::InCrossLeft(double _targetDistance, double _targetSpeed, int _targetAngle)
+  : BlockMotion(1.23, 1.09),
+    targetDistance(_targetDistance),
+    targetSpeed(_targetSpeed),
+    targetAngle(_targetAngle)
+{
+}
 
 void InCrossLeft::run()
 {
@@ -59,7 +65,8 @@ void InCrossLeft::logRunning()
   const char* nextEdgeStr = nextEdge ? "true" : "false";
 
   snprintf(buf, BUF_SIZE,
-           "Run InCrossLeft (targetDistance: %.2f, targetSpeed: %.2f, targetAngle: %d, isLeftEdge: %s, nextEdge: %s)",
+           "Run InCrossLeft (targetDistance: %.2f, targetSpeed: %.2f, targetAngle: %d, isLeftEdge: "
+           "%s, nextEdge: %s)",
            targetDistance, targetSpeed, targetAngle, isLeftEdgeStr, nextEdgeStr);
   logger.log(buf);
 }
