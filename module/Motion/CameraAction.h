@@ -7,14 +7,15 @@
 #ifndef CAMERAACTION_H
 #define CAMERAACTION_H
 
-#include "UniMotion.h"
+#include "CompositeMotion.h"
 #include "AngleRotation.h"
 
-class CameraAction : public UniMotion {
+class CameraAction : public CompositeMotion {
  public:
   /**
    * コンストラクタ
-   * @param _isClockwis ミニフィグがある方向　true:車体の右側, false:車体の左側
+   * @param _isClockwis リアカメラをミニフィグに向けるための回頭方向　true:時計回り,
+   * false:反時計回り
    * @param _preTargetAngle 撮影のための回頭角度
    * @param _postTargetAngle 黒線復帰のための回頭角度
    */
@@ -28,7 +29,7 @@ class CameraAction : public UniMotion {
   /**
    * @brief 撮影動作を行う際の事前条件判定をする
    */
-  bool isMetPrecondition() override;
+  bool isMetPrecondition();
 
   /**
    * @brief 実行のログを取る
@@ -36,9 +37,9 @@ class CameraAction : public UniMotion {
   void logRunning() override;
 
  private:
-  bool isClockwis;                // ミニフィグがある方向
-  int preTargetAngle;             // 撮影のための目標角度
-  int postTargetAngle;            // 黒線復帰のための目標角度
+  bool isClockwis;      // リアカメラをミニフィグに向けるための回頭方向
+  int preTargetAngle;   // 撮影のための目標角度
+  int postTargetAngle;  // 黒線復帰のための目標角度
   const int rotationSpeed = 150;  // 回頭速度
 };
 #endif

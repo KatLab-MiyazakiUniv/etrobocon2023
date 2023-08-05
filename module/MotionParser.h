@@ -1,7 +1,7 @@
 /**
  * @file   MotionParser.h
  * @brief  動作コマンドファイルを解析するクラス
- * @author aridome222
+ * @author aridome222 bizyutyu
  */
 
 #ifndef MOTION_PARSER_H
@@ -20,6 +20,7 @@
 #include "Sleeping.h"
 #include "EdgeChanging.h"
 #include "StringOperator.h"
+#include "CameraAction.h"
 
 enum class COMMAND {
   DL,  // 指定距離ライントレース
@@ -33,6 +34,7 @@ enum class COMMAND {
   AU,  // アームを上げる
   AD,  // アームを下げる
   XR,  // 角度補正回頭
+  CA,  // 撮影動作
   NONE
 };
 
