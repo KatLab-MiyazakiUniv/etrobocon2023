@@ -6,28 +6,28 @@
 
 #include "DirectionChanger.h"
 
-DirectionChanger::DirectionChanger(COLOR _targetColor)
-  : BlockMotion(0.88, 0.92), targetColor(_targetColor)
+DirectionChanger::DirectionChanger(COLOR _targetColor, bool& _isLeftEdge)
+  : BlockMotion(0.88, 0.92), targetColor(_targetColor), isLeftEdge(_isLeftEdge)
 {
 }
 
 void DirectionChanger::changeDirection(int rotateAngle, int changeAngle)
 {
   double targetDistance = 10.0;
-  int targetSpeed = 20;     // 要調整
-  bool isLeftEdge = false;  // 方向転換前のエッジ
-  bool nextEdge = true;     // 方向転換後のエッジ
+  int targetSpeed = 20;      // 要調整
+  bool isClockwise = false;  // 回転方向
+  bool nextEdge = false;     // 方向転換後のエッジ
 
   DistanceStraight ds(targetDistance, targetSpeed);
   ColorStraight cs(targetColor, targetSpeed);
 
   // 回転方向を判定
   if(rotateAngle >= 0) {
-    bool isClockwise = true;
+    isClockwise = true;
     AngleRotation rotation(changeAngle, targetSpeed, isClockwise);
     rotation.run();
   } else {
-    bool isClockwise = false;
+    isClockwise = false;
     AngleRotation rotation2(changeAngle, targetSpeed, isClockwise);
     rotation2.run();
   }
@@ -48,8 +48,9 @@ void DirectionChanger::changeDirection(int rotateAngle, int changeAngle)
       ec2.run();
       break;
     }
-    case 180:  // 後ろ方向に方向転換する場合, 要修正
+    case 180:  // 後ろ方向に方向転換する場合
     case -180: {
+      nextEdge = !isLeftEdge;
       EdgeChanging ec3(isLeftEdge, nextEdge);
       ec3.run();
       break;

@@ -23,7 +23,7 @@ class ToCrossMotion : public BlockMotion {
 
  private:
   COLOR targetColor;  // 目標色
-  bool& isLeftEdge;   // エッジの左右判定(true:左エッジ, false:右エッジ)s
+  bool& isLeftEdge;   // エッジの左右判定(true:左エッジ, false:右エッジ)
 };
 
 #endif
