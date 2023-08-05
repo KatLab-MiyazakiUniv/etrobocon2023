@@ -6,7 +6,10 @@
 
 #include "DirectionChanger.h"
 
-DirectionChanger::DirectionChanger() : BlockMotion(0.88, 0.92) {}
+DirectionChanger::DirectionChanger(COLOR _targetColor)
+  : BlockMotion(0.88, 0.92), targetColor(_targetColor)
+{
+}
 
 void DirectionChanger::changeDirection(int rotateAngle, int changeAngle)
 {
@@ -14,10 +17,9 @@ void DirectionChanger::changeDirection(int rotateAngle, int changeAngle)
   int targetSpeed = 20;     // 要調整
   bool isLeftEdge = false;  // 方向転換前のエッジ
   bool nextEdge = true;     // 方向転換後のエッジ
-  COLOR targetColor = COLOR::NONE;
-  COLOR currentColor = COLOR::NONE;
 
   DistanceStraight ds(targetDistance, targetSpeed);
+  ColorStraight cs(targetColor, targetSpeed);
 
   // 回転方向を判定
   if(rotateAngle >= 0) {
@@ -57,17 +59,6 @@ void DirectionChanger::changeDirection(int rotateAngle, int changeAngle)
   // 色サークルに乗るまで直進
   ds.run();
 
-  // 白黒を判定するまで進む
-  currentColor = ColorJudge::getColor(Measurer::getRawColor());
-  while(currentColor == COLOR::WHITE || currentColor == COLOR::BLACK) {
-    if(currentColor == COLOR::WHITE) {
-      targetColor = COLOR::WHITE;
-      ColorStraight cs(targetColor, targetSpeed);
-      cs.run();
-    } else if(currentColor == COLOR::BLACK) {
-      targetColor = COLOR::BLACK;
-      ColorStraight cs2(targetColor, targetSpeed);
-      cs2.run();
-    }
-  }
+  // 指定色（白または黒）を判定するまで直進
+  cs.run();
 }

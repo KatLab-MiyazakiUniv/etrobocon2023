@@ -17,7 +17,7 @@
 
 class DirectionChanger : public BlockMotion {
  public:
-  DirectionChanger();
+  DirectionChanger(COLOR _targetColor);
 
   /**
    * @brief 方向転換する
@@ -25,6 +25,9 @@ class DirectionChanger : public BlockMotion {
    * @param changeAngle 設置動作の直前方向から見て回頭する角度
    */
   void changeDirection(int rotateAngle, int changeAngle);
+
+ private:
+  COLOR targetColor;  // 目標色
 };
 
 #endif
