@@ -11,7 +11,7 @@ InCrossRight::InCrossRight() : BlockMotion(1.23, 1.09) {}
 void InCrossRight::runRight(void)
 {
   double targetDistance = 25.0;
-  int targetSpeed = 30;  // 要調整
+  double targetSpeed = 30;  // 要調整
   int angle = 74;
   bool isClockwise = true;  // ピボットターンの方向は右回り
   bool isLeftEdge = false;  // ピボットターン前のエッジは右

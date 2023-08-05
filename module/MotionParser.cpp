@@ -111,7 +111,29 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
       motionList.push_back(xr);                                          // 動作リストに追加
     }
     */
-    else {  // 未定義のコマンドの場合
+    else if(command == COMMAND::IS) {  // サークルの交点から交点までの直進
+      InCrossStraight* is = new InCrossStraight(atof(params[1]));
+
+      motionList.push_back(is);          // 動作リストに追加
+    } else if(command == COMMAND::IL) {  // 交点内移動（左折）
+      InCrossLeft* il = new InCrossLeft(atof(params[1]));
+
+      motionList.push_back(il);          // 動作リストに追加
+    } else if(command == COMMAND::IR) {  // 交点内移動（右折）
+      InCrossRight* ir = new InCrossRight(atof(params[1]));
+
+      motionList.push_back(ir);          // 動作リストに追加
+    } else if(command == COMMAND::DC) {  // 方向転換
+      DirectionChanger* dc = new DirectionChanger(ColorJudge::stringToColor(params[1]),  // 目標色
+                                                  isLeftEdge);  // エッジ
+
+      motionList.push_back(dc);          // 動作リストに追加
+    } else if(command == COMMAND::TC) {  // 交点サークル間移動
+      ToCrossMotion* tc = new ToCrossMotion(ColorJudge::stringToColor(params[1]),  // 目標色
+                                            isLeftEdge);                           // エッジ
+
+      motionList.push_back(tc);  // 動作リストに追加
+    } else {                     // 未定義のコマンドの場合
       snprintf(buf, BUF_SIZE, "%s:%d: '%s' is undefined command", commandFilePath, lineNum,
                params[0]);
       logger.logWarning(buf);
@@ -149,6 +171,10 @@ COMMAND MotionParser::convertCommand(char* str)
     return COMMAND::AD;
   } else if(strcmp(str, "XR") == 0) {  // 文字列がXRの場合
     return COMMAND::XR;
+  } else if(strcmp(str, "IS") == 0) {  // 文字列がISの場合
+    return COMMAND::IS;
+  } else if(strcmp(str, "IL") == 0) {  // 文字列がILの場合
+    return COMMAND::IL;
   } else {  // 想定していない文字列が来た場合
     return COMMAND::NONE;
   }

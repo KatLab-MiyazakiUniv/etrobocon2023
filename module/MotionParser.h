@@ -19,6 +19,11 @@
 #include "AngleRotation.h"
 #include "Sleeping.h"
 #include "EdgeChanging.h"
+#include "InCrossStraight.h"
+#include "InCrossLeft.h"
+#include "InCrossRight.h"
+#include "DirectionChanger.h"
+#include "ToCrossMotion.h"
 #include "StringOperator.h"
 
 enum class COMMAND {
@@ -33,6 +38,11 @@ enum class COMMAND {
   AU,  // アームを上げる
   AD,  // アームを下げる
   XR,  // 角度補正回頭
+  IS,  // サークルの交点から交点までの直進
+  IL,  // 交点内移動（左折）
+  IR,  // 交点内移動（右折）
+  DC,  // 方向転換
+  TC,  // 交点サークル間移動
   NONE
 };
 

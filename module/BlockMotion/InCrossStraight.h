@@ -13,12 +13,15 @@
 class InCrossStraight : public BlockMotion {
  public:
   // コンストラクタ
-  InCrossStraight();
+  InCrossStraight(double _targetSpeed);
 
   /**
    * @brief 交点サークル上を前に進む
    */
   void runForward(void);
+
+  private:
+    double targetSpeed;  // 目標速度[mm/s]
 };
 
 #endif
