@@ -146,7 +146,7 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
           isLeftEdge);                                                 // エッジ
 
       motionList.push_back(tc);          // 動作リストに追加
-    } else if(command == COMMAND::CM) {  // サークルの交点から交点へ移動
+    } else if(command == COMMAND::CM) {  // サークルの交点から直線の中点へ移動
       CrossToMid* cm
           = new CrossToMid(ColorJudge::stringToColor(params[1]),  // 目標色
                            atof(params[2]),                       // 目標速度 [mm/s]
@@ -157,7 +157,7 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
                            atoi(params[8]));  // 設置動作の直前方向から見て回頭する角度
 
       motionList.push_back(cm);          // 動作リストに追加
-    } else if(command == COMMAND::MM) {  // サークルの交点から交点へ移動
+    } else if(command == COMMAND::MM) {  // サークル間直線の中点から別の直線の中点へ移動
       MidToMid* mm
           = new MidToMid(ColorJudge::stringToColor(params[1]),  // 目標色
                          atof(params[2]),                       // 目標速度 [mm/s]
