@@ -6,7 +6,9 @@
 
 #include "BlockPivotTurn.h"
 
-BlockPivotTurn::BlockPivotTurn(bool _isClockwise) : BlockMotion(2.0, 1.41){}
+using namespace std;
+
+BlockPivotTurn::BlockPivotTurn(bool _isClockwise) : BlockMotion(2.0, 1.41) {}
 
 void BlockPivotTurn::setBlockPivotTurn()
 {

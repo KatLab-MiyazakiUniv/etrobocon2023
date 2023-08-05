@@ -112,27 +112,62 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
     }
     */
     else if(command == COMMAND::IS) {  // サークルの交点から交点までの直進
-      InCrossStraight* is = new InCrossStraight(atof(params[1]));
+      InCrossStraight* is = new InCrossStraight(atof(params[1]));  // 目標速度 [mm/s]
 
-      motionList.push_back(is);          // 動作リストに追加
-    } else if(command == COMMAND::IL) {  // 交点内移動（左折）
-      InCrossLeft* il = new InCrossLeft(atof(params[1]));
+      motionList.push_back(is);                            // 動作リストに追加
+    } else if(command == COMMAND::IL) {                    // 交点内移動（左折）
+      InCrossLeft* il = new InCrossLeft(atof(params[1]),   // 目標距離
+                                        atof(params[2]),   // 目標速度 [mm/s]
+                                        atoi(params[3]));  // 目標ピボットターン角度
 
-      motionList.push_back(il);          // 動作リストに追加
-    } else if(command == COMMAND::IR) {  // 交点内移動（右折）
-      InCrossRight* ir = new InCrossRight(atof(params[1]));
+      motionList.push_back(il);                              // 動作リストに追加
+    } else if(command == COMMAND::IR) {                      // 交点内移動（右折）
+      InCrossRight* ir = new InCrossRight(atof(params[1]),   // 目標距離
+                                          atof(params[2]),   // 目標速度 [mm/s]
+                                          atoi(params[3]));  // 目標ピボットターン角度
 
       motionList.push_back(ir);          // 動作リストに追加
     } else if(command == COMMAND::DC) {  // 方向転換
-      DirectionChanger* dc = new DirectionChanger(ColorJudge::stringToColor(params[1]),  // 目標色
-                                                  isLeftEdge);  // エッジ
+      DirectionChanger* dc
+          = new DirectionChanger(ColorJudge::stringToColor(params[1]),  // 目標色
+                                 atof(params[2]),                       // 目標距離
+                                 atof(params[3]),                       // 目標速度 [mm/s]
+                                 isLeftEdge,                            // エッジ
+                                 atoi(params[4]),  // 回転角度（deg） -180 < angle <= 180 45度刻み
+                                 atoi(params[5]));  // 設置動作の直前方向から見て回頭する角度
 
       motionList.push_back(dc);          // 動作リストに追加
     } else if(command == COMMAND::TC) {  // 交点サークル間移動
-      ToCrossMotion* tc = new ToCrossMotion(ColorJudge::stringToColor(params[1]),  // 目標色
-                                            isLeftEdge);                           // エッジ
+      ToCrossMotion* tc = new ToCrossMotion(
+          ColorJudge::stringToColor(params[1]),                        // 目標色
+          atof(params[2]),                                             // 目標速度 [mm/s]
+          targetBrightness + atoi(params[3]),                          // 目標輝度 + 調整
+          PidGain(atof(params[4]), atof(params[5]), atof(params[6])),  // PIDゲイン
+          isLeftEdge);                                                 // エッジ
 
-      motionList.push_back(tc);  // 動作リストに追加
+      motionList.push_back(tc);          // 動作リストに追加
+    } else if(command == COMMAND::CM) {  // サークルの交点から交点へ移動
+      CrossToMid* cm
+          = new CrossToMid(ColorJudge::stringToColor(params[1]),  // 目標色
+                           atof(params[2]),                       // 目標速度 [mm/s]
+                           targetBrightness + atoi(params[3]),    // 目標輝度 + 調整
+                           PidGain(atof(params[4]), atof(params[5]), atof(params[6])),  // PIDゲイン
+                           isLeftEdge,                                                  // エッジ
+                           atoi(params[7]),  // 回転角度（deg） -180 < angle <= 180 45度刻み
+                           atoi(params[8]));  // 設置動作の直前方向から見て回頭する角度
+
+      motionList.push_back(cm);          // 動作リストに追加
+    } else if(command == COMMAND::MM) {  // サークルの交点から交点へ移動
+      MidToMid* mm
+          = new MidToMid(ColorJudge::stringToColor(params[1]),  // 目標色
+                         atof(params[2]),                       // 目標速度 [mm/s]
+                         targetBrightness + atoi(params[3]),    // 目標輝度 + 調整
+                         PidGain(atof(params[4]), atof(params[5]), atof(params[6])),  // PIDゲイン
+                         isLeftEdge,                                                  // エッジ
+                         atoi(params[7]),  // 回転角度（deg） -180 < angle <= 180 45度刻み
+                         atoi(params[8]));  // 設置動作の直前方向から見て回頭する角度
+
+      motionList.push_back(mm);  // 動作リストに追加
     } else {                     // 未定義のコマンドの場合
       snprintf(buf, BUF_SIZE, "%s:%d: '%s' is undefined command", commandFilePath, lineNum,
                params[0]);
@@ -175,6 +210,10 @@ COMMAND MotionParser::convertCommand(char* str)
     return COMMAND::IS;
   } else if(strcmp(str, "IL") == 0) {  // 文字列がILの場合
     return COMMAND::IL;
+  } else if(strcmp(str, "CM") == 0) {  // 文字列がCMの場合
+    return COMMAND::CM;
+  } else if(strcmp(str, "MM") == 0) {  // 文字列がMMの場合
+    return COMMAND::MM;
   } else {  // 想定していない文字列が来た場合
     return COMMAND::NONE;
   }

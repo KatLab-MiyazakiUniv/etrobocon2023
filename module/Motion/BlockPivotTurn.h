@@ -29,7 +29,7 @@ class BlockPivotTurn : public BlockMotion {
 
  private:
   // BlockThrower blockThrower;
-  bool isClockwise;    // 回頭方向 true:時計回り, false:反時計回り
+  bool isClockwise;  // 回頭方向 true:時計回り, false:反時計回り
   Timer timer;
 
   const double TREAD = 140;  // 走行体のトレッド幅（両輪の間の距離）[mm]

@@ -6,6 +6,8 @@
 
 #include "BlockMotion.h"
 
+using namespace std;
+
 BlockMotion::BlockMotion(double time, double risk) : MOTION_TIME(time), FAILURE_RISK(risk){};
 
 // 動作時間の取得

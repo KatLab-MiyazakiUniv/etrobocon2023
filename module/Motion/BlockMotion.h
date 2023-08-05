@@ -7,7 +7,9 @@
 #ifndef BLOCK_MOTION_H
 #define BLOCK_MOTION_H
 
-class BlockMotion {
+#include "CompositeMotion.h"
+
+class BlockMotion : public CompositeMotion {
  public:
   // コンストラクタ
   BlockMotion(double time = 0, double risk = 0);
