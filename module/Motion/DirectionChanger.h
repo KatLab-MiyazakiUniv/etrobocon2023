@@ -18,7 +18,7 @@
 class DirectionChanger : public BlockMotion {
  public:
   DirectionChanger(COLOR _targetColor, double _targetDistance, double _targetSpeed,
-                   bool& _isLeftEdge, int _rotateAngle, int _changeAngle);
+                   int _targetAngle, bool _isClockwise, bool& _isLeftEdge, bool _nextEdge);
 
   /**
    * @brief 方向転換する
@@ -39,9 +39,10 @@ class DirectionChanger : public BlockMotion {
   COLOR targetColor;      // 目標色
   double targetDistance;  // 目標距離
   double targetSpeed;     // 目標速度 [mm/s]
-  bool& isLeftEdge;       // エッジの左右判定(true:左エッジ, false:右エッジ)
-  int rotateAngle;        // 回転角度（deg） -180 < angle <= 180 45度刻み
-  int changeAngle;        // 設置動作の直前方向から見て回頭する角度
+  int targetAngle;        // 目標回頭角度
+  bool isClockwise;       // 回頭方向 (true:時計回り, false:反時計回り)
+  bool& isLeftEdge;       // エッジの左右判定 (true:左エッジ, false:右エッジ)
+  bool nextEdge;          // 方向転換後のエッジ
 };
 
 #endif

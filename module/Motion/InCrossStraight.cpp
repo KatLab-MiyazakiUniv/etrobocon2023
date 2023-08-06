@@ -9,9 +9,8 @@
 using namespace std;
 
 InCrossStraight::InCrossStraight(double _targetSpeed)
-  : BlockMotion(1.0, 1.12), targetSpeed(_targetSpeed)
-{
-}
+  : BlockMotion(1.0, 1.12),  // 動作時間, 失敗リスク TODO: 測定し直す
+    targetSpeed(_targetSpeed){};
 
 void InCrossStraight::run()
 {

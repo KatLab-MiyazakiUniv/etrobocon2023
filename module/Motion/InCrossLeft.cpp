@@ -9,12 +9,10 @@
 using namespace std;
 
 InCrossLeft::InCrossLeft(double _targetDistance, double _targetSpeed, int _targetAngle)
-  : BlockMotion(1.23, 1.09),
+  : BlockMotion(1.23, 1.09),  // 動作時間, 失敗リスク TODO: 測定し直す
     targetDistance(_targetDistance),
     targetSpeed(_targetSpeed),
-    targetAngle(_targetAngle)
-{
-}
+    targetAngle(_targetAngle){};
 
 void InCrossLeft::run()
 {
@@ -39,6 +37,14 @@ bool InCrossLeft::isMetPrecondition()
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
+
+  // targetDistance値が0以下の場合はwarningを出して終了する
+  if(targetDistance <= 0.0) {
+    snprintf(buf, BUF_SIZE, "The targetDistance value passed to InCrossLeft is %.2f",
+             targetDistance);
+    logger.logWarning(buf);
+    return false;
+  }
 
   // targetSpeed値が0の場合はwarningを出して終了する
   if(targetSpeed == 0.0) {

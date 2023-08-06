@@ -12,8 +12,8 @@
 
 class CrossToMid : public BlockMotion {
  public:
-  CrossToMid(COLOR _targetColor, double _targetSpeed, int _targetBrightness, const PidGain& _gain,
-             bool& _isLeftEdge, int _rotateAngle, int _changeAngle);
+  CrossToMid(COLOR _targetColor, double _targetSpeed, int _targetBrightness, int targetAngle,
+             const PidGain& _gain, bool _isClockwise, bool& _isLeftEdge, bool _nextEdge);
 
   /**
    * @brief サークルの交点から中点へ移動
@@ -31,13 +31,15 @@ class CrossToMid : public BlockMotion {
   void logRunning() override;
 
  private:
-  COLOR targetColor;     // 目標色
-  double targetSpeed;    // 目標速度 [mm/s]
-  int targetBrightness;  // 目標輝度
-  PidGain gain;          // PIDゲイン
-  bool& isLeftEdge;      // エッジの左右判定(true:左エッジ, false:右エッジ)
-  int rotateAngle;       // 回転角度（deg） -180 < angle <= 180 45度刻み
-  int changeAngle;       // 設置動作の直前方向から見て回頭する角度
+  COLOR targetColor;              // 目標色
+  double targetDistance = 125.0;  // サークル間直線の端から中点までの距離
+  double targetSpeed;             // 目標速度 [mm/s]
+  int targetBrightness;           // 目標輝度
+  int targetAngle;                // 目標回頭角度
+  PidGain gain;                   // PIDゲイン
+  bool isClockwise;               // 回頭方向 (true:時計回り, false:反時計回り)
+  bool& isLeftEdge;               // エッジの左右判定(true:左エッジ, false:右エッジ)
+  bool nextEdge;                  // 方向転換後のエッジ
 };
 
 #endif

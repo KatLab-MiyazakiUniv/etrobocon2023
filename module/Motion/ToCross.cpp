@@ -1,16 +1,16 @@
 /**
- * @file ToCrossMotion.cpp
+ * @file ToCross.cpp
  * @brief 交点サークル間移動のクラス
  * @author YKhm20020
  */
 
-#include "ToCrossMotion.h"
+#include "ToCross.h"
 
 using namespace std;
 
-ToCrossMotion::ToCrossMotion(COLOR _targetColor, double _targetSpeed, int _targetBrightness,
-                             const PidGain& _gain, bool& _isLeftEdge)
-  : BlockMotion(1.02, 1.01),
+ToCross::ToCross(COLOR _targetColor, double _targetSpeed, int _targetBrightness,
+                 const PidGain& _gain, bool& _isLeftEdge)
+  : BlockMotion(1.02, 1.01),  // 動作時間, 失敗リスク TODO: 測定し直す
     targetColor(_targetColor),
     targetSpeed(_targetSpeed),
     targetBrightness(_targetBrightness),
@@ -19,7 +19,7 @@ ToCrossMotion::ToCrossMotion(COLOR _targetColor, double _targetSpeed, int _targe
 {
 }
 
-void ToCrossMotion::run()
+void ToCross::run()
 {
   // 事前条件を判定する
   if(!isMetPrecondition()) {
@@ -32,14 +32,20 @@ void ToCrossMotion::run()
   cl.run();
 }
 
-bool ToCrossMotion::isMetPrecondition()
+bool ToCross::isMetPrecondition()
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
 
+  // 目標の色がNoneのときwarningを出して終了する
+  if(targetColor == COLOR::NONE) {
+    logger.logWarning("The targetColor passed to ToCross is NONE");
+    return false;
+  }
+
   // targetSpeed値が0の場合はwarningを出して終了する
   if(targetSpeed == 0.0) {
-    snprintf(buf, BUF_SIZE, "The targetSpeed value passed to ToCrossMotion is 0");
+    snprintf(buf, BUF_SIZE, "The targetSpeed value passed to ToCross is 0");
     logger.logWarning(buf);
     return false;
   }
@@ -47,14 +53,14 @@ bool ToCrossMotion::isMetPrecondition()
   return true;
 }
 
-void ToCrossMotion::logRunning()
+void ToCross::logRunning()
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
   const char* str = isLeftEdge ? "true" : "false";
 
   snprintf(buf, BUF_SIZE,
-           "Run ToCrossMotion (targetColor: %s, targetSpeed: %.2f, targetBrightness: %d, gain: "
+           "Run ToCross (targetColor: %s, targetSpeed: %.2f, targetBrightness: %d, gain: "
            "(%.2f,%.2f,%.2f), isLeftEdge: %s)",
            ColorJudge::colorToString(targetColor), targetSpeed, targetBrightness, gain.kp, gain.ki,
            gain.kd, str);

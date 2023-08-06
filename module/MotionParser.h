@@ -23,9 +23,8 @@
 #include "InCrossLeft.h"
 #include "InCrossRight.h"
 #include "DirectionChanger.h"
-#include "ToCrossMotion.h"
+#include "ToCross.h"
 #include "CrossToMid.h"
-#include "MidToMid.h"
 #include "StringOperator.h"
 
 enum class COMMAND {
@@ -46,7 +45,6 @@ enum class COMMAND {
   DC,  // 方向転換
   TC,  // 交点サークル間移動
   CM,  // サークルの交点から直線の中点へ移動
-  MM,  // サークル間直線の中点から別の直線の中点へ移動
   NONE
 };
 

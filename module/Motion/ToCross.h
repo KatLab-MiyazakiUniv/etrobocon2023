@@ -1,21 +1,21 @@
 /**
- * @file ToCrossMotion.h
+ * @file ToCross.h
  * @brief 交点間移動のクラス
  * @author YKhm20020
  */
 
-#ifndef TO_CROSS_MOTION_H
-#define TO_CROSS_MOTION_H
+#ifndef TO_CROSS_H
+#define TO_CROSS_H
 
 #include "ColorLineTracing.h"
 #include "ColorJudge.h"
 #include "Measurer.h"
 #include "BlockMotion.h"
 
-class ToCrossMotion : public BlockMotion {
+class ToCross : public BlockMotion {
  public:
-  ToCrossMotion(COLOR _targetColor, double _targetSpeed, int _targetBrightness,
-                const PidGain& _gain, bool& _isLeftEdge);
+  ToCross(COLOR _targetColor, double _targetSpeed, int _targetBrightness, const PidGain& _gain,
+          bool& _isLeftEdge);
 
   /**
    * @brief 交点間を移動する

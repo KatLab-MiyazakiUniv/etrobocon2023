@@ -32,12 +32,12 @@ class InCrossRight : public BlockMotion {
   void logRunning() override;
 
  private:
-  double targetDistance = 25.0;
-  double targetSpeed;  // 目標速度 [mm/s]
-  int targetAngle = 74;
-  bool isClockwise = true;  // ピボットターンの方向は右回り
-  bool isLeftEdge = false;  // ピボットターン前のエッジは右
-  bool nextEdge = true;     // ピボットターン後のエッジを左に変更
+  double targetDistance = 25.0;  // 目標距離
+  double targetSpeed;            // 目標速度 [mm/s]
+  int targetAngle = 74;          // 目標回頭角度
+  bool isClockwise = true;       // ピボットターンの方向は右回り
+  bool isLeftEdge = false;       // ピボットターン前のエッジは右
+  bool nextEdge = true;          // ピボットターン後のエッジを左に変更
 };
 
 #endif
