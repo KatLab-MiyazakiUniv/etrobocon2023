@@ -1,6 +1,6 @@
 """コースの直線に対する機体の角度算出するモジュール.
 
-@author: aridome222 
+@author: aridome222
 """
 
 import datetime

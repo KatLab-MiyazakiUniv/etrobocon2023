@@ -70,7 +70,7 @@ class Calibrator:
 
         h, w = img.shape[:2]
         top_coordinate = self.__get_marker_mean(ids, corners, 1)
-        
+
         for i, id in enumerate(ids):
             # マーカーのインデックス検索
             if (id[0] == 1):

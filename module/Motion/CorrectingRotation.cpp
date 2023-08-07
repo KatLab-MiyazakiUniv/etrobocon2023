@@ -39,15 +39,14 @@ void CorrectingRotation::run()
    * シミュレータ環境ではpopenが使えないため，
    * ファイルに出力して読み込む
    */
-  FILE* fp = fopen("/home/et2023/work/RasPike/sdk/workspace/etrobocon2023/result.txt", "r");
+  FILE* fp = fopen("./etrobocon2023/result.txt", "r");
   char output[8];  // rear_camera.shの出力結果を保持する領域
   char cmd[1024];
   snprintf(cmd, 1024,
-           "bash ./etrobocon2023/scripts/rear_camera.sh %d > "
-           "/home/et2023/work/RasPike/sdk/workspace/etrobocon2023/result.txt",
+           "bash ./etrobocon2023/scripts/rear_camera.sh %d > ./etrobocon2023/result.txt",
            ANGLE_SERVER_PORT);
   system(cmd);
-  if((fp = fopen("/home/et2023/work/RasPike/sdk/workspace/etrobocon2023/result.txt", "r"))
+  if((fp = fopen("./etrobocon2023/result.txt", "r"))
      == NULL) {
     // コマンドを実行できなかった場合Warningを出して終了する
     logger.logWarning("Could not open \"./result.txt\"");
