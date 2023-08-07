@@ -8,8 +8,8 @@
 
 using namespace std;
 
-CameraAction::CameraAction(bool _isClockwis, int _preTargetAngle, int _postTargetAngle)
-  : isClockwis(_isClockwis), preTargetAngle(_preTargetAngle), postTargetAngle(_postTargetAngle){};
+CameraAction::CameraAction(bool _isClockwise, int _preTargetAngle, int _postTargetAngle)
+  : isClockwise(_isClockwise), preTargetAngle(_preTargetAngle), postTargetAngle(_postTargetAngle){};
 
 void CameraAction::run()
 {
@@ -20,8 +20,8 @@ void CameraAction::run()
     return;
   }
 
-  AngleRotation preAR(preTargetAngle, rotationSpeed, isClockwis);
-  AngleRotation postAR(postTargetAngle, rotationSpeed, !isClockwis);
+  AngleRotation preAR(preTargetAngle, rotationSpeed, isClockwise);
+  AngleRotation postAR(postTargetAngle, rotationSpeed, !isClockwise);
 
   // 撮影のための回頭をする
   preAR.run();
@@ -70,7 +70,7 @@ void CameraAction::logRunning()
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
 
-  snprintf(buf, BUF_SIZE, "Run CameraAction (isClockwis, preTargetAngle, postTargetAngle)",
-           isClockwis, preTargetAngle, postTargetAngle);
+  snprintf(buf, BUF_SIZE, "Run CameraAction (isClockwise, preTargetAngle, postTargetAngle)",
+           isClockwise, preTargetAngle, postTargetAngle);
   logger.log(buf);
 }
