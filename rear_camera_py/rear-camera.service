@@ -1,5 +1,5 @@
 # @brief etrobocon2022のリアカメラシステムServiceのUnitファイル
-# @author Takahiro55555
+# @author aridome222
 #
 # References:
 #   - [これからSystemd入門する - Qiita](https://qiita.com/bluesDD/items/eaf14408d635ffd55a18)
@@ -59,7 +59,7 @@ After=network.target
 
 [Service]
 # 変数
-Environment=SCRIPT_PATH=/home/katlab/work/RasPike/sdk/workspace/etrobocon2022/scripts/start_rear_camera.sh
+Environment=SCRIPT_PATH=/home/et2023/work/RasPike/sdk/workspace/etrobocon2023/scripts/start_rear_camera.sh
 Environment=PORT=10338
 
 # 実行コマンド

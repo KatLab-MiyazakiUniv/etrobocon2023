@@ -1,4 +1,7 @@
-"""TCPサーバを起動し、リクエストに応じて登録されたコールバック関数を実行するモジュール."""
+"""TCPサーバを起動し、リクエストに応じて登録されたコールバック関数を実行するモジュール.
+
+@author aridome222
+"""
 
 import socket
 from typing import Callable
@@ -19,7 +22,7 @@ class AngleServer:
         server_port: int = 10338,
         listen_num: int = 127,
         buf_size: int = 1024,
-        debug: bool = False
+        debug: bool = True
     ) -> None:
         """コンストラクタ.
 

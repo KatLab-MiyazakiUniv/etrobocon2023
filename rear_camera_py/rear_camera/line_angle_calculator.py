@@ -1,6 +1,6 @@
 """コースの直線に対する機体の角度算出するモジュール.
 
-@author: Takahiro55555 kawanoichi
+@author: aridome222 
 """
 
 import datetime
@@ -23,7 +23,7 @@ class LineAngleCalculator:
         trans_mat_file: str = "rear_camera_param.npy",
         distance_file: str = "rear_camera_distance_param.json",
         running_body_to_4_ArUco_center: float = 312.5,
-        debug: bool = False,
+        debug: bool = True,
         debug_dir="debug"
     ) -> None:
         """コンストラクタ.

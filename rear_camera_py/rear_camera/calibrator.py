@@ -1,6 +1,6 @@
 """Arucoマーカを用いたリアカメラのキャリブレーションを行うモジュール.
 
-@author Takahiro55555
+@author aridome222
 """
 
 import datetime
@@ -93,17 +93,16 @@ class Calibrator:
         #  ただし、射影変換後の画像下部より更に下の部分に走行体の原点が存在することに留意すること.
         #  また、現実の座標系と画像の座標の差異にも留意すること.
         distance_from_center_52_5mm = h/20
-        height_offset_from_center = h/2.5
+        height_offset_from_center = 200
 
         # 上記正方形の射影変換後の画像における中心座標を求める(pix)
         cx, cy = w/2, h/2 + height_offset_from_center
         target_coordinates = np.float32(
-            [[cx, cy-distance_from_center_52_5mm],
-             [cx, cy+distance_from_center_52_5mm],
-             [cx-distance_from_center_52_5mm, cy],
-             [cx+distance_from_center_52_5mm, cy]])
-        # trans_mat = cv2.getPerspectiveTransform(
-        #     frame_coordinates, target_coordinates)
+            [[0+590*1.33, 0+590*1.0],
+             [1640-590*1.33, 0+590*1.0],
+             [1640-590*1.33, 1232-590*1.0],
+             [0+590*1.33, 1232-590*1.0]])
+        print(target_coordinates)
         trans_mat = cv2.getPerspectiveTransform(
             frame_coordinates, target_coordinates)
         return trans_mat, distance_from_center_52_5mm, height_offset_from_center
