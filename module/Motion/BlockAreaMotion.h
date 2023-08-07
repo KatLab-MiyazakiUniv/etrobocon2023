@@ -1,5 +1,5 @@
 /**
- * @file BlockMotion.h
+ * @file BlockAreaMotion.h
  * @brief ブロックエリア内動作の親クラス
  * @author YKhm20020
  */
@@ -9,10 +9,10 @@
 
 #include "CompositeMotion.h"
 
-class BlockMotion : public CompositeMotion {
+class BlockAreaMotion : public CompositeMotion {
  public:
   // コンストラクタ
-  BlockMotion(double time = 0, double risk = 0);
+  BlockAreaMotion(double time = 0, double risk = 0);
 
   /**
    * @brief 動作時間を取得する

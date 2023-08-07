@@ -10,7 +10,7 @@ using namespace std;
 
 ToCross::ToCross(COLOR _targetColor, double _targetSpeed, int _targetBrightness,
                  const PidGain& _gain, bool& _isLeftEdge)
-  : BlockMotion(1.02, 1.01),  // 動作時間, 失敗リスク TODO: 測定し直す
+  : BlockAreaMotion(1.02, 1.01),  // 動作時間, 失敗リスク TODO: 測定し直す
     targetColor(_targetColor),
     targetSpeed(_targetSpeed),
     targetBrightness(_targetBrightness),

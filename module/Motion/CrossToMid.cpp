@@ -8,11 +8,12 @@
 
 using namespace std;
 
-CrossToMid::CrossToMid(COLOR _targetColor, double _targetSpeed, int _targetBrightness,
-                       int _targetAngle, const PidGain& _gain, bool _isClockwise, bool& _isLeftEdge,
-                       bool _nextEdge)
-  : BlockMotion(1.02, 1.01),  // 動作時間, 失敗リスク TODO: 測定し直す
+CrossToMid::CrossToMid(COLOR _targetColor, double _targetDistance, double _targetSpeed,
+                       int _targetBrightness, int _targetAngle, const PidGain& _gain,
+                       bool _isClockwise, bool& _isLeftEdge, bool _nextEdge)
+  : BlockAreaMotion(1.02, 1.01),  // 動作時間, 失敗リスク TODO: 測定し直す
     targetColor(_targetColor),
+    targetDistance(_targetDistance),
     targetSpeed(_targetSpeed),
     targetBrightness(_targetBrightness),
     targetAngle(_targetAngle),
@@ -28,12 +29,21 @@ void CrossToMid::run()
     return;
   }
 
-  DirectionChanger dc(targetColor, targetDistance, targetSpeed, targetAngle, isClockwise,
-                      isLeftEdge, nextEdge);
   DistanceLineTracing dl(targetDistance, targetSpeed, targetBrightness, gain, isLeftEdge);
 
   // サークル内移動
-  dc.run();
+  if(targetAngle >= 0 && targetAngle <= 5) {  // 回頭角度が0度から5度の間であれば直進
+    InCrossStraight is(targetDistance, targetSpeed);
+    is.run();
+
+  } else if(isClockwise == false) {  // 左に回頭するなら左折
+    InCrossLeft il(targetDistance, targetSpeed, targetAngle);
+    il.run();
+
+  } else {  // 右に回頭するなら右折
+    InCrossRight ir(targetDistance, targetSpeed, targetAngle);
+    ir.run();
+  }
 
   // 交点から中点までライントレース
   dl.run();
@@ -57,8 +67,8 @@ bool CrossToMid::isMetPrecondition()
     return false;
   }
 
-  // targetAngleが0以下の場合はwarningを出して終了する
-  if(targetAngle <= 0 || targetAngle >= 360) {
+  // targetAngleが0未満の場合はwarningを出して終了する
+  if(targetAngle < 0 || targetAngle > 360) {
     snprintf(buf, BUF_SIZE, "The targetAngle value passed to CrossToMid is %d", targetAngle);
     logger.logWarning(buf);
     return false;

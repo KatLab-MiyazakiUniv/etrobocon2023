@@ -7,13 +7,20 @@
 #ifndef CROSS_TO_MID_H
 #define CROSS_TO_MID_H
 
-#include "DirectionChanger.h"
+#include "InCrossStraight.h"
+#include "InCrossLeft.h"
+#include "InCrossRight.h"
+#include "ColorJudge.h"
 #include "DistanceLineTracing.h"
 
-class CrossToMid : public BlockMotion {
+class CrossToMid : public BlockAreaMotion {
  public:
-  CrossToMid(COLOR _targetColor, double _targetSpeed, int _targetBrightness, int targetAngle,
-             const PidGain& _gain, bool _isClockwise, bool& _isLeftEdge, bool _nextEdge);
+  /**
+   * コンストラクタ
+   */
+  CrossToMid(COLOR _targetColor, double _targetDistance, double _targetSpeed, int _targetBrightness,
+             int targetAngle, const PidGain& _gain, bool _isClockwise, bool& _isLeftEdge,
+             bool _nextEdge);
 
   /**
    * @brief サークルの交点から中点へ移動

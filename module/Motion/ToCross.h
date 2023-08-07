@@ -10,10 +10,13 @@
 #include "ColorLineTracing.h"
 #include "ColorJudge.h"
 #include "Measurer.h"
-#include "BlockMotion.h"
+#include "BlockAreaMotion.h"
 
-class ToCross : public BlockMotion {
+class ToCross : public BlockAreaMotion {
  public:
+  /**
+   * コンストラクタ
+   */
   ToCross(COLOR _targetColor, double _targetSpeed, int _targetBrightness, const PidGain& _gain,
           bool& _isLeftEdge);
 

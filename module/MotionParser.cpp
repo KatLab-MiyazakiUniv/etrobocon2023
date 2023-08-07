@@ -112,32 +112,22 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
     }
     */
     else if(command == COMMAND::IS) {  // サークルの交点から交点までの直進
-      InCrossStraight* is = new InCrossStraight(atof(params[1]));  // 目標速度 [mm/s]
+      InCrossStraight* is = new InCrossStraight(atof(params[1]),   // 目標距離
+                                                atof(params[2]));  // 目標速度 [mm/s]
 
       motionList.push_back(is);                            // 動作リストに追加
     } else if(command == COMMAND::IL) {                    // 交点内移動（左折）
       InCrossLeft* il = new InCrossLeft(atof(params[1]),   // 目標距離
                                         atof(params[2]),   // 目標速度 [mm/s]
-                                        atoi(params[3]));  // 目標ピボットターン角度
+                                        atoi(params[3]));  // 目標回頭角度
 
       motionList.push_back(il);                              // 動作リストに追加
     } else if(command == COMMAND::IR) {                      // 交点内移動（右折）
       InCrossRight* ir = new InCrossRight(atof(params[1]),   // 目標距離
                                           atof(params[2]),   // 目標速度 [mm/s]
-                                          atoi(params[3]));  // 目標ピボットターン角度
+                                          atoi(params[3]));  // 目標回頭角度
 
       motionList.push_back(ir);          // 動作リストに追加
-    } else if(command == COMMAND::DC) {  // 方向転換
-      DirectionChanger* dc = new DirectionChanger(
-          ColorJudge::stringToColor(params[1]),  // 目標色
-          atof(params[2]),                       // 目標距離
-          atof(params[3]),                       // 目標速度 [mm/s]
-          atoi(params[4]),                       // 目標回頭角度
-          convertBool(params[0], params[5]),  // 回頭方向 (true:時計回り, false:反時計回り)
-          isLeftEdge,                         // エッジ
-          convertBool(params[0], params[6]));  // 切り替え後のエッジ
-
-      motionList.push_back(dc);          // 動作リストに追加
     } else if(command == COMMAND::TC) {  // 交点サークル間移動
       ToCross* tc
           = new ToCross(ColorJudge::stringToColor(params[1]),  // 目標色
@@ -150,13 +140,14 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
     } else if(command == COMMAND::CM) {  // サークルの交点から直線の中点へ移動
       CrossToMid* cm = new CrossToMid(
           ColorJudge::stringToColor(params[1]),                        // 目標色
-          atof(params[2]),                                             // 目標速度 [mm/s]
-          targetBrightness + atoi(params[3]),                          // 目標輝度 + 調整
-          atoi(params[4]),                                             // 目標回頭角度
-          PidGain(atof(params[5]), atof(params[6]), atof(params[7])),  // PIDゲイン
-          convertBool(params[0], params[8]),  // 回頭方向 (true:時計回り, false:反時計回り)
+          atof(params[2]),                                             // 目標距離
+          atof(params[3]),                                             // 目標速度 [mm/s]
+          targetBrightness + atoi(params[4]),                          // 目標輝度 + 調整
+          atoi(params[5]),                                             // 目標回頭角度
+          PidGain(atof(params[6]), atof(params[7]), atof(params[8])),  // PIDゲイン
+          convertBool(params[0], params[9]),  // 回頭方向 (true:時計回り, false:反時計回り)
           isLeftEdge,                         // エッジ
-          convertBool(params[0], params[9]));  // 切り替え後のエッジ
+          convertBool(params[0], params[10]));  // 切り替え後のエッジ
 
       motionList.push_back(cm);  // 動作リストに追加
     } else {                     // 未定義のコマンドの場合

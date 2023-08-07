@@ -10,10 +10,13 @@
 #include "AngleRotation.h"
 #include "DistanceStraight.h"
 #include "EdgeChanging.h"
-#include "BlockMotion.h"
+#include "BlockAreaMotion.h"
 
-class InCrossLeft : public BlockMotion {
+class InCrossLeft : public BlockAreaMotion {
  public:
+  /**
+   * コンストラクタ
+   */
   InCrossLeft(double _targetDistance, double _targetSpeed, int _targetAngle);
 
   /**
@@ -34,10 +37,10 @@ class InCrossLeft : public BlockMotion {
  private:
   double targetDistance = 25.0;  // 目標距離
   double targetSpeed;            // 目標速度 [mm/s]
-  int targetAngle = 74;          // 目標ピボットターン角度
-  bool isClockwise = false;      // ピボットターンの方向は左回り
-  bool isLeftEdge = true;        // ピボットターン前のエッジは左
-  bool nextEdge = false;         // ピボットターン後のエッジを右に変更
+  int targetAngle = 74;          // 目標回頭角度
+  bool isClockwise = false;      // 回頭の方向は左回り
+  bool isLeftEdge = true;        // 回頭前のエッジは左
+  bool nextEdge = false;         // 回頭後のエッジを右に変更
 };
 
 #endif

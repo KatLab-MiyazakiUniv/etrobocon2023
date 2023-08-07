@@ -8,12 +8,14 @@
 #define IN_CROSS_STRAIGHT_H
 
 #include "DistanceStraight.h"
-#include "BlockMotion.h"
+#include "BlockAreaMotion.h"
 
-class InCrossStraight : public BlockMotion {
+class InCrossStraight : public BlockAreaMotion {
  public:
-  // コンストラクタ
-  InCrossStraight(double _targetSpeed);
+  /**
+   * コンストラクタ
+   */
+  InCrossStraight(double _targetDistance, double _targetSpeed);
 
   /**
    * @brief 交点サークル上を前に進む

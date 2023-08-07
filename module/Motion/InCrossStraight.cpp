@@ -8,8 +8,9 @@
 
 using namespace std;
 
-InCrossStraight::InCrossStraight(double _targetSpeed)
-  : BlockMotion(1.0, 1.12),  // 動作時間, 失敗リスク TODO: 測定し直す
+InCrossStraight::InCrossStraight(double _targetDistance, double _targetSpeed)
+  : BlockAreaMotion(1.0, 1.12),  // 動作時間, 失敗リスク TODO: 測定し直す
+    targetDistance(_targetDistance),
     targetSpeed(_targetSpeed){};
 
 void InCrossStraight::run()
@@ -29,6 +30,14 @@ bool InCrossStraight::isMetPrecondition()
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
+
+  // targetDistance値が0以下の場合はwarningを出して終了する
+  if(targetDistance <= 0.0) {
+    snprintf(buf, BUF_SIZE, "The targetDistance value passed to InCrossStraight is %.2f",
+             targetDistance);
+    logger.logWarning(buf);
+    return false;
+  }
 
   // targetSpeed値が0の場合はwarningを出して終了する
   if(targetSpeed == 0.0) {

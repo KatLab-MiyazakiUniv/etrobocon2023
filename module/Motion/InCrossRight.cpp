@@ -9,7 +9,7 @@
 using namespace std;
 
 InCrossRight::InCrossRight(double _targetDistance, double _targetSpeed, int _targetAngle)
-  : BlockMotion(1.23, 1.09),  // 動作時間, 失敗リスク TODO: 測定し直す
+  : BlockAreaMotion(1.23, 1.09),  // 動作時間, 失敗リスク TODO: 測定し直す
     targetDistance(_targetDistance),
     targetSpeed(_targetSpeed),
     targetAngle(_targetAngle){};
@@ -25,9 +25,9 @@ void InCrossRight::run()
   AngleRotation rotation(targetAngle, targetSpeed, isClockwise);
   EdgeChanging ec(isLeftEdge, nextEdge);
 
-  // ピボットターン後の位置を調整するため、直進する
+  // 回頭後の位置を調整するため、直進する
   ds.run();
-  // 右に90度ピボットターンする
+  // 右に90度回頭する
   rotation.run();
   // エッジを左にする
   ec.run();
