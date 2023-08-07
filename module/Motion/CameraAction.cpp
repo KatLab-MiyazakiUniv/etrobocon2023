@@ -13,10 +13,8 @@ CameraAction::CameraAction(bool _isClockwise, int _preTargetAngle, int _postTarg
 
 void CameraAction::run()
 {
-  bool cameraActionSkipFlag = false;
-
   // 事前条件を判定する
-  if(!isMetPrecondition(cameraActionSkipFlag)) {
+  if(!isMetPrecondition()) {
     return;
   }
 
@@ -36,7 +34,7 @@ void CameraAction::run()
   postAR.run();
 }
 
-bool CameraAction::isMetPrecondition(bool cameraActionSkipFlag)
+bool CameraAction::isMetPrecondition()
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
@@ -69,8 +67,10 @@ void CameraAction::logRunning()
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
+  const char* isClockwisestr = isClockwise ? "true" : "false";
 
-  snprintf(buf, BUF_SIZE, "Run CameraAction (isClockwise, preTargetAngle, postTargetAngle)",
-           isClockwise, preTargetAngle, postTargetAngle);
+  snprintf(buf, BUF_SIZE,
+           "Run CameraAction (isClockwise: %s, preTargetAngle: %d, postTargetAngle: %d)",
+           isClockwisestr, preTargetAngle, postTargetAngle);
   logger.log(buf);
 }

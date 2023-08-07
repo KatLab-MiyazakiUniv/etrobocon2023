@@ -7,6 +7,7 @@
 #ifndef CAMERAACTION_H
 #define CAMERAACTION_H
 
+#include "SystemInfo.h"
 #include "CompositeMotion.h"
 #include "AngleRotation.h"
 
@@ -29,7 +30,7 @@ class CameraAction : public CompositeMotion {
   /**
    * @brief 撮影動作を行う際の事前条件判定をする
    */
-  bool isMetPrecondition(bool cameraActionSkipFlag);
+  bool isMetPrecondition();
 
   /**
    * @brief 実行のログを取る

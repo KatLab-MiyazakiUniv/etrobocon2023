@@ -191,4 +191,18 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
       return true;
     }
   }
+
+  if(strcmp(command, "CA") == 0) {         //  コマンドがCAの場合
+    if(strcmp(param, "clockwise") == 0) {  // パラメータがclockwiseの場合
+      return true;
+    } else if(strcmp(param, "anticlockwise") == 0) {  // パラメータがanticlockwiseの場合
+      return false;
+    } else {  // 想定していないパラメータが来た場合
+      logger.logWarning("Parameter before conversion must be 'clockwise' or 'anticlockwise'");
+      return true;
+    }
+  }
+
+  logger.logWarning("Using a command that is not defined in convertBool.");
+  return true;
 }
