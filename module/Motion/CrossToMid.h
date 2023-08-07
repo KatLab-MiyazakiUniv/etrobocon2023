@@ -12,15 +12,16 @@
 #include "InCrossRight.h"
 #include "ColorJudge.h"
 #include "DistanceLineTracing.h"
+#include "BlockAreaMotion.h"
 
 class CrossToMid : public BlockAreaMotion {
  public:
   /**
    * コンストラクタ
    */
-  CrossToMid(COLOR _targetColor, double _targetDistance, double _targetSpeed, int _targetBrightness,
-             int targetAngle, const PidGain& _gain, bool _isClockwise, bool& _isLeftEdge,
-             bool _nextEdge);
+  CrossToMid(COLOR _targetColor, double _targetDistance, double _dlTargetSpeed,
+             double _dsTargetSpeed, double _arTargetSpeed, int _targetBrightness, int targetAngle,
+             const PidGain& _gain, bool _isClockwise, bool& _isLeftEdge, bool _nextEdge);
 
   /**
    * @brief サークルの交点から中点へ移動
@@ -38,15 +39,17 @@ class CrossToMid : public BlockAreaMotion {
   void logRunning() override;
 
  private:
-  COLOR targetColor;              // 目標色
-  double targetDistance = 125.0;  // サークル間直線の端から中点までの距離
-  double targetSpeed;             // 目標速度 [mm/s]
-  int targetBrightness;           // 目標輝度
-  int targetAngle;                // 目標回頭角度
-  PidGain gain;                   // PIDゲイン
-  bool isClockwise;               // 回頭方向 (true:時計回り, false:反時計回り)
-  bool& isLeftEdge;               // エッジの左右判定(true:左エッジ, false:右エッジ)
-  bool nextEdge;                  // 方向転換後のエッジ
+  COLOR targetColor;      // 目標色
+  double targetDistance;  // サークル間直線の端から中点までの距離 (一昨年は125.0)
+  double dlTargetSpeed;  // 距離指定ライントレースの目標速度 [mm/s]
+  double dsTargetSpeed;  // 距離指定直進の目標速度 [mm/s]
+  double arTargetSpeed;  // 角度指定回頭の目標速度 [mm/s]
+  int targetBrightness;  // 目標輝度
+  int targetAngle;       // 目標回頭角度
+  PidGain gain;          // PIDゲイン
+  bool isClockwise;      // 回頭方向 (true:時計回り, false:反時計回り)
+  bool& isLeftEdge;      // エッジの左右判定(true:左エッジ, false:右エッジ)
+  bool nextEdge;         // 方向転換後のエッジ
 };
 
 #endif

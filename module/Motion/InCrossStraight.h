@@ -33,8 +33,8 @@ class InCrossStraight : public BlockAreaMotion {
   void logRunning() override;
 
  private:
-  double targetDistance = 100.0;  // 交点サークルの外径
-  double targetSpeed;             // 目標速度[mm/s]
+  double targetDistance;  // 交点サークルの外径 (一昨年は 100.0)
+  double targetSpeed;     // 目標速度[mm/s]
 };
 
 #endif

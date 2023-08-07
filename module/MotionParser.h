@@ -19,6 +19,7 @@
 #include "AngleRotation.h"
 #include "Sleeping.h"
 #include "EdgeChanging.h"
+#include "BlockAreaMotion.h"
 #include "InCrossStraight.h"
 #include "InCrossLeft.h"
 #include "InCrossRight.h"

@@ -8,10 +8,12 @@
 
 using namespace std;
 
-InCrossLeft::InCrossLeft(double _targetDistance, double _targetSpeed, int _targetAngle)
+InCrossLeft::InCrossLeft(double _targetDistance, double _dsTargetSpeed, double _arTargetSpeed,
+                         int _targetAngle)
   : BlockAreaMotion(1.23, 1.09),  // 動作時間, 失敗リスク TODO: 測定し直す
     targetDistance(_targetDistance),
-    targetSpeed(_targetSpeed),
+    dsTargetSpeed(_dsTargetSpeed),
+    arTargetSpeed(_arTargetSpeed),
     targetAngle(_targetAngle){};
 
 void InCrossLeft::run()
@@ -21,8 +23,8 @@ void InCrossLeft::run()
     return;
   }
 
-  DistanceStraight ds(targetDistance, targetSpeed);
-  AngleRotation rotation(targetAngle, targetSpeed, isClockwise);
+  DistanceStraight ds(targetDistance, dsTargetSpeed);
+  AngleRotation rotation(targetAngle, arTargetSpeed, isClockwise);
   EdgeChanging ec(isLeftEdge, nextEdge);
 
   // 回頭後の位置を調整するため、直進する
@@ -46,9 +48,16 @@ bool InCrossLeft::isMetPrecondition()
     return false;
   }
 
-  // targetSpeed値が0の場合はwarningを出して終了する
-  if(targetSpeed == 0.0) {
-    snprintf(buf, BUF_SIZE, "The targetSpeed value passed to InCrossLeft is 0");
+  // dsTargetSpeed値が0の場合はwarningを出して終了する
+  if(dsTargetSpeed == 0.0) {
+    snprintf(buf, BUF_SIZE, "The dsTargetSpeed value passed to InCrossLeft is 0");
+    logger.logWarning(buf);
+    return false;
+  }
+
+  // arTargetSpeed値が0の場合はwarningを出して終了する
+  if(arTargetSpeed == 0.0) {
+    snprintf(buf, BUF_SIZE, "The arTargetSpeed value passed to InCrossLeft is 0");
     logger.logWarning(buf);
     return false;
   }
@@ -71,8 +80,9 @@ void InCrossLeft::logRunning()
   const char* nextEdgeStr = nextEdge ? "true" : "false";
 
   snprintf(buf, BUF_SIZE,
-           "Run InCrossLeft (targetDistance: %.2f, targetSpeed: %.2f, targetAngle: %d, isLeftEdge: "
+           "Run InCrossLeft (targetDistance: %.2f, dsTargetSpeed: %.2f, arTargetSpeed: %.2f, "
+           "targetAngle: %d, isLeftEdge: "
            "%s, nextEdge: %s)",
-           targetDistance, targetSpeed, targetAngle, isLeftEdgeStr, nextEdgeStr);
+           targetDistance, dsTargetSpeed, arTargetSpeed, targetAngle, isLeftEdgeStr, nextEdgeStr);
   logger.log(buf);
 }

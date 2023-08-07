@@ -15,9 +15,7 @@ ToCross::ToCross(COLOR _targetColor, double _targetSpeed, int _targetBrightness,
     targetSpeed(_targetSpeed),
     targetBrightness(_targetBrightness),
     gain(_gain),
-    isLeftEdge(_isLeftEdge)
-{
-}
+    isLeftEdge(_isLeftEdge){};
 
 void ToCross::run()
 {
