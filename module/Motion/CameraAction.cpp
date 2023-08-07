@@ -13,33 +13,30 @@ CameraAction::CameraAction(bool _isClockwis, int _preTargetAngle, int _postTarge
 
 void CameraAction::run()
 {
+  bool cameraActionSkipFlag = false;
+
   // 事前条件を判定する
-  if(!isMetPrecondition()) {
+  if(!isMetPrecondition(cameraActionSkipFlag)) {
     return;
   }
 
-  bool cameraActionFlag = false;
+  AngleRotation preAR(preTargetAngle, rotationSpeed, isClockwis);
+  AngleRotation postAR(postTargetAngle, rotationSpeed, !isClockwis);
 
-  // 撮影終了フラグがtrueの場合は撮影動作をスキップする
-  if(cameraActionFlag == false) {
-    AngleRotation preAR(preTargetAngle, rotationSpeed, isClockwis);
-    AngleRotation postAR(postTargetAngle, rotationSpeed, !isClockwis);
+  // 撮影のための回頭をする
+  preAR.run();
 
-    // 撮影のための回頭をする
-    preAR.run();
+  // リアカメラで画像を取得する
+  // 撮影に際してディレクトリ移動も行う
+  char cmd[256];
+  snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make image && cd ../..");
+  system(cmd);
 
-    // リアカメラで画像を取得する
-    // 撮影に際してディレクトリ移動も行う
-    char cmd[256];
-    snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make image && cd ../..");
-    system(cmd);
-
-    // 黒線復帰のための回頭をする
-    postAR.run();
-  }
+  // 黒線復帰のための回頭をする
+  postAR.run();
 }
 
-bool CameraAction::isMetPrecondition()
+bool CameraAction::isMetPrecondition(bool cameraActionSkipFlag)
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
@@ -59,6 +56,12 @@ bool CameraAction::isMetPrecondition()
     return false;
   }
 
+  // 撮影終了フラグがtrueの場合は撮影動作をスキップする
+  if(cameraActionSkipFlag == true) {
+    snprintf(buf, BUF_SIZE, "The value of cameraActionSkipFlag is true.");
+    logger.logHighlight(buf);
+    return false;
+  }
   return true;
 }
 

@@ -29,7 +29,7 @@ class CameraAction : public CompositeMotion {
   /**
    * @brief 撮影動作を行う際の事前条件判定をする
    */
-  bool isMetPrecondition();
+  bool isMetPrecondition(bool cameraActionSkipFlag);
 
   /**
    * @brief 実行のログを取る
