@@ -1,6 +1,6 @@
 /**
  * @file CrossToMid.h
- * @brief サークルの交点から交点へ移動するクラス
+ * @brief サークルの交点から直線の中点へ移動するクラス
  * @author YKhm20020
  */
 
