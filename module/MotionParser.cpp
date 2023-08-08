@@ -214,8 +214,8 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
   // 末尾の改行を削除
   char* param = StringOperator::removeEOL(stringParameter);
 
-  if(strcmp(command, "AR") == 0 || strcmp(command, "CM")) {  //  コマンドがAR, CMの場合
-    if(strcmp(param, "clockwise") == 0) {                    // パラメータがclockwiseの場合
+  if(strcmp(command, "AR") == 0 || strcmp(command, "CM") == 0) {  //  コマンドがAR, CMの場合
+    if(strcmp(param, "clockwise") == 0) {  // パラメータがclockwiseの場合
       return true;
     } else if(strcmp(param, "anticlockwise") == 0) {  // パラメータがanticlockwiseの場合
       return false;
@@ -225,8 +225,8 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
     }
   }
 
-  if(strcmp(command, "EC") == 0 || strcmp(command, "CM")) {  //  コマンドがEC, CMの場合
-    if(strcmp(param, "left") == 0) {                         // パラメータがleftの場合
+  if(strcmp(command, "EC") == 0 || strcmp(command, "CM") == 0) {  //  コマンドがEC, CMの場合
+    if(strcmp(param, "left") == 0) {                              // パラメータがleftの場合
       return true;
     } else if(strcmp(param, "right") == 0) {  // パラメータがrightの場合
       return false;
