@@ -36,7 +36,7 @@ class CorrectingRotation : public Motion {
  private:
   static constexpr int NO_CORRECTION_ANGLE = 2;  // 補正免除角度(deg)
   int targetAngle;                               // 目標角度(deg) 0~89
-  int targetSpeed;                               // 目標速度[mm/s]
+  double targetSpeed;                            // 目標速度[mm/s]
   Timer timer;
 };
 

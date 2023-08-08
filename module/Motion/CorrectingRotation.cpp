@@ -20,7 +20,7 @@ void CorrectingRotation::run()
 
   // 目標速度が0.0以下の場合はwarningを出して終了する
   if(targetSpeed <= 0.0) {
-    snprintf(buf, BUF_SIZE, "The targetSpeed value passed to CorrectingRotation is %d",
+    snprintf(buf, BUF_SIZE, "The targetSpeed value passed to CorrectingRotation is %lf",
              targetSpeed);
     logger.logWarning(buf);
     return;
@@ -39,17 +39,17 @@ void CorrectingRotation::run()
    * シミュレータ環境ではpopenが使えないため，
    * ファイルに出力して読み込む
    */
-  FILE* fp = fopen("./etrobocon2023/result.txt", "r");
+  FILE* fp = fopen("./etrobocon2023/rear_camera_py/result.txt", "r");
   char output[8];  // rear_camera.shの出力結果を保持する領域
   char cmd[1024];
-  snprintf(cmd, 1024,
-           "bash ./etrobocon2023/scripts/rear_camera.sh %d > ./etrobocon2023/result.txt",
-           ANGLE_SERVER_PORT);
+  snprintf(
+      cmd, 1024,
+      "bash ./etrobocon2023/scripts/rear_camera.sh %d > ./etrobocon2023/rear_camera_py/result.txt",
+      ANGLE_SERVER_PORT);
   system(cmd);
-  if((fp = fopen("./etrobocon2023/result.txt", "r"))
-     == NULL) {
+  if((fp = fopen("./etrobocon2023/rear_camera_py/result.txt", "r")) == NULL) {
     // コマンドを実行できなかった場合Warningを出して終了する
-    logger.logWarning("Could not open \"./result.txt\"");
+    logger.logWarning("Could not open \"./etrobocon2023/rear_camera_py/result.txt\"");
     return;
   }
   // 実行結果をoutputにセット
