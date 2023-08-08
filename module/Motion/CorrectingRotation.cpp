@@ -39,17 +39,15 @@ void CorrectingRotation::run()
    * シミュレータ環境ではpopenが使えないため，
    * ファイルに出力して読み込む
    */
-  FILE* fp = fopen("./etrobocon2023/rear_camera_py/result.txt", "r");
+  FILE* fp = fopen("result.txt", "r");
   char output[8];  // rear_camera.shの出力結果を保持する領域
   char cmd[1024];
-  snprintf(
-      cmd, 1024,
-      "bash ./etrobocon2023/scripts/rear_camera.sh %d > ./etrobocon2023/rear_camera_py/result.txt",
-      ANGLE_SERVER_PORT);
+  snprintf(cmd, 1024, "bash ./etrobocon2023/scripts/rear_camera.sh %d > result.txt",
+           ANGLE_SERVER_PORT);
   system(cmd);
-  if((fp = fopen("./etrobocon2023/rear_camera_py/result.txt", "r")) == NULL) {
+  if((fp = fopen("result.txt", "r")) == NULL) {
     // コマンドを実行できなかった場合Warningを出して終了する
-    logger.logWarning("Could not open \"./etrobocon2023/rear_camera_py/result.txt\"");
+    logger.logWarning("Could not open \"./result.txt\"");
     return;
   }
   // 実行結果をoutputにセット

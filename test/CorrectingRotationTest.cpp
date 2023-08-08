@@ -20,7 +20,7 @@ namespace etrobocon2023_test {
   TEST(CorrectingRotationTest, runClockwiseToZero)
   {
     int targetAngle = 0;
-    int targetSpeed = 60;
+    double targetSpeed = 60.0;
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで-2.1を返すように書き換える
@@ -53,7 +53,7 @@ namespace etrobocon2023_test {
   TEST(CorrectingRotationTest, runAnticlockwiseToZero)
   {
     int targetAngle = 0;
-    int targetSpeed = 60;
+    double targetSpeed = 60.0;
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで5.9を返すように書き換える
@@ -84,7 +84,7 @@ namespace etrobocon2023_test {
   TEST(CorrectingRotationTest, runClockwiseTo45)
   {
     int targetAngle = 45;
-    int targetSpeed = 60;
+    double targetSpeed = 60.0;
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで-49.9を返すように書き換える
@@ -115,7 +115,7 @@ namespace etrobocon2023_test {
   TEST(CorrectingRotationTest, runAnticlockwiseTo45)
   {
     int targetAngle = 45;
-    int targetSpeed = 60;
+    double targetSpeed = 60.0;
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで50.1を返すように書き換える
@@ -146,7 +146,7 @@ namespace etrobocon2023_test {
   TEST(CorrectingRotationTest, runClockwiseTo90)
   {
     int targetAngle = 0;
-    int targetSpeed = 60;
+    double targetSpeed = 60.0;
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで87.9を返すように書き換える
@@ -177,7 +177,7 @@ namespace etrobocon2023_test {
   TEST(CorrectingRotationTest, runAnticlockwiseTo90)
   {
     int targetAngle = 0;
-    int targetSpeed = 60;
+    double targetSpeed = 60.0;
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで-85.1を返すように書き換える
@@ -208,7 +208,7 @@ namespace etrobocon2023_test {
   TEST(CorrectingRotationTest, runNoCorrecting)
   {
     int targetAngle = 0;
-    int targetSpeed = 60;
+    double targetSpeed = 60.0;
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで-2.0を返すように書き換える
@@ -238,7 +238,7 @@ namespace etrobocon2023_test {
   TEST(CorrectingRotationTest, runZerotargetSpeed)
   {
     int targetAngle = 0;
-    int targetSpeed = 0;
+    double targetSpeed = 0.0;
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで-5.0を返すように書き換える
@@ -277,7 +277,7 @@ namespace etrobocon2023_test {
   TEST(CorrectingRotationTest, runMinustargetSpeed)
   {
     int targetAngle = 0;
-    int targetSpeed = -100;
+    double targetSpeed = -100.0;
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで-5.0を返すように書き換える
@@ -316,7 +316,7 @@ namespace etrobocon2023_test {
   TEST(CorrectingRotationTest, runMinusAngle)
   {
     int targetAngle = -1;
-    int targetSpeed = 60;
+    double targetSpeed = 60.0;
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで-5.0を返すように書き換える
@@ -355,7 +355,7 @@ namespace etrobocon2023_test {
   TEST(CorrectingRotationTest, runOverAngle)
   {
     int targetAngle = 90;
-    int targetSpeed = 60;
+    double targetSpeed = 60.0;
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで-5.0を返すように書き換える
@@ -395,7 +395,7 @@ namespace etrobocon2023_test {
   TEST(CorrectingRotationTest, runReturnNone)
   {
     int targetAngle = 45;
-    int targetSpeed = 60;
+    double targetSpeed = 60.0;
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shでNoneを返すように書き換える
