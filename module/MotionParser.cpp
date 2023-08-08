@@ -214,9 +214,8 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
   // 末尾の改行を削除
   char* param = StringOperator::removeEOL(stringParameter);
 
-  if(strcmp(command, "AR") == 0 || strcmp(command, "IL") || strcmp(command, "IR")
-     || strcmp(command, "CC") || strcmp(command, "CM")) {  //  コマンドがAR, IL, IR, CM, CCの場合
-    if(strcmp(param, "clockwise") == 0) {                  // パラメータがclockwiseの場合
+  if(strcmp(command, "AR") == 0 || strcmp(command, "CM")) {  //  コマンドがAR, CMの場合
+    if(strcmp(param, "clockwise") == 0) {                    // パラメータがclockwiseの場合
       return true;
     } else if(strcmp(param, "anticlockwise") == 0) {  // パラメータがanticlockwiseの場合
       return false;
