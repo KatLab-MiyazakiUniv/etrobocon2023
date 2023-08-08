@@ -1,7 +1,7 @@
 /**
  * @file   MotionParser.cpp
  * @brief  動作コマンドファイルを解析するクラス
- * @author aridome222
+ * @author aridome222 bizyutyu
  */
 
 #include "MotionParser.h"
@@ -87,7 +87,14 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
     } else if(command == COMMAND::SL) {  // 自タスクスリープの生成
       Sleeping* sl = new Sleeping(atoi(params[1]));
 
-      motionList.push_back(sl);  // 動作リストに追加
+      motionList.push_back(sl);          // 動作リストに追加
+    } else if(command == COMMAND::CA) {  // 距離指定旋回動作の生成
+      CameraAction* ca = new CameraAction(
+          convertBool(params[0], params[1]),  // リアカメラをミニフィグに向けるための回頭方向
+          atoi(params[2]),                    // 撮影のための目標角度
+          atoi(params[3]));                   // 黒線復帰のための目標角度
+
+      motionList.push_back(ca);  // 動作リストに追加
     }
     // TODO: 後で作成する
     /*else if(command == COMMAND::DT) {  // 距離指定旋回動作の生成
@@ -149,6 +156,8 @@ COMMAND MotionParser::convertCommand(char* str)
     return COMMAND::AD;
   } else if(strcmp(str, "XR") == 0) {  // 文字列がXRの場合
     return COMMAND::XR;
+  } else if(strcmp(str, "CA") == 0) {  // 文字列がCAの場合
+    return COMMAND::CA;
   } else {  // 想定していない文字列が来た場合
     return COMMAND::NONE;
   }
@@ -182,4 +191,18 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
       return true;
     }
   }
+
+  if(strcmp(command, "CA") == 0) {         //  コマンドがCAの場合
+    if(strcmp(param, "clockwise") == 0) {  // パラメータがclockwiseの場合
+      return true;
+    } else if(strcmp(param, "anticlockwise") == 0) {  // パラメータがanticlockwiseの場合
+      return false;
+    } else {  // 想定していないパラメータが来た場合
+      logger.logWarning("Parameter before conversion must be 'clockwise' or 'anticlockwise'");
+      return true;
+    }
+  }
+
+  logger.logWarning("Using a command that is not defined in convertBool.");
+  return true;
 }
