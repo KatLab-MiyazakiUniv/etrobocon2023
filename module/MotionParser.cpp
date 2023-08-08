@@ -111,7 +111,7 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
       motionList.push_back(xr);                                          // 動作リストに追加
     }
     */
-    else if(command == COMMAND::IS) {  // サークルの交点から交点までの直進
+    else if(command == COMMAND::IS) {                              // 交点内移動（直進）
       InCrossStraight* is = new InCrossStraight(atof(params[1]),   // 目標距離
                                                 atof(params[2]));  // 目標速度 [mm/s]
 
@@ -130,16 +130,16 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
                                           atoi(params[4]));  // 目標回頭角度
 
       motionList.push_back(ir);          // 動作リストに追加
-    } else if(command == COMMAND::TC) {  // 交点サークル間移動
-      ToCross* tc
-          = new ToCross(ColorJudge::stringToColor(params[1]),  // 目標色
-                        atof(params[2]),                       // 目標速度 [mm/s]
-                        targetBrightness + atoi(params[3]),    // 目標輝度 + 調整
-                        PidGain(atof(params[4]), atof(params[5]), atof(params[6])),  // PIDゲイン
-                        isLeftEdge);                                                 // エッジ
+    } else if(command == COMMAND::CC) {  // 交点サークルから交点サークル
+      CrossToCross* cc = new CrossToCross(
+          ColorJudge::stringToColor(params[1]),                        // 目標色
+          atof(params[2]),                                             // 目標速度 [mm/s]
+          targetBrightness + atoi(params[3]),                          // 目標輝度 + 調整
+          PidGain(atof(params[4]), atof(params[5]), atof(params[6])),  // PIDゲイン
+          isLeftEdge);                                                 // エッジ
 
-      motionList.push_back(tc);          // 動作リストに追加
-    } else if(command == COMMAND::CM) {  // サークルの交点から直線の中点へ移動
+      motionList.push_back(cc);          // 動作リストに追加
+    } else if(command == COMMAND::CM) {  // 交点サークルから直線の中点
       CrossToMid* cm = new CrossToMid(
           ColorJudge::stringToColor(params[1]),  // 目標色
           atof(params[2]),                       // 目標距離
@@ -196,6 +196,10 @@ COMMAND MotionParser::convertCommand(char* str)
     return COMMAND::IS;
   } else if(strcmp(str, "IL") == 0) {  // 文字列がILの場合
     return COMMAND::IL;
+  } else if(strcmp(str, "IR") == 0) {  // 文字列がIRの場合
+    return COMMAND::IR;
+  } else if(strcmp(str, "CC") == 0) {  // 文字列がCCの場合
+    return COMMAND::CC;
   } else if(strcmp(str, "CM") == 0) {  // 文字列がCMの場合
     return COMMAND::CM;
   } else {  // 想定していない文字列が来た場合
@@ -210,8 +214,9 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
   // 末尾の改行を削除
   char* param = StringOperator::removeEOL(stringParameter);
 
-  if(strcmp(command, "AR") == 0) {         //  コマンドがARの場合
-    if(strcmp(param, "clockwise") == 0) {  // パラメータがclockwiseの場合
+  if(strcmp(command, "AR") == 0 || strcmp(command, "IL") || strcmp(command, "IR")
+     || strcmp(command, "CC") || strcmp(command, "CM")) {  //  コマンドがAR, IL, IR, CM, CCの場合
+    if(strcmp(param, "clockwise") == 0) {                  // パラメータがclockwiseの場合
       return true;
     } else if(strcmp(param, "anticlockwise") == 0) {  // パラメータがanticlockwiseの場合
       return false;
@@ -221,8 +226,8 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
     }
   }
 
-  if(strcmp(command, "EC") == 0) {    //  コマンドがECの場合
-    if(strcmp(param, "left") == 0) {  // パラメータがleftの場合
+  if(strcmp(command, "EC") == 0 || strcmp(command, "CM")) {  //  コマンドがEC, CMの場合
+    if(strcmp(param, "left") == 0) {                         // パラメータがleftの場合
       return true;
     } else if(strcmp(param, "right") == 0) {  // パラメータがrightの場合
       return false;

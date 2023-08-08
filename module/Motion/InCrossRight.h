@@ -36,10 +36,10 @@ class InCrossRight : public BlockAreaMotion {
   void logRunning() override;
 
  private:
-  double targetDistance;     // 目標距離 (一昨年は25.0)
+  double targetDistance;     // 目標距離 (25.0mm)
   double dsTargetSpeed;      // 距離指定直進の目標速度 [mm/s]
   double arTargetSpeed;      // 角度指定回頭の目標速度 [mm/s]
-  int targetAngle;           // 目標回頭角度 (一昨年は74)
+  int targetAngle;           // 目標回頭角度 (74°)
   bool isClockwise = false;  // 回頭の方向は左回り
   bool isLeftEdge = true;    // 回頭前のエッジは左
   bool nextEdge = false;     // 回頭後のエッジを右に変更

@@ -1,24 +1,24 @@
 /**
- * @file ToCross.h
- * @brief 交点間移動のクラス
+ * @file CrossToCross.h
+ * @brief 交点から交点までライントレースするクラス
  * @author YKhm20020
  */
 
-#ifndef TO_CROSS_H
-#define TO_CROSS_H
+#ifndef CROSS_TO_CROSS_H
+#define CROSS_TO_CROSS_H
 
 #include "ColorLineTracing.h"
 #include "ColorJudge.h"
 #include "Measurer.h"
 #include "BlockAreaMotion.h"
 
-class ToCross : public BlockAreaMotion {
+class CrossToCross : public BlockAreaMotion {
  public:
   /**
    * コンストラクタ
    */
-  ToCross(COLOR _targetColor, double _targetSpeed, int _targetBrightness, const PidGain& _gain,
-          bool& _isLeftEdge);
+  CrossToCross(COLOR _targetColor, double _targetSpeed, int _targetBrightness, const PidGain& _gain,
+               bool& _isLeftEdge);
 
   /**
    * @brief 交点間を移動する
