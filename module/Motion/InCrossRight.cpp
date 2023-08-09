@@ -8,13 +8,13 @@
 
 using namespace std;
 
-InCrossRight::InCrossRight(double _targetDistance, double _dsTargetSpeed, double _arTargetSpeed,
-                           int _targetAngle)
+InCrossRight::InCrossRight(double _targetDistance, double _dsTargetSpeed, int _targetAngle,
+                           double _arTargetSpeed)
   : BlockAreaMotion(1.23, 1.09),  // 動作時間, 失敗リスク TODO: 測定し直す
     targetDistance(_targetDistance),
     dsTargetSpeed(_dsTargetSpeed),
-    arTargetSpeed(_arTargetSpeed),
-    targetAngle(_targetAngle){};
+    targetAngle(_targetAngle),
+    arTargetSpeed(_arTargetSpeed){};
 
 void InCrossRight::run()
 {
@@ -80,9 +80,9 @@ void InCrossRight::logRunning()
   const char* nextEdgeStr = nextEdge ? "true" : "false";
 
   snprintf(buf, BUF_SIZE,
-           "Run InCrossRight (targetDistance: %.2f, dsTargetSpeed: %.2f, arTargetSpeed: %.2f, "
-           "targetAngle: %d, isLeftEdge: "
+           "Run InCrossRight (targetDistance: %.2f, dsTargetSpeed: %.2f, targetAngle: %d, "
+           "arTargetSpeed: %.2f, isLeftEdge: "
            "%s, nextEdge: %s)",
-           targetDistance, dsTargetSpeed, arTargetSpeed, targetAngle, isLeftEdgeStr, nextEdgeStr);
+           targetDistance, dsTargetSpeed, targetAngle, arTargetSpeed, isLeftEdgeStr, nextEdgeStr);
   logger.log(buf);
 }

@@ -1,6 +1,6 @@
 /**
  * @file CrossToMid.h
- * @brief サークルの交点から直線の中点へ移動するクラス
+ * @brief 交点サークルから直線の中点へ移動するクラス
  * @author YKhm20020
  */
 
@@ -24,7 +24,7 @@ class CrossToMid : public BlockAreaMotion {
              const PidGain& _gain, bool _isClockwise, bool& _isLeftEdge, bool _nextEdge);
 
   /**
-   * @brief サークルの交点から中点へ移動
+   * @brief 交点サークルから中点へ移動
    */
   void run() override;
 

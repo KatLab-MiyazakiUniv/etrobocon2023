@@ -1,6 +1,6 @@
 /**
  * @file CrossToMid.cpp
- * @brief サークルの交点から直線の中点へ移動するクラス
+ * @brief 交点サークルから直線の中点へ移動するクラス
  * @author YKhm20020
  */
 
@@ -9,17 +9,17 @@
 using namespace std;
 
 CrossToMid::CrossToMid(COLOR _targetColor, double _targetDistance, double _dlTargetSpeed,
-                       double _dsTargetSpeed, double _arTargetSpeed, int _targetBrightness,
-                       int _targetAngle, const PidGain& _gain, bool _isClockwise, bool& _isLeftEdge,
-                       bool _nextEdge)
+                       double _dsTargetSpeed, int _targetAngle, double _arTargetSpeed,
+                       int _targetBrightness, const PidGain& _gain, bool _isClockwise,
+                       bool& _isLeftEdge, bool _nextEdge)
   : BlockAreaMotion(1.02, 1.01),  // 動作時間, 失敗リスク TODO: 測定し直す
     targetColor(_targetColor),
     targetDistance(_targetDistance),
     dlTargetSpeed(_dlTargetSpeed),
     dsTargetSpeed(_dsTargetSpeed),
+    targetAngle(_targetAngle),
     arTargetSpeed(_arTargetSpeed),
     targetBrightness(_targetBrightness),
-    targetAngle(_targetAngle),
     gain(_gain),
     isClockwise(_isClockwise),
     isLeftEdge(_isLeftEdge),
@@ -77,7 +77,7 @@ bool CrossToMid::isMetPrecondition()
     return false;
   }
 
-  // dsTargetSpeed値が0の場合はwarningを出して終了する
+  // arTargetSpeed値が0の場合はwarningを出して終了する
   if(arTargetSpeed == 0.0) {
     snprintf(buf, BUF_SIZE, "The arTargetSpeed value passed to CrossToMid is 0");
     logger.logWarning(buf);
@@ -104,11 +104,11 @@ void CrossToMid::logRunning()
 
   snprintf(buf, BUF_SIZE,
            "Run CrossToMid (targetColor: %s, targetDistance: %.2f, dlTargetSpeed: %.2f, "
-           "dsTargetSpeed: %.2f, arTargetSpeed: %.2f"
-           "targetBrightness: %d, targetAngle: %d, gain: "
+           "dsTargetSpeed: %.2f, targetAngle: %d, arTargetSpeed: %.2f"
+           "targetBrightness: %d, gain: "
            "(%.2f,%.2f,%.2f), isClockwise: %s, isLeftEdge: %s, nextEdge: %s)",
            ColorJudge::colorToString(targetColor), targetDistance, dlTargetSpeed, dsTargetSpeed,
-           arTargetSpeed, targetBrightness, targetAngle, gain.kp, gain.ki, gain.kd, isClockwiseStr,
+           targetAngle, arTargetSpeed, targetBrightness, gain.kp, gain.ki, gain.kd, isClockwiseStr,
            isLeftEdgeStr, nextEdgeStr);
   logger.log(buf);
 }
