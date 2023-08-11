@@ -8,8 +8,12 @@
 
 using namespace std;
 
-CameraAction::CameraAction(bool _isClockwise, int _preTargetAngle, int _postTargetAngle)
-  : isClockwise(_isClockwise), preTargetAngle(_preTargetAngle), postTargetAngle(_postTargetAngle){};
+CameraAction::CameraAction(bool _target, bool _isClockwise, int _preTargetAngle,
+                           int _postTargetAngle)
+  : target(_target),
+    isClockwise(_isClockwise),
+    preTargetAngle(_preTargetAngle),
+    postTargetAngle(_postTargetAngle){};
 
 void CameraAction::run()
 {
@@ -54,11 +58,14 @@ bool CameraAction::isMetPrecondition()
     return false;
   }
 
-  // 撮影終了フラグがtrueの場合は撮影動作をスキップする
-  if(cameraActionSkipFlag == true) {
-    snprintf(buf, BUF_SIZE, "The value of cameraActionSkipFlag is true.");
-    logger.logHighlight(buf);
-    return false;
+  // 撮影対象がA（targetがtrue）の場合はフラグ確認を行う
+  if(target == true) {
+    // 撮影終了フラグがtrueの場合は撮影動作をスキップする
+    if(cameraActionSkipFlag == true) {
+      snprintf(buf, BUF_SIZE, "The value of cameraActionSkipFlag is true.");
+      logger.logHighlight(buf);
+      return false;
+    }
   }
   return true;
 }
