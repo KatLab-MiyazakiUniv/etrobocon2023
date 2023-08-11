@@ -19,6 +19,12 @@
 #include "AngleRotation.h"
 #include "Sleeping.h"
 #include "EdgeChanging.h"
+#include "BlockAreaMotion.h"
+#include "InCrossStraight.h"
+#include "InCrossLeft.h"
+#include "InCrossRight.h"
+#include "CrossToCross.h"
+#include "CrossToMid.h"
 #include "StringOperator.h"
 #include "CameraAction.h"
 
@@ -35,6 +41,11 @@ enum class COMMAND {
   AD,  // アームを下げる
   XR,  // 角度補正回頭
   CA,  // 撮影動作
+  IS,  // 交点内移動（直進）
+  IL,  // 交点内移動（左折）
+  IR,  // 交点内移動（右折）
+  CC,  // 交点サークルから交点サークル
+  CM,  // 交点サークルから直線の中点
   NONE
 };
 
