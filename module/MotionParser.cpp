@@ -1,7 +1,7 @@
 /**
  * @file   MotionParser.cpp
  * @brief  動作コマンドファイルを解析するクラス
- * @author aridome222
+ * @author aridome222 bizyutyu
  */
 
 #include "MotionParser.h"
@@ -87,7 +87,14 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
     } else if(command == COMMAND::SL) {  // 自タスクスリープの生成
       Sleeping* sl = new Sleeping(atoi(params[1]));
 
-      motionList.push_back(sl);  // 動作リストに追加
+      motionList.push_back(sl);          // 動作リストに追加
+    } else if(command == COMMAND::CA) {  // 距離指定旋回動作の生成
+      CameraAction* ca = new CameraAction(
+          convertBool(params[0], params[1]),  // リアカメラをミニフィグに向けるための回頭方向
+          atoi(params[2]),                    // 撮影のための目標角度
+          atoi(params[3]));                   // 黒線復帰のための目標角度
+
+      motionList.push_back(ca);  // 動作リストに追加
     }
     // TODO: 後で作成する
     /*else if(command == COMMAND::DT) {  // 距離指定旋回動作の生成
@@ -111,6 +118,49 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
                                                       atof(params[2]));  // 目標速度
 
       motionList.push_back(xr);  // 動作リストに追加
+    else if(command == COMMAND::IS) {                              // 交点内移動（直進）
+      InCrossStraight* is = new InCrossStraight(atof(params[1]),   // 目標距離
+                                                atof(params[2]));  // 目標速度 [mm/s]
+
+      motionList.push_back(is);                           // 動作リストに追加
+    } else if(command == COMMAND::IL) {                   // 交点内移動（左折）
+      InCrossLeft* il = new InCrossLeft(atof(params[1]),  // 目標距離
+                                        atof(params[2]),  // 距離指定直進の目標速度 [mm/s]
+                                        atoi(params[3]),  // 目標回頭角度
+                                        atof(params[4]));  // 角度指定回頭の目標速度 [mm/s]
+
+      motionList.push_back(il);                             // 動作リストに追加
+    } else if(command == COMMAND::IR) {                     // 交点内移動（右折）
+      InCrossRight* ir = new InCrossRight(atof(params[1]),  // 目標距離
+                                          atof(params[2]),  // 距離指定直進の目標速度 [mm/s]
+                                          atoi(params[3]),  // 目標回頭角度
+                                          atof(params[4]));  // 角度指定回頭の目標速度 [mm/s]
+
+      motionList.push_back(ir);          // 動作リストに追加
+    } else if(command == COMMAND::CC) {  // 交点サークルから交点サークル
+      CrossToCross* cc = new CrossToCross(
+          ColorJudge::stringToColor(params[1]),                        // 目標色
+          atof(params[2]),                                             // 目標速度 [mm/s]
+          targetBrightness + atoi(params[3]),                          // 目標輝度 + 調整
+          PidGain(atof(params[4]), atof(params[5]), atof(params[6])),  // PIDゲイン
+          isLeftEdge);                                                 // エッジ
+
+      motionList.push_back(cc);          // 動作リストに追加
+    } else if(command == COMMAND::CM) {  // 交点サークルから直線の中点
+      CrossToMid* cm = new CrossToMid(
+          ColorJudge::stringToColor(params[1]),  // 目標色
+          atof(params[2]),                       // 目標距離
+          atof(params[3]),  // 距離指定ライントレースの目標速度 [mm/s]
+          atof(params[4]),  // 距離指定直進の目標速度 [mm/s]
+          atoi(params[5]),  // 目標回頭角度
+          atof(params[6]),  // 角度指定回頭の目標速度 [mm/s]
+          targetBrightness + atoi(params[7]),                           // 目標輝度 + 調整
+          PidGain(atof(params[8]), atof(params[9]), atof(params[10])),  // PIDゲイン
+          convertBool(params[0], params[11]),  // 回頭方向 (true:時計回り, false:反時計回り)
+          isLeftEdge,                          // エッジ
+          convertBool(params[0], params[12]));  // 切り替え後のエッジ
+
+      motionList.push_back(cm);  // 動作リストに追加
     } else {                     // 未定義のコマンドの場合
       snprintf(buf, BUF_SIZE, "%s:%d: '%s' is undefined command", commandFilePath, lineNum,
                params[0]);
@@ -149,6 +199,18 @@ COMMAND MotionParser::convertCommand(char* str)
     return COMMAND::AD;
   } else if(strcmp(str, "XR") == 0) {  // 文字列がXRの場合
     return COMMAND::XR;
+  } else if(strcmp(str, "CA") == 0) {  // 文字列がCAの場合
+    return COMMAND::CA;
+  } else if(strcmp(str, "IS") == 0) {  // 文字列がISの場合
+    return COMMAND::IS;
+  } else if(strcmp(str, "IL") == 0) {  // 文字列がILの場合
+    return COMMAND::IL;
+  } else if(strcmp(str, "IR") == 0) {  // 文字列がIRの場合
+    return COMMAND::IR;
+  } else if(strcmp(str, "CC") == 0) {  // 文字列がCCの場合
+    return COMMAND::CC;
+  } else if(strcmp(str, "CM") == 0) {  // 文字列がCMの場合
+    return COMMAND::CM;
   } else {  // 想定していない文字列が来た場合
     return COMMAND::NONE;
   }
@@ -161,7 +223,7 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
   // 末尾の改行を削除
   char* param = StringOperator::removeEOL(stringParameter);
 
-  if(strcmp(command, "AR") == 0) {         //  コマンドがARの場合
+  if(strcmp(command, "AR") == 0 || strcmp(command, "CM") == 0) {  //  コマンドがAR, CMの場合
     if(strcmp(param, "clockwise") == 0) {  // パラメータがclockwiseの場合
       return true;
     } else if(strcmp(param, "anticlockwise") == 0) {  // パラメータがanticlockwiseの場合
@@ -172,8 +234,8 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
     }
   }
 
-  if(strcmp(command, "EC") == 0) {    //  コマンドがECの場合
-    if(strcmp(param, "left") == 0) {  // パラメータがleftの場合
+  if(strcmp(command, "EC") == 0 || strcmp(command, "CM") == 0) {  //  コマンドがEC, CMの場合
+    if(strcmp(param, "left") == 0) {                              // パラメータがleftの場合
       return true;
     } else if(strcmp(param, "right") == 0) {  // パラメータがrightの場合
       return false;
@@ -182,4 +244,18 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
       return true;
     }
   }
+
+  if(strcmp(command, "CA") == 0) {         //  コマンドがCAの場合
+    if(strcmp(param, "clockwise") == 0) {  // パラメータがclockwiseの場合
+      return true;
+    } else if(strcmp(param, "anticlockwise") == 0) {  // パラメータがanticlockwiseの場合
+      return false;
+    } else {  // 想定していないパラメータが来た場合
+      logger.logWarning("Parameter before conversion must be 'clockwise' or 'anticlockwise'");
+      return true;
+    }
+  }
+
+  logger.logWarning("Using a command that is not defined in convertBool.");
+  return true;
 }
