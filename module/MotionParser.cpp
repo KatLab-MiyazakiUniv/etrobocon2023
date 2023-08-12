@@ -118,7 +118,7 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
                                                       atof(params[2]));  // 目標速度
 
       motionList.push_back(xr);  // 動作リストに追加
-    else if(command == COMMAND::IS) {                              // 交点内移動（直進）
+    } else if(command == COMMAND::IS) {                              // 交点内移動（直進）
       InCrossStraight* is = new InCrossStraight(atof(params[1]),   // 目標距離
                                                 atof(params[2]));  // 目標速度 [mm/s]
 
