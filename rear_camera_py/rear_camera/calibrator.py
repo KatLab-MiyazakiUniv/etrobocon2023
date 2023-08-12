@@ -1,6 +1,6 @@
 """Arucoマーカを用いたリアカメラのキャリブレーションを行うモジュール.
 
-@author aridome222
+@author aridome222 kodama0720
 """
 
 import datetime
@@ -12,7 +12,10 @@ import cv2
 from cv2 import aruco
 import numpy as np
 
-from rear_camera.camera_interface import CameraInterface
+import sys
+sys.path.append('../')
+
+from src.camera_interface import CameraInterface
 
 
 class Calibrator:
@@ -76,36 +79,27 @@ class Calibrator:
             if (id[0] == 1):
                 frame_coordinates = corners[i][0]
                 break
-        # bottom_coordinate = self.__get_marker_mean(ids, corners, 6)
-        # left_coordinate = self.__get_marker_mean(ids, corners, 3)
-        # right_coordinate = self.__get_marker_mean(ids, corners, 4)
-        # frame_coordinates = np.float32(
-        #     [top_coordinate, bottom_coordinate, left_coordinate, right_coordinate])
 
-        # NOTE: 射影変換後の画像において、4つのArUcoマーカの中心点と各辺の中点が一致する正方形を考える.
-        # - distance_from_center_52_5mm
-        #     上記正方形の中心点と各辺の中点を結ぶ線分の距離(pix)、(105/2 mm).
+        # NOTE: 射影変換後の画像において、マーカID：1のArUcoマーカの4点が一致する正方形を考える.
+        # - distance_from_center_20mm
+        #     上記正方形の中心点から辺までの距離(pix)、(40/2 mm).
         # - height_offset_from_center
         #     上記正方形の中心点のオフセット、
         #     0の場合上記正方形の中心点と射影変換後の画像の中心点が一致する(pix).
-        # 上記正方形の中心点と走行体の中心点(タイヤの軸の中点)の距離は以下のようになる.
-        #     105/2 + 40/2 + (301 - 122/2) = 312.5mm
-        #  ただし、射影変換後の画像下部より更に下の部分に走行体の原点が存在することに留意すること.
-        #  また、現実の座標系と画像の座標の差異にも留意すること.
-        distance_from_center_52_5mm = h/20
-        height_offset_from_center = 200
+        distance_from_center_20mm = h/52.5
+
+        height_offset_from_center = h/3
 
         # 上記正方形の射影変換後の画像における中心座標を求める(pix)
         cx, cy = w/2, h/2 + height_offset_from_center
         target_coordinates = np.float32(
-            [[0+590*1.33, 0+590*1.0],
-             [1640-590*1.33, 0+590*1.0],
-             [1640-590*1.33, 1232-590*1.0],
-             [0+590*1.33, 1232-590*1.0]])
-        print(target_coordinates)
+            [[cx-distance_from_center_20mm, cy-distance_from_center_20mm],
+             [cx+distance_from_center_20mm, cy-distance_from_center_20mm],
+             [cx+distance_from_center_20mm, cy+distance_from_center_20mm],
+             [cx-distance_from_center_20mm, cy+distance_from_center_20mm]])
         trans_mat = cv2.getPerspectiveTransform(
             frame_coordinates, target_coordinates)
-        return trans_mat, distance_from_center_52_5mm, height_offset_from_center
+        return trans_mat, distance_from_center_20mm, height_offset_from_center
 
     def calibrate(self) -> None:
         """キャリブレーションを行い、結果をパラメータファイルとして出力する関数.
@@ -119,10 +113,10 @@ class Calibrator:
         if img is None:
             raise RuntimeError("Could not capture camera image.")
         self.__save_debug_img(img, 'calibration', 'captured.png')
-        trans_mat, distance_from_center_52_5mm, height_offset_from_center = self._calc_param(img)
+        trans_mat, distance_from_center_20mm, height_offset_from_center = self._calc_param(img)
         np.save(self.__trans_mat_file, trans_mat)
         distance_data = {
-            "distance_from_center_52_5mm": distance_from_center_52_5mm,
+            "distance_from_center_20mm": distance_from_center_20mm,
             "height_offset_from_center": height_offset_from_center
         }
         with open(self.__distance_file, mode="w") as fp:

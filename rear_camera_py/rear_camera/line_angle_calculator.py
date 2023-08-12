@@ -1,6 +1,6 @@
 """コースの直線に対する機体の角度算出するモジュール.
 
-@author: aridome222
+@author: aridome222 kodama0720
 """
 
 import datetime
@@ -9,9 +9,11 @@ import os
 from typing import Tuple, Union
 import cv2
 import numpy as np
+import sys
+sys.path.append('../')
 
 from rear_camera.black_extractor import BlackExtractor
-from rear_camera.camera_interface import CameraInterface
+from src.camera_interface import CameraInterface
 
 
 class LineAngleCalculator:
@@ -71,23 +73,19 @@ class LineAngleCalculator:
 
         self.__trans_mat = np.load(self.__trans_mat_file)
 
-        # NOTE: 射影変換後の画像において、4つのArUcoマーカの中心点と各辺の中点が一致する正方形を考える.
-        # - distance_from_center_52_5mm
-        #     上記正方形の中心点と各辺の中点を結ぶ線分の距離(pix)、(105/2 mm).
+        # NOTE: 射影変換後の画像において、マーカID：1のArUcoマーカの4点が一致する正方形を考える.
+        # - distance_from_center_20mm
+        #     上記正方形の中心点から辺までの距離(pix)、(40/2 mm).
         # - height_offset_from_center
         #     上記正方形の中心点のオフセット、
         #     0の場合上記正方形の中心点と射影変換後の画像の中心点が一致する(pix).
-        # 上記正方形の中心点と走行体の中心点(タイヤの軸の中点)の距離は以下のようになる.
-        #     105/2 + 40/2 + (301 - 122/2) = 312.5mm
-        #  ただし、射影変換後の画像下部より更に下の部分に走行体の原点が存在することに留意すること.
-        #  また、現実の座標系と画像の座標の差異にも留意すること.
         with open(self.__distance_file) as fp:
             distance_data = json.load(fp)
-        key = "distance_from_center_52_5mm"
+        key = "distance_from_center_20mm"
         if key not in distance_data:
             raise KeyError("key not found: '%s', file: %s" %
                            (key, self.__distance_file))
-        self.__distance_from_center_52_5mm = distance_data[key]
+        self.__distance_from_center_20mm = distance_data[key]
         key = "height_offset_from_center"
         if key not in distance_data:
             raise KeyError("key not found: '%s', file: %s" %
@@ -353,7 +351,7 @@ class LineAngleCalculator:
         Returns:
             float: 変換結果[pix]
         """
-        return mm * self.__distance_from_center_52_5mm / 52.5
+        return mm * self.__distance_from_center_20mm / 20
 
     def pix_to_mm(self, pix: Union[int, float]) -> float:
         """pixをmmに変換する.
@@ -364,7 +362,7 @@ class LineAngleCalculator:
         Returns:
             float: 変換結果[mm]
         """
-        return pix * 52.5 / self.__distance_from_center_52_5mm
+        return pix * 20 / self.__distance_from_center_20mm
 
     def __create_debug_dir(self) -> None:
         if not self.__debug:

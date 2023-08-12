@@ -1,6 +1,6 @@
 """Picamera2のダミーモジュール.
 
-@author: Takahiro55555
+@author: aridome222
 """
 
 

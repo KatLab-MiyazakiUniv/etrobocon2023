@@ -2,7 +2,7 @@
 
 Calibratorクラスのパラメータファイルが正常に生成されているかのテストも一部兼ねている.
 
-@author: Takahiro55555 kawanoichi
+@author: aridome222
 """
 
 import os
@@ -71,7 +71,7 @@ class TestCalibrator(unittest.TestCase):
         mm = line_angle_calculator.pix_to_mm(pix)
         self.assertAlmostEqual(original, mm)
 
-        original = 948723894
+        original = 948723880
         pix = line_angle_calculator.mm_to_pix(original)
         mm = line_angle_calculator.pix_to_mm(pix)
         self.assertAlmostEqual(original, mm)

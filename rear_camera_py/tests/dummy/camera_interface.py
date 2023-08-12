@@ -1,6 +1,6 @@
 """カメラインターフェースのダミーモジュール.
 
-@author Takahiro55555
+@author aridome222
 """
 
 import os

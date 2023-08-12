@@ -1,19 +1,19 @@
-# @brief etrobocon2022のリアカメラシステムServiceのUnitファイル
-# @author aridome222
+# @brief etrobocon2023のリアカメラシステムServiceのUnitファイル
+# @author aridome222 kodama0720
 #
 # References:
 #   - [これからSystemd入門する - Qiita](https://qiita.com/bluesDD/items/eaf14408d635ffd55a18)
 #
 # WARNING: このServiceを動かす前にキャリブレーションを行わないと起動に失敗する.
-#          具体的には、/home/katlab/work/RasPike/sdk/workspace/etrobocon2022/rear_camera_py ディレクトリ配下にパラメータファイルが存在しないと失敗する。
-#          以下、キャリブレーション方法(カレントディレクトリ: /home/katlab/work/RasPike/sdk/workspace/etrobocon2022)
+#          具体的には、/home/et2023/work/RasPike/sdk/workspace/etrobocon2023/rear_camera_py ディレクトリ配下にパラメータファイルが存在しないと失敗する。
+#          以下、キャリブレーション方法(カレントディレクトリ: /home/et2023/work/RasPike/sdk/workspace/etrobocon2023)
 #           $ ./scripts/start_rear_camera.sh --calibrate
 #
 # WARNING: このServiceが起動している最中に上記のコマンドでキャリブレーションを行おうとすると失敗する.
-#          以下、Service起動中のキャリブレーション方法(カレントディレクトリ: /home/katlab/work/RasPike/sdk/workspace/etrobocon2022)
+#          以下、Service起動中のキャリブレーション方法(カレントディレクトリ: /home/et2023/work/RasPike/sdk/workspace/etrobocon2023)
 #           $ ./scripts/rear_camera.sh --calibrate
 #
-# NOTE: 以下、Serviceの登録手順(カレントディレクトリ: /home/katlab/work/RasPike/sdk/workspace/etrobocon2022/rear_camera_py)
+# NOTE: 以下、Serviceの登録手順(カレントディレクトリ: /home/et2023/work/RasPike/sdk/workspace/etrobocon2023/rear_camera_py)
 #       この手順をこなせば、再起動後も自動でServiceが起動してくれるため、再起動のたびにプログラムを起動する必要が無い
 #       1. ファイルの配置
 #           $ sudo cp rear-camera.service /etc/systemd/system/rear-camera.service
@@ -34,7 +34,7 @@
 #           $ echo quit | nc 127.0.0.1 10338  # ポート番号(10338)はこのファイルで設定した値を利用すること
 #
 # NOTE: リアカメラシステムの開発をRasPike上で行いたい場合(サーバモードを使わずに角度算出処理を動かす)
-#       (カレントディレクトリ: /home/katlab/work/RasPike/sdk/workspace/etrobocon2022/rear_camera_py)
+#       (カレントディレクトリ: /home/et2023/work/RasPike/sdk/workspace/etrobocon2023/rear_camera_py)
 #       1. Serviceの停止
 #           $ sudo systemctl stop rear-camera.service
 #       2. 角度算出処理の実行
@@ -44,7 +44,7 @@
 #
 # NOTE: 以下、Serviceファイルを更新したい場合
 #       作業用ディレクトリ(カレントディレクトリ)にある"rear-camera.service"ファイルを編集後反映することを想定
-#       (カレントディレクトリ: /home/katlab/work/RasPike/sdk/workspace/etrobocon2022/rear_camera_py)
+#       (カレントディレクトリ: /home/et2023/work/RasPike/sdk/workspace/etrobocon2023/rear_camera_py)
 #       - Serviceファイル(このファイル)の更新方法
 #           $ sudo systemctl stop rear-camera.service  # 停止
 #           $ sudo cp rear-camera.service /etc/systemd/system/rear-camera.service  # ファイルの書き換え

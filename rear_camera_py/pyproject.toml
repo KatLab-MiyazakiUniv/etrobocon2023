@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "etrobocon2022"
+name = "etrobocon2023"
 version = "0.1.0"
 description = ""
-authors = ["Takahiro55555 <31930148+Takahiro55555@users.noreply.github.com>"]
+authors = ["kodama00720"]
 
 [tool.poetry.dependencies]
 python = "^3.8"

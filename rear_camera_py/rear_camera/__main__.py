@@ -4,13 +4,15 @@
 > python -m rear_camera
 
 必要最低限のコードのみを記述するようにする
-@author: Takahiro55555
+@author: aridome222
 """
 import argparse
+import sys
+sys.path.append('../')
 
 from rear_camera.angle_server import AngleServer
 from rear_camera.calibrator import Calibrator
-from rear_camera.camera_interface import CameraInterface
+from src.camera_interface import CameraInterface
 from rear_camera.line_angle_calculator import LineAngleCalculator
 
 

@@ -1,6 +1,6 @@
 """Calibratorクラスのテストを記述するモジュール.
 
-@author: Takahiro55555
+@author: aridome222
 """
 
 import os
