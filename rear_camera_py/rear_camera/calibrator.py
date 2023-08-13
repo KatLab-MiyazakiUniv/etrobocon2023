@@ -72,7 +72,6 @@ class Calibrator:
             raise RuntimeError("Could not find markers.")
 
         h, w = img.shape[:2]
-        top_coordinate = self.__get_marker_mean(ids, corners, 1)
 
         for i, id in enumerate(ids):
             # マーカーのインデックス検索
@@ -136,32 +135,6 @@ class Calibrator:
         except Exception as e:
             return "[ERROR] %s" % e
         return "[Info] Successfully calibrated"
-
-    def __get_marker_mean(
-        self,
-        ids: np.ndarray,
-        corners: List[np.ndarray],
-        target_id: int
-    ) -> Tuple[float, float]:
-        """指定したIDのArUcoマーカの中心座標を取得する関数.
-
-        Args:
-            ids (np.ndarray): cornersのデータに対応するArUcoマーカのID.
-            corners (List[np.ndarray]): 検出したArUcoマーカの角座標.
-            target_id (int): ArUcoマーカのID.
-
-        Raises:
-            ValueError: 指定したIDのArUcoマーカが存在しなかった場合に発生.
-
-        Returns:
-            Tuple[float, float]: ArUcoマーカの中心座標[pix].
-        """
-        for i, id in enumerate(ids):
-            # マーカーのインデックス検索
-            if (id[0] == target_id):
-                v = np.mean(corners[i][0], axis=0)  # マーカーの四隅の座標から中心の座標を取得する
-                return v[0], v[1]
-        raise ValueError("Index(%d) not found" % target_id)
 
     def __create_debug_dir(self) -> None:
         if not self.__debug:
