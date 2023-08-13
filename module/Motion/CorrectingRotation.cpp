@@ -9,28 +9,12 @@
 using namespace std;
 
 CorrectingRotation::CorrectingRotation(int _targetAngle, double _targetSpeed)
-  : targetAngle(_targetAngle), targetSpeed(_targetSpeed)
-{
-}
+  : targetAngle(_targetAngle), targetSpeed(_targetSpeed){};
 
 void CorrectingRotation::run()
 {
-  const int BUF_SIZE = 256;
-  char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
-
-  // 目標速度が0.0以下の場合はwarningを出して終了する
-  if(targetSpeed <= 0.0) {
-    snprintf(buf, BUF_SIZE, "The targetSpeed value passed to CorrectingRotation is %lf",
-             targetSpeed);
-    logger.logWarning(buf);
-    return;
-  }
-
-  // 目標角度が0未満or90以上の場合はwarningを出して終了する
-  if(targetAngle < 0 || targetAngle >= 90) {
-    snprintf(buf, BUF_SIZE, "The targetAngle value passed to CorrectingRotation is %d",
-             targetAngle);
-    logger.logWarning(buf);
+  // 事前条件を判定する
+  if(!isMetPrecondition()) {
     return;
   }
 
@@ -92,6 +76,8 @@ void CorrectingRotation::run()
   bool isClockwise = correctionAngle > 0 ? true : false;
 
   // 補正角度をログに出力
+  const int BUF_SIZE = 256;
+  char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
   snprintf(buf, BUF_SIZE, "%d degree angle correction", (int)correctionAngle);
   logger.log(buf);
 
@@ -100,32 +86,15 @@ void CorrectingRotation::run()
   // isClockwiseは回転方向の係数
   int leftSign = isClockwise ? 1 : -1;
   int rightSign = isClockwise ? -1 : 1;
-  double targetDistance
-      = M_PI * TREAD * angle / 360;  // 指定した角度に対する目標の走行距離(弧の長さ)
 
-  // 目標距離（呼び出し時の走行距離 ± 指定された回転量に必要な距離）
-  double targetLeftDistance
-      = Mileage::calculateWheelMileage(Measurer::getLeftCount()) + targetDistance * leftSign;
-  double targetRightDistance
-      = Mileage::calculateWheelMileage(Measurer::getRightCount()) + targetDistance * rightSign;
+  // 呼び出し時の走行距離
+  double initLeftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
+  double initRightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
 
   SpeedCalculator speedCalculator(targetSpeed * rightSign, targetSpeed * leftSign);
 
   // 継続条件を満たしている間ループ
-  while(1) {
-    // 残りの移動距離を算出
-    double diffLeftDistance
-        = (targetLeftDistance - Mileage::calculateWheelMileage(Measurer::getLeftCount()))
-          * leftSign;
-    double diffRightDistance
-        = (targetRightDistance - Mileage::calculateWheelMileage(Measurer::getRightCount()))
-          * rightSign;
-
-    // 目標距離に到達した場合
-    if(diffLeftDistance <= 0 && diffRightDistance <= 0) {
-      break;
-    }
-
+  while(isMetPostcondition(initLeftMileage, initRightMileage, leftSign, rightSign, angle)) {
     // PWM値を設定する
     int leftPwm = speedCalculator.calcLeftPwmFromSpeed();
     int rightPwm = speedCalculator.calcRightPwmFromSpeed();
@@ -140,6 +109,55 @@ void CorrectingRotation::run()
 
   // モータの停止
   Controller::stopMotor();
+}
+
+bool CorrectingRotation::isMetPrecondition()
+{
+  const int BUF_SIZE = 256;
+  char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
+
+  // 目標速度が0.0以下の場合はwarningを出して終了する
+  if(targetSpeed <= 0.0) {
+    snprintf(buf, BUF_SIZE, "The targetSpeed value passed to CorrectingRotation is %lf",
+             targetSpeed);
+    logger.logWarning(buf);
+    return false;
+  }
+
+  // 目標角度が0未満or90以上の場合はwarningを出して終了する
+  if(targetAngle < 0 || targetAngle >= 90) {
+    snprintf(buf, BUF_SIZE, "The targetAngle value passed to CorrectingRotation is %d",
+             targetAngle);
+    logger.logWarning(buf);
+    return false;
+  }
+
+  return true;
+}
+
+bool CorrectingRotation::isMetPostcondition(double initLeftMileage, double initRightMileage,
+                                            int leftSign, int rightSign, int angle)
+{
+  double targetDistance
+      = M_PI * TREAD * angle / 360;  // 算出された補正角度に対する目標の走行距離(弧の長さ)
+
+  // 目標距離（呼び出し時の走行距離 ± 指定された回転量に必要な距離）
+  double targetLeftDistance = initLeftMileage + targetDistance * leftSign;
+  double targetRightDistance = initRightMileage + targetDistance * rightSign;
+
+  // 残りの移動距離を算出
+  double diffLeftDistance
+      = (targetLeftDistance - Mileage::calculateWheelMileage(Measurer::getLeftCount())) * leftSign;
+  double diffRightDistance
+      = (targetRightDistance - Mileage::calculateWheelMileage(Measurer::getRightCount()))
+        * rightSign;
+
+  // 目標距離に到達した場合
+  if(diffLeftDistance <= 0 && diffRightDistance <= 0) {
+    return false;
+  }
+
+  return true;
 }
 
 void CorrectingRotation::logRunning()
