@@ -30,7 +30,6 @@ class CorrectingRotation : public CompositeMotion {
 
   /**
    * @brief 角度補正回頭する際の事前条件判定をする
-   * @note オーバーライド必須
    */
   bool isMetPrecondition();
 
@@ -41,7 +40,6 @@ class CorrectingRotation : public CompositeMotion {
    * @param leftSign 左車輪の回転方向
    * @param rightSign 右車輪の回転方向
    * @param angle 補正角度
-   * @note オーバーライド必須
    */
   bool isMetPostcondition(double initLeftMileage, double initRightMileage, int leftSign,
                           int rightSign, int angle);
