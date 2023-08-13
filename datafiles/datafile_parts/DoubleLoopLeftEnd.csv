@@ -2,10 +2,10 @@ DS,300,150,交点上を直進
 CS,BLACK,200,黒まで直進
 DS,50,150,外エッジに乗るよう直進
 AR,20,300,clockwise,右回頭
-CA,A,clockwise,74,74,撮影動作
+CA,A,anticlockwise,74,74,撮影動作
 DL,500,200,0,0.75,0.2,0.2,円（大）上をライントレース
 DL,450,200,0,0.75,0.2,0.2,円（大）上をライントレース
-CA,A,clockwise,74,74,撮影動作
+CA,A,anticlockwise,74,74,撮影動作
 AR,55,150,anticlockwise,左回頭
 DS,400,150,交点上を直進
 CS,BLACK,150,黒まで直進
