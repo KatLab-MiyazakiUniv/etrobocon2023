@@ -48,7 +48,7 @@ class TestCalibrator(unittest.TestCase):
             self.__tmp_distance_file,
             debug=True
         )
-        expected = -43
+        expected = 54
         actual = line_angle_calculator.calc_yaw_angle()
         # 期待値と実際の値がdelta以下であることを検証
         self.assertAlmostEqual(expected, actual, delta=1.0)

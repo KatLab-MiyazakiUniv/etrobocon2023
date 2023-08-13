@@ -1,4 +1,7 @@
-"""AngleServerクラスのテストコード."""
+"""AngleServerクラスのテストコード.
+
+@author: kodama0720
+"""
 
 import unittest
 import subprocess

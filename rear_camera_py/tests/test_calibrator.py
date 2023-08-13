@@ -18,10 +18,10 @@ class TestCalibrator(unittest.TestCase):
         fname = "tests/test_data/group-00-calibration-image-normal.png"
         img = CameraInterface(fname).capture_image()
         calibrator = Calibrator(CameraInterface())
-        trans_mat, distance_from_center_52_5mm, height_offset_from_center = calibrator._calc_param(
+        trans_mat, distance_from_center_20mm, height_offset_from_center = calibrator._calc_param(
             img)
         self.assertEqual(type(trans_mat), np.ndarray)
-        self.assertEqual(type(distance_from_center_52_5mm), float)
+        self.assertEqual(type(distance_from_center_20mm), float)
         self.assertEqual(type(height_offset_from_center), float)
 
     def test_calc_param_could_not_find_markers(self):
