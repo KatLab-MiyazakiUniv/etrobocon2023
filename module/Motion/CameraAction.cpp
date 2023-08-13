@@ -26,7 +26,9 @@ void CameraAction::run()
   AngleRotation postAR(postTargetAngle, rotationSpeed, !isClockwise);
 
   // 撮影のための回頭をする
+  if(preTargetAngle != 0){
   preAR.run();
+  }
 
   // リアカメラで画像を取得する
   // 撮影に際してディレクトリ移動も行う
@@ -35,7 +37,9 @@ void CameraAction::run()
   system(cmd);
 
   // 黒線復帰のための回頭をする
+  if(postTargetAngle != 0){
   postAR.run();
+  }
 }
 
 bool CameraAction::isMetPrecondition()
@@ -44,19 +48,29 @@ bool CameraAction::isMetPrecondition()
   char buf[BUF_SIZE];
 
   // preTargetAngleが0以下の場合はwarningを出して終了する
-  if(preTargetAngle <= 0 || preTargetAngle >= 360) {
+  if(preTargetAngle < 0 || preTargetAngle >= 360) {
     snprintf(buf, BUF_SIZE, "The preTargetAngle value passed to preRotation is %d", preTargetAngle);
     logger.logWarning(buf);
     return false;
+  }else if(preTargetAngle == 0) {
+    snprintf(buf, BUF_SIZE, "The preTargetAngle value passed to preRotation is %d", preTargetAngle);
+    logger.logHighlight(buf);
+    return true;
   }
 
   // postTargetAngleが0以下の場合はwarningを出して終了する
-  if(postTargetAngle <= 0 || postTargetAngle >= 360) {
+  if(postTargetAngle < 0 || postTargetAngle >= 360) {
     snprintf(buf, BUF_SIZE, "The postTargetAngle value passed to postRotation is %d",
              postTargetAngle);
     logger.logWarning(buf);
     return false;
+  }else if(postTargetAngle == 0) {
+    snprintf(buf, BUF_SIZE, "The postTargetAngle value passed to postRotation is %d",
+             postTargetAngle);
+    logger.logHighlight(buf);
+    return true;
   }
+
 
   // 撮影対象がA（targetがtrue）の場合はフラグ確認を行う
   if(target == true) {
@@ -67,6 +81,7 @@ bool CameraAction::isMetPrecondition()
       return false;
     }
   }
+  
   return true;
 }
 
