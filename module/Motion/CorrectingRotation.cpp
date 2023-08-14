@@ -19,19 +19,19 @@ void CorrectingRotation::run()
   }
 
   /*
-   * rear_camera.shより直線の角度を取得
+   * rear_camera_request.shより直線の角度を取得
    * シミュレータ環境ではpopenが使えないため，
    * ファイルに出力して読み込む
    */
-  FILE* fp = fopen("result.txt", "r");
-  char output[8];  // rear_camera.shの出力結果を保持する領域
+  FILE* fp = nullptr;
+  char output[8];  // rear_camera_request.shの出力結果を保持する領域
   char cmd[1024];
-  snprintf(cmd, 1024, "bash ./etrobocon2023/scripts/rear_camera.sh %d > result.txt",
+  snprintf(cmd, 1024, "bash ./etrobocon2023/scripts/rear_camera_request.sh %d > response.txt",
            ANGLE_SERVER_PORT);
   system(cmd);
-  if((fp = fopen("result.txt", "r")) == NULL) {
+  if((fp = fopen("response.txt", "r")) == NULL) {
     // コマンドを実行できなかった場合Warningを出して終了する
-    logger.logWarning("Could not open \"./result.txt\"");
+    logger.logWarning("Could not open \"./response.txt\"");
     return;
   }
   // 実行結果をoutputにセット
@@ -81,34 +81,9 @@ void CorrectingRotation::run()
   snprintf(buf, BUF_SIZE, "%d degree angle correction", (int)correctionAngle);
   logger.log(buf);
 
-  // 以降はRotation::run()と同様
-  // isClockwiseがtrueなら時計回り，falseなら反時計回り
-  // isClockwiseは回転方向の係数
-  int leftSign = isClockwise ? 1 : -1;
-  int rightSign = isClockwise ? -1 : 1;
-
-  // 呼び出し時の走行距離
-  double initLeftMileage = Mileage::calculateWheelMileage(Measurer::getLeftCount());
-  double initRightMileage = Mileage::calculateWheelMileage(Measurer::getRightCount());
-
-  SpeedCalculator speedCalculator(targetSpeed * rightSign, targetSpeed * leftSign);
-
-  // 継続条件を満たしている間ループ
-  while(isMetPostcondition(initLeftMileage, initRightMileage, leftSign, rightSign, angle)) {
-    // PWM値を設定する
-    int leftPwm = speedCalculator.calcLeftPwmFromSpeed();
-    int rightPwm = speedCalculator.calcRightPwmFromSpeed();
-
-    // モータにPWM値をセット
-    Controller::setLeftMotorPwm(leftPwm);
-    Controller::setRightMotorPwm(rightPwm);
-
-    // 10ミリ秒待機
-    timer.sleep(10);
-  }
-
-  // モータの停止
-  Controller::stopMotor();
+  // 算出された補正角度だけ回頭する
+  AngleRotation angleRotation(angle, targetSpeed, isClockwise);
+  angleRotation.run();
 }
 
 bool CorrectingRotation::isMetPrecondition()
@@ -129,31 +104,6 @@ bool CorrectingRotation::isMetPrecondition()
     snprintf(buf, BUF_SIZE, "The targetAngle value passed to CorrectingRotation is %d",
              targetAngle);
     logger.logWarning(buf);
-    return false;
-  }
-
-  return true;
-}
-
-bool CorrectingRotation::isMetPostcondition(double initLeftMileage, double initRightMileage,
-                                            int leftSign, int rightSign, int angle)
-{
-  double targetDistance
-      = M_PI * TREAD * angle / 360;  // 算出された補正角度に対する目標の走行距離(弧の長さ)
-
-  // 目標距離（呼び出し時の走行距離 ± 指定された回転量に必要な距離）
-  double targetLeftDistance = initLeftMileage + targetDistance * leftSign;
-  double targetRightDistance = initRightMileage + targetDistance * rightSign;
-
-  // 残りの移動距離を算出
-  double diffLeftDistance
-      = (targetLeftDistance - Mileage::calculateWheelMileage(Measurer::getLeftCount())) * leftSign;
-  double diffRightDistance
-      = (targetRightDistance - Mileage::calculateWheelMileage(Measurer::getRightCount()))
-        * rightSign;
-
-  // 目標距離に到達した場合
-  if(diffLeftDistance <= 0 && diffRightDistance <= 0) {
     return false;
   }
 

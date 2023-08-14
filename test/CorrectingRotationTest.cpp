@@ -24,8 +24,8 @@ namespace etrobocon2023_test {
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで-2.1を返すように書き換える
-    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera.sh");
-    system("echo \"echo -2.1\" >> ./etrobocon2023/scripts/rear_camera.sh");
+    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera_request.sh");
+    system("echo \"echo -2.1\" >> ./etrobocon2023/scripts/rear_camera_request.sh");
 
     // 期待する車輪ごとの回頭角度(時計回り)
     double expectedLeft = 2;
@@ -57,8 +57,8 @@ namespace etrobocon2023_test {
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで5.9を返すように書き換える
-    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera.sh");
-    system("echo \"echo 5.9\" >> ./etrobocon2023/scripts/rear_camera.sh");
+    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera_request.sh");
+    system("echo \"echo 5.9\" >> ./etrobocon2023/scripts/rear_camera_request.sh");
 
     // 期待する車輪ごとの回頭角度(時計回り)
     double expectedLeft = -5;
@@ -88,8 +88,8 @@ namespace etrobocon2023_test {
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで-49.9を返すように書き換える
-    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera.sh");
-    system("echo \"echo -49.9\" >> ./etrobocon2023/scripts/rear_camera.sh");
+    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera_request.sh");
+    system("echo \"echo -49.9\" >> ./etrobocon2023/scripts/rear_camera_request.sh");
 
     // 期待する車輪ごとの回頭角度(時計回り)
     double expectedLeft = 4;
@@ -119,8 +119,8 @@ namespace etrobocon2023_test {
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで50.1を返すように書き換える
-    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera.sh");
-    system("echo \"echo 50.1\" >> ./etrobocon2023/scripts/rear_camera.sh");
+    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera_request.sh");
+    system("echo \"echo 50.1\" >> ./etrobocon2023/scripts/rear_camera_request.sh");
 
     // 期待する車輪ごとの回頭角度(時計回り)
     double expectedLeft = -5;
@@ -150,8 +150,8 @@ namespace etrobocon2023_test {
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで87.9を返すように書き換える
-    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera.sh");
-    system("echo \"echo 87.9\" >> ./etrobocon2023/scripts/rear_camera.sh");
+    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera_request.sh");
+    system("echo \"echo 87.9\" >> ./etrobocon2023/scripts/rear_camera_request.sh");
 
     // 期待する車輪ごとの回頭角度(時計回り)
     double expectedLeft = 2;
@@ -181,8 +181,8 @@ namespace etrobocon2023_test {
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで-85.1を返すように書き換える
-    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera.sh");
-    system("echo \"echo -85.1\" >> ./etrobocon2023/scripts/rear_camera.sh");
+    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera_request.sh");
+    system("echo \"echo -85.1\" >> ./etrobocon2023/scripts/rear_camera_request.sh");
 
     // 期待する車輪ごとの回頭角度(時計回り)
     double expectedLeft = -4;
@@ -212,8 +212,8 @@ namespace etrobocon2023_test {
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで-2.0を返すように書き換える
-    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera.sh");
-    system("echo \"echo -2.0\" >> ./etrobocon2023/scripts/rear_camera.sh");
+    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera_request.sh");
+    system("echo \"echo -2.0\" >> ./etrobocon2023/scripts/rear_camera_request.sh");
 
     // 期待する車輪ごとの回頭角度(時計回り)
     double expectedLeft = 0;
@@ -242,8 +242,8 @@ namespace etrobocon2023_test {
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで-5.0を返すように書き換える
-    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera.sh");
-    system("echo \"echo -5.0\" >> ./etrobocon2023/scripts/rear_camera.sh");
+    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera_request.sh");
+    system("echo \"echo -5.0\" >> ./etrobocon2023/scripts/rear_camera_request.sh");
 
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
@@ -281,8 +281,8 @@ namespace etrobocon2023_test {
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで-5.0を返すように書き換える
-    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera.sh");
-    system("echo \"echo -5.0\" >> ./etrobocon2023/scripts/rear_camera.sh");
+    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera_request.sh");
+    system("echo \"echo -5.0\" >> ./etrobocon2023/scripts/rear_camera_request.sh");
 
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
@@ -320,8 +320,8 @@ namespace etrobocon2023_test {
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで-5.0を返すように書き換える
-    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera.sh");
-    system("echo \"echo -5.0\" >> ./etrobocon2023/scripts/rear_camera.sh");
+    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera_request.sh");
+    system("echo \"echo -5.0\" >> ./etrobocon2023/scripts/rear_camera_request.sh");
 
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
@@ -359,8 +359,8 @@ namespace etrobocon2023_test {
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shで-5.0を返すように書き換える
-    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera.sh");
-    system("echo \"echo -5.0\" >> ./etrobocon2023/scripts/rear_camera.sh");
+    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera_request.sh");
+    system("echo \"echo -5.0\" >> ./etrobocon2023/scripts/rear_camera_request.sh");
 
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
@@ -391,7 +391,7 @@ namespace etrobocon2023_test {
     EXPECT_EQ(expectedOutput, actualOutput);  // 標準出力でWarningを出している
   }
 
-  // rear_camera.shがNoneを返した場合
+  // rear_camera_request.shがNoneを返した場合
   TEST(CorrectingRotationTest, runReturnNone)
   {
     int targetAngle = 45;
@@ -399,8 +399,8 @@ namespace etrobocon2023_test {
     CorrectingRotation xRotation(targetAngle, targetSpeed);
 
     // rearCamera.shでNoneを返すように書き換える
-    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera.sh");
-    system("echo \"echo \"None\"\" >> ./etrobocon2023/scripts/rear_camera.sh");
+    system("echo \"#!/bin/bash\" > ./etrobocon2023/scripts/rear_camera_request.sh");
+    system("echo \"echo \"None\"\" >> ./etrobocon2023/scripts/rear_camera_request.sh");
 
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
