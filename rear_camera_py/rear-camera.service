@@ -11,7 +11,7 @@
 #
 # WARNING: このServiceが起動している最中に上記のコマンドでキャリブレーションを行おうとすると失敗する.
 #          以下、Service起動中のキャリブレーション方法(カレントディレクトリ: /home/et2023/work/RasPike/sdk/workspace/etrobocon2023)
-#           $ ./scripts/rear_camera.sh --calibrate
+#           $ ./scripts/rear_camera_request.sh --calibrate
 #
 # NOTE: 以下、Serviceの登録手順(カレントディレクトリ: /home/et2023/work/RasPike/sdk/workspace/etrobocon2023/rear_camera_py)
 #       この手順をこなせば、再起動後も自動でServiceが起動してくれるため、再起動のたびにプログラムを起動する必要が無い

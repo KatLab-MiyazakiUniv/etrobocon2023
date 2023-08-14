@@ -7,14 +7,11 @@
 #ifndef CORRECTING_ROTATION_H
 #define CORRECTING_ROTATION_H
 
-#include "Motion.h"
-#include "Mileage.h"
-#include "Timer.h"
-#include "SpeedCalculator.h"
+#include "CompositeMotion.h"
 #include "StringOperator.h"
-#include "SystemInfo.h"
+#include "AngleRotation.h"
 
-class CorrectingRotation : public Motion {
+class CorrectingRotation : public CompositeMotion {
  public:
   /**
    * コンストラクタ
@@ -26,12 +23,17 @@ class CorrectingRotation : public Motion {
   /**
    * @brief 角度補正回頭する
    */
-  void run();
+  void run() override;
+
+  /**
+   * @brief 角度補正回頭する際の事前条件判定をする
+   */
+  bool isMetPrecondition();
 
   /**
    * @brief 実行のログを取る
    */
-  void logRunning();
+  void logRunning() override;
 
  private:
   static constexpr int NO_CORRECTION_ANGLE = 2;  // 補正免除角度(deg)
