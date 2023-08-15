@@ -18,6 +18,8 @@ help:
 	@echo " $$ make format-check"
 	@echo テストを実行する
 	@echo " $$ make gtest"
+	@echo 中断したmakeプロセスをkillする
+	@echo " $$ make kill"
 
 # ビルドする
 build:
@@ -61,3 +63,7 @@ gtest:
 rebuild-gtest:
 	rm -rf build
 	@${make} gtest
+
+kill:
+# makeのプロセスIDを抽出し、キルする
+	@ps aux | grep make | grep -v "grep" | awk '{print $$2}' | xargs -r kill -9
