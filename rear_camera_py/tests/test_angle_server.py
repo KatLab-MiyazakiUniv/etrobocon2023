@@ -9,7 +9,7 @@ import threading
 import time
 
 
-from rear_camera.angle_server import AngleServer
+from src.angle_server import AngleServer
 
 
 class TestCalibrator(unittest.TestCase):

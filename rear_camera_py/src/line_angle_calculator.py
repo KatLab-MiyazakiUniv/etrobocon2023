@@ -9,11 +9,9 @@ import os
 from typing import Tuple, Union
 import cv2
 import numpy as np
-import sys
-sys.path.append('../')
 
-from rear_camera.black_extractor import BlackExtractor
-from src.camera_interface import CameraInterface
+from black_extractor import BlackExtractor
+from camera_interface import CameraInterface
 
 
 class LineAngleCalculator:

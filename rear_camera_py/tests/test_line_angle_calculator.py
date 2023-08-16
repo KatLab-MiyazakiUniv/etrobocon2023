@@ -9,9 +9,9 @@ import os
 import cv2
 import unittest
 
-from rear_camera.calibrator import Calibrator
+from src.calibrator import Calibrator
 from tests.dummy.camera_interface import CameraInterface
-from rear_camera.line_angle_calculator import LineAngleCalculator
+from src.line_angle_calculator import LineAngleCalculator
 
 
 class TestCalibrator(unittest.TestCase):

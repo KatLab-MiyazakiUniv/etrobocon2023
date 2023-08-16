@@ -1,19 +1,17 @@
 """mainモジュール.
 
 プロジェクトルートで、以下のコマンドを実行すると最初に呼び出されるファイル
-> python -m rear_camera
+> python -m src
 
 必要最低限のコードのみを記述するようにする
 @author: aridome222
 """
 import argparse
-import sys
-sys.path.append('../')
 
-from rear_camera.angle_server import AngleServer
-from rear_camera.calibrator import Calibrator
-from src.camera_interface import CameraInterface
-from rear_camera.line_angle_calculator import LineAngleCalculator
+from angle_server import AngleServer
+from calibrator import Calibrator
+from camera_interface import CameraInterface
+from line_angle_calculator import LineAngleCalculator
 
 
 parser = argparse.ArgumentParser(description="回頭補正用角度算出プログラム")

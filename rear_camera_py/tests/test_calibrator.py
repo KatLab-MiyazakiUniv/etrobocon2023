@@ -8,7 +8,7 @@ import unittest
 
 import numpy as np
 
-from rear_camera.calibrator import Calibrator
+from src.calibrator import Calibrator
 from tests.dummy.camera_interface import CameraInterface
 
 
