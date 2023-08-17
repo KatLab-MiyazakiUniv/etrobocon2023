@@ -12,7 +12,7 @@ import cv2
 from cv2 import aruco
 import numpy as np
 
-from camera_interface import CameraInterface
+from src.camera_interface import CameraInterface
 
 
 class Calibrator:

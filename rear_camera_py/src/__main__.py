@@ -8,10 +8,10 @@
 """
 import argparse
 
-from angle_server import AngleServer
-from calibrator import Calibrator
-from camera_interface import CameraInterface
-from line_angle_calculator import LineAngleCalculator
+from src.angle_server import AngleServer
+from src.calibrator import Calibrator
+from src.camera_interface import CameraInterface
+from src.line_angle_calculator import LineAngleCalculator
 
 
 parser = argparse.ArgumentParser(description="回頭補正用角度算出プログラム")

@@ -10,8 +10,8 @@ from typing import Tuple, Union
 import cv2
 import numpy as np
 
-from black_extractor import BlackExtractor
-from camera_interface import CameraInterface
+from src.black_extractor import BlackExtractor
+from src.camera_interface import CameraInterface
 
 
 class LineAngleCalculator:
@@ -167,7 +167,7 @@ class LineAngleCalculator:
     def detect_line_segment(
         self,
         img,
-        length_threshold_mm: int = 80,
+        length_threshold_mm: int = 145,
         distance_threshold: float = 1.41421356,
         canny_th1: int = 50,
         canny_th2: int = 50,
@@ -183,8 +183,8 @@ class LineAngleCalculator:
                                   https://nsr-9.hatenablog.jp/entry/2021/08/12/200000
             length_threshold_mm (int): 線分を検出する際の長さ閾値(これより短い線は除外)
                                        検出したい線分の長さ = 交点to中点-ブロックの半径
-                                                          = 125 - 30
-                                                          = 95
+                                                          = 175 - 30
+                                                          = 145
                                        射影変換によってできた元画像の枠(直線)と同一とみなす距離
             distance_threshold (float): 距離閾値(この値より遠い座標は、同一線ではない)
                                         1.41421356はcv2.ximgproc.createFastLineDetectorの規定値
@@ -218,7 +218,7 @@ class LineAngleCalculator:
         # 検出する範囲の境界線(ignore_border(pix))を、detect_range_from_rbody_mmから求める
         # detect_range_from_rbody_mm: 線分検出したい範囲を走行体からの距離で指定する(mm)
         img_h, img_w = img.shape[:2]
-        detect_range_from_rbody_mm = 181*2*1.3  # 交点toブロック置き場*2*余幅補正 (mm)
+        detect_range_from_rbody_mm = 247*2*1.3  # 交点toブロック置き場*2*余幅補正 (mm)
         _, ignore_border = self.runner_base_coordinate_to_image_base_coordinate_pix(
             0, detect_range_from_rbody_mm, img_h, img_w)
 
@@ -230,9 +230,9 @@ class LineAngleCalculator:
 
         # 射影変換で得られたコース画像の両端と下の枠上に存在する点
         # NOTE: 枠(直線)を線分検出で実際に取得した座標を使用
-        straight_line_right = np.array([1559.891,        0, 912.159, 1199.626])
-        straight_line_left = np.array([758.320, 1204.827, 410.622,  559.664])
-        straight_line_lower = np.array([909.996, 1198.916, 759.986, 1204.6339])
+        straight_line_right = np.array([1595.393, 0.235, 939.959, 1093.975])
+        straight_line_left = np.array([698.343, 1096.039, 10.602, 0.249])
+        straight_line_lower = np.array([940.000, 1095.000, 701.000, 1095.000])
 
         # 画像の枠上(右左下)に線分があれば削除する
         delete_list = []
