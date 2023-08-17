@@ -33,6 +33,8 @@ void InCrossLeft::run()
   rotation.run();
   // エッジを右にする
   ec.run();
+  // 円外へ出る
+  ds.run();
 }
 
 bool InCrossLeft::isMetPrecondition()
