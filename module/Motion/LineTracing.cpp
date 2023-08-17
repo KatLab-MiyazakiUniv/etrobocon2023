@@ -55,6 +55,11 @@ void LineTracing::run()
                                     : min(baseRightPwm + (int)turnPwm, 0);
     int leftPwm
         = baseLeftPwm > 0 ? max(baseLeftPwm + (int)turnPwm, 0) : min(baseLeftPwm - (int)turnPwm, 0);
+
+    // iOSアプリ用log出力
+    snprintf(buf, BUF_SIZE, "%d %d %.2f", leftPwm, rightPwm, Measurer::getBrightness());
+    logger.log(buf);
+
     Controller::setRightMotorPwm(rightPwm);
     Controller::setLeftMotorPwm(leftPwm);
 
