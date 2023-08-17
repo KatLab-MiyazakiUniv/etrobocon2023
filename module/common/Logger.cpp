@@ -9,7 +9,7 @@ Logger::Logger() {}
 
 void Logger::log(const char* logMessage)
 {
-  const int BUF_SIZE = 128;
+  const int BUF_SIZE = 256;
   char message[BUF_SIZE];  // 表示するメッセージ
   snprintf(message, BUF_SIZE, "%s\n", logMessage);
   printf("%s", message);
