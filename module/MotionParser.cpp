@@ -149,8 +149,8 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
       motionList.push_back(cc);          // 動作リストに追加
     } else if(command == COMMAND::CM) {  // 交点サークルから直線の中点
       CrossToMid* cm = new CrossToMid(
-          ColorJudge::stringToColor(params[1]),  // 目標色
-          atof(params[2]),                       // 目標距離
+          atof(params[1]),  // 交点から中点までの目標距離
+          atof(params[2]),  // サークル内半径の目標距離
           atof(params[3]),  // 距離指定ライントレースの目標速度 [mm/s]
           atof(params[4]),  // 距離指定直進の目標速度 [mm/s]
           atoi(params[5]),  // 目標回頭角度
