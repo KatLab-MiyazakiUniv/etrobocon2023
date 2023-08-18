@@ -22,12 +22,12 @@ directory="./datafiles"
 parts_directory="./datafiles/datafile_parts"
 
 # 出力ファイル名
-output_file="$directory/DoubleLoopRight.csv"
+output_file="$directory/DoubleLoopLeft.csv"
 
 # 出力ファイルが既に存在する場合は削除する
 if [ -f "$output_file" ]; then
     rm "$output_file"
-    echo "DoubleLoopRight.csvが削除されました。"
+    echo "DoubleLoopLeft.csvが削除されました。"
 fi
 
 # ファイルが存在しない場合はエラーを表示して終了
@@ -39,9 +39,9 @@ function check_file_exists() {
 }
 
 # 3つのファイルが存在するかチェック
-check_file_exists "$parts_directory/DoubleLoopRightFirst.csv"
-check_file_exists "$parts_directory/DoubleLoopRightMiddle_$number.csv"
-check_file_exists "$parts_directory/DoubleLoopRightEnd.csv"
+check_file_exists "$parts_directory/DoubleLoopLeftFirst.csv"
+check_file_exists "$parts_directory/DoubleLoopLeftMiddle_$number.csv"
+check_file_exists "$parts_directory/DoubleLoopLeftEnd.csv"
 
 # ファイルを結合する関数
 function merge_files() {
@@ -50,8 +50,8 @@ function merge_files() {
 }
 
 # ファイルを結合する
-merge_files "$parts_directory/DoubleLoopRightFirst.csv"
-merge_files "$parts_directory/DoubleLoopRightMiddle_$number.csv"
-merge_files "$parts_directory/DoubleLoopRightEnd.csv"
+merge_files "$parts_directory/DoubleLoopLeftFirst.csv"
+merge_files "$parts_directory/DoubleLoopLeftMiddle_$number.csv"
+merge_files "$parts_directory/DoubleLoopLeftEnd.csv"
 
 echo "CSVファイルが結合されました。"

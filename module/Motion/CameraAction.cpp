@@ -8,8 +8,12 @@
 
 using namespace std;
 
-CameraAction::CameraAction(bool _isClockwise, int _preTargetAngle, int _postTargetAngle)
-  : isClockwise(_isClockwise), preTargetAngle(_preTargetAngle), postTargetAngle(_postTargetAngle){};
+CameraAction::CameraAction(bool _target, bool _isClockwise, int _preTargetAngle,
+                           int _postTargetAngle)
+  : target(_target),
+    isClockwise(_isClockwise),
+    preTargetAngle(_preTargetAngle),
+    postTargetAngle(_postTargetAngle){};
 
 void CameraAction::run()
 {
@@ -22,7 +26,9 @@ void CameraAction::run()
   AngleRotation postAR(postTargetAngle, rotationSpeed, !isClockwise);
 
   // 撮影のための回頭をする
-  preAR.run();
+  if(preTargetAngle != 0) {
+    preAR.run();
+  }
 
   // リアカメラで画像を取得する
   // 撮影に際してディレクトリ移動も行う
@@ -31,7 +37,9 @@ void CameraAction::run()
   system(cmd);
 
   // 黒線復帰のための回頭をする
-  postAR.run();
+  if(postTargetAngle != 0) {
+    postAR.run();
+  }
 }
 
 bool CameraAction::isMetPrecondition()
@@ -39,27 +47,40 @@ bool CameraAction::isMetPrecondition()
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
 
-  // preTargetAngleが0以下の場合はwarningを出して終了する
-  if(preTargetAngle <= 0 || preTargetAngle >= 360) {
+  // preTargetAngleが0未満または360以上の場合はwarningを出して終了する
+  if(preTargetAngle < 0 || preTargetAngle >= 360) {
     snprintf(buf, BUF_SIZE, "The preTargetAngle value passed to preRotation is %d", preTargetAngle);
     logger.logWarning(buf);
     return false;
+  } else if(preTargetAngle == 0) {
+    snprintf(buf, BUF_SIZE, "The preTargetAngle value passed to preRotation is %d", preTargetAngle);
+    logger.logHighlight(buf);
+    return true;
   }
 
-  // postTargetAngleが0以下の場合はwarningを出して終了する
-  if(postTargetAngle <= 0 || postTargetAngle >= 360) {
+  // postTargetAngleが0未満または360以上の場合はwarningを出して終了する
+  if(postTargetAngle < 0 || postTargetAngle >= 360) {
     snprintf(buf, BUF_SIZE, "The postTargetAngle value passed to postRotation is %d",
              postTargetAngle);
     logger.logWarning(buf);
     return false;
+  } else if(postTargetAngle == 0) {
+    snprintf(buf, BUF_SIZE, "The postTargetAngle value passed to postRotation is %d",
+             postTargetAngle);
+    logger.logHighlight(buf);
+    return true;
   }
 
-  // 撮影終了フラグがtrueの場合は撮影動作をスキップする
-  if(cameraActionSkipFlag == true) {
-    snprintf(buf, BUF_SIZE, "The value of cameraActionSkipFlag is true.");
-    logger.logHighlight(buf);
-    return false;
+  // 撮影対象がA（targetがtrue）の場合はフラグ確認を行う
+  if(target == true) {
+    // 撮影終了フラグがtrueの場合は撮影動作をスキップする
+    if(cameraActionSkipFlag == true) {
+      snprintf(buf, BUF_SIZE, "The value of cameraActionSkipFlag is true.");
+      logger.logHighlight(buf);
+      return false;
+    }
   }
+
   return true;
 }
 
