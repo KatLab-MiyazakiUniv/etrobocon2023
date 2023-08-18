@@ -1,6 +1,8 @@
 help:
 	@echo "テストを実行する"
 	@echo " $$ make test"
+	@echo "キャリブレーションを行う"
+	@echo " $$ make calibrate"
 	@echo "デバッグを行う"
 	@echo " $$ make debug"
 	@echo "画像を取得する"
@@ -20,6 +22,9 @@ help:
 
 test:
 	python -m unittest
+
+calibrate:
+    python -m src --calibrate
 
 debug:
 	python -m src --debug
