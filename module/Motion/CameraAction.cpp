@@ -47,7 +47,7 @@ bool CameraAction::isMetPrecondition()
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
 
-  // preTargetAngleが0以下の場合はwarningを出して終了する
+  // preTargetAngleが0未満または360以上の場合はwarningを出して終了する
   if(preTargetAngle < 0 || preTargetAngle >= 360) {
     snprintf(buf, BUF_SIZE, "The preTargetAngle value passed to preRotation is %d", preTargetAngle);
     logger.logWarning(buf);
@@ -58,7 +58,7 @@ bool CameraAction::isMetPrecondition()
     return true;
   }
 
-  // postTargetAngleが0以下の場合はwarningを出して終了する
+  // postTargetAngleが0未満または360以上の場合はwarningを出して終了する
   if(postTargetAngle < 0 || postTargetAngle >= 360) {
     snprintf(buf, BUF_SIZE, "The postTargetAngle value passed to postRotation is %d",
              postTargetAngle);
