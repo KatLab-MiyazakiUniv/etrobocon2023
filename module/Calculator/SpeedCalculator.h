@@ -12,6 +12,7 @@
 #include "Mileage.h"
 #include "Pid.h"
 #include "Timer.h"
+#include "SystemInfo.h"
 
 class SpeedCalculator {
  public:
