@@ -167,7 +167,7 @@ class LineAngleCalculator:
     def detect_line_segment(
         self,
         img,
-        length_threshold_mm: int = 145,
+        length_threshold_mm: int = 125,
         distance_threshold: float = 1.41421356,
         canny_th1: int = 50,
         canny_th2: int = 50,
@@ -182,9 +182,8 @@ class LineAngleCalculator:
             NOTE:以下の引数の詳細: https://emotionexplorer.blog.fc2.com/blog-entry-128.html
                                   https://nsr-9.hatenablog.jp/entry/2021/08/12/200000
             length_threshold_mm (int): 線分を検出する際の長さ閾値(これより短い線は除外)
-                                       検出したい線分の長さ = 交点to中点-ブロックの半径
-                                                          = 175 - 30
-                                                          = 145
+                                       検出したい線分の長さ = 交点to交点の線分の長さの半分（※交点サークル内の距離は除く）
+                                                          = 125
                                        射影変換によってできた元画像の枠(直線)と同一とみなす距離
             distance_threshold (float): 距離閾値(この値より遠い座標は、同一線ではない)
                                         1.41421356はcv2.ximgproc.createFastLineDetectorの規定値

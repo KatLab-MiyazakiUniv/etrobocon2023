@@ -24,7 +24,7 @@ test:
 	python -m unittest
 
 calibrate:
-    python -m src --calibrate
+	python -m src --calibrate
 
 debug:
 	python -m src --debug
@@ -37,7 +37,7 @@ images:
 
 rm:
 	rm -rf image_data/
-	
+
 format:
 	autopep8 --in-place --recursive src/
 	python -m autopep8 -i -r src/ tests/
