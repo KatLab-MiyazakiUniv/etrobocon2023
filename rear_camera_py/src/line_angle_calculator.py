@@ -217,7 +217,7 @@ class LineAngleCalculator:
         # 検出する範囲の境界線(ignore_border(pix))を、detect_range_from_rbody_mmから求める
         # detect_range_from_rbody_mm: 線分検出したい範囲を走行体からの距離で指定する(mm)
         img_h, img_w = img.shape[:2]
-        detect_range_from_rbody_mm = 247*2*1.3  # 交点toブロック置き場*2*余幅補正 (mm)
+        detect_range_from_rbody_mm = 350*np.sqrt(2)*1.3  # 交点to交点*√２*余幅補正 (mm) （※ここでは交点サークル内の距離を含む）
         _, ignore_border = self.runner_base_coordinate_to_image_base_coordinate_pix(
             0, detect_range_from_rbody_mm, img_h, img_w)
 
