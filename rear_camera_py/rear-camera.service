@@ -38,7 +38,7 @@
 #       1. Serviceの停止
 #           $ sudo systemctl stop rear-camera.service
 #       2. 角度算出処理の実行
-#           $ make run
+#           $ make debug
 #       3. Serviceの起動(作業終了後)
 #           $ sudo systemctl start rear-camera.service
 #

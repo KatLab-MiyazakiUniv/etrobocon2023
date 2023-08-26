@@ -34,7 +34,7 @@ class LineAngleCalculator:
             trans_mat_file (str, optional): 射影変換用パラメータファイル名. Defaults to "rear_camera_param.npy".
             distance_file (str, optional): 射影変換後の画像座標と走行体の中心からの距離等の関係を保持するパラメータファイル名.
                                            Defaults to "rear_camera_distance_param.json".
-            running_body_to_4_ArUco_center (float): 走行体の座標から4つのArUcoマーカの中心点までの距離(mm)
+            running_body_to_4_ArUco_center (float): 走行体の座標からマーカID:1のArUcoマーカの中心点までの距離(mm)
             debug (bool, optional): Trueに設定するとデバッグ用の画像ファイルが生成される. Defaults to False.
             debug_dir (str, optional): デバッグ用の画像ファイルを生成するディレクトリ(存在しない場合は自動で生成される).
                                        Defaults to "debug".
