@@ -6,11 +6,9 @@
 
 #include "ManagePwm.h"
 
-ManagePwm::ManagePwm()
-{
-  manageRightPwm = 0.0;
-  manageLeftPwm = 0.0;
-}
+// PWMの初期化
+double ManagePwm::manageRightPwm = 0.0;
+double ManagePwm::manageLeftPwm = 0.0;
 
 double ManagePwm::getRightPwm()
 {

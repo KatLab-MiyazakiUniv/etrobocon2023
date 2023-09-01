@@ -11,15 +11,15 @@
 
 class ManagePwm {
  public:
-  ManagePwm();
-
   /**
    * @brief 右車輪のPWMを返す
+   * @return 右車輪のPWM
    */
   static double getRightPwm();
 
   /**
    * @brief 左車輪のPWMを返す
+   * @return 左車輪のPWM
    */
   static double getLeftPwm();
 
