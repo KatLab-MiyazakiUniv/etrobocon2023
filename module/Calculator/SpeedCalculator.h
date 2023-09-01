@@ -12,7 +12,7 @@
 #include "Mileage.h"
 #include "Pid.h"
 #include "Timer.h"
-#include "SystemInfo.h"
+#include "ManagePwm.h"
 
 class SpeedCalculator {
  public:
@@ -56,6 +56,9 @@ class SpeedCalculator {
   static constexpr double K_P = 0.004;
   static constexpr double K_I = 0.0000005;
   static constexpr double K_D = 0.0007;
+  static constexpr double R_K_P = 0.004;
+  static constexpr double R_K_I = 0.0000005;
+  static constexpr double R_K_D = 0.0007;
 
   /**
    * @brief 走行速度を算出する

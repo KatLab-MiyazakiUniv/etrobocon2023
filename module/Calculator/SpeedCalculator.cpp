@@ -11,8 +11,8 @@ SpeedCalculator::SpeedCalculator(double _targetSpeed)
     rightPid(K_P, K_I, K_D, _targetSpeed),
     leftPid(K_P, K_I, K_D, _targetSpeed)
 {
-  rightPwm = mp.returnRightPwm();
-  leftPwm = mp.returnLeftPwm();
+  rightPwm = ManagePwm::getRightPwm();
+  leftPwm = ManagePwm::getLeftPwm();
   int rightAngle = Measurer::getRightCount();
   int leftAngle = Measurer::getLeftCount();
   prevRightMileage = Mileage::calculateWheelMileage(rightAngle);
@@ -25,11 +25,11 @@ SpeedCalculator::SpeedCalculator(double _targetSpeed)
 SpeedCalculator::SpeedCalculator(double _rightTargetSpeed, double _leftTargetSpeed)
   : rightTargetSpeed(_rightTargetSpeed),
     leftTargetSpeed(_leftTargetSpeed),
-    rightPid(K_P, K_I, K_D, _rightTargetSpeed),
-    leftPid(K_P, K_I, K_D, _leftTargetSpeed)
+    rightPid(R_K_P, R_K_I, R_K_D, _rightTargetSpeed),
+    leftPid(R_K_P, R_K_I, R_K_D, _leftTargetSpeed)
 {
-  rightPwm = 0.0;
-  leftPwm = 0.0;
+  rightPwm = ManagePwm::getRightPwm();
+  leftPwm = ManagePwm::getLeftPwm();
   int rightAngle = Measurer::getRightCount();
   int leftAngle = Measurer::getLeftCount();
   prevRightMileage = Mileage::calculateWheelMileage(rightAngle);
@@ -57,7 +57,7 @@ int SpeedCalculator::calcRightPwmFromSpeed()
   prevRightMileage = currentRightMileage;
   prevRightTime = currentRightTime;
   // 右タイヤのPWMを更新
-  mp.updateRightPwm(rightPwm);
+  ManagePwm::updateRightPwm(rightPwm);
 
   return (int)rightPwm;
 }
@@ -80,7 +80,7 @@ int SpeedCalculator::calcLeftPwmFromSpeed()
   prevLeftMileage = currentLeftMileage;
   prevLeftTime = currentLeftTime;
   // 左タイヤのPWMを更新
-  mp.updateLeftPwm(leftPwm);
+  ManagePwm::updateLeftPwm(leftPwm);
 
   return (int)leftPwm;
 }

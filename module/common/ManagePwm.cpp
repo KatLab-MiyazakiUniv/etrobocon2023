@@ -4,26 +4,30 @@
  * @author bizyutyu
  */
 
- #include "ManagePwm.h"
+#include "ManagePwm.h"
 
- ManagePwm::ManagePwm () {
-    rightPwm = 0.0;
-    leftPwm = 0.0;
- }
-
- double ManagePwm::returnRightPwm(){
-   return rightPwm;
- }
-
- double ManagePwm::returnLeftPwm(){
-   return leftPwm;
- }
-
-void ManagePwm::updateRightPwm(double inputRightPwm){
-   rightPwm = inputRightPwm;
+ManagePwm::ManagePwm()
+{
+  manageRightPwm = 0.0;
+  manageLeftPwm = 0.0;
 }
 
+double ManagePwm::getRightPwm()
+{
+  return manageRightPwm;
+}
 
-void ManagePwm::updateLeftPwm(double inputLeftPwm){
-   leftPwm = inputLeftPwm;
+double ManagePwm::getLeftPwm()
+{
+  return manageLeftPwm;
+}
+
+void ManagePwm::updateRightPwm(double _inputRightPwm)
+{
+  manageRightPwm = _inputRightPwm;
+}
+
+void ManagePwm::updateLeftPwm(double _inputLeftPwm)
+{
+  manageLeftPwm = _inputLeftPwm;
 }
