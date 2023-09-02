@@ -4,8 +4,8 @@
  * @author Negimarge
  */
 
-#ifndef ROTATION_H
-#define ROTATION_H
+#ifndef PWMROTATION_H
+#define PWMROTATION_H
 
 #include "Motion.h"
 #include "Mileage.h"

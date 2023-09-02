@@ -174,100 +174,101 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
       logger.logWarning(buf);
     }
     lineNum++;  // 行番号をインクリメントする
-
-    // ファイルを閉じる
-    fclose(fp);
-
-    return motionList;
   }
 
-  COMMAND MotionParser::convertCommand(char* str)
-  {
-    if(strcmp(str, "DL") == 0) {  // 文字列がDLの場合
-      return COMMAND::DL;
-    } else if(strcmp(str, "CL") == 0) {  // 文字列がCLの場合
-      return COMMAND::CL;
-    } else if(strcmp(str, "DS") == 0) {  // 文字列がDSの場合
-      return COMMAND::DS;
-    } else if(strcmp(str, "CS") == 0) {  // 文字列がCSの場合
-      return COMMAND::CS;
-    } else if(strcmp(str, "AR") == 0) {  // 文字列がARの場合
-      return COMMAND::AR;
-    } else if(strcmp(str, "DT") == 0) {  // 文字列がDTの場合
-      return COMMAND::DT;
-    } else if(strcmp(str, "EC") == 0) {  // 文字列がECの場合
-      return COMMAND::EC;
-    } else if(strcmp(str, "SL") == 0) {  // 文字列がSLの場合
-      return COMMAND::SL;
-    } else if(strcmp(str, "AU") == 0) {  // 文字列がAUの場合
-      return COMMAND::AU;
-    } else if(strcmp(str, "AD") == 0) {  // 文字列がADの場合
-      return COMMAND::AD;
-    } else if(strcmp(str, "XR") == 0) {  // 文字列がXRの場合
-      return COMMAND::XR;
-    } else if(strcmp(str, "CA") == 0) {  // 文字列がCAの場合
-      return COMMAND::CA;
-    } else if(strcmp(str, "IS") == 0) {  // 文字列がISの場合
-      return COMMAND::IS;
-    } else if(strcmp(str, "IL") == 0) {  // 文字列がILの場合
-      return COMMAND::IL;
-    } else if(strcmp(str, "IR") == 0) {  // 文字列がIRの場合
-      return COMMAND::IR;
-    } else if(strcmp(str, "CC") == 0) {  // 文字列がCCの場合
-      return COMMAND::CC;
-    } else if(strcmp(str, "CM") == 0) {  // 文字列がCMの場合
-      return COMMAND::CM;
-    } else if(strcmp(str, "PR") == 0) {
-      return COMMAND::PR;
-    } else {  // 想定していない文字列が来た場合
-      return COMMAND::NONE;
+  // ファイルを閉じる
+  fclose(fp);
+
+  return motionList;
+}
+
+COMMAND MotionParser::convertCommand(char* str)
+{
+  if(strcmp(str, "DL") == 0) {  // 文字列がDLの場合
+    return COMMAND::DL;
+  } else if(strcmp(str, "CL") == 0) {  // 文字列がCLの場合
+    return COMMAND::CL;
+  } else if(strcmp(str, "DS") == 0) {  // 文字列がDSの場合
+    return COMMAND::DS;
+  } else if(strcmp(str, "CS") == 0) {  // 文字列がCSの場合
+    return COMMAND::CS;
+  } else if(strcmp(str, "AR") == 0) {  // 文字列がARの場合
+    return COMMAND::AR;
+  } else if(strcmp(str, "DT") == 0) {  // 文字列がDTの場合
+    return COMMAND::DT;
+  } else if(strcmp(str, "EC") == 0) {  // 文字列がECの場合
+    return COMMAND::EC;
+  } else if(strcmp(str, "SL") == 0) {  // 文字列がSLの場合
+    return COMMAND::SL;
+  } else if(strcmp(str, "AU") == 0) {  // 文字列がAUの場合
+    return COMMAND::AU;
+  } else if(strcmp(str, "AD") == 0) {  // 文字列がADの場合
+    return COMMAND::AD;
+  } else if(strcmp(str, "XR") == 0) {  // 文字列がXRの場合
+    return COMMAND::XR;
+  } else if(strcmp(str, "CA") == 0) {  // 文字列がCAの場合
+    return COMMAND::CA;
+  } else if(strcmp(str, "IS") == 0) {  // 文字列がISの場合
+    return COMMAND::IS;
+  } else if(strcmp(str, "IL") == 0) {  // 文字列がILの場合
+    return COMMAND::IL;
+  } else if(strcmp(str, "IR") == 0) {  // 文字列がIRの場合
+    return COMMAND::IR;
+  } else if(strcmp(str, "CC") == 0) {  // 文字列がCCの場合
+    return COMMAND::CC;
+  } else if(strcmp(str, "CM") == 0) {  // 文字列がCMの場合
+    return COMMAND::CM;
+  } else if(strcmp(str, "PR") == 0) {
+    return COMMAND::PR;
+  } else {  // 想定していない文字列が来た場合
+    return COMMAND::NONE;
+  }
+}
+
+bool MotionParser::convertBool(char* command, char* stringParameter)
+{
+  Logger logger;
+
+  // 末尾の改行を削除
+  char* param = StringOperator::removeEOL(stringParameter);
+
+  if(strcmp(command, "AR") == 0 || strcmp(command, "CM") == 0
+     || strcmp(command, "PR") == 0) {      //  コマンドがAR, CM, PRの場合
+    if(strcmp(param, "clockwise") == 0) {  // パラメータがclockwiseの場合
+      return true;
+    } else if(strcmp(param, "anticlockwise") == 0) {  // パラメータがanticlockwiseの場合
+      return false;
+    } else {  // 想定していないパラメータが来た場合
+      logger.logWarning("Parameter before conversion must be 'clockwise' or 'anticlockwise'");
+      return true;
     }
   }
 
-  bool MotionParser::convertBool(char* command, char* stringParameter)
-  {
-    Logger logger;
-
-    // 末尾の改行を削除
-    char* param = StringOperator::removeEOL(stringParameter);
-
-    if(strcmp(command, "AR") == 0 || strcmp(command, "CM") == 0
-       || strcmp(command, "PR") == 0) {      //  コマンドがAR, CM, PRの場合
-      if(strcmp(param, "clockwise") == 0) {  // パラメータがclockwiseの場合
-        return true;
-      } else if(strcmp(param, "anticlockwise") == 0) {  // パラメータがanticlockwiseの場合
-        return false;
-      } else {  // 想定していないパラメータが来た場合
-        logger.logWarning("Parameter before conversion must be 'clockwise' or 'anticlockwise'");
-        return true;
-      }
+  if(strcmp(command, "EC") == 0 || strcmp(command, "CM") == 0) {  //  コマンドがEC, CMの場合
+    if(strcmp(param, "left") == 0) {                              // パラメータがleftの場合
+      return true;
+    } else if(strcmp(param, "right") == 0) {  // パラメータがrightの場合
+      return false;
+    } else {  // 想定していないパラメータが来た場合
+      logger.logWarning("Parameter before conversion must be 'left' or 'right'");
+      return true;
     }
-
-    if(strcmp(command, "EC") == 0 || strcmp(command, "CM") == 0) {  //  コマンドがEC, CMの場合
-      if(strcmp(param, "left") == 0) {  // パラメータがleftの場合
-        return true;
-      } else if(strcmp(param, "right") == 0) {  // パラメータがrightの場合
-        return false;
-      } else {  // 想定していないパラメータが来た場合
-        logger.logWarning("Parameter before conversion must be 'left' or 'right'");
-        return true;
-      }
-    }
-
-    if(strcmp(command, "CA") == 0) {         //  コマンドがCAの場合
-      if(strcmp(param, "clockwise") == 0) {  // パラメータがclockwiseの場合
-        return true;
-      } else if(strcmp(param, "anticlockwise") == 0) {  // パラメータがanticlockwiseの場合
-        return false;
-      } else if(strcmp(param, "A") == 0) {  // パラメータがAの場合
-        return true;
-      } else if(strcmp(param, "B") == 0) {  // パラメータがBの場合
-        return false;
-      } else {  // 想定していないパラメータが来た場合
-        logger.logWarning("Parameter before conversion must be 'clockwise' or 'anticlockwise'");
-        return true;
-      }
-    }
-    logger.logWarning("Using a command that is not defined in convertBool.");
-    return true;
   }
+
+  if(strcmp(command, "CA") == 0) {         //  コマンドがCAの場合
+    if(strcmp(param, "clockwise") == 0) {  // パラメータがclockwiseの場合
+      return true;
+    } else if(strcmp(param, "anticlockwise") == 0) {  // パラメータがanticlockwiseの場合
+      return false;
+    } else if(strcmp(param, "A") == 0) {  // パラメータがAの場合
+      return true;
+    } else if(strcmp(param, "B") == 0) {  // パラメータがBの場合
+      return false;
+    } else {  // 想定していないパラメータが来た場合
+      logger.logWarning("Parameter before conversion must be 'clockwise' or 'anticlockwise'");
+      return true;
+    }
+  }
+  logger.logWarning("Using a command that is not defined in convertBool.");
+  return true;
+}
