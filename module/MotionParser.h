@@ -27,6 +27,7 @@
 #include "CrossToMid.h"
 #include "StringOperator.h"
 #include "CameraAction.h"
+#include "PwmRotation.h"
 
 enum class COMMAND {
   DL,  // 指定距離ライントレース
@@ -46,6 +47,7 @@ enum class COMMAND {
   IR,  // 交点内移動（右折）
   CC,  // 交点サークルから交点サークル
   CM,  // 交点サークルから直線の中点
+  PR,  // Pwm値指定回頭
   NONE
 };
 
