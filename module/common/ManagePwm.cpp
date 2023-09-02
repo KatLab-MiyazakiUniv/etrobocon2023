@@ -1,6 +1,6 @@
 /**
  * @file ManagePwm.cpp
- * @brief 動作確認に用いるprintf()関数を所持するクラス
+ * @brief 走行体の左右車輪のPWMを所持するクラス
  * @author bizyutyu
  */
 
