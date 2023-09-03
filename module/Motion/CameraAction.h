@@ -10,6 +10,7 @@
 #include "SystemInfo.h"
 #include "CompositeMotion.h"
 #include "AngleRotation.h"
+#include "DistanceStraight.h"
 
 class CameraAction : public CompositeMotion {
  public:
