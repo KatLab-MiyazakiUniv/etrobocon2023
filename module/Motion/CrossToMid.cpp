@@ -8,13 +8,13 @@
 
 using namespace std;
 
-CrossToMid::CrossToMid(COLOR _targetColor, double _targetDistance, double _dlTargetSpeed,
-                       double _dsTargetSpeed, int _targetAngle, double _arTargetSpeed,
-                       int _targetBrightness, const PidGain& _gain, bool _isClockwise,
-                       bool& _isLeftEdge, bool _nextEdge)
+CrossToMid::CrossToMid(double _targetLineDistance, double _targetCircleDistance,
+                       double _dlTargetSpeed, double _dsTargetSpeed, int _targetAngle,
+                       double _arTargetSpeed, int _targetBrightness, const PidGain& _gain,
+                       bool _isClockwise, bool& _isLeftEdge, bool _nextEdge)
   : BlockAreaMotion(1.02, 1.01),  // 動作時間, 失敗リスク TODO: 測定し直す
-    targetColor(_targetColor),
-    targetDistance(_targetDistance),
+    targetLineDistance(_targetLineDistance),
+    targetCircleDistance(_targetCircleDistance),
     dlTargetSpeed(_dlTargetSpeed),
     dsTargetSpeed(_dsTargetSpeed),
     targetAngle(_targetAngle),
@@ -32,19 +32,19 @@ void CrossToMid::run()
     return;
   }
 
-  DistanceLineTracing dl(targetDistance, dlTargetSpeed, targetBrightness, gain, isLeftEdge);
+  DistanceLineTracing dl(targetLineDistance, dlTargetSpeed, targetBrightness, gain, isLeftEdge);
 
   // サークル内移動
   if(targetAngle >= 0 && targetAngle <= 5) {  // 回頭角度が0度から5度の間であれば直進
-    InCrossStraight is(targetDistance, dsTargetSpeed);
+    InCrossStraight is(targetCircleDistance, dsTargetSpeed);
     is.run();
 
   } else if(isClockwise == false) {  // 左に回頭するなら左折
-    InCrossLeft il(targetDistance, dsTargetSpeed, arTargetSpeed, targetAngle);
+    InCrossLeft il(targetCircleDistance, dsTargetSpeed, arTargetSpeed, targetAngle);
     il.run();
 
   } else {  // 右に回頭するなら右折
-    InCrossRight ir(targetDistance, dsTargetSpeed, arTargetSpeed, targetAngle);
+    InCrossRight ir(targetCircleDistance, dsTargetSpeed, arTargetSpeed, targetAngle);
     ir.run();
   }
 
@@ -57,9 +57,19 @@ bool CrossToMid::isMetPrecondition()
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];
 
-  // 目標の色がNoneのときwarningを出して終了する
-  if(targetColor == COLOR::NONE) {
-    logger.logWarning("The targetColor passed to CrossToMid is NONE");
+  // targetLineDistance値が0以下の場合はwarningを出して終了する
+  if(targetLineDistance <= 0.0) {
+    snprintf(buf, BUF_SIZE, "The targetLineDistance value passed to CrossToMid is %.2f",
+             targetLineDistance);
+    logger.logWarning(buf);
+    return false;
+  }
+
+  // targetCircleDistance値が0以下の場合はwarningを出して終了する
+  if(targetCircleDistance <= 0.0) {
+    snprintf(buf, BUF_SIZE, "The targetCircleDistance value passed to CrossToMid is %.2f",
+             targetCircleDistance);
+    logger.logWarning(buf);
     return false;
   }
 
@@ -102,13 +112,14 @@ void CrossToMid::logRunning()
   const char* isLeftEdgeStr = isLeftEdge ? "true" : "false";
   const char* nextEdgeStr = nextEdge ? "true" : "false";
 
-  snprintf(buf, BUF_SIZE,
-           "Run CrossToMid (targetColor: %s, targetDistance: %.2f, dlTargetSpeed: %.2f, "
-           "dsTargetSpeed: %.2f, targetAngle: %d, arTargetSpeed: %.2f"
-           "targetBrightness: %d, gain: "
-           "(%.2f,%.2f,%.2f), isClockwise: %s, isLeftEdge: %s, nextEdge: %s)",
-           ColorJudge::colorToString(targetColor), targetDistance, dlTargetSpeed, dsTargetSpeed,
-           targetAngle, arTargetSpeed, targetBrightness, gain.kp, gain.ki, gain.kd, isClockwiseStr,
-           isLeftEdgeStr, nextEdgeStr);
+  snprintf(
+      buf, BUF_SIZE,
+      "Run CrossToMid (targetLineDistance: %.2f, targetCircleDistance: %.2f, dlTargetSpeed: %.2f, "
+      "dsTargetSpeed: %.2f, targetAngle: %d, arTargetSpeed: %.2f"
+      "targetBrightness: %d, gain: "
+      "(%.2f,%.2f,%.2f), isClockwise: %s, isLeftEdge: %s, nextEdge: %s)",
+      targetLineDistance, targetCircleDistance, dlTargetSpeed, dsTargetSpeed, targetAngle,
+      arTargetSpeed, targetBrightness, gain.kp, gain.ki, gain.kd, isClockwiseStr, isLeftEdgeStr,
+      nextEdgeStr);
   logger.log(buf);
 }
