@@ -35,3 +35,4 @@ export GTEST_COLOR=1
 ctest -VV
 
 rm -rf etrobocon2023/
+rm response.txt

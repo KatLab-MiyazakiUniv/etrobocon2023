@@ -112,14 +112,14 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
       ArmDownning* ad = new ArmDownnig(atoi(params[1]), atoi(params[2]));
 
       motionList.push_back(ad);          // 動作リストに追加
-    } else if(command == COMMAND::XR) {  // 角度補正回頭の追加
-      CorrectingRotation* xr = new CorrectingRotation(atoi(params[1]),   // 目標角度
-                                                      atoi(params[2]));  // 目標速度
-
-      motionList.push_back(xr);                                          // 動作リストに追加
     }
     */
-    else if(command == COMMAND::IS) {                              // 交点内移動（直進）
+    else if(command == COMMAND::XR) {  // 角度補正回頭の追加
+      CorrectingRotation* xr = new CorrectingRotation(atoi(params[1]),   // 目標角度
+                                                      atof(params[2]));  // 目標速度
+
+      motionList.push_back(xr);                                    // 動作リストに追加
+    } else if(command == COMMAND::IS) {                            // 交点内移動（直進）
       InCrossStraight* is = new InCrossStraight(atof(params[1]),   // 目標距離
                                                 atof(params[2]));  // 目標速度 [mm/s]
 

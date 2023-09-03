@@ -20,6 +20,6 @@ static constexpr double TREAD = 125.0;  // 走行体のトレッド幅（両輪�
 static bool cameraActionSkipFlag = false;           // 撮影終了フラグ
 #pragma GCC diagnostic pop
 
-// static constexpr int ANGLE_SERVER_PORT = 10338;  // 角度算出用サーバのポート番号
+static constexpr int ANGLE_SERVER_PORT = 10338;  // 角度算出用サーバのポート番号
 
 #endif
