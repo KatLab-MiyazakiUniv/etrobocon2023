@@ -53,9 +53,11 @@ class SpeedCalculator {
   double prevLeftMileage;
   int prevRightTime;
   int prevLeftTime;
+  // 回頭以外のPIDゲイン
   static constexpr double K_P = 0.004;
   static constexpr double K_I = 0.0000005;
   static constexpr double K_D = 0.0007;
+  //回頭用PIDゲイン
   static constexpr double R_K_P = 0.004;
   static constexpr double R_K_I = 0.0000005;
   static constexpr double R_K_D = 0.0007;

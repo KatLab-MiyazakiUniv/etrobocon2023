@@ -28,8 +28,8 @@ SpeedCalculator::SpeedCalculator(double _rightTargetSpeed, double _leftTargetSpe
     rightPid(R_K_P, R_K_I, R_K_D, _rightTargetSpeed),
     leftPid(R_K_P, R_K_I, R_K_D, _leftTargetSpeed)
 {
-  rightPwm = ManagePwm::getRightPwm();
-  leftPwm = ManagePwm::getLeftPwm();
+  rightPwm = 0.0;
+  leftPwm = 0.0;
   int rightAngle = Measurer::getRightCount();
   int leftAngle = Measurer::getLeftCount();
   prevRightMileage = Mileage::calculateWheelMileage(rightAngle);
