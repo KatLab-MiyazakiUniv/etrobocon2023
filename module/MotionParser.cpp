@@ -218,7 +218,7 @@ COMMAND MotionParser::convertCommand(char* str)
     return COMMAND::CC;
   } else if(strcmp(str, "CM") == 0) {  // 文字列がCMの場合
     return COMMAND::CM;
-  } else if(strcmp(str, "PR") == 0) {
+  } else if(strcmp(str, "PR") == 0) {  // 文字列がPRの場合
     return COMMAND::PR;
   } else {  // 想定していない文字列が来た場合
     return COMMAND::NONE;
