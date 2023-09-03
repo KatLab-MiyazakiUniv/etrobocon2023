@@ -1,7 +1,7 @@
 /**
  * @file   CameraAction.cpp
  * @brief  ミニフィグ撮影動作
- * @author bizyutyu
+ * @author bizyutyu YKhm20020
  */
 
 #include "CameraAction.h"
