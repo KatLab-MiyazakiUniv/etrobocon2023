@@ -112,14 +112,14 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
       ArmDownning* ad = new ArmDownnig(atoi(params[1]), atoi(params[2]));
 
       motionList.push_back(ad);          // 動作リストに追加
-    } else if(command == COMMAND::XR) {  // 角度補正回頭の追加
-      CorrectingRotation* xr = new CorrectingRotation(atoi(params[1]),   // 目標角度
-                                                      atoi(params[2]));  // 目標速度
-
-      motionList.push_back(xr);                                          // 動作リストに追加
     }
     */
-    else if(command == COMMAND::IS) {                              // 交点内移動（直進）
+    else if(command == COMMAND::XR) {  // 角度補正回頭の追加
+      CorrectingRotation* xr = new CorrectingRotation(atoi(params[1]),   // 目標角度
+                                                      atof(params[2]));  // 目標速度
+
+      motionList.push_back(xr);                                    // 動作リストに追加
+    } else if(command == COMMAND::IS) {                            // 交点内移動（直進）
       InCrossStraight* is = new InCrossStraight(atof(params[1]),   // 目標距離
                                                 atof(params[2]));  // 目標速度 [mm/s]
 
@@ -149,8 +149,8 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
       motionList.push_back(cc);          // 動作リストに追加
     } else if(command == COMMAND::CM) {  // 交点サークルから直線の中点
       CrossToMid* cm = new CrossToMid(
-          ColorJudge::stringToColor(params[1]),  // 目標色
-          atof(params[2]),                       // 目標距離
+          atof(params[1]),  // 交点から中点までの目標距離
+          atof(params[2]),  // サークル内半径の目標距離
           atof(params[3]),  // 距離指定ライントレースの目標速度 [mm/s]
           atof(params[4]),  // 距離指定直進の目標速度 [mm/s]
           atoi(params[5]),  // 目標回頭角度
