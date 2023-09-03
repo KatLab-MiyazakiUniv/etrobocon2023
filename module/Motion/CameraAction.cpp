@@ -30,11 +30,23 @@ void CameraAction::run()
     preAR.run();
   }
 
+  // 撮影対象がB（targetがfalse）の場合は、バックでフィグへ接近
+  if(target == false) {
+    DistanceStraight dsToFig(targetDistance, targetSpeed);
+    dsToFig.run();
+  }
+
   // リアカメラで画像を取得する
   // 撮影に際してディレクトリ移動も行う
   char cmd[256];
   snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make image && cd ../..");
   system(cmd);
+
+  // 撮影対象がB（targetがfalse）の場合は、前進で黒線へ復帰
+  if(target == false) {
+    DistanceStraight dsToLine(targetDistance, -1.0 * targetSpeed);
+    dsToLine.run();
+  }
 
   // 黒線復帰のための回頭をする
   if(postTargetAngle != 0) {
