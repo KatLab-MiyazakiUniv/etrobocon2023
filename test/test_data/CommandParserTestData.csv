@@ -3,5 +3,5 @@ CL,RED,30,0,0.1,0.2,0.3,指定色ライントレース
 DS,100.20,100,指定距離直進
 CS,GREEN,100,指定色直進
 AR,90,80,anticlockwise,角度指定回頭
-PR,90,90,clockwise,Pwd値指定回頭
+PR,90,90,clockwise,Pwm値指定回頭
 UNDEFINED,未定義コマンド
