@@ -18,7 +18,7 @@ LineTracing::LineTracing(double _targetSpeed, int _targetBrightness, const PidGa
 
 void LineTracing::run()
 {
-  double turnPwm = 0;     // 旋回値を計算
+  double turnPwm = 0.0;   // 旋回値を計算
   initialDistance = 0.0;  // 実行前の走行距離
   currentDistance = 0.0;  // 現在の走行距離
   int edgeSign = 0;

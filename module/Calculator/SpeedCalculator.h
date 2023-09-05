@@ -57,6 +57,7 @@ class SpeedCalculator {
   static constexpr double K_I = 0.0000005;
   static constexpr double K_D = 0.0007;
   // 回頭用PIDゲイン
+  // ToDo：次イテレーションで調整
   static constexpr double R_K_P = 0.004;
   static constexpr double R_K_I = 0.0000005;
   static constexpr double R_K_D = 0.0007;

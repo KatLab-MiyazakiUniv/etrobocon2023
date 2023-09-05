@@ -31,8 +31,8 @@ void Straight::run()
   // SpeedCalculatorの実体化
   SpeedCalculator SpeedCalculator(targetSpeed);
 
-  double currentLeftPwm = 0;   // 現在の左タイヤpwd値
-  double currentRightPwm = 0;  // 現在の右タイヤpwd値
+  double currentLeftPwm = 0.0;   // 現在の左タイヤpwd値
+  double currentRightPwm = 0.0;  // 現在の右タイヤpwd値
 
   // 走行距離が目標値に到達するまで繰り返す
   while(true) {
