@@ -25,9 +25,7 @@ void CameraAction::run()
   AngleRotation postAR(postTargetAngle, rotationSpeed, !isClockwise);
 
   // 撮影のための回頭をする
-  if(preTargetAngle != 0) {
-    preAR.run();
-  }
+  preAR.run();
 
   // 撮影対象がBの場合は、前進でフィグから遠ざかる
   if(isA == false) {
@@ -48,9 +46,7 @@ void CameraAction::run()
   }
 
   // 黒線復帰のための回頭をする
-  if(postTargetAngle != 0) {
-    postAR.run();
-  }
+  postAR.run();
 }
 
 bool CameraAction::isMetPrecondition()
