@@ -43,9 +43,11 @@ namespace etrobocon2023_test {
     expectedList.push_back(cs);
     AngleRotation* ar = new AngleRotation(90, 80, false);
     expectedList.push_back(ar);
+    PwmRotation* pr = new PwmRotation(90, 90, true);
+    expectedList.push_back(pr);
     // Warning文
     string expectedOutput = "\x1b[36m";  // 文字色をシアンに
-    expectedOutput += "Warning: ../test/test_data/CommandParserTestData.csv:6: ";
+    expectedOutput += "Warning: ../test/test_data/CommandParserTestData.csv:7: ";
     expectedOutput += "'UNDEFINED' is undefined command";
     expectedOutput += "\n\x1b[39m";  // 文字色をデフォルトに戻す
 

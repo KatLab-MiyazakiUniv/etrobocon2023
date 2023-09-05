@@ -161,7 +161,13 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
           isLeftEdge,                          // エッジ
           convertBool(params[0], params[12]));  // 切り替え後のエッジ
 
-      motionList.push_back(cm);  // 動作リストに追加
+      motionList.push_back(cm);                           // 動作リストに追加
+    } else if(command == COMMAND::PR) {                   // Pwm値指定回頭動作
+      PwmRotation* pr = new PwmRotation(atoi(params[1]),  // 目標角度
+                                        atoi(params[2]),  // Pwm値
+                                        convertBool(params[0], params[3]));  // 回頭方向
+
+      motionList.push_back(pr);  // 動作リストに追加
     } else {                     // 未定義のコマンドの場合
       snprintf(buf, BUF_SIZE, "%s:%d: '%s' is undefined command", commandFilePath, lineNum,
                params[0]);
@@ -212,6 +218,8 @@ COMMAND MotionParser::convertCommand(char* str)
     return COMMAND::CC;
   } else if(strcmp(str, "CM") == 0) {  // 文字列がCMの場合
     return COMMAND::CM;
+  } else if(strcmp(str, "PR") == 0) {  // 文字列がPRの場合
+    return COMMAND::PR;
   } else {  // 想定していない文字列が来た場合
     return COMMAND::NONE;
   }
@@ -224,7 +232,8 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
   // 末尾の改行を削除
   char* param = StringOperator::removeEOL(stringParameter);
 
-  if(strcmp(command, "AR") == 0 || strcmp(command, "CM") == 0) {  //  コマンドがAR, CMの場合
+  if(strcmp(command, "AR") == 0 || strcmp(command, "CM") == 0
+     || strcmp(command, "PR") == 0) {      //  コマンドがAR, CM, PRの場合
     if(strcmp(param, "clockwise") == 0) {  // パラメータがclockwiseの場合
       return true;
     } else if(strcmp(param, "anticlockwise") == 0) {  // パラメータがanticlockwiseの場合
