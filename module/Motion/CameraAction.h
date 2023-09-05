@@ -44,8 +44,8 @@ class CameraAction : public CompositeMotion {
   bool isClockwise;     // リアカメラをミニフィグに向けるための回頭方向
   int preTargetAngle;   // 撮影のための目標角度
   int postTargetAngle;  // 黒線復帰のための目標角度
-  const int rotationSpeed = 100;  // 回頭速度
-  double targetDistance = 50;     // 撮影前後の前進・後退のための目標距離
-  double targetSpeed = 150;       // 撮影前後の前進・後退のための目標速度
+  const int rotationSpeed = 100;     // 回頭速度
+  const double targetDistance = 50;  // 撮影前後の前進・後退のための目標距離
+  const double targetSpeed = 150;    // 撮影前後の前進・後退のための目標速度
 };
 #endif
