@@ -17,8 +17,8 @@ namespace etrobocon2023_test {
   TEST(ColorStraightTest, runToGetFirst)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     COLOR targetColor = COLOR::GREEN;
     int targetSpeed = 100;
     ColorStraight cs(targetColor, targetSpeed);
@@ -43,8 +43,8 @@ namespace etrobocon2023_test {
   TEST(ColorStraightTest, run)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     COLOR targetColor = COLOR::BLUE;
     int targetSpeed = 1000;
     ColorStraight cs(targetColor, targetSpeed);
@@ -77,8 +77,8 @@ namespace etrobocon2023_test {
   TEST(ColorStraightTest, runBack)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     COLOR targetColor = COLOR::RED;
     int targetSpeed = -100;
     ColorStraight cs(targetColor, targetSpeed);
@@ -110,8 +110,8 @@ namespace etrobocon2023_test {
   TEST(ColorStraightTest, runZeroPWM)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     COLOR targetColor = COLOR::YELLOW;
     int targetSpeed = 0;
     ColorStraight cs(targetColor, targetSpeed);
@@ -143,8 +143,8 @@ namespace etrobocon2023_test {
   TEST(ColorStraightTest, runNoneColor)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     COLOR targetColor = COLOR::NONE;
     int targetSpeed = 100;
     ColorStraight cs(targetColor, targetSpeed);

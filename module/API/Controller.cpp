@@ -8,6 +8,10 @@
 ev3api::Motor* Controller::rightMotor = nullptr;
 ev3api::Motor* Controller::leftMotor = nullptr;
 ev3api::Motor* Controller::armMotor = nullptr;
+// PWMの初期化
+double Controller::manageRightPwm = 0.0;
+double Controller::manageLeftPwm = 0.0;
+double Controller::manageArmPwm = 0.0;
 
 int Controller::limitPwmValue(const int value)
 {
@@ -20,32 +24,50 @@ int Controller::limitPwmValue(const int value)
 }
 
 // 右モータにPWM値をセット
-void Controller::setRightMotorPwm(const int pwm)
+void Controller::setRightMotorPwm(const double pwm)
 {
-  rightMotor->setPWM(limitPwmValue(pwm));
+  manageRightPwm = pwm;
+  rightMotor->setPWM(limitPwmValue(int(pwm)));
 }
 
 // 左モータにPWM値をセット
-void Controller::setLeftMotorPwm(const int pwm)
+void Controller::setLeftMotorPwm(const double pwm)
 {
-  leftMotor->setPWM(limitPwmValue(pwm));
+  manageLeftPwm = pwm;
+  leftMotor->setPWM(limitPwmValue(int(pwm)));
 }
 
 // タイヤのモータを停止する
 void Controller::stopMotor()
 {
+  manageRightPwm = 0.0;
+  manageLeftPwm = 0.0;
   rightMotor->stop();
   leftMotor->stop();
 }
 
 // アームのモータにPWM値をセット
-void Controller::setArmMotorPwm(const int pwm)
+void Controller::setArmMotorPwm(const double pwm)
 {
-  armMotor->setPWM(limitPwmValue(pwm));
+  manageArmPwm = pwm;
+  armMotor->setPWM(limitPwmValue(int(pwm)));
 }
 
 // アームのモータを停止する
 void Controller::stopArmMotor()
 {
+  manageArmPwm = 0.0;
   armMotor->stop();
+}
+
+// 右タイヤのPWMを取得する
+double Controller::getRightPwm()
+{
+  return manageRightPwm;
+}
+
+// 左タイヤのPWMを取得する
+double Controller::getLeftPwm()
+{
+  return manageLeftPwm;
 }

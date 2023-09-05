@@ -12,7 +12,6 @@
 #include "Mileage.h"
 #include "Pid.h"
 #include "Timer.h"
-#include "ManagePwm.h"
 
 class SpeedCalculator {
  public:
@@ -33,13 +32,13 @@ class SpeedCalculator {
    * @brief 目標とする走行速度に相当する右車輪のPWM値を算出する
    * @return 走行速度に相当する右タイヤのPWM値
    */
-  int calcRightPwmFromSpeed();
+  double calcRightPwmFromSpeed();
 
   /**
    * @brief 目標とする走行速度に相当する左車輪のPWM値を算出する
    * @return 走行速度に相当する左タイヤのPWM値
    */
-  int calcLeftPwmFromSpeed();
+  double calcLeftPwmFromSpeed();
 
  private:
   const double rightTargetSpeed;
@@ -57,7 +56,7 @@ class SpeedCalculator {
   static constexpr double K_P = 0.004;
   static constexpr double K_I = 0.0000005;
   static constexpr double K_D = 0.0007;
-  //回頭用PIDゲイン
+  // 回頭用PIDゲイン
   static constexpr double R_K_P = 0.004;
   static constexpr double R_K_I = 0.0000005;
   static constexpr double R_K_D = 0.0007;

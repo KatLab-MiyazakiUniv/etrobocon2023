@@ -18,7 +18,7 @@ LineTracing::LineTracing(double _targetSpeed, int _targetBrightness, const PidGa
 
 void LineTracing::run()
 {
-  int turnPwm = 0;        // 旋回値を計算
+  double turnPwm = 0;     // 旋回値を計算
   initialDistance = 0.0;  // 実行前の走行距離
   currentDistance = 0.0;  // 現在の走行距離
   int edgeSign = 0;
@@ -44,17 +44,17 @@ void LineTracing::run()
   // 継続条件を満たしている間ループ
   while(isMetPostcondition()) {
     // 初期pwm値を計算
-    int baseRightPwm = speedCalculator.calcRightPwmFromSpeed();
-    int baseLeftPwm = speedCalculator.calcLeftPwmFromSpeed();
+    double baseRightPwm = speedCalculator.calcRightPwmFromSpeed();
+    double baseLeftPwm = speedCalculator.calcLeftPwmFromSpeed();
 
     // PIDで旋回値を計算
     turnPwm = pid.calculatePid(Measurer::getBrightness()) * edgeSign;
 
     // モータのPWM値をセット（0を超えないようにセット）
-    int rightPwm = baseRightPwm > 0 ? max(baseRightPwm - (int)turnPwm, 0)
-                                    : min(baseRightPwm + (int)turnPwm, 0);
-    int leftPwm
-        = baseLeftPwm > 0 ? max(baseLeftPwm + (int)turnPwm, 0) : min(baseLeftPwm - (int)turnPwm, 0);
+    double rightPwm
+        = baseRightPwm > 0.0 ? max(baseRightPwm - turnPwm, 0.0) : min(baseRightPwm + turnPwm, 0.0);
+    double leftPwm
+        = baseLeftPwm > 0.0 ? max(baseLeftPwm + turnPwm, 0.0) : min(baseLeftPwm - turnPwm, 0.0);
     Controller::setRightMotorPwm(rightPwm);
     Controller::setLeftMotorPwm(leftPwm);
 

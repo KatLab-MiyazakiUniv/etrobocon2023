@@ -15,12 +15,12 @@ namespace etrobocon2023_test {
   TEST(DistanceLineTracingTest, runLeftEdge)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     double targetSpeed = 100.0;
     double targetDistance = 1000.0;
     double targetBrightness = 45.0;
-    int basePwm = 100;
+    double basePwm = 100;
     PidGain gain = { 0.1, 0.05, 0.05 };
     bool isLeftEdge = true;
     DistanceLineTracing dl(targetDistance, targetSpeed, targetBrightness, gain, isLeftEdge);
@@ -48,12 +48,12 @@ namespace etrobocon2023_test {
   TEST(DistanceLineTracingTest, runRightEdge)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     double targetSpeed = 100.0;
     double targetDistance = 1000.0;
     double targetBrightness = 45.0;
-    int basePwm = 100;
+    double basePwm = 100;
     PidGain gain = { 0.1, 0.05, 0.05 };
     bool isLeftEdge = false;
     DistanceLineTracing dl(targetDistance, targetSpeed, targetBrightness, gain, isLeftEdge);
@@ -81,12 +81,12 @@ namespace etrobocon2023_test {
   TEST(DistanceLineTracingTest, runBackLeftEdge)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     double targetSpeed = -100.0;
     double targetDistance = 100.0;
     double targetBrightness = 45.0;
-    int basePwm = -100;
+    double basePwm = -100;
     PidGain gain = { 0.1, 0.05, 0.05 };
     bool isLeftEdge = true;
     DistanceLineTracing dl(targetDistance, targetSpeed, targetBrightness, gain, isLeftEdge);
@@ -115,12 +115,12 @@ namespace etrobocon2023_test {
   TEST(DistanceLineTracingTest, runBackRightEdge)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     double targetSpeed = -100.0;
     double targetDistance = 1000.0;
     double targetBrightness = 45.0;
-    int basePwm = -100;
+    double basePwm = -100;
     PidGain gain = { 0.1, 0.05, 0.05 };
     bool isLeftEdge = false;
     DistanceLineTracing dl(targetDistance, targetSpeed, targetBrightness, gain, isLeftEdge);
@@ -149,12 +149,12 @@ namespace etrobocon2023_test {
   TEST(DistanceLineTracingTest, runZeroSpeed)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     double targetSpeed = 0.0;
     double targetDistance = 1000.0;
     double targetBrightness = 45.0;
-    int basePwm = 100;
+    double basePwm = 100;
     PidGain gain = { 0.1, 0.05, 0.05 };
     bool isLeftEdge = true;
     DistanceLineTracing dl(targetDistance, targetSpeed, targetBrightness, gain, isLeftEdge);
@@ -185,12 +185,12 @@ namespace etrobocon2023_test {
   TEST(DistanceLineTracingTest, runMinusDistance)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     double targetSpeed = 100.0;
     double targetDistance = -1000.0;
     double targetBrightness = 45.0;
-    int basePwm = 100;
+    double basePwm = 100;
     PidGain gain = { 0.1, 0.05, 0.05 };
     bool isLeftEdge = true;
     DistanceLineTracing dl(targetDistance, targetSpeed, targetBrightness, gain, isLeftEdge);

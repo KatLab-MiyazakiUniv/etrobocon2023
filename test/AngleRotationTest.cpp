@@ -21,8 +21,8 @@ namespace etrobocon2023_test {
   TEST(AngleRotationTest, runRight)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     int angle = 180;
     double targetSpeed = 60.0;
     bool isClockwise = true;
@@ -48,8 +48,8 @@ namespace etrobocon2023_test {
   TEST(AngleRotationTest, runLeft)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     int angle = 180;
     double targetSpeed = 60.0;
     bool isClockwise = false;
@@ -74,8 +74,8 @@ namespace etrobocon2023_test {
   TEST(AngleRotationTest, runZeroPWM)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     int angle = 45;
     double targetSpeed = 0.0;
     bool isClockwise = true;
@@ -109,8 +109,8 @@ namespace etrobocon2023_test {
   TEST(AngleRotationTest, runMinusPWM)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     int angle = 45;
     double targetSpeed = -100.0;
     bool isClockwise = true;
@@ -144,8 +144,8 @@ namespace etrobocon2023_test {
   TEST(AngleRotationTest, runZeroAngle)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     int angle = 0;
     double targetSpeed = 100.0;
     bool isClockwise = true;
@@ -178,8 +178,8 @@ namespace etrobocon2023_test {
   TEST(AngleRotationTest, runMinusAngle)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     int angle = -180;
     double targetSpeed = 100.0;
     bool isClockwise = true;
@@ -212,8 +212,8 @@ namespace etrobocon2023_test {
   TEST(AngleRotationTest, runOverAngle)
   {
     // PWMの初期化
-    ManagePwm::updateRightPwm(0.0);
-    ManagePwm::updateLeftPwm(0.0);
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     int angle = 360;
     double targetSpeed = 100.0;
     bool isClockwise = true;
