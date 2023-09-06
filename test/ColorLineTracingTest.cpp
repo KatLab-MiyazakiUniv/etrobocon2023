@@ -16,6 +16,9 @@ namespace etrobocon2023_test {
   // 最初3回の色取得で連続して指定色を取得するテストケース
   TEST(ColorLineTracingTest, runToGetFirst)
   {
+    // PWMの初期化
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     COLOR targetColor = COLOR::GREEN;
     double targetSpeed = 50000.0;
     double targetBrightness = 50.0;
@@ -43,6 +46,9 @@ namespace etrobocon2023_test {
   // 少し走ってから指定色を取得するテストケース
   TEST(ColorLineTracingTest, runLeftEdge)
   {
+    // PWMの初期化
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     COLOR targetColor = COLOR::BLUE;
     double targetSpeed = 100.0;
     double targetBrightness = 45.0;
@@ -70,6 +76,9 @@ namespace etrobocon2023_test {
   // 少し走ってから指定色を取得するテストケース
   TEST(ColorLineTracingTest, runRightEdge)
   {
+    // PWMの初期化
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     COLOR targetColor = COLOR::RED;
     double targetSpeed = 100.0;
     double targetBrightness = 45.0;
@@ -97,6 +106,9 @@ namespace etrobocon2023_test {
   // 少し走ってから指定色を取得するテストケース
   TEST(ColorLineTracingTest, runBackLeftEdge)
   {
+    // PWMの初期化
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     COLOR targetColor = COLOR::YELLOW;
     double targetSpeed = -100.0;
     double targetBrightness = 45.0;
@@ -124,6 +136,9 @@ namespace etrobocon2023_test {
   // 少し走ってから指定色を取得するテストケース
   TEST(ColorLineTracingTest, runBackRightEdge)
   {
+    // PWMの初期化
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     COLOR targetColor = COLOR::GREEN;
     double targetSpeed = -100.0;
     double targetBrightness = 45.0;
@@ -150,6 +165,9 @@ namespace etrobocon2023_test {
 
   TEST(ColorLineTracingTest, runZeroSpeed)
   {
+    // PWMの初期化
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     COLOR targetColor = COLOR::BLUE;
     double targetSpeed = 0.0;
     double targetBrightness = 45.0;
@@ -184,6 +202,9 @@ namespace etrobocon2023_test {
 
   TEST(ColorLineTracingTest, runNoneColor)
   {
+    // PWMの初期化
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     COLOR targetColor = COLOR::NONE;
     double targetSpeed = 100.0;
     double targetBrightness = 45.0;

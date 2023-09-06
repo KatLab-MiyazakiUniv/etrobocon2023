@@ -21,8 +21,8 @@ class Controller {
    * タイヤのモータにPWM値をセット
    * @param pwm PWM値
    */
-  static void setRightMotorPwm(const int pwm);
-  static void setLeftMotorPwm(const int pwm);
+  static void setRightMotorPwm(const double pwm);
+  static void setLeftMotorPwm(const double pwm);
 
   /**
    * タイヤのモータを停止する
@@ -33,16 +33,31 @@ class Controller {
    * アームのモータにPWM値をセット
    * @param pwm PWM値
    */
-  static void setArmMotorPwm(const int pwm);
+  static void setArmMotorPwm(const double pwm);
 
   /**
    * アームのモータを停止する
    */
   static void stopArmMotor();
 
+  /**
+   * @brief 右タイヤのPWMを取得する
+   * @return 右タイヤのPWM
+   */
+  static double getRightPwm();
+
+  /**
+   * @brief 左タイヤのPWMを取得する
+   * @return 左タイヤのPWM
+   */
+  static double getLeftPwm();
+
  private:
   static const int MOTOR_PWM_MAX = 100;
   static const int MOTOR_PWM_MIN = -100;
+  static double manageRightPwm;  // 右タイヤPWM
+  static double manageLeftPwm;   // 左タイヤPWM
+  static double manageArmPwm;    // アームPWM
 
   /**
    * モータに設定するPWM値の制限

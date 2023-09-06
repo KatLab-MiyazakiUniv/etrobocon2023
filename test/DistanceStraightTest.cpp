@@ -14,6 +14,9 @@ using namespace std;
 namespace etrobocon2023_test {
   TEST(DistanceStraightTest, run)
   {
+    // PWMの初期化
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     double targetDistance = 350;
     double targetSpeed = 50;
     DistanceStraight ds(targetDistance, targetSpeed);
@@ -58,6 +61,9 @@ namespace etrobocon2023_test {
 
   TEST(DistanceStraightTest, runFullPwm)
   {
+    // PWMの初期化
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     double targetDistance = 350;
     double targetSpeed = 100;
     DistanceStraight ds(targetDistance, targetSpeed);
@@ -102,6 +108,9 @@ namespace etrobocon2023_test {
 
   TEST(DistanceStraightTest, runMinusDistance)
   {
+    // PWMの初期化
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     double targetDistance = -350;
     double targetSpeed = 100;
     DistanceStraight ds(targetDistance, targetSpeed);
@@ -132,6 +141,9 @@ namespace etrobocon2023_test {
 
   TEST(DistanceStraightTest, runBack)
   {
+    // PWMの初期化
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     double targetDistance = 350;
     double targetSpeed = -50;
     DistanceStraight ds(targetDistance, targetSpeed);
@@ -176,6 +188,9 @@ namespace etrobocon2023_test {
 
   TEST(DistanceStraightTest, runBackFullPwm)
   {
+    // PWMの初期化
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     double targetDistance = 350;
     double targetSpeed = -100;
     DistanceStraight ds(targetDistance, targetSpeed);
@@ -220,6 +235,9 @@ namespace etrobocon2023_test {
 
   TEST(DistanceStraightTest, runZeroPwm)
   {
+    // PWMの初期化
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     double targetDistance = 350;
     double targetSpeed = 0;
     DistanceStraight ds(targetDistance, targetSpeed);
@@ -250,6 +268,9 @@ namespace etrobocon2023_test {
 
   TEST(DistanceStraightTest, runMinusDistanceZeroPwm)
   {
+    // PWMの初期化
+    Controller::setRightMotorPwm(0.0);
+    Controller::setLeftMotorPwm(0.0);
     double targetDistance = -350;
     double targetSpeed = 0;
     DistanceStraight ds(targetDistance, targetSpeed);

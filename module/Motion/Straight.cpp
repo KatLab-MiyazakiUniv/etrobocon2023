@@ -31,8 +31,8 @@ void Straight::run()
   // SpeedCalculatorの実体化
   SpeedCalculator SpeedCalculator(targetSpeed);
 
-  int currentLeftPwm = 0;   // 現在の左タイヤpwd値
-  int currentRightPwm = 0;  // 現在の右タイヤpwd値
+  double currentLeftPwm = 0.0;   // 現在の左タイヤpwd値
+  double currentRightPwm = 0.0;  // 現在の右タイヤpwd値
 
   // 走行距離が目標値に到達するまで繰り返す
   while(true) {
@@ -69,11 +69,11 @@ bool Straight::isRunPreconditionJudgement()
   // \"target\"をオーバーライド必須
   // rightPwmとleftPwmの絶対値がMIN_PWMより小さい場合はwarningを出す
   SpeedCalculator SpeedCalculator(targetSpeed);
-  int rightPwm = SpeedCalculator.calcRightPwmFromSpeed();
-  int leftPwm = SpeedCalculator.calcLeftPwmFromSpeed();
+  double rightPwm = SpeedCalculator.calcRightPwmFromSpeed();
+  double leftPwm = SpeedCalculator.calcLeftPwmFromSpeed();
   if(abs(rightPwm) < MIN_PWM || abs(leftPwm) < MIN_PWM) {
     snprintf(buf, BUF_SIZE,
-             "The pwm value passed to \"target\" Straight is rightPwm = %d and leftPwm = %d",
+             "The pwm value passed to \"target\" Straight is rightPwm = %f and leftPwm = %f",
              rightPwm, leftPwm);
     logger.logWarning(buf);
   }
