@@ -1,16 +1,15 @@
 /**
  * @file   CameraAction.cpp
  * @brief  ミニフィグ撮影動作
- * @author bizyutyu
+ * @author bizyutyu YKhm20020
  */
 
 #include "CameraAction.h"
 
 using namespace std;
 
-CameraAction::CameraAction(bool _target, bool _isClockwise, int _preTargetAngle,
-                           int _postTargetAngle)
-  : target(_target),
+CameraAction::CameraAction(bool _isA, bool _isClockwise, int _preTargetAngle, int _postTargetAngle)
+  : isA(_isA),
     isClockwise(_isClockwise),
     preTargetAngle(_preTargetAngle),
     postTargetAngle(_postTargetAngle){};
@@ -30,11 +29,23 @@ void CameraAction::run()
     preAR.run();
   }
 
+  // 撮影対象がBの場合は、前進でフィグから遠ざかる
+  if(isA == false) {
+    DistanceStraight dsToFig(targetDistance, targetSpeed);
+    dsToFig.run();
+  }
+
   // リアカメラで画像を取得する
   // 撮影に際してディレクトリ移動も行う
   char cmd[256];
   snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make image && cd ../..");
   system(cmd);
+
+  // 撮影対象がBの場合は、バックで黒線へ復帰
+  if(isA == false) {
+    DistanceStraight dsToLine(targetDistance, -1.0 * targetSpeed);
+    dsToLine.run();
+  }
 
   // 黒線復帰のための回頭をする
   if(postTargetAngle != 0) {
@@ -71,8 +82,8 @@ bool CameraAction::isMetPrecondition()
     return true;
   }
 
-  // 撮影対象がA（targetがtrue）の場合はフラグ確認を行う
-  if(target == true) {
+  // 撮影対象がAの場合はフラグ確認を行う
+  if(isA == true) {
     // 撮影終了フラグがtrueの場合は撮影動作をスキップする
     if(cameraActionSkipFlag == true) {
       snprintf(buf, BUF_SIZE, "The value of cameraActionSkipFlag is true.");
