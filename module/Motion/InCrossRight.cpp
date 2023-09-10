@@ -25,14 +25,11 @@ void InCrossRight::run()
 
   DistanceStraight ds(targetDistance, dsTargetSpeed);
   AngleRotation rotation(targetAngle, arTargetSpeed, isClockwise);
-  EdgeChanging ec(isLeftEdge, nextEdge);
 
   // 回頭後の位置を調整するため、直進する
   ds.run();
   // 右に90度回頭する
   rotation.run();
-  // エッジを左にする
-  ec.run();
   // 円外へ出る
   ds.run();
 }
