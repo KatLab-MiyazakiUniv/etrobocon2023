@@ -9,7 +9,13 @@ from flask import Flask, request
 
 
 # サーバが扱うファイルの設定
-FILE_PATH = "datafiles/data.csv"
+L_LINE_FILE_PATH = "../datafiles/LineTraceLeft.csv"
+L_DOUBLE_FILE_PATH = "../datafiles/DoubleLoopLeft.csv"
+L_BLOCK_FILE_PATH = "../datafiles/BlockDeTreasureLeft.csv"
+R_LINE_FILE_PATH = "../datafiles/LineTraceRight.csv"
+R_DOUBLE_FILE_PATH = "../datafiles/DoubleLoopRight.csv"
+R_BLOCK_FILE_PATH = "../datafiles/BlockDeTreasureRight.csv"
+LOGFILE_PATH = "../logfiles/"
 
 # サーバが扱うロボットの情報
 # state
@@ -120,13 +126,27 @@ def update() -> str:
     return robot_info["state"]
 
 
+# '/logfiles'へのGETリクエストに対する操作
+@app.route('/logfiles', methods=["GET"])
+def send() -> str:
+    """GETリクエストに対しログファイルを返す.
+    "http://サーバIPアドレス:8000/logfiles"にGETリクエストされたときに実行される
+    
+    Returns:
+        str:  ログファイル (輝度値, 左PWM, 右PWM)
+    """
+
+    # 値の送信
+    return (LOGFILE_PATH + "ios_logfile.txt")
+
+
 # ポート番号の設定
 if __name__ == "__main__":
 
     ip = "127.0.0.1"
     
     host = os.uname()[1]
-    if host == "katlab":
+    if host == "katlab2":
         ip = "192.168.11.16"
     elif host == "katlab2":
         ip = "192.168.11.17"
