@@ -3,7 +3,6 @@
 */
 
 #include <stdio.h>
-#include <stdbool.h>
 #include <unistd.h>
 #include <sys/mman.h>
 #include <fcntl.h>
@@ -18,26 +17,30 @@ struct SystemInfo {
 
 int main() {
     // 共有メモリセグメントをオープン
-    int shm_fd = shm_open("system_info_memory", O_RDONLY, 0666);
+    int shm_fd = shm_open("system_info_memory", O_RDWR, 00777);
     if (shm_fd == -1) {
         perror("shm_open");
         return 1;
     }
 
+    // 共有メモリの権限を設定（読み取りと書き込み可能）
+    if (fchmod(shm_fd, 00777) == -1) {
+        perror("fchmod");
+        return 1;
+    }
+
     // 共有メモリをマップ
-    struct SystemInfo* shm_data = (struct SystemInfo*)mmap(0, sizeof(struct SystemInfo), PROT_READ, MAP_SHARED, shm_fd, 0);
+    struct SystemInfo* shm_data = (struct SystemInfo*)mmap(0, sizeof(struct SystemInfo), PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
     if (shm_data == MAP_FAILED) {
         perror("mmap");
         return 1;
     }
 
     // 共有メモリからデータを取得して表示
-    // while (1) {
-        printf("State: %s\n", shm_data->state);
-        printf("Skip Camera Action: %s\n", shm_data->skip_camera_action ? "True" : "False");
-    //     sleep(1); // インターバルを設定して繰り返し表示
-    // }
-    // strcpy(shm_data->state, "lap");
+    printf("State: %s\n", shm_data->state);
+    printf("Skip Camera Action: %s\n", shm_data->skip_camera_action ? "True" : "False");
+    // 共有メモリのデータを上書き
+    strcpy(shm_data->state, "lap");
 
     // 共有メモリのアンマップとクローズ
     munmap(shm_data, sizeof(struct SystemInfo));
