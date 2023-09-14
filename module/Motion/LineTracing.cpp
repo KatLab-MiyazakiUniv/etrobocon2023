@@ -50,6 +50,10 @@ void LineTracing::run()
     // PIDで旋回値を計算
     turnPwm = pid.calculatePid(Measurer::getBrightness()) * edgeSign;
 
+    // if(turnPwm < -100.0 || 100.0 < turnPwm){
+    //   turnPwm = 0.0;
+    // }
+
     // モータのPWM値をセット（0を超えないようにセット）
     double rightPwm
         = baseRightPwm > 0.0 ? max(baseRightPwm - turnPwm, 0.0) : min(baseRightPwm + turnPwm, 0.0);
@@ -57,6 +61,8 @@ void LineTracing::run()
         = baseLeftPwm > 0.0 ? max(baseLeftPwm + turnPwm, 0.0) : min(baseLeftPwm - turnPwm, 0.0);
     Controller::setRightMotorPwm(rightPwm);
     Controller::setLeftMotorPwm(leftPwm);
+
+    printf("turn=%9f, right=%9f, left=%9f\n", turnPwm, rightPwm, leftPwm);
 
     // 10ミリ秒待機
     timer.sleep(10);
