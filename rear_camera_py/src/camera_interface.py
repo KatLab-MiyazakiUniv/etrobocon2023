@@ -24,7 +24,7 @@ class CameraInterface:
     def __init__(
         self,
         camera_id: int = 0,
-        data_format: str = 'RGB888',
+        data_format: str = "RGB888",
         size: Tuple[int, int] = (1640, 1232)
     ) -> None:
         """カメラインターフェースのコンストラクタ.
@@ -81,14 +81,16 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="リアカメラに関するプログラム")
     parser.add_argument("--camera-num", type=int, default=0,
                         help="カメラIDを指定する")
-    parser.add_argument('-s', '--images',
-                        help='1秒ごとに画像を取得する', action='store_true')
+    parser.add_argument("-s", "--images",  action="store_true",
+                        help="1秒ごとに撮影を実行する")
+    parser.add_argument("-spath", "--save_path", type=str, default=None,
+                        help="保存する画像の名前を指定")
     args = parser.parse_args()
 
     # 保存用フォルダの作成
     current_path = os.path.dirname(os.path.abspath(__file__))
     parent_path = os.path.dirname(current_path)
-    folder_path = parent_path + '/image_data'
+    folder_path = os.path.join(parent_path, "image_data")
     if not os.path.exists(folder_path):
         os.mkdir(folder_path)
 
@@ -96,14 +98,19 @@ if __name__ == "__main__":
     camera = CameraInterface(args.camera_num)
     camera.start_camera()
 
-    # 1秒ごとに画像を取得する
+    # 1秒ごとに撮影を実行する
     if args.images:
         while True:
             data_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            save_path = os.path.join(folder_path, data_name+".png")
             camera.capture_save_image(folder_path+"/"+data_name+".png")
             time.sleep(1)
 
     # 1枚の画像を取得する
     else:
-        data_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        camera.capture_save_image(folder_path+"/"+data_name+".png")
+        if args.save_path is not None:
+            save_path = os.path.join(folder_path, args.save_path)
+        else:
+            data_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            save_path = os.path.join(folder_path, data_name+".png")
+        camera.capture_save_image(save_path)
