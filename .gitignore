@@ -115,3 +115,8 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/c++,macos,windows
 
+# 後で削除
+work.cpp
+work.h
+work_execute.cpp
+info.h

@@ -11,6 +11,10 @@
 #include "CompositeMotion.h"
 #include "AngleRotation.h"
 #include "DistanceStraight.h"
+// #include <map>
+// #include <string>
+
+using namespace std;
 
 class CameraAction : public CompositeMotion {
  public:
@@ -47,5 +51,12 @@ class CameraAction : public CompositeMotion {
   const int rotationSpeed = 100;     // 回頭速度
   const double targetDistance = 50;  // 撮影前後の前進・後退のための目標距離
   const double targetSpeed = 150;    // 撮影前後の前進・後退のための目標速度
-};
+  // std::string shootLocation;         // 撮影場所(image_nameのkey)
+  // 撮影した画像のファイル名
+//   std::map<std::string, std::string> imageName = { { "A1", "FigA_1.png" },
+//                                                    { "A2", "FigA_2.png" },
+//                                                    { "A3", "FigA_3.png" },
+//                                                    { "A4", "FigA_4.png" },
+//                                                    { "B", "FigB.png" } };
+// };
 #endif

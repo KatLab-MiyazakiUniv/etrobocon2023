@@ -38,7 +38,9 @@ void CameraAction::run()
   // リアカメラで画像を取得する
   // 撮影に際してディレクトリ移動も行う
   char cmd[256];
-  snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make image && cd ../..");
+  // snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make image SAVE_NAME=%s && cd ../..",
+  //          imageName["imgA2"].c_str());
+
   system(cmd);
 
   // 撮影対象がBの場合は、バックで黒線へ復帰

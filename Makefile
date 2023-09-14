@@ -61,3 +61,9 @@ gtest:
 rebuild-gtest:
 	rm -rf build
 	@${make} gtest
+
+# 後で削除
+work:
+	g++ -o myprogram work.cpp work_execute.cpp
+	./myprogram
+	rm myprogram
