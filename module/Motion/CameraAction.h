@@ -1,7 +1,7 @@
 /**
  * @file   CameraAction.h
  * @brief  ミニフィグ撮影動作
- * @author bizyutyu YKhm20020
+ * @author bizyutyu YKhm20020 kawanoichi
  */
 
 #ifndef CAMERAACTION_H
@@ -11,8 +11,6 @@
 #include "CompositeMotion.h"
 #include "AngleRotation.h"
 #include "DistanceStraight.h"
-#include <string>
-#include <map>
 
 class CameraAction : public CompositeMotion {
  public:

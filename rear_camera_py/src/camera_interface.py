@@ -113,7 +113,4 @@ if __name__ == "__main__":
         else:
             data_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             save_path = os.path.join(folder_path, data_name+".png")
-        print("save_path", save_path)
-        # camera.capture_save_image(save_path)
-
-    print("完了")
+        camera.capture_save_image(save_path)
