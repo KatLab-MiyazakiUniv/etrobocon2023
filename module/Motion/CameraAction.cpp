@@ -8,6 +8,9 @@
 
 using namespace std;
 
+// countShootAの初期化
+int CameraAction::countShootA = 0;
+
 CameraAction::CameraAction(bool _isA, bool _isClockwise, int _preTargetAngle, int _postTargetAngle)
   : isA(_isA),
     isClockwise(_isClockwise),
@@ -36,11 +39,18 @@ void CameraAction::run()
   }
 
   // リアカメラで画像を取得する
+  // 画像のファイル名を指定
+  if(isA) {
+    countShootA++;
+    sprintf(imageName, "FigA_%d.png", countShootA);
+  } else {
+    sprintf(imageName, "FigB.png");
+  }
+
   // 撮影に際してディレクトリ移動も行う
   char cmd[256];
-  snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make image && cd ../..");
-  // snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make image SAVE_NAME=%s && cd ../..",
-  //          imageName["imgA2"].c_str());
+  snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make image SAVE_NAME=%s && cd ../..",
+           imageName);
   system(cmd);
 
   // 撮影対象がBの場合は、バックで黒線へ復帰
