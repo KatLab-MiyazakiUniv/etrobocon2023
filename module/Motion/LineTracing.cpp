@@ -58,7 +58,6 @@ void LineTracing::run()
     Controller::setRightMotorPwm(rightPwm);
     Controller::setLeftMotorPwm(leftPwm);
 
-
     // 10ミリ秒待機
     timer.sleep(10);
   }
