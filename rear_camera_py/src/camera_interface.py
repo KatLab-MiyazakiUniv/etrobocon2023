@@ -98,7 +98,7 @@ if __name__ == "__main__":
     camera = CameraInterface(args.camera_num)
     camera.start_camera()
 
-    # 1秒ごとに撮影を実行する
+    # 1秒ごとにリアカメラで撮影する
     if args.images:
         while True:
             data_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -106,7 +106,7 @@ if __name__ == "__main__":
             camera.capture_save_image(folder_path+"/"+data_name+".png")
             time.sleep(1)
 
-    # 1枚の画像を取得する
+    # １枚だけリアカメラで撮影する
     else:
         if args.save_path is not None:
             save_path = os.path.join(folder_path, args.save_path)

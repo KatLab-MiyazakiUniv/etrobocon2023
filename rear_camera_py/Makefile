@@ -5,11 +5,11 @@ help:
 	@echo " $$ make calibrate"
 	@echo "デバッグを行う"
 	@echo " $$ make debug"
-	@echo "画像を取得する"
+	@echo "リアカメラで撮影する"
 	@echo " $$ make image"
-	@echo "画像を取得する(画像のファイル名を指定する)"
+	@echo "リアカメラで撮影する(画像のファイル名を指定する)"
 	@echo " $$ make image SAVE_NAME=FigA_1.png"
-	@echo "画像を複数枚取得する"
+	@echo "リアカメラで1sごとに撮影する(Ctrl+Cで終了)"
 	@echo " $$ make images"
 	@echo "取得した画像を一括削除"
 	@echo " $$ make rm"
@@ -57,3 +57,4 @@ check_style:
 
 clean:
 	rm -rf ./debug
+	
