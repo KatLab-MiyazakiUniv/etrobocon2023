@@ -2,7 +2,7 @@
 <<DOCUMENT_COMMENT
 @file   rear_camera_request.sh
 @brief  リアカメラキャリブレーション/角度補正を行う
-@author 
+@author aridome222 miyashita64
 @note
     キャリブレーション: $ bash ./rear_camera_request.sh --calibrate
     角度補正:          $ bash ./rear_camera_request.sh {ポート番号}

@@ -2,7 +2,7 @@
 <<DOCUMENT_COMMENT
 @file   start_rear_camera.sh
 @brief  リアカメラ用のサーバを起動する
-@author 
+@author aridome222 miyashita64
 DOCUMENT_COMMENT
 
 cd /home/et2023/work/RasPike/sdk/workspace/etrobocon2023/rear_camera_py
