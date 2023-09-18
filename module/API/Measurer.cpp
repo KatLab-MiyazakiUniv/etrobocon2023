@@ -87,8 +87,8 @@ double Measurer::getVoltage()
   return (double)ev3_battery_voltage_mV() / 1000.0;
 }
 
-// 管理用輝度を更新（原則キャリブレーション時しか使わない）
-void Measurer::updateManageBrightness(const int brightness)
+// 管理用輝度をセット（原則キャリブレーション時しか使わない）
+void Measurer::setManageBrightness(const int brightness)
 {
   manageBrightness = brightness;
 }

@@ -85,10 +85,10 @@ class Measurer {
   static double getVoltage();
 
   /**
-   * 管理用輝度を更新（原則キャリブレーション時しか使わない）
+   * 管理用輝度をセット（原則キャリブレーション時しか使わない）
    * @param 輝度
    */
-  static void updateManageBrightness(const int brightness);
+  static void setManageBrightness(const int brightness);
 
   /**
    * 管理用輝度を取得
