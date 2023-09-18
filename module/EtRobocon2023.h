@@ -21,6 +21,12 @@ class EtRobocon2023 {
    * @param _ キャッチしたシグナルの値がセットされる(ここでは使用しない)
    */
   static void sigint(int _);
+
+  /**
+   * @brief 走行状況をサーバに反映する
+   * @param state 走行状況
+   */
+  static void setState(char* state);
 };
 
 #endif

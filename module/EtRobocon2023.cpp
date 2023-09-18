@@ -10,6 +10,7 @@
 #include "Measurer.h"
 #include "Controller.h"
 #include "Calibrator.h"
+#include "SystemInfo.h"
 #include "ev3api.h"
 #include "ColorSensor.h"
 #include "SonarSensor.h"
@@ -43,7 +44,7 @@ void EtRobocon2023::start()
   Timer::clock = _clockPtr;
 
   const int BUF_SIZE = 128;
-  char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
+  char buf[BUF_SIZE];  // logやコマンド用にメッセージを一時保持する領域
   Logger logger;
 
   bool isLeftCourse = false;
@@ -55,7 +56,8 @@ void EtRobocon2023::start()
   signal(SIGINT, sigint);
 
   // 走行情報を初期化
-  system("bash ./etrobocon2023/scripts/init_robot_info.sh");
+  snprintf(buf, BUF_SIZE, "bash ./etrobocon2023/scripts/init_robot_info.sh %s", RAS_PI_IP);
+  system(buf);
 
   // キャリブレーションする
   calibrator.run();
@@ -64,12 +66,12 @@ void EtRobocon2023::start()
   targetBrightness = calibrator.getTargetBrightness();
 
   // 走行状態をwait(開始合図待ち)に変更
-  system("bash ./etrobocon2023/scripts/set_state.sh wait");
+  setState("wait");
   // 合図を送るまで待機する
   calibrator.waitForStart();
 
   // 走行状態をstart(走行開始)に変更
-  system("bash ./etrobocon2023/scripts/set_state.sh start");
+  setState("start");
   // スタートのメッセージログを出す
   const char* course = isLeftCourse ? "Left" : "Right";
   snprintf(buf, BUF_SIZE, "\nRun on the %s Course\n", course);
@@ -82,12 +84,12 @@ void EtRobocon2023::start()
                                        targetBrightness);
   lineTraceAreaMaster.run();
   // 走行状態をlap(LAPゲート通過)に変更
-  system("bash ./etrobocon2023/scripts/set_state.sh lap");
+  setState("lap");
   doubleLoopAreaMaster.run();
   blockDeTreasureAreaMaster.run();
 
   // 走行状態をfinish(ゴールライン通過(処理停止))に変更
-  system("bash ./etrobocon2023/scripts/set_state.sh finish");
+  setState("finish");
   // 走行終了のメッセージログを出す
   logger.logHighlight("The run has been completed\n");
 
@@ -101,4 +103,12 @@ void EtRobocon2023::sigint(int _)
   logger.log("Forced termination.");  // 強制終了のログを出力
   logger.outputToFile();              // ログファイルを生成
   _exit(0);                           // システムコールで強制終了
+}
+
+void EtRobocon2023::setState(char* state){
+    const int CMD_BUF_SIZE = 64;
+    char cmd_buf[CMD_BUF_SIZE]; // コマンドを一時的に保持する領域
+
+    snprintf(cmd_buf, CMD_BUF_SIZE, "bash ./etrobocon2023/scripts/set_state.sh %s %s", state, RAS_PI_IP);
+    system(cmd_buf);
 }
