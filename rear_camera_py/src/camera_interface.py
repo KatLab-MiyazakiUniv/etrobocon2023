@@ -82,7 +82,7 @@ if __name__ == "__main__":
     parser.add_argument("--camera-num", type=int, default=0,
                         help="カメラIDを指定する")
     parser.add_argument("-s", "--images",  action="store_true",
-                        help="1秒ごとに撮影を実行する")
+                        help="リアカメラで1秒ごとに撮影する")
     parser.add_argument("-spath", "--save_path", type=str, default=None,
                         help="保存する画像の名前を指定")
     args = parser.parse_args()

@@ -8,7 +8,7 @@ help:
 	@echo "リアカメラで撮影する"
 	@echo " $$ make image"
 	@echo "リアカメラで撮影する(画像のファイル名を指定する)"
-	@echo " $$ make image SAVE_NAME=FigA_1.png"
+	@echo " $$ make image SAVE_NAME=(画像のファイル名)"
 	@echo "リアカメラで1sごとに撮影する(Ctrl+Cで終了)"
 	@echo " $$ make images"
 	@echo "取得した画像を一括削除"
@@ -32,7 +32,7 @@ debug:
 	python -m src --debug
 
 ifeq ($(SAVE_NAME),)
-    SAVE_NAME = FigA_1.png
+    SAVE_NAME = FigA_1.png # デフォルト値
 endif
 image:
 	python3 src/camera_interface.py  --save_path $(SAVE_NAME)
