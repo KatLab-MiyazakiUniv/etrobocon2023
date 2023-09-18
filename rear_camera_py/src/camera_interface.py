@@ -82,7 +82,7 @@ if __name__ == "__main__":
     parser.add_argument("--camera-num", type=int, default=0,
                         help="カメラIDを指定する")
     parser.add_argument("-s", "--images",  action="store_true",
-                        help="リアカメラで1秒ごとに撮影する")
+                        help="リアカメラで1秒ごとに画像を取得する")
     parser.add_argument("-spath", "--save_path", type=str, default=None,
                         help="保存する画像の名前を指定")
     args = parser.parse_args()
@@ -98,19 +98,19 @@ if __name__ == "__main__":
     camera = CameraInterface(args.camera_num)
     camera.start_camera()
 
-    # 1秒ごとにリアカメラで撮影する
+    # 1秒ごとにリアカメラで画像を取得する
     if args.images:
         while True:
-            data_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            save_path = os.path.join(folder_path, data_name+".png")
-            camera.capture_save_image(folder_path+"/"+data_name+".png")
+            data_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".png"
+            save_path = os.path.join(folder_path, data_name)
+            camera.capture_save_image(folder_path+"/"+data_name)
             time.sleep(1)
 
-    # １枚だけリアカメラで撮影する
+    # １枚だけリアカメラで画像を取得する
     else:
         if args.save_path is not None:
             save_path = os.path.join(folder_path, args.save_path)
         else:
-            data_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            save_path = os.path.join(folder_path, data_name+".png")
+            data_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".png"
+            save_path = os.path.join(folder_path, data_name)
         camera.capture_save_image(save_path)
