@@ -105,10 +105,12 @@ void EtRobocon2023::sigint(int _)
   _exit(0);                           // システムコールで強制終了
 }
 
-void EtRobocon2023::setState(char* state){
-    const int CMD_BUF_SIZE = 64;
-    char cmd_buf[CMD_BUF_SIZE]; // コマンドを一時的に保持する領域
+void EtRobocon2023::setState(char* state)
+{
+  const int CMD_BUF_SIZE = 64;
+  char cmd_buf[CMD_BUF_SIZE];  // コマンドを一時的に保持する領域
 
-    snprintf(cmd_buf, CMD_BUF_SIZE, "bash ./etrobocon2023/scripts/set_state.sh %s %s", state, RAS_PI_IP);
-    system(cmd_buf);
+  snprintf(cmd_buf, CMD_BUF_SIZE, "bash ./etrobocon2023/scripts/set_state.sh %s %s", state,
+           RAS_PI_IP);
+  system(cmd_buf);
 }
