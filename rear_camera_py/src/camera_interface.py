@@ -101,9 +101,9 @@ if __name__ == "__main__":
     # 1秒ごとにリアカメラで画像を取得する
     if args.images:
         while True:
-            data_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".png"
-            save_path = os.path.join(folder_path, data_name)
-            camera.capture_save_image(folder_path+"/"+data_name)
+            file_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".png"
+            save_path = os.path.join(folder_path, file_name)
+            camera.capture_save_image(folder_path+"/"+file_name)
             time.sleep(1)
 
     # １枚だけリアカメラで画像を取得する
@@ -111,6 +111,6 @@ if __name__ == "__main__":
         if args.save_path is not None:
             save_path = os.path.join(folder_path, args.save_path)
         else:
-            data_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".png"
-            save_path = os.path.join(folder_path, data_name)
+            file_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".png"
+            save_path = os.path.join(folder_path, file_name)
         camera.capture_save_image(save_path)
