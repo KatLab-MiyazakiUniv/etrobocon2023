@@ -36,6 +36,7 @@ def init() -> None:
         print(f"Remove the file '{SKIP_FLAG_FILE}'.")
     except OSError as e:
         print(f"OS error: {e}")
+    return str(robot_info)
 
 # '/robot_info/state'へのGETリクエストに対する操作
 @app.route('/robot_info/state', methods=["GET"])
@@ -78,6 +79,7 @@ def setTrueSkipCameraAction() -> None:
         print(f"Touch the file '{SKIP_FLAG_FILE}'.")
     except IOError as e:
         print(f"I/O error: {e}")
+    return "skip" # 何かしらの値を返す必要があるため任意の値を設定
 
 
 # ポート番号の設定
