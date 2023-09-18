@@ -1,7 +1,7 @@
 /**
  * @file Measurer.cpp
  * @brief 計測に用いる関数をまとめたラッパークラス
- * @author YKhm20020 miyashita64
+ * @author YKhm20020 miyashita64 bizyutyu
  */
 
 #include "Measurer.h"
@@ -11,6 +11,8 @@ ev3api::SonarSensor* Measurer::sonarSensor = nullptr;
 ev3api::Motor* Measurer::rightMotor = nullptr;
 ev3api::Motor* Measurer::leftMotor = nullptr;
 ev3api::Motor* Measurer::armMotor = nullptr;
+// 管理用輝度の初期化
+int Measurer::manageBrightness = 50;
 
 // 明るさを取得
 // 参考: https://tomari.org/main/java/color/ccal.html
@@ -20,6 +22,7 @@ int Measurer::getBrightness()
   // 参考: https://qiita.com/kawanon868/items/5d52eb291c3f71af0419
   rgb_raw_t rgb = getRawColor();
   int brightness = std::max({ rgb.r, rgb.g, rgb.b }) * 100 / 255;  // 明度を取得して0-100に正規化
+  manageBrightness = brightness;  // 正規化した輝度を管理用輝度として記録
   return brightness;
 }
 
@@ -82,4 +85,16 @@ int Measurer::getForwardDistance()
 double Measurer::getVoltage()
 {
   return (double)ev3_battery_voltage_mV() / 1000.0;
+}
+
+// 管理用輝度を更新（原則キャリブレーション時しか使わない）
+void Measurer::updateManageBrightness(const int brightness)
+{
+  manageBrightness = brightness;
+}
+
+// 管理用輝度を取得
+int Measurer::getManageBrightness()
+{
+  return manageBrightness;
 }

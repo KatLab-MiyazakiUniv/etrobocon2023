@@ -1,11 +1,13 @@
 /**
  * @file Pid.h
  * @brief PIDを計算するクラス
- * @author Negimarge kawanoichi
+ * @author Negimarge kawanoichi bizyutyu
  */
 
 #ifndef PID_H
 #define PID_H
+
+#include "Measurer.h"
 
 // PIDゲインを保持する構造体
 struct PidGain {
@@ -29,8 +31,9 @@ class Pid {
    * @param _ki Iゲイン
    * @param _kd Dゲイン
    * @param _targetValue 目標値
+   * @param _isSpeedCalculator PID制御使用者がSpeedCalculatorかどうか
    */
-  Pid(double _kp, double _ki, double _kd, double _targetValue);
+  Pid(double _kp, double _ki, double _kd, double _targetValue, bool _isSpeedCalculator = true);
 
   /**
    * @brief PIDゲインを設定する

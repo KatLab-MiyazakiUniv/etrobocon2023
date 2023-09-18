@@ -1,7 +1,7 @@
 /**
  * @file Measurer.h
  * @brief 計測に用いる関数をまとめたラッパークラス
- * @author YKhm20020 miyashita64
+ * @author YKhm20020 miyashita64 bizyutyu
  */
 
 #ifndef MEASURER_H
@@ -83,6 +83,21 @@ class Measurer {
    * @return SPIKEの電圧[V]
    */
   static double getVoltage();
+
+  /**
+   * 管理用輝度を更新（原則キャリブレーション時しか使わない）
+   * @param 輝度
+   */
+  static void updateManageBrightness(const int brightness);
+
+  /**
+   * 管理用輝度を取得
+   * @return 管理用輝度
+   */
+  static int getManageBrightness();
+
+ private:
+  static int manageBrightness;  // 管理用輝度
 };
 
 #endif
