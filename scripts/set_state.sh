@@ -4,7 +4,7 @@
 @brief  Webサーバが持つ走行状況を設定する
 @author miyashita64
 @note
-    bash set_state.sh {走行状況(必須)} {RasPIのIP(任意)}
+    $ bash set_state.sh {走行状況(必須)} {RasPIのIP(任意)}
 
     走行状況:
         - notReady: 通信未確立

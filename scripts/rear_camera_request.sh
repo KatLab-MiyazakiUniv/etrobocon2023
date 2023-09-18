@@ -4,8 +4,8 @@
 @brief  リアカメラキャリブレーション/角度補正を行う
 @author 
 @note
-    キャリブレーション: bash ./rear_camera_request.sh --calibrate
-    角度補正:          bash ./rear_camera_request.sh {ポート番号}
+    キャリブレーション: $ bash ./rear_camera_request.sh --calibrate
+    角度補正:          $ bash ./rear_camera_request.sh {ポート番号}
 DOCUMENT_COMMENT
 
 # デフォルト値

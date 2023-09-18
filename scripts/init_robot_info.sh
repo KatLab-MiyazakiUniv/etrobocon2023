@@ -4,7 +4,7 @@
 @brief  Webサーバが持つ走行情報を初期化する
 @author miyashita64
 @note
-    bash init_robot_info.sh {RasPIのIP(任意)}
+    $ bash init_robot_info.sh {RasPIのIP(任意)}
 DOCUMENT_COMMENT
 
 # Bluetooth接続する場合のRasPiのIP(デフォルト値)
