@@ -24,14 +24,14 @@ void EtRobocon2023::start()
   const ePortM armMotorPort = PORT_A;
   const ePortM rightMotorPort = PORT_B;
   const ePortM leftMotorPort = PORT_C;
-
+  // 各モータ・センサをインスタンス化
   ev3api::ColorSensor* _colorSensorPtr = new ev3api::ColorSensor(colorSensorPort);
   ev3api::SonarSensor* _sonarSensorPtr = new ev3api::SonarSensor(sonarSensorPort);
   ev3api::Motor* _rightMotorPtr = new ev3api::Motor(rightMotorPort);
   ev3api::Motor* _leftMotorPtr = new ev3api::Motor(leftMotorPort);
   ev3api::Motor* _armMotorPtr = new ev3api::Motor(armMotorPort);
   ev3api::Clock* _clockPtr = new ev3api::Clock();
-
+  // 各モータ・センサ インスタンスのポインタを設定
   Controller::rightMotor = _rightMotorPtr;
   Controller::leftMotor = _leftMotorPtr;
   Controller::armMotor = _armMotorPtr;
@@ -54,18 +54,23 @@ void EtRobocon2023::start()
   // 強制終了(CTRL+C)のシグナルを登録する
   signal(SIGINT, sigint);
 
+  // 走行情報を初期化
+  system("bash ./etrobocon2023/scripts/init_robot_info.sh");
+
   // キャリブレーションする
   calibrator.run();
   isLeftCourse = calibrator.getIsLeftCourse();
   isLeftEdge = isLeftCourse;
   targetBrightness = calibrator.getTargetBrightness();
 
-  // 合図を送るまで待機する
+  // 走行状態をwait(開始合図待ち)に変更
   system("bash ./etrobocon2023/scripts/set_state.sh wait");
+  // 合図を送るまで待機する
   calibrator.waitForStart();
 
-  // スタートのメッセージログを出す
+  // 走行状態をstart(走行開始)に変更
   system("bash ./etrobocon2023/scripts/set_state.sh start");
+  // スタートのメッセージログを出す
   const char* course = isLeftCourse ? "Left" : "Right";
   snprintf(buf, BUF_SIZE, "\nRun on the %s Course\n", course);
   logger.logHighlight(buf);
@@ -76,12 +81,14 @@ void EtRobocon2023::start()
   AreaMaster blockDeTreasureAreaMaster(Area::BlockDeTreasure, isLeftCourse, isLeftEdge,
                                        targetBrightness);
   lineTraceAreaMaster.run();
+  // 走行状態をlap(LAPゲート通過)に変更
   system("bash ./etrobocon2023/scripts/set_state.sh lap");
   doubleLoopAreaMaster.run();
   blockDeTreasureAreaMaster.run();
 
-  // 走行終了のメッセージログを出す
+  // 走行状態をfinish(ゴールライン通過(処理停止))に変更
   system("bash ./etrobocon2023/scripts/set_state.sh finish");
+  // 走行終了のメッセージログを出す
   logger.logHighlight("The run has been completed\n");
 
   // ログファイルを生成する

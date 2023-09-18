@@ -15,7 +15,7 @@ robot_info = {
     #   - wait: 開始合図待ち
     #   - start: 走行開始
     #   - lap: LAPゲート通過
-    #   - finish: 処理停止
+    #   - finish: ゴールライン通過(処理停止)
     "state": "notReady"
 }
 
@@ -27,8 +27,12 @@ app = Flask(__name__)
 
 # '/robot_info/init'へのGETリクエストに対する操作
 @app.route('/robot_info/init', methods=["GET"])
-def init() -> None:
-    """ロボットの走行情報を初期化する."""
+def init() -> str:
+    """ロボットの走行情報を初期化する.
+
+    Return:
+        robot_info(str): 走行情報
+    """
     robot_info["state"] = "notReady"
     try:
         # ファイルを削除
@@ -67,8 +71,12 @@ def setState() -> str:
 
 # '/robot_info/skip_camera_action_true'へのPOSTリクエストに対する操作
 @app.route('/robot_info/skip_camera_action_true', methods=["POST"])
-def setTrueSkipCameraAction() -> None:
-    """撮影動作終了フラグを立てる."""
+def setTrueSkipCameraAction() -> str:
+    """撮影動作終了フラグを立てる.
+    
+    Returns:
+        success(str): "True"(成功)/"False"(失敗)
+    """
     # C++側から確認できるようファイルを生成する(C++はファイルの有無で判断)
     skip_camera_action_flag_file = pathlib.Path(SKIP_FLAG_FILE)
     skip_camera_action_flag_file.touch()
@@ -77,9 +85,11 @@ def setTrueSkipCameraAction() -> None:
         with open(SKIP_FLAG_FILE, 'w') as file:
             pass
         print(f"Touch the file '{SKIP_FLAG_FILE}'.")
+        success = True
     except IOError as e:
         print(f"I/O error: {e}")
-    return "skip" # 何かしらの値を返す必要があるため任意の値を設定
+        success = False
+    return str(success)
 
 
 # ポート番号の設定

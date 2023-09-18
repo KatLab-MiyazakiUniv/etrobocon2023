@@ -1,4 +1,9 @@
 #!/bin/sh
+<<DOCUMENT_COMMENT
+@file   organize_logfile.sh
+@brief  前回のログファイルを退避する
+@author
+DOCUMENT_COMMENT
 
 mkdir -p etrobocon2023/logfiles
 oldName="logfile.txt"
