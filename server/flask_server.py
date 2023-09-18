@@ -1,6 +1,6 @@
 '''ロボットの走行情報を提供するWebサーバ.
 
- @auther  desty505 aridome222 miyashita64
+ @author  desty505 aridome222 miyashita64
 '''
 import os
 import csv
@@ -16,9 +16,6 @@ robot_info = {
     #   - start: 走行開始
     #   - lap: LAPゲート通過
     #   - finish: 処理停止
-    # cameraActionSkipFlag
-    #   - True: 撮影動作をスキップする
-    #   - False: 撮影動作を行う
     "state": "notReady"
 }
 
@@ -65,9 +62,9 @@ def setState() -> str:
     request_text = request_data.decode(charset, 'replace')
     # ロボットの状況を更新する
     robot_info["state"] = request_text
-    return str(robot_info["state"])
+    return robot_info["state"]
 
-# '/robot_info/skip_camera_action'へのPOSTリクエストに対する操作
+# '/robot_info/skip_camera_action_true'へのPOSTリクエストに対する操作
 @app.route('/robot_info/skip_camera_action_true', methods=["POST"])
 def setTrueSkipCameraAction() -> None:
     """撮影動作終了フラグを立てる."""
@@ -87,8 +84,6 @@ def setTrueSkipCameraAction() -> None:
 if __name__ == "__main__":
     ip = "127.0.0.1"
     host = os.uname()[1]
-    if host == "katlab":
-        ip = "192.168.11.16"
-    elif host == "katlab2":
-        ip = "192.168.11.17"
+    if host == "katlab2":
+        ip = "172.20.1.1"
     app.run(host=ip, port=8000)

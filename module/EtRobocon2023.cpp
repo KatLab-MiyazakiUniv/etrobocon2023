@@ -61,9 +61,11 @@ void EtRobocon2023::start()
   targetBrightness = calibrator.getTargetBrightness();
 
   // 合図を送るまで待機する
+  system("bash ./etrobocon2023/scripts/set_state.sh wait");
   calibrator.waitForStart();
 
   // スタートのメッセージログを出す
+  system("bash ./etrobocon2023/scripts/set_state.sh start");
   const char* course = isLeftCourse ? "Left" : "Right";
   snprintf(buf, BUF_SIZE, "\nRun on the %s Course\n", course);
   logger.logHighlight(buf);
@@ -74,10 +76,12 @@ void EtRobocon2023::start()
   AreaMaster blockDeTreasureAreaMaster(Area::BlockDeTreasure, isLeftCourse, isLeftEdge,
                                        targetBrightness);
   lineTraceAreaMaster.run();
+  system("bash ./etrobocon2023/scripts/set_state.sh lap");
   doubleLoopAreaMaster.run();
   blockDeTreasureAreaMaster.run();
 
   // 走行終了のメッセージログを出す
+  system("bash ./etrobocon2023/scripts/set_state.sh finish");
   logger.logHighlight("The run has been completed\n");
 
   // ログファイルを生成する
