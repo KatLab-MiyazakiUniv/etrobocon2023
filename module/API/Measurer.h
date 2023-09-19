@@ -83,22 +83,6 @@ class Measurer {
    * @return SPIKEの電圧[V]
    */
   static double getVoltage();
-
-  /**
-   * 管理用輝度をセット
-   * @param 輝度
-   * @note 原則キャリブレーション時しか使わない
-   */
-  static void setManageBrightness(const int brightness);
-
-  /**
-   * 管理用輝度を取得
-   * @return 管理用輝度
-   */
-  static int getManageBrightness();
-
- private:
-  static int manageBrightness;  // 管理用輝度
 };
 
 #endif

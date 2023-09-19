@@ -95,7 +95,6 @@ void Calibrator::measureTargetBrightness()
   }
 
   targetBrightness = (whiteBrightness + blackBrightness) / 2;
-  Measurer::setManageBrightness(targetBrightness);  // 管理用輝度をセット
   snprintf(buf, BUF_SIZE, ">> Target Brightness Value is %d", targetBrightness);
   logger.log(buf);
 }

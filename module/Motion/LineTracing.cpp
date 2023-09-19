@@ -22,7 +22,7 @@ void LineTracing::run()
   initialDistance = 0.0;  // 実行前の走行距離
   currentDistance = 0.0;  // 現在の走行距離
   int edgeSign = 0;
-  double initDeviation = double(targetBrightness) - double(Measurer::getManageBrightness());
+  double initDeviation = double(targetBrightness) - double(Measurer::getBrightness());
   Pid pid(gain.kp, gain.ki, gain.kd, targetBrightness, initDeviation);
 
   // 初期値を代入
