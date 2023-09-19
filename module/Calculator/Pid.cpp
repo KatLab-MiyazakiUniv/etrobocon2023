@@ -8,11 +8,8 @@
 
 PidGain::PidGain(double _kp, double _ki, double _kd) : kp(_kp), ki(_ki), kd(_kd) {}
 
-Pid::Pid(double _kp, double _ki, double _kd, double _targetValue, bool _isSpeedCalculator)
-  : gain(_kp, _ki, _kd),
-    preDeviation(_isSpeedCalculator ? 0 : _targetValue - double(Measurer::getManageBrightness())),
-    integral(0.0),
-    targetValue(_targetValue)
+Pid::Pid(double _kp, double _ki, double _kd, double _targetValue, double _initDeviation)
+  : gain(_kp, _ki, _kd), preDeviation(_initDeviation), integral(0.0), targetValue(_targetValue)
 {
 }
 

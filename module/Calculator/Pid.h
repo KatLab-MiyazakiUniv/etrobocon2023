@@ -7,8 +7,6 @@
 #ifndef PID_H
 #define PID_H
 
-#include "Measurer.h"
-
 // PIDゲインを保持する構造体
 struct PidGain {
  public:
@@ -31,9 +29,9 @@ class Pid {
    * @param _ki Iゲイン
    * @param _kd Dゲイン
    * @param _targetValue 目標値
-   * @param _isSpeedCalculator PID制御使用者がSpeedCalculatorかどうか
+   * @param _initDeviation 現在の偏差
    */
-  Pid(double _kp, double _ki, double _kd, double _targetValue, bool _isSpeedCalculator = true);
+  Pid(double _kp, double _ki, double _kd, double _targetValue, double _initDeviation = 0.0);
 
   /**
    * @brief PIDゲインを設定する

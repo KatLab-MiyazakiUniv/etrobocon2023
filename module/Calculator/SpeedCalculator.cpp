@@ -8,8 +8,8 @@
 SpeedCalculator::SpeedCalculator(double _targetSpeed)
   : rightTargetSpeed(_targetSpeed),
     leftTargetSpeed(_targetSpeed),
-    rightPid(K_P, K_I, K_D, _targetSpeed, true),
-    leftPid(K_P, K_I, K_D, _targetSpeed, true)
+    rightPid(K_P, K_I, K_D, _targetSpeed, 0.0),
+    leftPid(K_P, K_I, K_D, _targetSpeed, 0.0)
 {
   rightPwm = Controller::getRightPwm();
   leftPwm = Controller::getLeftPwm();
@@ -25,8 +25,8 @@ SpeedCalculator::SpeedCalculator(double _targetSpeed)
 SpeedCalculator::SpeedCalculator(double _rightTargetSpeed, double _leftTargetSpeed)
   : rightTargetSpeed(_rightTargetSpeed),
     leftTargetSpeed(_leftTargetSpeed),
-    rightPid(R_K_P, R_K_I, R_K_D, _rightTargetSpeed, true),
-    leftPid(R_K_P, R_K_I, R_K_D, _leftTargetSpeed, true)
+    rightPid(R_K_P, R_K_I, R_K_D, _rightTargetSpeed, 0.0),
+    leftPid(R_K_P, R_K_I, R_K_D, _leftTargetSpeed, 0.0)
 {
   rightPwm = Controller::getRightPwm();
   leftPwm = Controller::getLeftPwm();
