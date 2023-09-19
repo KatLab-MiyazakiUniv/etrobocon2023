@@ -21,12 +21,12 @@ void CameraAction::run()
     return;
   }
 
-  AngleRotation preAR(preTargetAngle, rotationSpeed, isClockwise);
-  AngleRotation postAR(postTargetAngle, rotationSpeed, !isClockwise);
+  PwmRotation prePR(preTargetAngle, rotationPwm, isClockwise);
+  PwmRotation postPR(postTargetAngle, rotationPwm, !isClockwise);
 
   // 撮影のための回頭をする
   if(preTargetAngle != 0) {
-    preAR.run();
+    prePR.run();
   }
 
   // 撮影対象がBの場合は、前進でフィグから遠ざかる
@@ -49,7 +49,7 @@ void CameraAction::run()
 
   // 黒線復帰のための回頭をする
   if(postTargetAngle != 0) {
-    postAR.run();
+    postPR.run();
   }
 }
 

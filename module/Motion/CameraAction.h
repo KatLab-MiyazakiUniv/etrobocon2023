@@ -9,7 +9,7 @@
 
 #include "SystemInfo.h"
 #include "CompositeMotion.h"
-#include "AngleRotation.h"
+#include "PwmRotation.h"
 #include "DistanceStraight.h"
 
 class CameraAction : public CompositeMotion {
@@ -41,10 +41,10 @@ class CameraAction : public CompositeMotion {
 
  private:
   bool isA;  // フラグ確認を行うかの判断に用いる撮影対象(true:ミニフィグA, false:ミニフィグB)
-  bool isClockwise;     // リアカメラをミニフィグに向けるための回頭方向
-  int preTargetAngle;   // 撮影のための目標角度
-  int postTargetAngle;  // 黒線復帰のための目標角度
-  const int rotationSpeed = 100;     // 回頭速度
+  bool isClockwise;            // リアカメラをミニフィグに向けるための回頭方向
+  int preTargetAngle;          // 撮影のための目標角度
+  int postTargetAngle;         // 黒線復帰のための目標角度
+  const int rotationPwm = 60;  // 回頭PWM
   const double targetDistance = 50;  // 撮影前後の前進・後退のための目標距離
   const double targetSpeed = 150;    // 撮影前後の前進・後退のための目標速度
 };
