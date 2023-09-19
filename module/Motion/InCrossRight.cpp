@@ -24,7 +24,7 @@ void InCrossRight::run()
   }
 
   DistanceStraight ds(targetDistance, dsTargetSpeed);
-  AngleRotation rotation(targetAngle, prPwm, isClockwise);
+  PwmRotation rotation(targetAngle, prPwm, isClockwise);
   EdgeChanging ec(isLeftEdge, nextEdge);
 
   // 回頭後の位置を調整するため、直進する
@@ -83,7 +83,7 @@ void InCrossRight::logRunning()
 
   snprintf(buf, BUF_SIZE,
            "Run InCrossRight (targetDistance: %.2f, dsTargetSpeed: %.2f, targetAngle: %d, "
-           "prPwm: %.2f, isLeftEdge: "
+           "prPwm: %d, isLeftEdge: "
            "%s, nextEdge: %s)",
            targetDistance, dsTargetSpeed, targetAngle, prPwm, isLeftEdgeStr, nextEdgeStr);
   logger.log(buf);

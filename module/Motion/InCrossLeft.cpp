@@ -83,7 +83,7 @@ void InCrossLeft::logRunning()
 
   snprintf(buf, BUF_SIZE,
            "Run InCrossLeft (targetDistance: %.2f, dsTargetSpeed: %.2f, targetAngle: %d, "
-           "prPwm: %.2f, isLeftEdge: "
+           "prPwm: %d, isLeftEdge: "
            "%s, nextEdge: %s)",
            targetDistance, dsTargetSpeed, targetAngle, prPwm, isLeftEdgeStr, nextEdgeStr);
   logger.log(buf);
