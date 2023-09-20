@@ -1,7 +1,7 @@
 /**
  * @file   CameraAction.h
  * @brief  ミニフィグ撮影動作
- * @author bizyutyu YKhm20020
+ * @author bizyutyu YKhm20020 kawanoichi
  */
 
 #ifndef CAMERAACTION_H
@@ -47,5 +47,7 @@ class CameraAction : public CompositeMotion {
   const int rotationSpeed = 100;     // 回頭速度
   const double targetDistance = 50;  // 撮影前後の前進・後退のための目標距離
   const double targetSpeed = 150;    // 撮影前後の前進・後退のための目標速度
+  static int countShootA;            // Aでの撮影回数をカウント
+  char imageName[20];                // 画像のファイル名
 };
 #endif
