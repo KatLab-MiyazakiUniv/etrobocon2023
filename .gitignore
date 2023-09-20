@@ -12,6 +12,9 @@ image_data/
 # カメラシステムへのメッセージファイル
 scripts/message.txt
 
+# Webサーバが管理する撮影終了フラグ用のファイル
+server/skip_camera_action.flag
+
 # vscode設定ファイル
 .vscode/settings.json
 

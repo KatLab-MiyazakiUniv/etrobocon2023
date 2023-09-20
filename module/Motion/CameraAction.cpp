@@ -1,7 +1,7 @@
 /**
  * @file   CameraAction.cpp
  * @brief  ミニフィグ撮影動作
- * @author bizyutyu YKhm20020 kawanoichi
+ * @author bizyutyu YKhm20020 kawanoichi miyashita64
  */
 
 #include "CameraAction.h"
@@ -96,10 +96,13 @@ bool CameraAction::isMetPrecondition()
 
   // 撮影対象がAの場合はフラグ確認を行う
   if(isA == true) {
-    // 撮影終了フラグがtrueの場合は撮影動作をスキップする
-    if(cameraActionSkipFlag == true) {
-      snprintf(buf, BUF_SIZE, "The value of cameraActionSkipFlag is true.");
+    // フラグファイルの存在確認(ファイルはWebサーバが生成する)
+    FILE* fp = fopen(SKIP_FLAG_PATH, "r");
+    // ファイルが存在する場合は、撮影をスキップする
+    if(fp != NULL) {
+      snprintf(buf, BUF_SIZE, "The skip flag is exist as a file %s.", SKIP_FLAG_PATH);
       logger.logHighlight(buf);
+      fclose(fp);
       return false;
     }
   }

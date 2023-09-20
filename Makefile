@@ -10,6 +10,8 @@ help:
 	@echo " $$ make rebuild"
 	@echo 走行を開始する\(実機限定\)
 	@echo " $$ make start"
+	@echo 走行状態を提供するサーバを起動する
+	@echo " $$ make server"
 	@echo 指定ファイルをフォーマットする
 	@echo " $$ make format FILES=<ディレクトリ名>/<ファイル名>.cpp"
 	@echo すべての変更ファイルをフォーマットする
@@ -40,6 +42,10 @@ start:
 ifeq ($(filter katlab%,$(HOST)), $(HOST))
 	cd $(MAKEFILE_PATH)../ && make start
 endif
+
+# 走行状態を提供するWebサーバを起動する
+server:
+	cd $(MAKEFILE_PATH)/server && python3 flask_server.py
 
 # ファイルにclang-formatを適用する
 format:
