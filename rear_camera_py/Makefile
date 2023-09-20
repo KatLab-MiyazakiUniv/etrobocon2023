@@ -5,9 +5,11 @@ help:
 	@echo " $$ make calibrate"
 	@echo "デバッグを行う"
 	@echo " $$ make debug"
-	@echo "画像を取得する"
+	@echo "リアカメラで画像を取得する"
 	@echo " $$ make image"
-	@echo "画像を複数枚取得する"
+	@echo "リアカメラで画像を取得する(画像のファイル名を指定する)"
+	@echo " $$ make image SAVE_NAME=(画像のファイル名)"
+	@echo "リアカメラで1sごとに画像を取得する(Ctrl+Cで終了)"
 	@echo " $$ make images"
 	@echo "取得した画像を一括削除"
 	@echo " $$ make rm"
@@ -29,8 +31,11 @@ calibrate:
 debug:
 	python -m src --debug
 
+ifeq ($(SAVE_NAME),)
+    SAVE_NAME = FigA_1.png # デフォルト値
+endif
 image:
-	python3 src/camera_interface.py
+	python3 src/camera_interface.py  --save_path $(SAVE_NAME)
 
 images:
 	python3 src/camera_interface.py -s
@@ -52,3 +57,4 @@ check_style:
 
 clean:
 	rm -rf ./debug
+	

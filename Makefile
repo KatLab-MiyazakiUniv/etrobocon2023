@@ -20,6 +20,8 @@ help:
 	@echo " $$ make format-check"
 	@echo テストを実行する
 	@echo " $$ make gtest"
+	@echo format, rebuild-gtest, format-checkを行う
+	@echo " $$ make all-check"
 
 # ビルドする
 build:
@@ -67,3 +69,8 @@ gtest:
 rebuild-gtest:
 	rm -rf build
 	@${make} gtest
+
+all-check:
+	@${make} format
+	@${make} rebuild-gtest
+	@${make} format-check
