@@ -9,12 +9,12 @@
 using namespace std;
 
 InCrossRight::InCrossRight(double _targetDistance, double _dsTargetSpeed, int _targetAngle,
-                           double _arTargetSpeed)
+                           int _prPwm)
   : BlockAreaMotion(1.23, 1.09),  // 動作時間, 失敗リスク TODO: 測定し直す
     targetDistance(_targetDistance),
     dsTargetSpeed(_dsTargetSpeed),
     targetAngle(_targetAngle),
-    arTargetSpeed(_arTargetSpeed){};
+    prPwm(_prPwm){};
 
 void InCrossRight::run()
 {
@@ -24,7 +24,7 @@ void InCrossRight::run()
   }
 
   DistanceStraight ds(targetDistance, dsTargetSpeed);
-  AngleRotation rotation(targetAngle, arTargetSpeed, isClockwise);
+  PwmRotation rotation(targetAngle, prPwm, isClockwise);
 
   // 回頭後の位置を調整するため、直進する
   ds.run();
@@ -54,9 +54,9 @@ bool InCrossRight::isMetPrecondition()
     return false;
   }
 
-  // arTargetSpeed値が0の場合はwarningを出して終了する
-  if(arTargetSpeed == 0.0) {
-    snprintf(buf, BUF_SIZE, "The arTargetSpeed value passed to InCrossRight is 0");
+  // prPwm値が0の場合はwarningを出して終了する
+  if(prPwm == 0) {
+    snprintf(buf, BUF_SIZE, "The prPwm value passed to InCrossRight is 0");
     logger.logWarning(buf);
     return false;
   }
@@ -78,7 +78,7 @@ void InCrossRight::logRunning()
 
   snprintf(buf, BUF_SIZE,
            "Run InCrossRight (targetDistance: %.2f, dsTargetSpeed: %.2f, targetAngle: %d, "
-           "arTargetSpeed: %.2f)",
-           targetDistance, dsTargetSpeed, targetAngle, arTargetSpeed);
+           "prPwm: %d)",
+           targetDistance, dsTargetSpeed, targetAngle, prPwm);
   logger.log(buf);
 }

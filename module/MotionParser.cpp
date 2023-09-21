@@ -127,15 +127,15 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
     } else if(command == COMMAND::IL) {                   // 交点内移動（左折）
       InCrossLeft* il = new InCrossLeft(atof(params[1]),  // 目標距離
                                         atof(params[2]),  // 距離指定直進の目標速度 [mm/s]
-                                        atoi(params[3]),  // 目標回頭角度
-                                        atof(params[4]));  // 角度指定回頭の目標速度 [mm/s]
+                                        atoi(params[3]),   // 目標回頭角度
+                                        atoi(params[4]));  // 角度指定回頭の目標PWM
 
       motionList.push_back(il);                             // 動作リストに追加
     } else if(command == COMMAND::IR) {                     // 交点内移動（右折）
       InCrossRight* ir = new InCrossRight(atof(params[1]),  // 目標距離
                                           atof(params[2]),  // 距離指定直進の目標速度 [mm/s]
-                                          atoi(params[3]),  // 目標回頭角度
-                                          atof(params[4]));  // 角度指定回頭の目標速度 [mm/s]
+                                          atoi(params[3]),   // 目標回頭角度
+                                          atoi(params[4]));  // 角度指定回頭の目標PWM
 
       motionList.push_back(ir);          // 動作リストに追加
     } else if(command == COMMAND::CC) {  // 交点サークルから交点サークル
@@ -154,7 +154,7 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
           atof(params[3]),  // 距離指定ライントレースの目標速度 [mm/s]
           atof(params[4]),  // 距離指定直進の目標速度 [mm/s]
           atoi(params[5]),  // 目標回頭角度
-          atof(params[6]),  // 角度指定回頭の目標速度 [mm/s]
+          atoi(params[6]),  // 角度指定回頭の目標PWM
           targetBrightness + atoi(params[7]),                           // 目標輝度 + 調整
           PidGain(atof(params[8]), atof(params[9]), atof(params[10])),  // PIDゲイン
           convertBool(params[0], params[11]),  // 回頭方向 (true:時計回り, false:反時計回り)

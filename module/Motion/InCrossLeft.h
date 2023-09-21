@@ -7,7 +7,7 @@
 #ifndef IN_CROSS_LEFT_H
 #define IN_CROSS_LEFT_H
 
-#include "AngleRotation.h"
+#include "PwmRotation.h"
 #include "DistanceStraight.h"
 #include "EdgeChanging.h"
 #include "BlockAreaMotion.h"
@@ -17,8 +17,7 @@ class InCrossLeft : public BlockAreaMotion {
   /**
    * コンストラクタ
    */
-  InCrossLeft(double _targetDistance, double _dsTargetSpeed, int _targetAngle,
-              double _arTargetSpeed);
+  InCrossLeft(double _targetDistance, double _dsTargetSpeed, int _targetAngle, int _prPwm);
 
   /**
    * @brief 交点サークル上を左に進む
@@ -39,7 +38,7 @@ class InCrossLeft : public BlockAreaMotion {
   double targetDistance;     // 目標距離 (25.0mm)
   double dsTargetSpeed;      // 距離指定直進の目標速度 [mm/s]
   int targetAngle;           // 目標回頭角度 (74°)
-  double arTargetSpeed;      // 角度指定回頭の目標速度 [mm/s]
+  int prPwm;                 // 角度指定回頭の目標PWM
   bool isClockwise = false;  // 回頭の方向は左回り
 };
 

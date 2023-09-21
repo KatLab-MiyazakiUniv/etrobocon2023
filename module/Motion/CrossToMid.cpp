@@ -9,16 +9,16 @@
 using namespace std;
 
 CrossToMid::CrossToMid(double _targetLineDistance, double _targetCircleDistance,
-                       double _dlTargetSpeed, double _dsTargetSpeed, int _targetAngle,
-                       double _arTargetSpeed, int _targetBrightness, const PidGain& _gain,
-                       bool _isClockwise, bool& _isLeftEdge, bool _nextEdge)
+                       double _dlTargetSpeed, double _dsTargetSpeed, int _targetAngle, int _prPwm,
+                       int _targetBrightness, const PidGain& _gain, bool _isClockwise,
+                       bool& _isLeftEdge, bool _nextEdge)
   : BlockAreaMotion(1.02, 1.01),  // 動作時間, 失敗リスク TODO: 測定し直す
     targetLineDistance(_targetLineDistance),
     targetCircleDistance(_targetCircleDistance),
     dlTargetSpeed(_dlTargetSpeed),
     dsTargetSpeed(_dsTargetSpeed),
     targetAngle(_targetAngle),
-    arTargetSpeed(_arTargetSpeed),
+    prPwm(_prPwm),
     targetBrightness(_targetBrightness),
     gain(_gain),
     isClockwise(_isClockwise),
@@ -40,11 +40,11 @@ void CrossToMid::run()
     is.run();
 
   } else if(isClockwise == false) {  // 左に回頭するなら左折
-    InCrossLeft il(targetCircleDistance, dsTargetSpeed, arTargetSpeed, targetAngle);
+    InCrossLeft il(targetCircleDistance, dsTargetSpeed, prPwm, targetAngle);
     il.run();
 
   } else {  // 右に回頭するなら右折
-    InCrossRight ir(targetCircleDistance, dsTargetSpeed, arTargetSpeed, targetAngle);
+    InCrossRight ir(targetCircleDistance, dsTargetSpeed, prPwm, targetAngle);
     ir.run();
   }
 
@@ -87,9 +87,9 @@ bool CrossToMid::isMetPrecondition()
     return false;
   }
 
-  // arTargetSpeed値が0の場合はwarningを出して終了する
-  if(arTargetSpeed == 0.0) {
-    snprintf(buf, BUF_SIZE, "The arTargetSpeed value passed to CrossToMid is 0");
+  // prPwm値が0の場合はwarningを出して終了する
+  if(prPwm == 0) {
+    snprintf(buf, BUF_SIZE, "The prPwm value passed to CrossToMid is 0");
     logger.logWarning(buf);
     return false;
   }
@@ -115,11 +115,10 @@ void CrossToMid::logRunning()
   snprintf(
       buf, BUF_SIZE,
       "Run CrossToMid (targetLineDistance: %.2f, targetCircleDistance: %.2f, dlTargetSpeed: %.2f, "
-      "dsTargetSpeed: %.2f, targetAngle: %d, arTargetSpeed: %.2f"
+      "dsTargetSpeed: %.2f, targetAngle: %d, prPwm: %d"
       "targetBrightness: %d, gain: "
       "(%.2f,%.2f,%.2f), isClockwise: %s, isLeftEdge: %s, nextEdge: %s)",
-      targetLineDistance, targetCircleDistance, dlTargetSpeed, dsTargetSpeed, targetAngle,
-      arTargetSpeed, targetBrightness, gain.kp, gain.ki, gain.kd, isClockwiseStr, isLeftEdgeStr,
-      nextEdgeStr);
+      targetLineDistance, targetCircleDistance, dlTargetSpeed, dsTargetSpeed, targetAngle, prPwm,
+      targetBrightness, gain.kp, gain.ki, gain.kd, isClockwiseStr, isLeftEdgeStr, nextEdgeStr);
   logger.log(buf);
 }

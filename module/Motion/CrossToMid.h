@@ -19,7 +19,7 @@ class CrossToMid : public BlockAreaMotion {
    * コンストラクタ
    */
   CrossToMid(double _targetLineDistance, double _targetCircleDistance, double _dlTargetSpeed,
-             double _dsTargetSpeed, int targetAngle, double _arTargetSpeed, int _targetBrightness,
+             double _dsTargetSpeed, int targetAngle, int _prPwm, int _targetBrightness,
              const PidGain& _gain, bool _isClockwise, bool& _isLeftEdge, bool _nextEdge);
 
   /**
@@ -43,7 +43,7 @@ class CrossToMid : public BlockAreaMotion {
   double dlTargetSpeed;         // 距離指定ライントレースの目標速度 [mm/s]
   double dsTargetSpeed;         // 距離指定直進の目標速度 [mm/s]
   int targetAngle;              // 目標回頭角度
-  double arTargetSpeed;         // 角度指定回頭の目標速度 [mm/s]
+  int prPwm;                    // 角度指定回頭の目標PWM
   int targetBrightness;         // 目標輝度
   PidGain gain;                 // PIDゲイン
   bool isClockwise;             // 回頭方向 (true:時計回り, false:反時計回り)
