@@ -40,8 +40,6 @@ class InCrossLeft : public BlockAreaMotion {
   int targetAngle;           // 目標回頭角度 (74°)
   int prPwm;                 // 角度指定回頭の目標PWM
   bool isClockwise = false;  // 回頭の方向は左回り
-  bool isLeftEdge = true;    // 回頭前のエッジは左
-  bool nextEdge = false;     // 回頭後のエッジを右に変更
 };
 
 #endif

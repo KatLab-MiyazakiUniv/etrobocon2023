@@ -1,7 +1,7 @@
 /**
  * @file   CameraAction.h
  * @brief  ミニフィグ撮影動作
- * @author bizyutyu YKhm20020
+ * @author bizyutyu YKhm20020 kawanoichi miyashita64
  */
 
 #ifndef CAMERAACTION_H
@@ -40,6 +40,7 @@ class CameraAction : public CompositeMotion {
   void logRunning() override;
 
  private:
+  static constexpr char* SKIP_FLAG_PATH = "skip_camera_action.flag";
   bool isA;  // フラグ確認を行うかの判断に用いる撮影対象(true:ミニフィグA, false:ミニフィグB)
   bool isClockwise;            // リアカメラをミニフィグに向けるための回頭方向
   int preTargetAngle;          // 撮影のための目標角度
@@ -47,5 +48,7 @@ class CameraAction : public CompositeMotion {
   const int rotationPwm = 60;  // 回頭PWM
   const double targetDistance = 50;  // 撮影前後の前進・後退のための目標距離
   const double targetSpeed = 150;    // 撮影前後の前進・後退のための目標速度
+  static int countShootA;            // Aでの撮影回数をカウント
+  char imageName[20];                // 画像のファイル名
 };
 #endif

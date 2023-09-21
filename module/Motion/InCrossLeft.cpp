@@ -24,15 +24,13 @@ void InCrossLeft::run()
   }
 
   DistanceStraight ds(targetDistance, dsTargetSpeed);
+
   PwmRotation rotation(targetAngle, prPwm, isClockwise);
-  EdgeChanging ec(isLeftEdge, nextEdge);
 
   // 回頭後の位置を調整するため、直進する
   ds.run();
   // 左に90度回頭する
   rotation.run();
-  // エッジを右にする
-  ec.run();
   // 円外へ出る
   ds.run();
 }
@@ -78,13 +76,10 @@ void InCrossLeft::logRunning()
 {
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
-  const char* isLeftEdgeStr = isLeftEdge ? "true" : "false";
-  const char* nextEdgeStr = nextEdge ? "true" : "false";
 
   snprintf(buf, BUF_SIZE,
            "Run InCrossLeft (targetDistance: %.2f, dsTargetSpeed: %.2f, targetAngle: %d, "
-           "prPwm: %d, isLeftEdge: "
-           "%s, nextEdge: %s)",
-           targetDistance, dsTargetSpeed, targetAngle, prPwm, isLeftEdgeStr, nextEdgeStr);
+           "prPwm: %d)",
+           targetDistance, dsTargetSpeed, targetAngle, prPwm);
   logger.log(buf);
 }

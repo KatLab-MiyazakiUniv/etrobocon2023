@@ -10,6 +10,8 @@ help:
 	@echo " $$ make rebuild"
 	@echo 走行を開始する\(実機限定\)
 	@echo " $$ make start"
+	@echo 走行状態を提供するサーバを起動する
+	@echo " $$ make server"
 	@echo 指定ファイルをフォーマットする
 	@echo " $$ make format FILES=<ディレクトリ名>/<ファイル名>.cpp"
 	@echo すべての変更ファイルをフォーマットする
@@ -18,6 +20,10 @@ help:
 	@echo " $$ make format-check"
 	@echo テストを実行する
 	@echo " $$ make gtest"
+	@echo 中断したmakeプロセスをkillする
+	@echo " $$ make kill"
+	@echo format, rebuild-gtest, format-checkを行う
+	@echo " $$ make all-check"
 
 # ビルドする
 build:
@@ -38,6 +44,10 @@ start:
 ifeq ($(filter katlab%,$(HOST)), $(HOST))
 	cd $(MAKEFILE_PATH)../ && make start
 endif
+
+# 走行状態を提供するWebサーバを起動する
+server:
+	cd $(MAKEFILE_PATH)/server && python3 flask_server.py
 
 # ファイルにclang-formatを適用する
 format:
@@ -61,3 +71,13 @@ gtest:
 rebuild-gtest:
 	rm -rf build
 	@${make} gtest
+
+# makeのプロセスIDを抽出し、キルする
+kill:
+	@ps aux | grep make | grep -v "grep" | awk '{print $$2}' | xargs -r kill -9
+
+# ソースコードをチェックする
+all-check:
+	@${make} format
+	@${make} rebuild-gtest
+	@${make} format-check
