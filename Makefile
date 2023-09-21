@@ -46,6 +46,7 @@ ifeq ($(filter katlab%,$(HOST)), $(HOST))
 endif
 
 # 走行状態を提供するWebサーバを起動する
+.PHONY: server
 server:
 	cd $(MAKEFILE_PATH)/server && python3 flask_server.py
 
