@@ -63,10 +63,11 @@ format-check:
 	find ./test ./module -type f -name "*.cpp" -o -name "*.h" | xargs clang-format --dry-run --Werror *.h *.cpp
 
 # テストを実行する
-# ※ターゲット名がtestだと動かない
-gtest:
+# ディレクトリに'test/'があるとtestというコマンドは使えない
+test-all:
 	set -eu
 	./test/gtest/gtest_build.sh
+	python -m unittest discover rear_camera_py
 
 rebuild-gtest:
 	rm -rf build
