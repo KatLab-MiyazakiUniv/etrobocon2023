@@ -19,7 +19,7 @@ help:
 	@echo フォーマットチェックをする
 	@echo " $$ make format-check"
 	@echo テストを実行する
-	@echo " $$ make gtest"
+	@echo " $$ make test-all"
 	@echo 中断したmakeプロセスをkillする
 	@echo " $$ make kill"
 	@echo format, rebuild-gtest, format-checkを行う
@@ -69,9 +69,9 @@ test-all:
 	./test/gtest/gtest_build.sh
 	python -m unittest discover rear_camera_py
 
-rebuild-gtest:
+rebuild-test:
 	rm -rf build
-	@${make} gtest
+	@${make} test-all
 
 # makeのプロセスIDを抽出し、キルする
 kill:
@@ -80,5 +80,5 @@ kill:
 # ソースコードをチェックする
 all-check:
 	@${make} format
-	@${make} rebuild-gtest
+	@${make} rebuild-test
 	@${make} format-check
