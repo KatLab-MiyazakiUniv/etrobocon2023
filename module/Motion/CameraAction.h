@@ -11,6 +11,7 @@
 #include "CompositeMotion.h"
 #include "PwmRotation.h"
 #include "DistanceStraight.h"
+#include "Sleeping.h"
 
 class CameraAction : public CompositeMotion {
  public:
