@@ -82,3 +82,7 @@ all-check:
 	@${make} format
 	@${make} rebuild-test
 	@${make} format-check
+
+
+create-env:	
+	pip install -r requirements.txt
