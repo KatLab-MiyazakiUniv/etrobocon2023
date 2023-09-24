@@ -27,8 +27,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install -r ./rear_camera_py/requirements.txt  # 必要なパッケージをインストールするコマンドを実行してください
-    
+        pip install -r ~/work/etrobocon2023/rear_camera_py/requirements.txt
+
     - name: Run unittest
       run: make utest
 
