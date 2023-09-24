@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt  # 必要なパッケージをインストールするコマンドを実行してください
-      working-directory: rear_camera_py  # プロジェクトのディレクトリに移動してください
+      working-directory: rear_camera_py/  # プロジェクトのディレクトリに移動してください
 
     - name: Run unittest
       run: make utest
