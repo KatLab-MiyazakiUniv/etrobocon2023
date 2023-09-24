@@ -25,6 +25,10 @@ jobs:
       run: |
         echo "Current working directory: $GITHUB_WORKSPACE"
 
+    - name: List files in the working directory
+      run: |
+        ls -l
+
     - name: Install dependencies
       run: |
         pip install -r ~/work/etrobocon2023/rear_camera_py/requirements.txt
