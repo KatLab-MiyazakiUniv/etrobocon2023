@@ -17,9 +17,7 @@ jobs:
     - name: Check Project Root
       run: |
         cd ${{ github.workspace }}  # プロジェクトのルートディレクトリに移動
-        ls  # プロジェクトのルートディレクトリ内のファイルを表示
-        cd ..  # プロジェクトのルートディレクトリ内のファイルを表示
-        ls  # プロジェクトのルートディレクトリ内のファイルを表示
+        ls
 
     - name: gtest
       run: make gtest
