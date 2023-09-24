@@ -12,14 +12,23 @@ help:
 	@echo " $$ make start"
 	@echo 走行状態を提供するサーバを起動する
 	@echo " $$ make server"
+
 	@echo 指定ファイルをフォーマットする
 	@echo " $$ make format FILES=<ディレクトリ名>/<ファイル名>.cpp"
 	@echo すべての変更ファイルをフォーマットする
 	@echo " $$ make format"
 	@echo フォーマットチェックをする
 	@echo " $$ make format-check"
-	@echo テストを実行する
+
+	@echo C++のテストを実行する
+	@echo " $$ make gtest"
+	@echo buildしてテストを実行する
+	@echo " $$ make rebuild-gtest"
+	@echo pythonのテストを実行する
+	@echo " $$ make utest"
+	@echo C++とPythonのテストを実行する
 	@echo " $$ make test-all"
+
 	@echo 中断したmakeプロセスをkillする
 	@echo " $$ make kill"
 	@echo format, rebuild-gtest, format-checkを行う
@@ -69,7 +78,7 @@ gtest:
 	set -eu
 	./test/gtest/gtest_build.sh
 
-rebuild-test:
+rebuild-gtest:
 	rm -rf build
 	@${make} gtest
 
@@ -77,8 +86,9 @@ rebuild-test:
 utest:
 	python -m unittest discover rear_camera_py
 
+# すべてのテスト
 test-all:
-	@${make} rebuild-test
+	@${make} rebuild-gtest
 	@${make} utest
 
 
@@ -89,7 +99,7 @@ kill:
 # ソースコードをチェックする
 all-check:
 	@${make} format
-	@${make} rebuild-test
+	@${make} rebuild-gtest
 	@${make} format-check
 
 
