@@ -64,14 +64,23 @@ format-check:
 
 # テストを実行する
 # ディレクトリに'test/'があるとtestというコマンドは使えない
-test-all:
+# C++のテスト
+gtest:
 	set -eu
 	./test/gtest/gtest_build.sh
-	python -m unittest discover rear_camera_py
 
 rebuild-test:
 	rm -rf build
-	@${make} test-all
+	@${make} gtest
+
+# pythonのテスト
+utest:
+	python -m unittest discover rear_camera_py
+
+test-all:
+	@${make} rebuild-test
+	@${make} utest
+
 
 # makeのプロセスIDを抽出し、キルする
 kill:
