@@ -21,10 +21,14 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
+    - name: Show current working directory
+      run: |
+        echo "Current working directory: $GITHUB_WORKSPACE"
+
     - name: Install dependencies
       run: |
         pip install -r ./rear_camera_py/requirements.txt  # 必要なパッケージをインストールするコマンドを実行してください
-
+    
     - name: Run unittest
       run: make utest
 
