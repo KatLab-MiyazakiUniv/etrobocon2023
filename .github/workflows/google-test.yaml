@@ -13,6 +13,21 @@ jobs:
     - name: gtest
       run: make gtest
 
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.10
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt  # 必要なパッケージをインストールするコマンドを実行してください
+      # working-directory: ./path/to/your/project  # プロジェクトのディレクトリに移動してください
+
+    - name: Run unittest
+      run: make utest
+
+
     # 参考資料
     # - Slack が提供する GitHub Action "slack-send" を使って GitHub から Slack に通知する - Qiita
     #     https://qiita.com/seratch/items/28d09eacada09134c96c

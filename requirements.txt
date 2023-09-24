@@ -1,3 +1,4 @@
+# rear_camera_pyに必要なモジュールを追記
 numpy>=1.23.3
 opencv-python
 autopep8>=1.7.0
