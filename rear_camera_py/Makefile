@@ -25,7 +25,6 @@ help:
 	@echo " $$ make debug"
 	@echo "デバッグフォルダを削除する"
 	@echo " $$ make clean"
-	@echo "requirements.txtを実行し、モジュールを追加する"
 	@echo " $$ make create-env-rear"
 
 # キャリブレーション
@@ -74,4 +73,4 @@ clean:
 	rm -rf ./debug
 	
 create-env-rear:	
-	pip install -r requirements.txt
+	pip install -r ../requirements.txt
