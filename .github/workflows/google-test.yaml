@@ -10,6 +10,17 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Check Current Directory
+      run: |
+        pwd  # カレントディレクトリを表示
+
+    - name: Check Project Root
+      run: |
+        cd ${{ github.workspace }}  # プロジェクトのルートディレクトリに移動
+        ls  # プロジェクトのルートディレクトリ内のファイルを表示
+        cd ..  # プロジェクトのルートディレクトリ内のファイルを表示
+        ls  # プロジェクトのルートディレクトリ内のファイルを表示
+
     - name: gtest
       run: make gtest
 
