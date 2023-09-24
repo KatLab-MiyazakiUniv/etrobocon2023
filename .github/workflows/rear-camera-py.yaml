@@ -21,6 +21,20 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
+    - name: Check Current Directory
+      run: |
+        pwd  # カレントディレクトリを表示
+
+
+    - name: Check Project Root
+      run: |
+        cd ${{ github.workspace }}  # プロジェクトのルートディレクトリに移動
+        ls  # プロジェクトのルートディレクトリ内のファイルを表示
+
+
+
+
+
     - name: Install dependencies
       run: pip install -r requirements.txt
     
