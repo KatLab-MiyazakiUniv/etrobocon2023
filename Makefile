@@ -84,7 +84,7 @@ rebuild-gtest:
 
 # pythonのテスト
 utest:
-	python -m unittest discover rear_camera_py
+	cd rear_camera_py && make test
 
 # すべてのテスト
 test-all:
