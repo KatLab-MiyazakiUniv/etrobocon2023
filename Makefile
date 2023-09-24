@@ -12,6 +12,8 @@ help:
 	@echo " $$ make start"
 	@echo 走行状態を提供するサーバを起動する
 	@echo " $$ make server"
+	@echo 中断したmakeプロセスをkillする
+	@echo " $$ make kill"
 
 	@echo 指定ファイルをフォーマットする
 	@echo " $$ make format FILES=<ディレクトリ名>/<ファイル名>.cpp"
@@ -19,20 +21,20 @@ help:
 	@echo " $$ make format"
 	@echo フォーマットチェックをする
 	@echo " $$ make format-check"
-
 	@echo C++のテストを実行する
 	@echo " $$ make gtest"
-	@echo pythonのテストを実行する
+	@echo C++のソースコードチェックとテスト
+	@echo " $$ make c-all-check"
+	@echo Pythonのテストを実行する
 	@echo " $$ make utest"
-	@echo C++とPythonのテストを実行する
-	@echo " $$ make test-all"
+	@echo Pythonのソースコードチェックとテスト
+	@echo " $$ make py-all-check"
 
-	@echo 中断したmakeプロセスをkillする
-	@echo " $$ make kill"
-	@echo format, rebuild-gtest, format-checkを行う
-	@echo " $$ make all-check"
+## 実行関連 ##
+# 走行状態を提供するWebサーバを起動する
+server:
+	cd $(MAKEFILE_PATH)/server && python3 flask_server.py
 
-# ビルドする
 build:
 # 実機で動かす場合(hostnameがkatlabから始まる場合)
 ifeq ($(filter katlab%,$(HOST)), $(HOST))
@@ -52,10 +54,12 @@ ifeq ($(filter katlab%,$(HOST)), $(HOST))
 	cd $(MAKEFILE_PATH)../ && make start
 endif
 
-# 走行状態を提供するWebサーバを起動する
-server:
-	cd $(MAKEFILE_PATH)/server && python3 flask_server.py
+# makeのプロセスIDを抽出し、キルする
+kill:
+	@ps aux | grep make | grep -v "grep" | awk '{print $$2}' | xargs -r kill -9
 
+
+## 開発関連 ##
 # ファイルにclang-formatを適用する
 format:
 # 指定ファイルがある場合、そのファイルにclang-formatを適用する
@@ -69,33 +73,21 @@ endif
 format-check:
 	find ./test ./module -type f -name "*.cpp" -o -name "*.h" | xargs clang-format --dry-run --Werror *.h *.cpp
 
-# テストを実行する
-# ディレクトリに'test/'があるとtestというコマンドは使えない
 # C++のテスト
 gtest:
 	set -eu
 	./test/gtest/gtest_build.sh
 
-# pythonのテスト
+# C++のソースコードチェックとテスト
+c-all-check:
+	@${make} format
+	@${make} gtest
+	@${make} format-check
+
+# Pythonのテスト
 utest:
 	cd rear_camera_py && make test
 
-# すべてのテスト
-test-all:
-	@${make} gtest
-	@${make} utest
-
-
-# makeのプロセスIDを抽出し、キルする
-kill:
-	@ps aux | grep make | grep -v "grep" | awk '{print $$2}' | xargs -r kill -9
-
-# ソースコードをチェックする
-all-check:
-	@${make} format
-	@${make} rebuild-gtest
-	@${make} format-check
-
-
-create-env:	
-	pip install -r requirements.txt
+# Pythonのソースコードチェックとテスト("rear_camera_py/"用)
+py-all-check:
+	cd rear_camera_py && make all-check
