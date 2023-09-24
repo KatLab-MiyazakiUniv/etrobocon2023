@@ -29,6 +29,7 @@ jobs:
     - name: Check Project Root
       run: |
         cd ${{ github.workspace }}  # プロジェクトのルートディレクトリに移動
+        cd ..  # プロジェクトのルートディレクトリ内のファイルを表示
         ls  # プロジェクトのルートディレクトリ内のファイルを表示
 
 
