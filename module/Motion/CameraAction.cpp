@@ -57,7 +57,7 @@ void CameraAction::run()
 
   // 撮影対象がBの場合は、バックで黒線へ復帰
   if(isA == false) {
-    DistanceStraight dsToLine((targetDistance - 35), -1.0 * targetSpeed);
+    DistanceStraight dsToLine((targetDistance - 25), -1.0 * targetSpeed);
     dsToLine.run();
   }
 
