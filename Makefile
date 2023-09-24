@@ -22,8 +22,6 @@ help:
 
 	@echo C++のテストを実行する
 	@echo " $$ make gtest"
-	@echo buildしてテストを実行する
-	@echo " $$ make rebuild-gtest"
 	@echo pythonのテストを実行する
 	@echo " $$ make utest"
 	@echo C++とPythonのテストを実行する
@@ -78,17 +76,13 @@ gtest:
 	set -eu
 	./test/gtest/gtest_build.sh
 
-rebuild-gtest:
-	rm -rf build
-	@${make} gtest
-
 # pythonのテスト
 utest:
 	cd rear_camera_py && make test
 
 # すべてのテスト
 test-all:
-	@${make} rebuild-gtest
+	@${make} gtest
 	@${make} utest
 
 
