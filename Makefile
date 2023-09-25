@@ -8,10 +8,10 @@ help:
 	@echo " $$ make build"
 	@echo ビルドファイルを消してからビルドする
 	@echo " $$ make rebuild"
-	@echo 走行を開始する\(実機限定\)
-	@echo " $$ make start"
 	@echo 走行状態を提供するサーバを起動する
 	@echo " $$ make server"
+	@echo 走行を開始する\(実機限定\)
+	@echo " $$ make start"
 	@echo 中断したmakeプロセスをkillする
 	@echo " $$ make kill"
 
@@ -29,12 +29,10 @@ help:
 	@echo " $$ make utest"
 	@echo Pythonのソースコードチェックとテストを実行する
 	@echo " $$ make py-all-check"
+	@echo C++とPythonのソースコードチェックとテストを実行する
+	@echo " $$ make py-all-check"
 
 ## 実行関連 ##
-# 走行状態を提供するWebサーバを起動する
-server:
-	cd $(MAKEFILE_PATH)/server && python3 flask_server.py
-
 build:
 # 実機で動かす場合(hostnameがkatlabから始まる場合)
 ifeq ($(filter katlab%,$(HOST)), $(HOST))
@@ -47,6 +45,10 @@ endif
 rebuild:
 	rm -rf build
 	@${make} build
+
+# 走行状態を提供するWebサーバを起動する
+server:
+	cd $(MAKEFILE_PATH)/server && python3 flask_server.py
 
 # 実機の場合、走行を開始する 
 start:
@@ -91,3 +93,13 @@ utest:
 # Pythonのソースコードチェックとテストを実行する
 py-all-check:
 	cd rear_camera_py && make all-check
+
+# C++とPythonのソースコードチェックとテストを実行する
+all-check:
+	@${make} format
+	cd rear_camera_py && make format
+	@${make} gtest
+	@${make} utest
+	@${make} format-check
+	cd rear_camera_py && make format-check
+
