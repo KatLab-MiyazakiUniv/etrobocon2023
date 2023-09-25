@@ -30,7 +30,7 @@ help:
 	@echo Pythonのソースコードチェックとテストを実行する
 	@echo " $$ make py-all-check"
 	@echo C++とPythonのソースコードチェックとテストを実行する
-	@echo " $$ make py-all-check"
+	@echo " $$ make all-check"
 
 ## 実行関連 ##
 build:
