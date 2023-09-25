@@ -91,8 +91,3 @@ utest:
 # Pythonのソースコードチェックとテスト("rear_camera_py/"用)
 py-all-check:
 	cd rear_camera_py && make all-check
-
-push:
-	git add .
-	git commit -m "実験"
-	git push origin ticket-121
