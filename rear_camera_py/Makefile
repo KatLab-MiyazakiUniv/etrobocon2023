@@ -27,11 +27,11 @@ help:
 	@echo " $$ make clean"
 	@echo " $$ make create-env-rear"
 
-# キャリブレーション
+# キャリブレーション 
 calibrate:
 	python -m src --calibrate
 
-# 画像取得関連
+## 画像取得関連 ##
 ifeq ($(SAVE_NAME),)
     SAVE_NAME = FigA_1.png # デフォルト値
 endif
@@ -44,7 +44,7 @@ images:
 rm:
 	rm -rf image_data/
 
-# 開発関連 
+## 開発関連 ##
 test:
 	python -m unittest
 
@@ -64,7 +64,6 @@ all-check:
 	@${make} format
 	@${make} test
 	@${make} format-check
-
 
 debug:
 	python -m src --debug
