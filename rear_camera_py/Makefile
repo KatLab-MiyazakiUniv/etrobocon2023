@@ -11,7 +11,7 @@ help:
 	@echo "リアカメラで1sごとに画像を取得する(Ctrl+Cで終了)"
 	@echo " $$ make images"
 	@echo "取得した画像を一括削除"
-	@echo " $$ make rm"
+	@echo " $$ make rm-img"
 
 	@echo "テストを実行する"
 	@echo " $$ make test"
@@ -21,10 +21,13 @@ help:
 	@echo " $$ make format-check"
 	@echo "スタイルチェックを行う"
 	@echo " $$ make check_style"
+	@echo "ソースコードチェックとテストを実行する"
+	@echo " $$ make all-check"
 	@echo "デバッグを行う"
 	@echo " $$ make debug"
 	@echo "デバッグフォルダを削除する"
 	@echo " $$ make clean"
+	@echo "ライブラリをinstallする"
 	@echo " $$ make create-env-rear"
 
 # キャリブレーション 
@@ -41,7 +44,7 @@ image:
 images:
 	python3 src/camera_interface.py -s
 
-rm:
+rm-img:
 	rm -rf image_data/
 
 ## 開発関連 ##

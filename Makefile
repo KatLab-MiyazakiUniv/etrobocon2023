@@ -23,11 +23,11 @@ help:
 	@echo " $$ make format-check"
 	@echo C++のテストを実行する
 	@echo " $$ make gtest"
-	@echo C++のソースコードチェックとテスト
+	@echo C++のソースコードチェックとテストを実行する
 	@echo " $$ make c-all-check"
 	@echo Pythonのテストを実行する
 	@echo " $$ make utest"
-	@echo Pythonのソースコードチェックとテスト
+	@echo Pythonのソースコードチェックとテストを実行する
 	@echo " $$ make py-all-check"
 
 ## 実行関連 ##
@@ -73,21 +73,21 @@ endif
 format-check:
 	find ./test ./module -type f -name "*.cpp" -o -name "*.h" | xargs clang-format --dry-run --Werror *.h *.cpp
 
-# C++のテスト
+# C++のテストを実行する
 gtest:
 	set -eu
 	./test/gtest/gtest_build.sh
 
-# C++のソースコードチェックとテスト
+# C++のソースコードチェックとテストを実行する
 c-all-check:
 	@${make} format
 	@${make} gtest
 	@${make} format-check
 
-# Pythonのテスト
+# Pythonのテストを実行する
 utest:
 	cd rear_camera_py && make test
 
-# Pythonのソースコードチェックとテスト("rear_camera_py/"用)
+# Pythonのソースコードチェックとテストを実行する
 py-all-check:
 	cd rear_camera_py && make all-check
