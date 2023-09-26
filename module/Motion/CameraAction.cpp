@@ -26,10 +26,12 @@ void CameraAction::run()
 
   PwmRotation prePR(preTargetAngle, rotationPwm, isClockwise);
   PwmRotation postPR(postTargetAngle, rotationPwm, !isClockwise);
+  Sleeping sl(500);
 
   // 撮影のための回頭をする
   if(preTargetAngle != 0) {
     prePR.run();
+    sl.run();
   }
 
   // 撮影対象がBの場合は、前進でフィグから遠ざかる
@@ -55,12 +57,13 @@ void CameraAction::run()
 
   // 撮影対象がBの場合は、バックで黒線へ復帰
   if(isA == false) {
-    DistanceStraight dsToLine(targetDistance, -1.0 * targetSpeed);
+    DistanceStraight dsToLine((targetDistance - 25), -1.0 * targetSpeed);
     dsToLine.run();
   }
 
   // 黒線復帰のための回頭をする
   if(postTargetAngle != 0) {
+    sl.run();
     postPR.run();
   }
 }
