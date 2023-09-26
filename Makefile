@@ -8,24 +8,31 @@ help:
 	@echo " $$ make build"
 	@echo ビルドファイルを消してからビルドする
 	@echo " $$ make rebuild"
-	@echo 走行を開始する\(実機限定\)
-	@echo " $$ make start"
 	@echo 走行状態を提供するサーバを起動する
 	@echo " $$ make server"
+	@echo 走行を開始する\(実機限定\)
+	@echo " $$ make start"
+	@echo 中断したmakeプロセスをkillする
+	@echo " $$ make kill"
+
 	@echo 指定ファイルをフォーマットする
 	@echo " $$ make format FILES=<ディレクトリ名>/<ファイル名>.cpp"
 	@echo すべての変更ファイルをフォーマットする
 	@echo " $$ make format"
 	@echo フォーマットチェックをする
 	@echo " $$ make format-check"
-	@echo テストを実行する
+	@echo C++のテストを実行する
 	@echo " $$ make gtest"
-	@echo 中断したmakeプロセスをkillする
-	@echo " $$ make kill"
-	@echo format, rebuild-gtest, format-checkを行う
+	@echo C++のソースコードチェックとテストを実行する
+	@echo " $$ make c-all-check"
+	@echo Pythonのテストを実行する
+	@echo " $$ make utest"
+	@echo Pythonのソースコードチェックとテストを実行する
+	@echo " $$ make py-all-check"
+	@echo C++とPythonのソースコードチェックとテストを実行する
 	@echo " $$ make all-check"
 
-# ビルドする
+## 実行関連 ##
 build:
 # 実機で動かす場合(hostnameがkatlabから始まる場合)
 ifeq ($(filter katlab%,$(HOST)), $(HOST))
@@ -39,16 +46,22 @@ rebuild:
 	rm -rf build
 	@${make} build
 
+# 走行状態を提供するWebサーバを起動する
+server:
+	cd $(MAKEFILE_PATH)/server && python3 flask_server.py
+
 # 実機の場合、走行を開始する 
 start:
 ifeq ($(filter katlab%,$(HOST)), $(HOST))
 	cd $(MAKEFILE_PATH)../ && make start
 endif
 
-# 走行状態を提供するWebサーバを起動する
-server:
-	cd $(MAKEFILE_PATH)/server && python3 flask_server.py
+# makeのプロセスIDを抽出し、キルする
+kill:
+	@ps aux | grep make | grep -v "grep" | awk '{print $$2}' | xargs -r kill -9
 
+
+## 開発関連 ##
 # ファイルにclang-formatを適用する
 format:
 # 指定ファイルがある場合、そのファイルにclang-formatを適用する
@@ -62,22 +75,31 @@ endif
 format-check:
 	find ./test ./module -type f -name "*.cpp" -o -name "*.h" | xargs clang-format --dry-run --Werror *.h *.cpp
 
-# テストを実行する
-# ※ターゲット名がtestだと動かない
+# C++のテストを実行する
 gtest:
 	set -eu
 	./test/gtest/gtest_build.sh
 
-rebuild-gtest:
-	rm -rf build
+# C++のソースコードチェックとテストを実行する
+c-all-check:
+	@${make} format
 	@${make} gtest
+	@${make} format-check
 
-# makeのプロセスIDを抽出し、キルする
-kill:
-	@ps aux | grep make | grep -v "grep" | awk '{print $$2}' | xargs -r kill -9
+# Pythonのテストを実行する
+utest:
+	cd rear_camera_py && make test
 
-# ソースコードをチェックする
+# Pythonのソースコードチェックとテストを実行する
+py-all-check:
+	cd rear_camera_py && make all-check
+
+# C++とPythonのソースコードチェックとテストを実行する
 all-check:
 	@${make} format
-	@${make} rebuild-gtest
+	cd rear_camera_py && make format
+	@${make} gtest
+	@${make} utest
 	@${make} format-check
+	cd rear_camera_py && make format-check
+

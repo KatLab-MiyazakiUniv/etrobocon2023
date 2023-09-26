@@ -5,6 +5,7 @@ build/
 logfiles/*
 !logfiles/.gitkeep
 image_data/
+debug/
 
 # シミュレータ自動実行ツール関係
 .cancel-sim-test
