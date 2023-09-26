@@ -15,18 +15,18 @@
 DOCUMENT_COMMENT
 
 # Bluetooth接続する場合のRasPiのIP(デフォルト値)
-IP="172.20.1.1:8000"
+IP="172.20.1.1"
 
 # stateが渡されたことを確認
-if [ -z ${state} ]; then
+if [ -z $1 ]; then
     echo "Error: state is NULL"
     exit 1
 fi
 state=$1
 
 # IPが渡された場合、指定IPにリクエストを送る
-if [ -n ${$2} ]; then
+if [ -n $2 ]; then
     IP=$2
 fi
 
-curl -X POST -d ${state} http://${IP}/robot_info/state
+curl -X POST -d ${state} http://${IP}:8000/robot_info/state

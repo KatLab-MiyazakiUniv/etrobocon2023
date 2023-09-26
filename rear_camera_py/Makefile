@@ -34,18 +34,24 @@ help:
 calibrate:
 	python -m src --calibrate
 
-## 画像取得関連 ##
+## 画像取得関連 ##@
 ifeq ($(SAVE_NAME),)
     SAVE_NAME = FigA_1.png # デフォルト値
 endif
 image:
-	python3 src/camera_interface.py  --save_path $(SAVE_NAME)
+	@${make} kill
+	sudo python3 src/camera_interface.py  --save_path $(SAVE_NAME)
+	@echo "画像取得！！！！！！！"
 
 images:
-	python3 src/camera_interface.py -s
+	sudo python3 src/camera_interface.py -s
+
+kill:
+	@ps aux | grep "python -m src --server --server-port 10338" | grep -v "grep" | awk '{print $$2}' | sudo xargs -r kill -9
+
 
 rm-img:
-	rm -rf image_data/
+	sudo rm -rf image_data/
 
 ## 開発関連 ##
 test:

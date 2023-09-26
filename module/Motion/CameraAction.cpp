@@ -55,6 +55,8 @@ void CameraAction::run()
            imageName);
   system(cmd);
 
+  printf("%s\n", cmd);
+
   // 撮影対象がBの場合は、バックで黒線へ復帰
   if(isA == false) {
     DistanceStraight dsToLine((targetDistance - 25), -1.0 * targetSpeed);
