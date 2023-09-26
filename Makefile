@@ -48,6 +48,7 @@ rebuild:
 
 # 走行状態を提供するWebサーバを起動する
 server:
+.PHONY: server
 	cd $(MAKEFILE_PATH)/server && python3 flask_server.py
 
 # 実機の場合、走行を開始する 
@@ -55,11 +56,6 @@ start:
 ifeq ($(filter katlab%,$(HOST)), $(HOST))
 	cd $(MAKEFILE_PATH)../ && make start
 endif
-
-# 走行状態を提供するWebサーバを起動する
-.PHONY: server
-server:
-	cd $(MAKEFILE_PATH)/server && python3 flask_server.py
 
 # makeのプロセスIDを抽出し、キルする
 kill:
