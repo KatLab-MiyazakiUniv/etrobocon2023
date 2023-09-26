@@ -47,8 +47,8 @@ rebuild:
 	@${make} build
 
 # 走行状態を提供するWebサーバを起動する
-server:
 .PHONY: server
+server:
 	cd $(MAKEFILE_PATH)/server && python3 flask_server.py
 
 # 実機の場合、走行を開始する 
