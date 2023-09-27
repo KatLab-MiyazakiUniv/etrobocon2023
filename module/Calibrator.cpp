@@ -9,7 +9,7 @@
 Calibrator::Calibrator() : isLeftCourse(true), targetBrightness(50) {}
 
 void Calibrator::run()
-{ 
+{
   //  画像の削除
   char cmd[256];
   snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make rm-img && cd ../..");

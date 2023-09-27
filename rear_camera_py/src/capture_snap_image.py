@@ -1,4 +1,4 @@
-"""画像処理を行うモジュール.
+"""ロボコンスナップのために画像を取得し、加工するモジュール.
 
 @author: kawanoichi
 """
@@ -26,6 +26,7 @@ class ProcessSnapImage:
         folder_path = os.path.join(parent_path, "image_data")
         if not os.path.exists(folder_path):
             os.mkdir(folder_path)
+
         self.save_path = os.path.join(folder_path, self.img_name)
 
     def sharpen_image(self, img) -> np.ndarray:
@@ -73,7 +74,7 @@ class ProcessSnapImage:
 
         return resized_img
 
-    def start(self):
+    def start(self) -> None:
         """画像取得し、加工する."""
         try:
             # 画像取得
