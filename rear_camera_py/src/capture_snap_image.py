@@ -28,7 +28,7 @@ class ProcessSnapImage:
             os.mkdir(folder_path)
         self.save_path = os.path.join(folder_path, self.img_name)
 
-    def sharpen_image(img) -> np.ndarray:
+    def sharpen_image(self, img) -> np.ndarray:
         """画像の鮮明化を行う関数.
 
         手法：カラー画像のアンシャープマスク
@@ -53,7 +53,6 @@ class ProcessSnapImage:
 
         return result
 
-    @staticmethod
     def resize_img(self, img) -> np.ndarray:
         """一枚の画像をリサイズ.
 
