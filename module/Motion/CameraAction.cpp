@@ -51,7 +51,7 @@ void CameraAction::run()
 
   // 撮影に際してディレクトリ移動も行う
   char cmd[256];
-  snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make image SAVE_NAME=%s && cd ../..",
+  snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make snap_image SAVE_NAME=%s && cd ../..",
            imageName);
   system(cmd);
 
