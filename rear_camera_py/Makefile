@@ -32,6 +32,7 @@ help:
 
 # キャリブレーション 
 calibrate:
+	@${make} kill
 	python -m src --calibrate
 
 ## 画像取得関連 ##@
@@ -40,7 +41,7 @@ ifeq ($(SAVE_NAME),)
 endif
 image:
 	@${make} kill
-	sudo python3 src/camera_interface.py  --save_path $(SAVE_NAME)
+	sudo python3 src/camera_interface2.py  --save_path $(SAVE_NAME)
 	@echo "画像取得！！！！！！！"
 
 images:
