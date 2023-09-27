@@ -39,10 +39,14 @@ calibrate:
 ifeq ($(SAVE_NAME),)
     SAVE_NAME = FigA_1.png # デフォルト値
 endif
+snap_image:
+	@${make} kill
+	sudo python3 src/capture_snap_image.py  --save_path $(SAVE_NAME)
+	@echo "画像取得！！！！！！！"
+
 image:
 	@${make} kill
-	sudo python3 src/camera_interface2.py  --save_path $(SAVE_NAME)
-	@echo "画像取得！！！！！！！"
+	sudo python3 src/camera_interface.py  --save_path $(SAVE_NAME)
 
 images:
 	sudo python3 src/camera_interface.py -s
