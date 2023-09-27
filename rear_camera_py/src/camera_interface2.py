@@ -11,12 +11,14 @@ from typing import Tuple, Union
 from picamera2 import Picamera2
 import numpy as np
 import PIL
+import cv2
 
 from datetime import datetime
 import os
 import argparse
 import time
 
+from image_processing import ImageProcessing
 
 class CameraInterface:
     """カメラインターフェースクラス."""
@@ -66,15 +68,21 @@ class CameraInterface:
             <class 'PIL.Image.Image'>: カメラ画像データ
         """
         # 画像取得
-        img = self.__picam2.capture_image()
+        img = self.__picam2.capture_array()
+        opencv_image = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+
+        processed_img_path = ImageProcessing.sharpen_image(opencv_image)
 
         # リサイズ
-        if not resize == False:
-            img.resize(resize)
+        processed_img_path = ImageProcessing.resize_img(processed_img_path)
+
+        # # リサイズ
+        # if not resize == False:
+        #     img.resize(resize)
 
         # 保存
         if save_path is not None:
-            img.save(save_path)
+            cv2.imwrite(save_path, processed_img_path)
 
         return img
 
