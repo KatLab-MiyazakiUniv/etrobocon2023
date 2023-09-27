@@ -95,7 +95,7 @@ if __name__ == "__main__":
         os.mkdir(folder_path)
 
     # 画像の取得
-    camera = CameraInterface(args.camera_num)
+    camera = CameraInterface(camera_id=args.camera_num, size=(640, 480))
     camera.start_camera()
 
     # 1秒ごとにリアカメラで画像を取得する
