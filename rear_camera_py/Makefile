@@ -42,11 +42,23 @@ endif
 snap_image:
 	@${make} kill
 	sudo python3 src/capture_snap_image.py  --save_path $(SAVE_NAME)
-	@echo "画像取得！！！！！！！"
+	@echo "make snap_image 画像取得！！！！！！！"
 
 image:
 	@${make} kill
-	sudo python3 src/camera_interface.py  --save_path $(SAVE_NAME)
+	sudo python3 src/capture_snap_image.py  --save_path $(SAVE_NAME)
+	@echo "make image 画像取得！！！！！！！"
+	@echo "make image 画像取得！！！！！！！"
+	@echo "make image 画像取得！！！！！！！"
+	@echo "make image 画像取得！！！！！！！"
+	@echo "make image 画像取得！！！！！！！"
+	@echo "make image 画像取得！！！！！！！"
+	@echo "make image 画像取得！！！！！！！"
+	@echo "make image 画像取得！！！！！！！"
+	@echo "make image 画像取得！！！！！！！"
+	@echo "make image 画像取得！！！！！！！"
+
+# sudo python3 src/camera_interface.py  --save_path $(SAVE_NAME)
 
 images:
 	sudo python3 src/camera_interface.py -s

@@ -87,6 +87,11 @@ if __name__ == "__main__":
                         help="保存する画像の名前を指定")
     args = parser.parse_args()
 
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+
     # 保存用フォルダの作成
     current_path = os.path.dirname(os.path.abspath(__file__))
     parent_path = os.path.dirname(current_path)
@@ -95,7 +100,7 @@ if __name__ == "__main__":
         os.mkdir(folder_path)
 
     # 画像の取得
-    camera = CameraInterface(camera_id=args.camera_num, size=(640, 480))
+    camera = CameraInterface(camera_id=args.camera_num)
     camera.start_camera()
 
     # 1秒ごとにリアカメラで画像を取得する
