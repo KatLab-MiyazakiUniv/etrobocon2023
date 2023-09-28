@@ -83,6 +83,7 @@ class ProcessSnapImage:
             img = camera.capture_image()
 
             # 型変換
+            img = img[:, :, ::-1]
             img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
 
             # 鮮明化
