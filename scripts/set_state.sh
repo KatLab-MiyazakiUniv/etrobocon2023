@@ -15,7 +15,7 @@
 DOCUMENT_COMMENT
 
 # Bluetooth接続する場合のRasPiのIP(デフォルト値)
-IP="172.20.1.1"
+IP="192.168.137.57"
 
 # stateが渡されたことを確認
 if [ -z $1 ]; then

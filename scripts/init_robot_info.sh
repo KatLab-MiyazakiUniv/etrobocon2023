@@ -8,7 +8,7 @@
 DOCUMENT_COMMENT
 
 # Bluetooth接続する場合のRasPiのIP(デフォルト値)
-IP="172.20.1.1:8000"
+IP="192.168.137.57:8000"
 
 # IPが渡された場合、指定IPにリクエストを送る
 if [ -n ${$1} ]; then

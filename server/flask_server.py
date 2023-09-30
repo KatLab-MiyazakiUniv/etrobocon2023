@@ -67,6 +67,7 @@ def setState() -> str:
     request_text = request_data.decode(charset, 'replace')
     # ロボットの状況を更新する
     robot_info["state"] = request_text
+    print(robot_info["state"])
     return robot_info["state"]
 
 # '/robot_info/skip_camera_action_true'へのGETリクエストに対する操作
@@ -97,5 +98,5 @@ if __name__ == "__main__":
     ip = "127.0.0.1"
     host = os.uname()[1]
     if host == "katlab2":
-        ip = "172.20.1.1"
+        ip = "192.168.137.57"
     app.run(host=ip, port=8000)
