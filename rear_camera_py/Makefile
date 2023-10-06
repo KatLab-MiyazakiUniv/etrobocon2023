@@ -46,7 +46,7 @@ snap_image:
 
 image:
 	@${make} kill
-	sudo python3 src/camera_interface.py  --save_path $(SAVE_NAME)
+	sudo python3 src/camera_interface.py
 	@echo "画像取得！！！！！！！"
 
 

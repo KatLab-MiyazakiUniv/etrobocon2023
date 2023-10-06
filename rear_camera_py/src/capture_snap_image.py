@@ -10,7 +10,7 @@ import os
 from camera_interface import CameraInterface
 
 
-class ProcessSnapImage:
+class CaptureSnapImage:
     """走行体側ロボコンスナップクラス."""
 
     resize = (640, 480)
@@ -97,7 +97,7 @@ class ProcessSnapImage:
 
         except FileNotFoundError as e:
             print("Error:", e)
-            print("Failed to ProcessSnapImage.start()")
+            print("Failed to CaptureSnapImage.start()")
 
 
 if __name__ == "__main__":
@@ -108,7 +108,7 @@ if __name__ == "__main__":
                         help="保存する画像の名前を指定")
     args = parser.parse_args()
 
-    snap = ProcessSnapImage(camera_id=args.camera_num,
+    snap = CaptureSnapImage(camera_id=args.camera_num,
                             img_name=args.save_path)
 
     snap.start()
