@@ -51,10 +51,14 @@ namespace etrobocon2023_test {
     Pid actualPid(kp, ki, kd, targetValue);
     double currentValue = 20;
     double preDeviation = 0;
+    double tc = 0.01;  // 時定数
     double currentDeviation = (targetValue - currentValue);
     double p = currentDeviation * kp;
     double i = ((preDeviation + currentDeviation) * DELTA / 2.0) * ki;
     double d = (currentDeviation - preDeviation) * kd / DELTA;
+    if(kd != 0.0) {
+      d = d / (1 + tc * (fabs(d) / kp));
+    }
     double expected = p + i + d;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
   }
@@ -69,10 +73,14 @@ namespace etrobocon2023_test {
     Pid actualPid(kp, ki, kd, targetValue);
     double currentValue = 40;
     double preDeviation = 0;
+    double tc = 0.01;  // 時定数
     double currentDeviation = (targetValue - currentValue);
     double p = currentDeviation * kp;
     double i = ((preDeviation + currentDeviation) * DELTA / 2.0) * ki;
     double d = (currentDeviation - preDeviation) * kd / DELTA;
+    if(kd != 0.0) {
+      d = d / (1 + tc * (fabs(d) / kp));
+    }
     double expected = p + i + d;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
   }
@@ -87,10 +95,14 @@ namespace etrobocon2023_test {
     Pid actualPid(kp, ki, kd, targetValue);
     double currentValue = 0;
     double preDeviation = 0;
+    double tc = 0.01;  // 時定数
     double currentDeviation = (targetValue - currentValue);
     double p = currentDeviation * kp;
     double i = ((preDeviation + currentDeviation) * DELTA / 2) * ki;
     double d = (currentDeviation - preDeviation) * kd / DELTA;
+    if(kd != 0.0) {
+      d = d / (1 + tc * (fabs(d) / kp));
+    }
     double expected = p + i + d;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
   }
@@ -105,10 +117,14 @@ namespace etrobocon2023_test {
     Pid actualPid(kp, ki, kd, targetValue);
     double currentValue = 55;
     double preDeviation = 0;
+    double tc = 0.01;  // 時定数
     double currentDeviation = (targetValue - currentValue);
     double p = currentDeviation * kp;
     double i = ((preDeviation + currentDeviation) * DELTA / 2) * ki;
     double d = (currentDeviation - preDeviation) * kd / DELTA;
+    if(kd != 0.0) {
+      d = d / (1 + tc * (fabs(d) / kp));
+    }
     double expected = p + i + d;
     // 第2引数に周期を渡し、周期に応じた計算結果を返すことができるかを確認(デフォルトでは0.01が渡される)
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue, DELTA));
@@ -124,10 +140,14 @@ namespace etrobocon2023_test {
     Pid actualPid(kp, ki, kd, targetValue);
     double currentValue = 55;
     double preDeviation = 0;
+    double tc = 0.01;  // 時定数
     double currentDeviation = (targetValue - currentValue);
     double p = currentDeviation * kp;
     double i = ((preDeviation + currentDeviation) * DELTA / 2) * ki;
     double d = (currentDeviation - preDeviation) * kd / DELTA;
+    if(kd != 0.0) {
+      d = d / (1 + tc * (fabs(d) / kp));
+    }
     double expected = p + i + d;
     // 第2引数に周期を渡し、周期に応じた計算結果を返すことができるかを確認(デフォルトでは0.01が渡される)
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue, DELTA));
@@ -137,7 +157,7 @@ namespace etrobocon2023_test {
   TEST(PidTest, calculatePidChangeDeltaZero)
   {
     constexpr double DELTA = 0;      // 実際に渡す周期
-    constexpr double kdELTA = 0.01;  // 期待される周期
+    constexpr double kDELTA = 0.01;  // 期待される周期
     double kp = 0.6;
     double ki = 0.02;
     double kd = 0.03;
@@ -145,10 +165,14 @@ namespace etrobocon2023_test {
     Pid actualPid(kp, ki, kd, targetValue);
     double currentValue = 55;
     double preDeviation = 0;
+    double tc = 0.01;  // 時定数
     double currentDeviation = (targetValue - currentValue);
     double p = currentDeviation * kp;
-    double i = ((preDeviation + currentDeviation) * kdELTA / 2) * ki;
-    double d = (currentDeviation - preDeviation) * kd / kdELTA;
+    double i = ((preDeviation + currentDeviation) * kDELTA / 2) * ki;
+    double d = (currentDeviation - preDeviation) * kd / kDELTA;
+    if(kd != 0.0) {
+      d = d / (1 + tc * (fabs(d) / kp));
+    }
     double expected = p + i + d;
     // 第2引数に周期を渡し、周期に応じた計算結果を返すことができるかを確認(デフォルトでは0.01が渡される)
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue, DELTA));
@@ -165,10 +189,14 @@ namespace etrobocon2023_test {
     Pid actualPid(kp, ki, kd, targetValue);
     double currentValue = 60;
     double preDeviation = 0;
+    double tc = 0.01;                                                 // 時定数
     double currentDeviation = (targetValue - currentValue);           // 現在の偏差
     double p = currentDeviation * kp;                                 // P制御
     double i = ((preDeviation + currentDeviation) * DELTA / 2) * ki;  // I制御(誤差の累積は0)
-    double d = (currentDeviation - preDeviation) * kd / DELTA;  // D制御(前回の誤差は0)
+    double d = (currentDeviation - preDeviation) * kd / DELTA;
+    if(kd != 0.0) {
+      d = d / (1 + tc * (fabs(d) / kp));
+    }
     double expected = p + i + d;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
 
@@ -183,7 +211,10 @@ namespace etrobocon2023_test {
     integral += (preDeviation + currentDeviation) * DELTA / 2;
     p = currentDeviation * kp;
     i = integral * ki;
-    d = (currentDeviation - preDeviation) / DELTA * kd;
+    d = (currentDeviation - preDeviation) * kd / DELTA;
+    if(kd != 0.0) {
+      d = d / (1 + tc * (fabs(d) / kp));
+    }
     expected = p + i + d;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
   }
@@ -230,8 +261,10 @@ namespace etrobocon2023_test {
     Pid actualPid(kp, ki, kd, targetValue);
     double currentValue = 60;
     double preDeviation = 0;
-    double currentDeviation = (targetValue - currentValue);            // 現在の偏差
-    double expected = (currentDeviation - preDeviation) * kd / DELTA;  // D制御
+    double tc = 0.01;                                           // 時定数
+    double currentDeviation = (targetValue - currentValue);     // 現在の偏差
+    double d = (currentDeviation - preDeviation) * kd / DELTA;  // D制御
+    double expected = d / (1 + tc * (fabs(d) / kp));
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
   }
 

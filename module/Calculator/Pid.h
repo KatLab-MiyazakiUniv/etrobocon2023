@@ -7,6 +7,8 @@
 #ifndef PID_H
 #define PID_H
 
+#include <math.h>
+
 // PIDゲインを保持する構造体
 struct PidGain {
  public:
@@ -51,9 +53,10 @@ class Pid {
 
  private:
   PidGain gain;
-  double preDeviation;  // 前回の偏差
-  double integral;      // 偏差の累積
-  double targetValue;   // 目標値
+  double preDeviation;                // 前回の偏差
+  double integral;                    // 偏差の累積
+  double targetValue;                 // 目標値
+  static constexpr double tc = 0.01;  // 時定数
 };
 
 #endif
