@@ -16,7 +16,6 @@ import os
 import argparse
 import time
 import cv2
-import shutil
 
 
 class CameraInterface:
