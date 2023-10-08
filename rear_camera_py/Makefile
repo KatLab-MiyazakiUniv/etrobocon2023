@@ -35,7 +35,7 @@ calibrate:
 	@${make} kill
 	python -m src --calibrate
 
-## 画像取得関連 ##@
+## 画像取得関連 ##
 ifeq ($(SAVE_NAME),)
     SAVE_NAME = FigA_1.png # デフォルト値
 endif
