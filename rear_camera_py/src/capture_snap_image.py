@@ -74,7 +74,7 @@ class CaptureSnapImage:
 
         return resized_img
 
-    def start(self) -> None:
+    def capture(self) -> None:
         """画像取得し、加工する."""
         try:
             # 画像取得
@@ -97,7 +97,7 @@ class CaptureSnapImage:
 
         except FileNotFoundError as e:
             print("Error:", e)
-            print("Failed to CaptureSnapImage.start()")
+            print("Failed to CaptureSnapImage.capture()")
 
 
 if __name__ == "__main__":
@@ -111,4 +111,4 @@ if __name__ == "__main__":
     snap = CaptureSnapImage(camera_id=args.camera_num,
                             img_name=args.save_path)
 
-    snap.start()
+    snap.capture()
