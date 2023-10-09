@@ -76,3 +76,10 @@ clean:
 	
 create-env-rear:	
 	pip install -r ../requirements.txt
+
+## 作業用 ##
+get_area:
+	python src/get_area_info.py
+
+coodinate:
+	python work/search_coodinate.py

@@ -4,7 +4,13 @@ command_files/*
 !tests/test_data/*
 tests/test_data/test_binary_image.png
 *.json
+!rear_camera_distance_param.json
 *.npy
+!rear_camera_param.npy
+
+### 作業用 ###
+!work_image_data/test.png
+
 
 #### macOS ####
 # General
