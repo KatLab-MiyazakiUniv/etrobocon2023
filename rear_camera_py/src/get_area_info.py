@@ -16,8 +16,8 @@ import cv2
 import os
 from enum import Enum
 
-script_dir = os.path.dirname(os.path.abspath(__file__)) # /src
-PROJECT_DIR_PATH = os.path.dirname(script_dir) #/rear_camera_py
+script_dir = os.path.dirname(os.path.abspath(__file__))  # /src
+PROJECT_DIR_PATH = os.path.dirname(script_dir)  # /rear_camera_py
 
 
 class Color(Enum):
@@ -34,10 +34,8 @@ class GetAreaInfo:
     RED1 = [(0, 15), (90, 255), (100, 255)]
     YELLOW = [(16, 30), (50, 255), (150, 255)]
     GREEN = [(31, 100), (60, 255), (40, 255)]
-
     BLUE = [(101, 150), (110, 255), (70, 255)]
-
-    RED2 = [(151, 180), (80, 255), (90, 255)]  # ブロック
+    RED2 = [(151, 180), (80, 255), (90, 255)]
 
     # OpenCVのHSV空間の上限はどれも255
     WHITE_threshold = [100, 50, 145]  # 彩度 HSV (以上,以下,以上)
@@ -166,7 +164,6 @@ class GetAreaInfo:
         save_path = os.path.join(self.image_dir_path, "changed_color2_"+self.image_name)
         cv2.imwrite(save_path, changed_color_img)
 
-
         """
         # 射影変換を行いたい！！
 
@@ -216,5 +213,5 @@ if __name__ == "__main__":
     # 処理時間計測用
     execute_time = time.time() - start
     print(f"実行時間: {str(execute_time)[:5]}s")
-    
+
     print("完了！")
