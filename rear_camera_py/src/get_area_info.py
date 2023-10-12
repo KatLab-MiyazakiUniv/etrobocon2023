@@ -141,7 +141,7 @@ class GetAreaInfo:
             do_merge=False)
 
         # グレースケール
-        gray = cv2.cvtColor(trans_img, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(changed_color_img, cv2.COLOR_BGR2GRAY)
 
         lines = fast_line_detector.detect(gray)
         if lines is None:
@@ -184,11 +184,13 @@ class GetAreaInfo:
 
         trans_mat = cv2.getPerspectiveTransform(original, trans)
         trans_img = cv2.warpPerspective(changed_color_img, trans_mat, (column, row))
-        save_path = os.path.join(self.image_dir_path, "trans_"+self.image_name)
-        cv2.imwrite(save_path, trans_img)
+        gray_trans_img = cv2.cvtColor(trans_img, cv2.COLOR_BGR2GRAY)
+        save_path = os.path.join(self.image_dir_path, "gray_trans_"+self.image_name)
+        cv2.imwrite(save_path, gray_trans_img)
+        #"""
         
         # サークルを見つけていく
-        circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, dp=1, minDist=20,
+        circles = cv2.HoughCircles(gray_trans_img, cv2.HOUGH_GRADIENT, dp=1, minDist=20,
                                    param1=100, param2=60, minRadius=0, maxRadius=0)
         print("circles\n", circles)
         if circles is None:
