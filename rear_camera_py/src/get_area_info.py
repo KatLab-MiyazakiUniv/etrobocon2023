@@ -65,6 +65,18 @@ class GetAreaInfo:
         y_size = game_area_img.shape[0]  # 入力画像の縦サイズ
         x_size = game_area_img.shape[1]  # 入力画像の横サイズ
         color_size = game_area_img.shape[2]  # RGBの3次元
+        
+        # 元画像で射影変換の結果を確認するための調整用動作
+        #""" 
+        original = np.float32([(432, 676), (1360, 691), (0, 807), (1636, 846)])
+        trans = np.float32([(0, 0), (1636, 0), (0, 1200), (1636, 1200)])
+
+        trans_mat = cv2.getPerspectiveTransform(original, trans)
+        trans_img = cv2.warpPerspective(game_area_img, trans_mat, (x_size, y_size))
+        save_path = os.path.join(self.image_dir_path, "trans_"+self.image_name)
+        cv2.imwrite(save_path, trans_img)
+        #"""
+        
 
         # # BGR色空間からHSV色空間への変換
         hsv = cv2.cvtColor(game_area_img, cv2.COLOR_BGR2HSV)
@@ -129,7 +141,7 @@ class GetAreaInfo:
             do_merge=False)
 
         # グレースケール
-        gray = cv2.cvtColor(changed_color_img, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(trans_img, cv2.COLOR_BGR2GRAY)
 
         lines = fast_line_detector.detect(gray)
         if lines is None:
@@ -164,14 +176,24 @@ class GetAreaInfo:
         save_path = os.path.join(self.image_dir_path, "changed_color2_"+self.image_name)
         cv2.imwrite(save_path, changed_color_img)
 
-        """
+        #"""
         # 射影変換を行いたい！！
+        original = np.float32([(432, 676), (1360, 691), (0, 807), (1636, 846)])
+        trans = np.float32([(0, 0), (1636, 0), (0, 1200), (1636, 1200)])
+        row, column, _ = changed_color_img.shape
 
-
+        trans_mat = cv2.getPerspectiveTransform(original, trans)
+        trans_img = cv2.warpPerspective(changed_color_img, trans_mat, (column, row))
+        save_path = os.path.join(self.image_dir_path, "trans_"+self.image_name)
+        cv2.imwrite(save_path, trans_img)
+        
         # サークルを見つけていく
         circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, dp=1, minDist=20,
                                    param1=100, param2=60, minRadius=0, maxRadius=0)
         print("circles\n", circles)
+        if circles is None:
+            print("Error: circles is None")
+            exit()
 
         circles = np.uint16(np.around(circles))
 

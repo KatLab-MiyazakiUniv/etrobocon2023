@@ -40,7 +40,7 @@ class CameraCoordinateCalibrator:
         """
         hsv = cv2.cvtColor(self.img, cv2.COLOR_BGR2HSV)
         point_hsv = hsv[event.y, event.x]
-        coodinate_massege = f"座標:({event.x},{event.y})\n"
+        coodinate_massege = f"coordinate:({event.x},{event.y})\n"
         coodinate_massege = "{:<15}".format(coodinate_massege)
         hsv_massege = f"HSV[{point_hsv[0]},{point_hsv[1]},{point_hsv[2]}]"
         hsv_massege = "{:<15}".format(hsv_massege)
@@ -52,7 +52,7 @@ class CameraCoordinateCalibrator:
 
         self.past_massage = coodinate_massege + hsv_massege + "\n\n"
 
-        # 古い順に削除(一回が32文字文)
+        # 古い順に削除(一回が32文字分)
         show_num = 12
         if len(self.__message2["text"]) > 32*(show_num+1):
             self.__message2["text"] = self.__message2["text"][32:]
