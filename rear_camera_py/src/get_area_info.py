@@ -68,7 +68,8 @@ class GetAreaInfo:
         
         # 元画像で射影変換の結果を確認するための調整用動作
         #""" 
-        original = np.float32([(432, 676), (1360, 691), (0, 807), (1636, 846)])
+        #original = np.float32([(432, 676), (1360, 691), (0, 807), (1636, 846)]) # ダブルループ
+        original = np.float32([(2, 958), (542, 677), (1230, 986), (1412, 721)]) # 赤の端点サークル
         trans = np.float32([(0, 0), (1636, 0), (0, 1200), (1636, 1200)])
 
         trans_mat = cv2.getPerspectiveTransform(original, trans)
@@ -178,8 +179,10 @@ class GetAreaInfo:
 
         #"""
         # 射影変換を行いたい！！
-        original = np.float32([(432, 676), (1360, 691), (0, 807), (1636, 846)])
+        #original = np.float32([(432, 676), (1360, 691), (0, 807), (1636, 846)]) # ダブルループ
+        original = np.float32([(2, 958), (542, 677), (1230, 986), (1412, 721)]) # 赤の端点サークル
         trans = np.float32([(0, 0), (1636, 0), (0, 1200), (1636, 1200)])
+        
         row, column, _ = changed_color_img.shape
 
         trans_mat = cv2.getPerspectiveTransform(original, trans)
@@ -221,7 +224,8 @@ if __name__ == "__main__":
     work_dir_path = os.path.join(PROJECT_DIR_PATH, "work_image_data")
 
     # 画像ファイル名
-    image_name = "test.png"
+    image_name = "test.png"                # ダブルループ
+    image_name = "2023-10-06_13-26-37.png" # 赤の端点サークル
     # 画像ファイルパス
     image_path = os.path.join(work_dir_path, image_name)
 
