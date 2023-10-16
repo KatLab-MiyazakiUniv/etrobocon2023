@@ -44,7 +44,7 @@ double Pid::calculatePid(double currentValue, double delta)
   // 0除算によるNaN発生を防ぐための条件
   if(gain.kd != 0.0) {
     // D値に一次遅れフィルタを適用
-    d = d / (1 + tc * (fabs(d) / gain.kp));
+    d = d / (1.0 + tc * (fabs(d) / gain.kp));
   }
 
   // 操作量 = P制御 + I制御 + D制御
