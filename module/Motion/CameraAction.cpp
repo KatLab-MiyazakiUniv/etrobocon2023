@@ -51,9 +51,11 @@ void CameraAction::run()
 
   // 撮影に際してディレクトリ移動も行う
   char cmd[256];
-  snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make image SAVE_NAME=%s && cd ../..",
+  snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make snap_image SAVE_NAME=%s && cd ../..",
            imageName);
   system(cmd);
+
+  printf("%s\n", cmd);
 
   // 撮影対象がBの場合は、バックで黒線へ復帰
   if(isA == false) {
@@ -81,7 +83,6 @@ bool CameraAction::isMetPrecondition()
   } else if(preTargetAngle == 0) {
     snprintf(buf, BUF_SIZE, "The preTargetAngle value passed to preRotation is %d", preTargetAngle);
     logger.logHighlight(buf);
-    return true;
   }
 
   // postTargetAngleが0未満または360以上の場合はwarningを出して終了する
@@ -94,7 +95,6 @@ bool CameraAction::isMetPrecondition()
     snprintf(buf, BUF_SIZE, "The postTargetAngle value passed to postRotation is %d",
              postTargetAngle);
     logger.logHighlight(buf);
-    return true;
   }
 
   // 撮影対象がAの場合はフラグ確認を行う

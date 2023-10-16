@@ -10,12 +10,12 @@ https://github.com/raspberrypi/picamera2
 from typing import Tuple, Union
 from picamera2 import Picamera2
 import numpy as np
-from PIL import Image
 
 from datetime import datetime
 import os
 import argparse
 import time
+import cv2
 
 
 class CameraInterface:
@@ -69,12 +69,7 @@ class CameraInterface:
             save_path (int): 画像の保存先パス(拡張子込み)
         """
         img = self.capture_image()
-        # カラーチャンネルの順序を変換（BGRからRGB）
-        img_rgb = img[:, :, ::-1]
-
-        # NumPyの配列をPILの画像オブジェクトに変換
-        pil_img = Image.fromarray(img_rgb)
-        pil_img.save(save_path)
+        cv2.imwrite(save_path, img)
 
 
 if __name__ == "__main__":
@@ -95,7 +90,7 @@ if __name__ == "__main__":
         os.mkdir(folder_path)
 
     # 画像の取得
-    camera = CameraInterface(args.camera_num)
+    camera = CameraInterface(camera_id=args.camera_num)
     camera.start_camera()
 
     # 1秒ごとにリアカメラで画像を取得する

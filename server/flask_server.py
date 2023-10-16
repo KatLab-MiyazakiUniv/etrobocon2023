@@ -69,8 +69,8 @@ def setState() -> str:
     robot_info["state"] = request_text
     return robot_info["state"]
 
-# '/robot_info/skip_camera_action_true'へのPOSTリクエストに対する操作
-@app.route('/robot_info/skip_camera_action_true', methods=["POST"])
+# '/robot_info/skip_camera_action_true'へのGETリクエストに対する操作
+@app.route('/robot_info/skip_camera_action_true', methods=["GET"])
 def setTrueSkipCameraAction() -> str:
     """撮影動作終了フラグを立てる.
     

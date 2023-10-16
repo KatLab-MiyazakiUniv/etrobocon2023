@@ -41,7 +41,7 @@ class CameraAction : public CompositeMotion {
   void logRunning() override;
 
  private:
-  static constexpr char* SKIP_FLAG_PATH = "skip_camera_action.flag";
+  static constexpr char* SKIP_FLAG_PATH = "etrobocon2023/server/skip_camera_action.flag";
   bool isA;  // フラグ確認を行うかの判断に用いる撮影対象(true:ミニフィグA, false:ミニフィグB)
   bool isClockwise;            // リアカメラをミニフィグに向けるための回頭方向
   int preTargetAngle;          // 撮影のための目標角度
