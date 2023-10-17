@@ -8,8 +8,13 @@
 
 PidGain::PidGain(double _kp, double _ki, double _kd) : kp(_kp), ki(_ki), kd(_kd) {}
 
-Pid::Pid(double _kp, double _ki, double _kd, double _targetValue, double _initDeviation)
-  : gain(_kp, _ki, _kd), preDeviation(_initDeviation), integral(0.0), targetValue(_targetValue)
+Pid::Pid(double _kp, double _ki, double _kd, double _targetValue, double _initDeviation,
+         double _timeConstant)
+  : gain(_kp, _ki, _kd),
+    preDeviation(_initDeviation),
+    integral(0.0),
+    targetValue(_targetValue),
+    timeConstant(_timeConstant)
 {
 }
 
@@ -41,10 +46,12 @@ double Pid::calculatePid(double currentValue, double delta)
   // D制御の計算を行う
   double d = gain.kd * difference;
 
-  // 0除算によるNaN発生を防ぐための条件
-  if(gain.kd != 0.0) {
+  // 以下の2つの為の条件
+  // 0除算によるNaN発生を防ぐ
+  // 時定数が0の時の無駄な計算を避ける
+  if(timeConstant != 0.0 && gain.kp != 0.0) {
     // D値に一次遅れフィルタを適用
-    d = d / (1.0 + tc * (fabs(d) / gain.kp));
+    d = d / (1.0 + timeConstant * (fabs(d) / gain.kp));
   }
 
   // 操作量 = P制御 + I制御 + D制御

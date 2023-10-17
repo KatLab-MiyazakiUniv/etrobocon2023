@@ -48,16 +48,17 @@ namespace etrobocon2023_test {
     double ki = 0.02;
     double kd = 0.03;
     double targetValue = 70;
-    Pid actualPid(kp, ki, kd, targetValue);
+    double initDeviation = 0;    // 偏差の初期値
+    double timeConstant = 0.01;  // 時定数
+    Pid actualPid(kp, ki, kd, targetValue, initDeviation, timeConstant);
     double currentValue = 20;
     double preDeviation = 0;
-    double tc = 0.01;  // 時定数
     double currentDeviation = (targetValue - currentValue);
     double p = currentDeviation * kp;
     double i = ((preDeviation + currentDeviation) * DELTA / 2.0) * ki;
     double d = (currentDeviation - preDeviation) * kd / DELTA;
-    if(kd != 0.0) {
-      d = d / (1.0 + tc * (fabs(d) / kp));
+    if(timeConstant != 0.0 && kd != 0.0) {
+      d = d / (1.0 + timeConstant * (fabs(d) / kp));
     }
     double expected = p + i + d;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
@@ -70,16 +71,17 @@ namespace etrobocon2023_test {
     double ki = 0.0;
     double kd = 0.0;
     double targetValue = 0;
-    Pid actualPid(kp, ki, kd, targetValue);
+    double initDeviation = 0;    // 偏差の初期値
+    double timeConstant = 0.01;  // 時定数
+    Pid actualPid(kp, ki, kd, targetValue, initDeviation, timeConstant);
     double currentValue = 40;
     double preDeviation = 0;
-    double tc = 0.01;  // 時定数
     double currentDeviation = (targetValue - currentValue);
     double p = currentDeviation * kp;
     double i = ((preDeviation + currentDeviation) * DELTA / 2.0) * ki;
     double d = (currentDeviation - preDeviation) * kd / DELTA;
-    if(kd != 0.0) {
-      d = d / (1.0 + tc * (fabs(d) / kp));
+    if(timeConstant != 0.0 && kd != 0.0) {
+      d = d / (1.0 + timeConstant * (fabs(d) / kp));
     }
     double expected = p + i + d;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
@@ -92,16 +94,17 @@ namespace etrobocon2023_test {
     double ki = -0.02;
     double kd = -0.175;
     double targetValue = 100;
-    Pid actualPid(kp, ki, kd, targetValue);
+    double initDeviation = 0;    // 偏差の初期値
+    double timeConstant = 0.01;  // 時定数
+    Pid actualPid(kp, ki, kd, targetValue, initDeviation, timeConstant);
     double currentValue = 0;
     double preDeviation = 0;
-    double tc = 0.01;  // 時定数
     double currentDeviation = (targetValue - currentValue);
     double p = currentDeviation * kp;
     double i = ((preDeviation + currentDeviation) * DELTA / 2) * ki;
     double d = (currentDeviation - preDeviation) * kd / DELTA;
-    if(kd != 0.0) {
-      d = d / (1.0 + tc * (fabs(d) / kp));
+    if(timeConstant != 0.0 && kd != 0.0) {
+      d = d / (1.0 + timeConstant * (fabs(d) / kp));
     }
     double expected = p + i + d;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
@@ -114,16 +117,17 @@ namespace etrobocon2023_test {
     double ki = 0.02;
     double kd = 0.03;
     double targetValue = 70;
-    Pid actualPid(kp, ki, kd, targetValue);
+    double initDeviation = 0;    // 偏差の初期値
+    double timeConstant = 0.01;  // 時定数
+    Pid actualPid(kp, ki, kd, targetValue, initDeviation, timeConstant);
     double currentValue = 55;
     double preDeviation = 0;
-    double tc = 0.01;  // 時定数
     double currentDeviation = (targetValue - currentValue);
     double p = currentDeviation * kp;
     double i = ((preDeviation + currentDeviation) * DELTA / 2) * ki;
     double d = (currentDeviation - preDeviation) * kd / DELTA;
-    if(kd != 0.0) {
-      d = d / (1.0 + tc * (fabs(d) / kp));
+    if(timeConstant != 0.0 && kd != 0.0) {
+      d = d / (1.0 + timeConstant * (fabs(d) / kp));
     }
     double expected = p + i + d;
     // 第2引数に周期を渡し、周期に応じた計算結果を返すことができるかを確認(デフォルトでは0.01が渡される)
@@ -137,16 +141,17 @@ namespace etrobocon2023_test {
     double ki = 0.02;
     double kd = 0.03;
     double targetValue = 70;
-    Pid actualPid(kp, ki, kd, targetValue);
+    double initDeviation = 0;    // 偏差の初期値
+    double timeConstant = 0.01;  // 時定数
+    Pid actualPid(kp, ki, kd, targetValue, initDeviation, timeConstant);
     double currentValue = 55;
     double preDeviation = 0;
-    double tc = 0.01;  // 時定数
     double currentDeviation = (targetValue - currentValue);
     double p = currentDeviation * kp;
     double i = ((preDeviation + currentDeviation) * DELTA / 2) * ki;
     double d = (currentDeviation - preDeviation) * kd / DELTA;
-    if(kd != 0.0) {
-      d = d / (1.0 + tc * (fabs(d) / kp));
+    if(timeConstant != 0.0 && kd != 0.0) {
+      d = d / (1.0 + timeConstant * (fabs(d) / kp));
     }
     double expected = p + i + d;
     // 第2引数に周期を渡し、周期に応じた計算結果を返すことができるかを確認(デフォルトでは0.01が渡される)
@@ -162,16 +167,17 @@ namespace etrobocon2023_test {
     double ki = 0.02;
     double kd = 0.03;
     double targetValue = 70;
-    Pid actualPid(kp, ki, kd, targetValue);
+    double initDeviation = 0;    // 偏差の初期値
+    double timeConstant = 0.01;  // 時定数
+    Pid actualPid(kp, ki, kd, targetValue, initDeviation, timeConstant);
     double currentValue = 55;
     double preDeviation = 0;
-    double tc = 0.01;  // 時定数
     double currentDeviation = (targetValue - currentValue);
     double p = currentDeviation * kp;
     double i = ((preDeviation + currentDeviation) * kDELTA / 2) * ki;
     double d = (currentDeviation - preDeviation) * kd / kDELTA;
-    if(kd != 0.0) {
-      d = d / (1.0 + tc * (fabs(d) / kp));
+    if(timeConstant != 0.0 && kd != 0.0) {
+      d = d / (1.0 + timeConstant * (fabs(d) / kp));
     }
     double expected = p + i + d;
     // 第2引数に周期を渡し、周期に応じた計算結果を返すことができるかを確認(デフォルトでは0.01が渡される)
@@ -186,16 +192,17 @@ namespace etrobocon2023_test {
     double ki = 0.05;
     double kd = 0.01;
     double targetValue = 70;
-    Pid actualPid(kp, ki, kd, targetValue);
+    double initDeviation = 0;    // 偏差の初期値
+    double timeConstant = 0.01;  // 時定数
+    Pid actualPid(kp, ki, kd, targetValue, initDeviation, timeConstant);
     double currentValue = 60;
     double preDeviation = 0;
-    double tc = 0.01;                                                 // 時定数
     double currentDeviation = (targetValue - currentValue);           // 現在の偏差
     double p = currentDeviation * kp;                                 // P制御
     double i = ((preDeviation + currentDeviation) * DELTA / 2) * ki;  // I制御(誤差の累積は0)
     double d = (currentDeviation - preDeviation) * kd / DELTA;
-    if(kd != 0.0) {
-      d = d / (1.0 + tc * (fabs(d) / kp));
+    if(timeConstant != 0.0 && kd != 0.0) {
+      d = d / (1.0 + timeConstant * (fabs(d) / kp));
     }
     double expected = p + i + d;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
@@ -212,8 +219,8 @@ namespace etrobocon2023_test {
     p = currentDeviation * kp;
     i = integral * ki;
     d = (currentDeviation - preDeviation) * kd / DELTA;
-    if(kd != 0.0) {
-      d = d / (1.0 + tc * (fabs(d) / kp));
+    if(timeConstant != 0.0 && kd != 0.0) {
+      d = d / (1.0 + timeConstant * (fabs(d) / kp));
     }
     expected = p + i + d;
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
@@ -258,13 +265,13 @@ namespace etrobocon2023_test {
     double ki = 0.0;
     double kd = 1.0;
     double targetValue = 70;
-    Pid actualPid(kp, ki, kd, targetValue);
+    double initDeviation = 0;    // 偏差の初期値
+    double timeConstant = 0.01;  // 時定数
+    Pid actualPid(kp, ki, kd, targetValue, initDeviation, timeConstant);
     double currentValue = 60;
     double preDeviation = 0;
-    double tc = 0.01;                                           // 時定数
-    double currentDeviation = (targetValue - currentValue);     // 現在の偏差
-    double d = (currentDeviation - preDeviation) * kd / DELTA;  // D制御
-    double expected = d / (1.0 + tc * (fabs(d) / kp));
+    double currentDeviation = (targetValue - currentValue);            // 現在の偏差
+    double expected = (currentDeviation - preDeviation) * kd / DELTA;  // D制御
     EXPECT_DOUBLE_EQ(expected, actualPid.calculatePid(currentValue));
   }
 
