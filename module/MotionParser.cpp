@@ -115,8 +115,8 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
     }
     */
     else if(command == COMMAND::XR) {  // 角度補正回頭の追加
-      CorrectingRotation* xr = new CorrectingRotation(atoi(params[1]),   // 目標角度
-                                                      atof(params[2]));  // 目標速度
+      CorrectingRotation* xr = new CorrectingRotation(atoi(params[1]),  // 目標角度
+                                                      atof(params[2]));  // 角度補正回頭の目標PWM
 
       motionList.push_back(xr);                                    // 動作リストに追加
     } else if(command == COMMAND::IS) {                            // 交点内移動（直進）

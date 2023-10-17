@@ -7,18 +7,22 @@
 #ifndef CORRECTING_ROTATION_H
 #define CORRECTING_ROTATION_H
 
+#include "SystemInfo.h"
 #include "CompositeMotion.h"
 #include "StringOperator.h"
-#include "AngleRotation.h"
+#include "Mileage.h"
+#include "Timer.h"
+#include "SpeedCalculator.h"
+#include "PwmRotation.h"
 
 class CorrectingRotation : public CompositeMotion {
  public:
   /**
    * コンストラクタ
    * @param _targetAngle 目標角度(deg) 0~89
-   * @param _targetSpeed 目標速度[mm/s]
+   * @param _pwm PWM値 0~100
    */
-  CorrectingRotation(int _targetAngle, double _targetSpeed);
+  CorrectingRotation(int _targetAngle, int _pwm);
 
   /**
    * @brief 角度補正回頭する
@@ -38,7 +42,7 @@ class CorrectingRotation : public CompositeMotion {
  private:
   static constexpr int NO_CORRECTION_ANGLE = 2;  // 補正免除角度(deg)
   int targetAngle;                               // 目標角度(deg) 0~89
-  double targetSpeed;                            // 目標速度[mm/s]
+  int pwm;                                       // PWM値 0~100
   Timer timer;
 };
 

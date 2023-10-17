@@ -5,11 +5,12 @@
  */
 
 #include "CorrectingRotation.h"
+#include <stdio.h>
 
 using namespace std;
 
-CorrectingRotation::CorrectingRotation(int _targetAngle, double _targetSpeed)
-  : targetAngle(_targetAngle), targetSpeed(_targetSpeed){};
+CorrectingRotation::CorrectingRotation(int _targetAngle, int _pwm)
+  : targetAngle(_targetAngle), pwm(_pwm){};
 
 void CorrectingRotation::run()
 {
@@ -19,7 +20,7 @@ void CorrectingRotation::run()
   }
 
   /*
-   * rear_camera_request.shより直線の角度を取得
+   * rear_camera_request.shにより検出した線分と機体の中心線のなす角を取得
    * シミュレータ環境ではpopenが使えないため，
    * ファイルに出力して読み込む
    */
@@ -56,6 +57,7 @@ void CorrectingRotation::run()
    * 目標角度を計測角度の方向に90度ずらして再設定する
    */
   if(abs(tAngle - measuredAngle) > 45) {
+    printf("横線を採用！！！\n");
     if(tAngle < measuredAngle)
       tAngle += 90;
     else
@@ -82,8 +84,8 @@ void CorrectingRotation::run()
   logger.log(buf);
 
   // 算出された補正角度だけ回頭する
-  AngleRotation angleRotation(angle, targetSpeed, isClockwise);
-  angleRotation.run();
+  PwmRotation pwmRotation(angle, pwm, isClockwise);
+  pwmRotation.run();
 }
 
 bool CorrectingRotation::isMetPrecondition()
@@ -91,10 +93,9 @@ bool CorrectingRotation::isMetPrecondition()
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
 
-  // 目標速度が0.0以下の場合はwarningを出して終了する
-  if(targetSpeed <= 0.0) {
-    snprintf(buf, BUF_SIZE, "The targetSpeed value passed to CorrectingRotation is %lf",
-             targetSpeed);
+  // pwm値が0以下の場合はwarningを出して終了する
+  if(pwm <= 0) {
+    snprintf(buf, BUF_SIZE, "The pwm value passed to CorrectingRotation is %d", pwm);
     logger.logWarning(buf);
     return false;
   }
@@ -115,7 +116,6 @@ void CorrectingRotation::logRunning()
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
 
-  snprintf(buf, BUF_SIZE, "Run CorrectingRotation (targetAngle: %d, targetSpeed: %lf)", targetAngle,
-           targetSpeed);
+  snprintf(buf, BUF_SIZE, "Run CorrectingRotation (targetAngle: %d, pwm: %d)", targetAngle, pwm);
   logger.log(buf);
 }
