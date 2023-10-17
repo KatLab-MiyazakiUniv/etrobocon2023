@@ -34,13 +34,27 @@ rgb_raw_t Measurer::getRawColor()
 // 左モータ角位置取得
 int Measurer::getLeftCount()
 {
+  // return 0;
   return leftMotor->getCount();
+}
+
+// 左モータ角位置更新
+void Measurer::setLeftCount(int count)
+{
+  leftMotor->gstCount(count);
 }
 
 // 右モータ角位置取得
 int Measurer::getRightCount()
 {
+  // return 0;
   return rightMotor->getCount();
+}
+
+// 右モータ角位置更新
+void Measurer::setRightCount(int count)
+{
+  rightMotor->setCount(count);
 }
 
 // アームモータ角位置取得
