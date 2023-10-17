@@ -15,6 +15,9 @@ Rotation::Rotation(double _targetSpeed, bool _isClockwise)
 
 void Rotation::run()
 {
+  // モータの停止
+  Controller::stopMotor();
+
   // 事前条件を判定する
   if(!isMetPrecondition()) {
     return;
