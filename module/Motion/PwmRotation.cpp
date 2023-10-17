@@ -18,6 +18,9 @@ void PwmRotation::run()
   const int BUF_SIZE = 128;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
 
+  // モータの停止
+  Controller::stopMotor();
+
   // pwm値が0以下の場合はwarningを出して終了する
   if(pwm <= 0) {
     snprintf(buf, BUF_SIZE, "The pwm value passed to PwmRotation is %d", pwm);
