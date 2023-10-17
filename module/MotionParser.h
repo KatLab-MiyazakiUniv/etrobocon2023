@@ -29,6 +29,7 @@
 #include "StringOperator.h"
 #include "CameraAction.h"
 #include "PwmRotation.h"
+#include "Stop.h"
 
 enum class COMMAND {
   DL,  // 指定距離ライントレース
@@ -49,6 +50,7 @@ enum class COMMAND {
   CC,  // 交点サークルから交点サークル
   CM,  // 交点サークルから直線の中点
   PR,  // Pwm値指定回頭
+  ST,  // 左右モーターストップ
   NONE
 };
 
