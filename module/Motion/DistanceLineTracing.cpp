@@ -39,6 +39,7 @@ bool DistanceLineTracing::isMetPrecondition(double targetSpeed)
 bool DistanceLineTracing::isMetPostcondition()
 {
   // 初期値を代入
+  printf("L: %d, R: %d\n", Measurer::getLeftCount(), Measurer::getRightCount());
   currentDistance = Mileage::calculateMileage(Measurer::getRightCount(), Measurer::getLeftCount());
 
   // 走行距離が目標距離に到達

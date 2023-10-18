@@ -44,10 +44,10 @@ void EtRobocon2023::start()
   Timer::clock = _clockPtr;
 
   // ======= 以下、オーバーフロー検証用の処理
-  const int INT_MAX = 2147483647;
-  int remain = 100;
-  Mesuarer::setRightCount(INT_MAX - remain);
-  Mesuarer::setLeftCount(INT_MAX - remain);
+  static constexpr int INT_MAX_VALUE = 2147483647;
+  int remain = 10;
+  Measurer::setRightCount(INT_MAX_VALUE - remain);
+  Measurer::setLeftCount(INT_MAX_VALUE - remain);
   // ======= 以上、オーバーフロー検証用の処理
 
   const int BUF_SIZE = 128;
