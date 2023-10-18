@@ -57,6 +57,13 @@ void Measurer::setRightCount(int count)
   rightMotor->setCount(count);
 }
 
+// モータ角位置の初期化
+void Measurer::resetCount()
+{
+  Measurer::setLeftCount(0);
+  Measurer::setRightCount(0);
+}
+
 // アームモータ角位置取得
 int Measurer::getArmMotorCount()
 {

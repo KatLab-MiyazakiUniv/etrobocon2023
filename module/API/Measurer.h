@@ -60,6 +60,11 @@ class Measurer {
   static void setRightCount(int count);
 
   /**
+   * モータ角位置を初期化
+   */
+  static void resetCount();
+
+  /**
    * アームモータ角位置を取得
    * @return アームモータ角位置[deg]
    */
