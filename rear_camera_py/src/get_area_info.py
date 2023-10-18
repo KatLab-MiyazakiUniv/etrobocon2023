@@ -225,7 +225,7 @@ if __name__ == "__main__":
 
     # 画像ファイル名
     image_name = "test.png"                # ダブルループ
-    image_name = "2023-10-06_13-26-37.png" # 赤の端点サークル
+    # image_name = "2023-10-06_13-26-37.png" # 赤の端点サークル
     # 画像ファイルパス
     image_path = os.path.join(work_dir_path, image_name)
 
