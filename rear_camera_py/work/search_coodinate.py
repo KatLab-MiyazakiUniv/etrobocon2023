@@ -3,13 +3,12 @@ GUI上で画像をクリックした場所の座標とHSV値(OpenCV)を表示さ
 大会等で,環境によりブロックの色などの値が違う場合に調整できるように,
 このファイルは残しておく.
 
-@author kawanoichi
+@author kawanoichi YKhm20020
 
 実行コマンド:
 rear_camera/ 直下で実行することを想定
 $ make coodinate
 """
-
 
 import cv2
 import tkinter as tk
@@ -24,7 +23,7 @@ class CameraCoordinateCalibrator:
     """カメラ画像から座標とHSV値を取得するクラス."""
 
     def __init__(self, img_path) -> None:
-        """CameraCoordinateCalibratorのコンストラクタ.        
+        """CameraCoordinateCalibratorのコンストラクタ.
 
         Args:
             img_path(str): 画像パス
@@ -40,21 +39,29 @@ class CameraCoordinateCalibrator:
         """
         hsv = cv2.cvtColor(self.img, cv2.COLOR_BGR2HSV)
         point_hsv = hsv[event.y, event.x]
-        coodinate_massege = f"coordinate:({event.x},{event.y})\n"
-        coodinate_massege = "{:<15}".format(coodinate_massege)
-        hsv_massege = f"HSV[{point_hsv[0]},{point_hsv[1]},{point_hsv[2]}]"
-        hsv_massege = "{:<15}".format(hsv_massege)
+        coordinate_message = f"Coordinate: ({event.x}, {event.y})\n"
+        coordinate_message = "{:<15}".format(coordinate_message)
+        hsv_message = f"HSV: [{point_hsv[0]}, {point_hsv[1]}, {point_hsv[2]}]"
 
-        self.__message["text"] = coodinate_massege + hsv_massege
+        # 色を判定
+        color = "Unknown"
+        if (0 <= point_hsv[0] <= 10) or (160 <= point_hsv[0] <= 180):
+            color = "Red"
+        elif 100 <= point_hsv[0] <= 140:
+            color = "Blue"
+        
+        color_message = f"Color: {color}"
+
+        self.__message["text"] = coordinate_message + hsv_message + "\n" + color_message
 
         if self.past_massage is not None:
             self.__message2["text"] += self.past_massage
 
-        self.past_massage = coodinate_massege + hsv_massege + "\n\n"
+        self.past_message = coordinate_message + hsv_message + "\n" + color_message + "\n\n"
 
         # 古い順に削除(一回が32文字分)
         show_num = 12
-        if len(self.__message2["text"]) > 32*(show_num+1):
+        if len(self.__message2["text"]) > 32 * (show_num + 1):
             self.__message2["text"] = self.__message2["text"][32:]
 
     def __complete_input_coordinate(self, event) -> None:
@@ -77,19 +84,18 @@ class CameraCoordinateCalibrator:
 
         photo = ImageTk.PhotoImage(Image.fromarray(self.img))
 
-
         # ウィンドウサイズ: (画像の横幅 + UIの横幅) x 画像の高さ
         ui_size_x = 200
-        ui_center_x = img_width + ui_size_x/2
+        ui_center_x = img_width + ui_size_x / 2
 
-        self.__window.geometry(f"{img_width+ui_size_x}x{img_height}")
+        self.__window.geometry(f"{img_width + ui_size_x}x{img_height}")
 
         # UI座標
         text_box_size_x = 180
         text_box_size_y = 60
-        text_box_x = ui_center_x - text_box_size_x/2
+        text_box_x = ui_center_x - text_box_size_x / 2
         text_box_y = 120
-        
+
         ## 座標textを配置する
         # title
         self.__message_title = tk.Label(
@@ -97,13 +103,13 @@ class CameraCoordinateCalibrator:
         self.__message_title.place(x=text_box_x,
                                    y=text_box_y,
                                    width=text_box_size_x,
-                                   height=text_box_size_y*0.8)
+                                   height=text_box_size_y * 0.8)
 
         # coodinate
         self.__message = tk.Label(
             self.__window, font=("", 10), bg="#ccc")
         self.__message.place(x=text_box_x,
-                             y=text_box_y + text_box_size_y*0.8,
+                             y=text_box_y + text_box_size_y * 0.8,
                              width=text_box_size_x,
                              height=text_box_size_y)
 
@@ -112,17 +118,17 @@ class CameraCoordinateCalibrator:
         self.__message2_title = tk.Label(
             self.__window, text="履歴\n", font=("", 10), bg="#ccc", anchor=tk.N)
         self.__message2_title.place(x=text_box_x,
-                              y=text_box_y+text_box_size_y*1.6+20,
-                              width=text_box_size_x,
-                              height=text_box_size_y*0.8)
+                                    y=text_box_y + text_box_size_y * 1.6 + 20,
+                                    width=text_box_size_x,
+                                    height=text_box_size_y * 0.8)
 
         # coodinate
         self.__message2 = tk.Label(
             self.__window, font=("", 10), bg="#ccc", anchor=tk.N)
         self.__message2.place(x=text_box_x,
-                              y=text_box_y+text_box_size_y*2.4+20,
-                              width=text_box_size_x,
-                              height=text_box_size_y*11)
+                             y=text_box_y + text_box_size_y * 2.4 + 20,
+                             width=text_box_size_x,
+                             height=text_box_size_y * 11)
 
         # OpenCVで取得した画像を変換する
         img_rgb = cv2.cvtColor(self.img,
@@ -134,9 +140,8 @@ class CameraCoordinateCalibrator:
         # 画像を表示するCanvasを定義する
         canvas = tk.Canvas(self.__window, width=img_width,
                            height=img_height)
-        
-        canvas.create_image(0, 0, anchor=tk.NW, image=photo)
 
+        canvas.create_image(0, 0, anchor=tk.NW, image=photo)
 
         # コールバック関数を指定する ("<Button-1>"は左クリックボタン)
         canvas.bind("<Button-1>", self.__set_coordinate)
@@ -151,7 +156,7 @@ class CameraCoordinateCalibrator:
         finish_button.bind("<Button-1>", self.__complete_input_coordinate)
         # Finishボタンを配置する
         button_size_x = 180
-        finish_button.place(x=ui_center_x-button_size_x/2, y=20, width=button_size_x, height=50)
+        finish_button.place(x=ui_center_x - button_size_x / 2, y=20, width=button_size_x, height=50)
 
         """
         NOTE:スクロールすると座標が変わってしまう
@@ -193,7 +198,7 @@ if __name__ == "__main__":
 
     # 画像ファイル名
     image_name = "test.png"                # ダブルループ
-    image_name = "2023-10-06_13-26-37.png" # 赤の端点サークル
+    # image_name = "2023-10-06_13-26-37.png"  # 赤の端点サークル
     # 画像ファイルパス
     image_path = os.path.join(work_dir_path, image_name)
 

@@ -190,6 +190,61 @@ class GetAreaInfo:
         gray_trans_img = cv2.cvtColor(trans_img, cv2.COLOR_BGR2GRAY)
         save_path = os.path.join(self.image_dir_path, "gray_trans_"+self.image_name)
         cv2.imwrite(save_path, gray_trans_img)
+        
+        # 赤と青の物体検知を行う閾値
+        blue_lower = np.array([100, 100, 100])
+        blue_upper = np.array([130, 255, 255])
+        red_lower = np.array([0, 100, 100])
+        red_upper = np.array([180, 255, 255])
+
+        red_mask = cv2.inRange(hsv, red_lower, red_upper)
+        blue_mask = cv2.inRange(hsv, blue_lower, blue_upper)
+
+        # 赤、青の物体を各色の矩形で囲む
+        blue_contours, _ = cv2.findContours(blue_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        red_contours, _ = cv2.findContours(red_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        blue_blocks = []
+        red_blocks = []
+        for contour in blue_contours:
+            x, y, w, h = cv2.boundingRect(contour)
+            # 面積が小さすぎる、もしくは大きすぎる矩形を除外
+            if(cv2.contourArea(contour) < 1000) or (cv2.contourArea(contour) > 1000000):
+                continue
+            
+            # アスペクト比が一定以上の場合を除外
+            aspect_ratio = float(w) / h if h > 0 else 0
+            if aspect_ratio > 2.0:
+                continue
+            blue_blocks.append((x, y, x + w, y + h))
+            cv2.rectangle(game_area_img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+        print(f'blue_blocks: {blue_blocks}')
+        
+        for contour in red_contours:
+            x, y, w, h = cv2.boundingRect(contour)
+            # 面積が小さすぎる、もしくは大きすぎる矩形を除外
+            if(cv2.contourArea(contour) < 1000) or (cv2.contourArea(contour) > 1000000):
+                continue
+            
+            # アスペクト比が一定以上の場合を除外
+            aspect_ratio = float(w) / h if h > 0 else 0
+            if aspect_ratio > 2.0:
+                continue
+            
+            skip_flag = False
+            for i in range(len(blue_blocks)):
+                if abs(x - blue_blocks[i][0]) < 10:
+                    skip_flag = True
+                    break
+            if skip_flag == True:
+                continue
+            red_blocks.append((x, y, x + w, y + h))
+            cv2.rectangle(game_area_img, (x, y), (x + w, y + h), (0, 0, 255), 2)
+        print(f'red_blocks: {red_blocks}')
+
+        save_path = os.path.join(self.image_dir_path, "circles_"+self.image_name)
+        cv2.imwrite(save_path, game_area_img)
+        
         #"""
         
         # サークルを見つけていく
@@ -213,7 +268,6 @@ class GetAreaInfo:
         save_path = os.path.join(self.image_dir_path, "changed_color2_"+self.image_name)
         cv2.imwrite(save_path, detect_circle_img)
         # """
-
 
 if __name__ == "__main__":
     # 処理時間計測用
