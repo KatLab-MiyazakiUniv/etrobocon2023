@@ -39,6 +39,7 @@ void AreaMaster::run()
 
   // 各動作を実行する
   for(const auto& motion : motionList) {
+    Measurer::resetCount();
     motion->logRunning();
     motion->run();
   }

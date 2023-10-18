@@ -37,10 +37,29 @@ int Measurer::getLeftCount()
   return leftMotor->getCount();
 }
 
+// 左モータ角位置更新
+void Measurer::setLeftCount(int count)
+{
+  leftMotor->setCount(count);
+}
+
 // 右モータ角位置取得
 int Measurer::getRightCount()
 {
   return rightMotor->getCount();
+}
+
+// 右モータ角位置更新
+void Measurer::setRightCount(int count)
+{
+  rightMotor->setCount(count);
+}
+
+// モータ角位置の初期化
+void Measurer::resetCount()
+{
+  Measurer::setLeftCount(0);
+  Measurer::setRightCount(0);
 }
 
 // アームモータ角位置取得

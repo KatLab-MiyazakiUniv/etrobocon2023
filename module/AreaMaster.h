@@ -12,6 +12,7 @@
 #include <string.h>
 #include "MotionParser.h"
 #include "Logger.h"
+#include "Measurer.h"
 
 // エリア名を持つ列挙型変数（LineTrace = 0, DoubleLoop = 1, BlockDeTreasure = 2）
 enum Area { LineTrace, DoubleLoop, BlockDeTreasure };

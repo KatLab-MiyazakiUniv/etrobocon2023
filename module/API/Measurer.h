@@ -42,10 +42,27 @@ class Measurer {
   static int getLeftCount();
 
   /**
+   * 左モータ角位置を更新
+   * @param 左モータ角位置[deg]
+   */
+  static void setLeftCount(int count);
+
+  /**
    * 右モータ角位置を取得
    * @return 右モータ角位置[deg]
    */
   static int getRightCount();
+
+  /**
+   * 右モータ角位置を更新
+   * @param 右モータ角位置[deg]
+   */
+  static void setRightCount(int count);
+
+  /**
+   * モータ角位置を初期化
+   */
+  static void resetCount();
 
   /**
    * アームモータ角位置を取得
