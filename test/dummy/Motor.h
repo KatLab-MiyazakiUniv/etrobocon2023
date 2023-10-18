@@ -31,6 +31,11 @@ namespace ev3api {
     int getCount();
 
     /**
+     * モータ角位置更新
+     */
+    void setCount(int count){};
+
+    /**
      * pwm値設定
      * @param pwm pwm値
      */
