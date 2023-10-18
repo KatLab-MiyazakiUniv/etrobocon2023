@@ -43,6 +43,13 @@ void EtRobocon2023::start()
   Measurer::armMotor = _armMotorPtr;
   Timer::clock = _clockPtr;
 
+  // ======= 以下、オーバーフロー検証用の処理
+  const int INT_MAX = 2147483647;
+  int remain = 100;
+  Mesuarer::setRightCount(INT_MAX - remain);
+  Mesuarer::setLeftCount(INT_MAX - remain);
+  // ======= 以上、オーバーフロー検証用の処理
+
   const int BUF_SIZE = 128;
   char buf[BUF_SIZE];  // logやコマンド用にメッセージを一時保持する領域
   Logger logger;
