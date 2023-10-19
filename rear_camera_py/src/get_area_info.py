@@ -7,6 +7,8 @@ https://www.peko-step.com/html/hsv.html
 NOTE:HSV値調べる
 https://yanohirota.com/image-spuit/
 
+@author kawanoichi YKhm20020
+
 実行コマンド:
 rear_camera/ 直下で実行することを想定
 $ make get_area
@@ -68,8 +70,8 @@ class GetAreaInfo:
         
         # 元画像で射影変換の結果を確認するための調整用動作
         #""" 
-        #original = np.float32([(432, 676), (1360, 691), (0, 807), (1636, 846)]) # ダブルループ
-        original = np.float32([(2, 958), (542, 677), (1230, 986), (1412, 721)]) # 赤の端点サークル
+        original = np.float32([(432, 676), (1360, 691), (0, 807), (1636, 846)]) # ダブルループ
+        # original = np.float32([(11, 958), (542, 677), (1230, 986), (1412, 721)]) # 赤の端点サークル
         trans = np.float32([(0, 0), (1636, 0), (0, 1200), (1636, 1200)])
 
         trans_mat = cv2.getPerspectiveTransform(original, trans)
@@ -116,12 +118,12 @@ class GetAreaInfo:
                                    (self.BLUE[2][0] <= hsv[:, :, 2]) & (hsv[:, :, 2] <= self.BLUE[2][1]))
                           ] = Color.WHITE.value
 
-        # 白
+        # # 白
         # changed_color_img[np.where(hsv[:,:,0] >= self.WHITE_threshold[0]) and \
         #             np.where(hsv[:,:,1] <= self.WHITE_threshold[1]) and \
         #             np.where(hsv[:,:,2] >= self.WHITE_threshold[2])] = Color.WHITE.value
 
-        # 黒
+        # # 黒
         # changed_color_img[np.where(hsv[:,:,2] <= self.BLACK_threshold)] = Color.BLACK.value
         # changed_color_img[np.where(hsv[:,:,2] <= self.BLACK_threshold)] = Color.WHITE.value
         # changed_color_img[np.where(hsv[:,:,0] >= self.BLACK_threshold[0]) and \
@@ -177,21 +179,21 @@ class GetAreaInfo:
         save_path = os.path.join(self.image_dir_path, "changed_color2_"+self.image_name)
         cv2.imwrite(save_path, changed_color_img)
 
-        #"""
-        # 射影変換を行いたい！！
-        #original = np.float32([(432, 676), (1360, 691), (0, 807), (1636, 846)]) # ダブルループ
-        original = np.float32([(2, 958), (542, 677), (1230, 986), (1412, 721)]) # 赤の端点サークル
-        trans = np.float32([(0, 0), (1636, 0), (0, 1200), (1636, 1200)])
+        # #"""
+        # # 射影変換を行いたい！！
+        # original = np.float32([(432, 676), (1360, 691), (0, 807), (1636, 846)]) # ダブルループ
+        # # original = np.float32([(11, 958), (542, 677), (1230, 986), (1412, 721)]) # 赤の端点サークル
+        # trans = np.float32([(0, 0), (1636, 0), (0, 1200), (1636, 1200)])
         
-        row, column, _ = changed_color_img.shape
+        # row, column, _ = changed_color_img.shape
 
-        trans_mat = cv2.getPerspectiveTransform(original, trans)
-        trans_img = cv2.warpPerspective(changed_color_img, trans_mat, (column, row))
-        gray_trans_img = cv2.cvtColor(trans_img, cv2.COLOR_BGR2GRAY)
-        save_path = os.path.join(self.image_dir_path, "gray_trans_"+self.image_name)
-        cv2.imwrite(save_path, gray_trans_img)
+        # trans_mat = cv2.getPerspectiveTransform(original, trans)
+        # trans_img = cv2.warpPerspective(changed_color_img, trans_mat, (column, row))
+        # gray_trans_img = cv2.cvtColor(trans_img, cv2.COLOR_BGR2GRAY)
+        # save_path = os.path.join(self.image_dir_path, "gray_trans_"+self.image_name)
+        # cv2.imwrite(save_path, gray_trans_img)
         
-        # 赤と青の物体検知を行う閾値
+        # 青と赤の物体検知を行う閾値
         blue_lower = np.array([100, 100, 100])
         blue_upper = np.array([130, 255, 255])
         red_lower = np.array([0, 100, 100])
@@ -208,8 +210,8 @@ class GetAreaInfo:
         red_blocks = []
         for contour in blue_contours:
             x, y, w, h = cv2.boundingRect(contour)
-            # 面積が小さすぎる、もしくは大きすぎる矩形を除外
-            if(cv2.contourArea(contour) < 1000) or (cv2.contourArea(contour) > 1000000):
+            # 面積が小さすぎる矩形を除外
+            if(cv2.contourArea(contour) < 1000):
                 continue
             
             # アスペクト比が一定以上の場合を除外
@@ -222,8 +224,8 @@ class GetAreaInfo:
         
         for contour in red_contours:
             x, y, w, h = cv2.boundingRect(contour)
-            # 面積が小さすぎる、もしくは大きすぎる矩形を除外
-            if(cv2.contourArea(contour) < 1000) or (cv2.contourArea(contour) > 1000000):
+            # 面積が小さすぎる矩形を除外
+            if(cv2.contourArea(contour) < 1000):
                 continue
             
             # アスペクト比が一定以上の場合を除外
@@ -242,10 +244,50 @@ class GetAreaInfo:
             cv2.rectangle(game_area_img, (x, y), (x + w, y + h), (0, 0, 255), 2)
         print(f'red_blocks: {red_blocks}')
 
-        save_path = os.path.join(self.image_dir_path, "circles_"+self.image_name)
+        save_path = os.path.join(self.image_dir_path, "blocks_"+self.image_name)
         cv2.imwrite(save_path, game_area_img)
         
-        #"""
+        square_size = 150
+        height, width, _ = trans_img.shape
+        
+        # 各色の色の範囲を定義 (HSV形式)
+        color_ranges = {
+            # 'white': ((0, 0, 200), (180, 30, 255)),  # 明度が高い色 (白)
+            # 'black': ((0, 0, 0), (180, 255, 50)),  # 明度が低い色 (黒)
+            'red': ((150, 100, 100), (180, 255, 255)),
+            'green': ((35, 100, 100), (85, 255, 255)),
+            'blue': ((100, 100, 100), (130, 255, 255)),
+            'yellow': ((20, 80, 10), (50, 130, 255))
+        }
+        
+        for y in range(0, height, square_size):
+            for x in range(0, width, square_size):
+                square = trans_img[y:y+square_size, x:x+square_size]
+
+                # 正方形内の色を抽出
+                square_hsv = cv2.cvtColor(square, cv2.COLOR_BGR2HSV)
+
+                color_counts = {}
+
+                for color, (lower, upper) in color_ranges.items():
+                    mask = cv2.inRange(square_hsv, np.array(lower), np.array(upper))
+                    count = cv2.countNonZero(mask)
+                    color_counts[color] = count
+
+                # 最も多い色を判定
+                dominant_color = max(color_counts, key=color_counts.get)
+                if dominant_color == 'white' or dominant_color == 'black':
+                    continue
+
+                # 結果を表示
+                print(f"Square at ({x},{y}) has dominant color: {dominant_color}")
+
+                # 画像に色情報を描画
+                cv2.rectangle(trans_img, (x, y), (x+square_size, y+square_size), color_ranges[dominant_color][0], 2)
+        save_path = os.path.join(self.image_dir_path, "circles_"+self.image_name)
+        cv2.imwrite(save_path, trans_img)
+        
+        """
         
         # サークルを見つけていく
         circles = cv2.HoughCircles(gray_trans_img, cv2.HOUGH_GRADIENT, dp=1, minDist=20,
@@ -265,9 +307,9 @@ class GetAreaInfo:
             # 中心点を描画する
             cv2.circle(detect_circle_img, (circle[0], circle[1]), 2, (0, 0, 255), 3)
 
-        save_path = os.path.join(self.image_dir_path, "changed_color2_"+self.image_name)
+        save_path = os.path.join(self.image_dir_path, "circles_changed_color2_"+self.image_name)
         cv2.imwrite(save_path, detect_circle_img)
-        # """
+        """
 
 if __name__ == "__main__":
     # 処理時間計測用
@@ -279,7 +321,7 @@ if __name__ == "__main__":
 
     # 画像ファイル名
     image_name = "test.png"                # ダブルループ
-    # image_name = "2023-10-06_13-26-37.png" # 赤の端点サークル
+    #image_name = "2023-10-06_13-26-37.png" # 赤の端点サークル
     # 画像ファイルパス
     image_path = os.path.join(work_dir_path, image_name)
 
