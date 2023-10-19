@@ -148,7 +148,7 @@ class GetAreaInfo:
 
         lines = fast_line_detector.detect(gray)
         if lines is None:
-            print("Error: lines is None")
+            print("Error: lines are None")
             exit()
 
         # 赤線を引く
@@ -218,6 +218,7 @@ class GetAreaInfo:
             aspect_ratio = float(w) / h if h > 0 else 0
             if aspect_ratio > 2.0:
                 continue
+
             blue_blocks.append((x, y, x + w, y + h))
             cv2.rectangle(game_area_img, (x, y), (x + w, y + h), (255, 0, 0), 2)
         print(f'blue_blocks: {blue_blocks}')
@@ -247,17 +248,28 @@ class GetAreaInfo:
         save_path = os.path.join(self.image_dir_path, "blocks_"+self.image_name)
         cv2.imwrite(save_path, game_area_img)
         
-        square_size = 150
+        square_size = 10
         height, width, _ = trans_img.shape
+        
+        max_color_count = 0
+        max_color_square = None
         
         # 各色の色の範囲を定義 (HSV形式)
         color_ranges = {
-            # 'white': ((0, 0, 200), (180, 30, 255)),  # 明度が高い色 (白)
-            # 'black': ((0, 0, 0), (180, 255, 50)),  # 明度が低い色 (黒)
+            'white': ((0, 0, 200), (180, 30, 255)),
+            'black': ((0, 0, 0), (180, 255, 150)),
             'red': ((150, 100, 100), (180, 255, 255)),
-            'green': ((35, 100, 100), (85, 255, 255)),
+            'green': ((35, 50, 100), (85, 150, 255)),
             'blue': ((100, 100, 100), (130, 255, 255)),
-            'yellow': ((20, 80, 10), (50, 130, 255))
+            'yellow': ((20, 50, 10), (50, 130, 255))
+        }
+        
+        # 四角で表示する用の明るい色 (RGB形式)
+        bright_colors = {
+            'red': (0, 0, 255),
+            'green': (0, 255, 0),
+            'blue': (255, 0, 0),
+            'yellow': (0, 255, 255),
         }
         
         for y in range(0, height, square_size):
@@ -279,14 +291,15 @@ class GetAreaInfo:
                 if dominant_color == 'white' or dominant_color == 'black':
                     continue
 
-                # 結果を表示
+                # 結果を表示（確認用）
                 print(f"Square at ({x},{y}) has dominant color: {dominant_color}")
 
                 # 画像に色情報を描画
-                cv2.rectangle(trans_img, (x, y), (x+square_size, y+square_size), color_ranges[dominant_color][0], 2)
+                cv2.rectangle(trans_img, (x, y), (x+square_size, y+square_size), bright_colors[dominant_color], 2)
+                
         save_path = os.path.join(self.image_dir_path, "circles_"+self.image_name)
-        cv2.imwrite(save_path, trans_img)
-        
+        cv2.imwrite(save_path, trans_img)        
+
         """
         
         # サークルを見つけていく
