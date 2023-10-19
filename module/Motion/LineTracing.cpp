@@ -64,6 +64,7 @@ void LineTracing::run()
     timer.sleep(10);
   }
 
+  // モータの停止
   Controller::stopMotor();
 }
 
