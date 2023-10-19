@@ -16,6 +16,7 @@ $ make get_area
 import numpy as np
 import cv2
 import os
+import math
 from enum import Enum
 
 script_dir = os.path.dirname(os.path.abspath(__file__))  # /src
@@ -254,6 +255,8 @@ class GetAreaInfo:
         max_color_count = 0
         max_color_square = None
         
+        distance_threshold = square_size * 10
+        
         # 各色の色の範囲を定義 (HSV形式)
         color_ranges = {
             'white': ((0, 0, 200), (180, 30, 255)),
@@ -271,6 +274,9 @@ class GetAreaInfo:
             'blue': (255, 0, 0),
             'yellow': (0, 255, 255),
         }
+        
+        # 各色の最外矩形を計算するためのディクショナリを作成
+        color_rectangles = {color: None for color in color_ranges}
         
         for y in range(0, height, square_size):
             for x in range(0, width, square_size):
@@ -290,13 +296,39 @@ class GetAreaInfo:
                 dominant_color = max(color_counts, key=color_counts.get)
                 if dominant_color == 'white' or dominant_color == 'black':
                     continue
+                
+                # 色ごとに最外矩形の座標を更新
+                if color_rectangles[dominant_color] is None:
+                    color_rectangles[dominant_color] = (x, y, x+square_size, y+square_size)
+                else:
+                    x1, y1, x2, y2 = color_rectangles[dominant_color]
+                    # 正方形の中心座標を計算
+                    square_center = (x + square_size // 2, y + square_size // 2)
+                    x1, y1, x2, y2 = min(x, x1), min(y, y1), max(x+square_size, x2), max(y+square_size, y2)
+                      
+                    # 最外矩形の中心座標を計算
+                    current_center = ((x1 + x2) // 2, (y1 + y2) // 2)
+                    
+                    # 正方形の中心と最外矩形の中心の距離を計算
+                    distance = math.sqrt((current_center[0] - square_center[0]) ** 2 + (current_center[1] - square_center[1]) ** 2)
+
+                    # 一定の距離内にある場合のみ最外矩形を更新
+                    if distance < distance_threshold:
+                        color_rectangles[dominant_color] = (x1, y1, x2, y2)
 
                 # 結果を表示（確認用）
                 print(f"Square at ({x},{y}) has dominant color: {dominant_color}")
 
                 # 画像に色情報を描画
                 cv2.rectangle(trans_img, (x, y), (x+square_size, y+square_size), bright_colors[dominant_color], 2)
-                
+        
+        # 色ごとに最外矩形を描画
+        for color, rectangle in color_rectangles.items():
+            if rectangle is not None:
+                x1, y1, x2, y2 = rectangle
+                cv2.rectangle(trans_img, (x1, y1), (x2, y2), bright_colors[color], 2)
+
+  
         save_path = os.path.join(self.image_dir_path, "circles_"+self.image_name)
         cv2.imwrite(save_path, trans_img)        
 
