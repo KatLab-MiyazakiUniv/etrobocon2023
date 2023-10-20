@@ -249,12 +249,14 @@ class GetAreaInfo:
         save_path = os.path.join(self.image_dir_path, "blocks_"+self.image_name)
         cv2.imwrite(save_path, game_area_img)
         
+        # 正方形のサイズ
         square_size = 10
         height, width, _ = trans_img.shape
         
         max_color_count = 0
         max_color_square = None
         
+        # どれだけ離れているとひとつのサークルと認識するかの閾値
         distance_threshold = square_size * 10
         
         # 各色の色の範囲を定義 (HSV形式)
@@ -275,7 +277,7 @@ class GetAreaInfo:
             'yellow': (0, 255, 255),
         }
         
-        # 各色の最外矩形を計算するためのディクショナリを作成
+        # 各色の最外矩形を計算するための辞書を作成
         color_rectangles = {color: None for color in color_ranges}
         
         for y in range(0, height, square_size):
@@ -292,7 +294,7 @@ class GetAreaInfo:
                     count = cv2.countNonZero(mask)
                     color_counts[color] = count
 
-                # 最も多い色を判定
+                # 最も多い色が白または黒であれば、サークル外なので除外
                 dominant_color = max(color_counts, key=color_counts.get)
                 if dominant_color == 'white' or dominant_color == 'black':
                     continue
@@ -317,7 +319,7 @@ class GetAreaInfo:
                         color_rectangles[dominant_color] = (x1, y1, x2, y2)
 
                 # 結果を表示（確認用）
-                print(f"Square at ({x},{y}) has dominant color: {dominant_color}")
+                # print(f"Square at ({x},{y}) has dominant color: {dominant_color}")
 
                 # 画像に色情報を描画
                 cv2.rectangle(trans_img, (x, y), (x+square_size, y+square_size), bright_colors[dominant_color], 2)
@@ -328,7 +330,6 @@ class GetAreaInfo:
                 x1, y1, x2, y2 = rectangle
                 cv2.rectangle(trans_img, (x1, y1), (x2, y2), bright_colors[color], 2)
 
-  
         save_path = os.path.join(self.image_dir_path, "circles_"+self.image_name)
         cv2.imwrite(save_path, trans_img)        
 
