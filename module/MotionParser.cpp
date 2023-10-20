@@ -167,7 +167,11 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
                                         atoi(params[2]),  // Pwm値
                                         convertBool(params[0], params[3]));  // 回頭方向
 
-      motionList.push_back(pr);  // 動作リストに追加
+      motionList.push_back(pr);          // 動作リストに追加
+    } else if(command == COMMAND::ST) {  // 左右モーターストップ
+      Stop* st = new Stop();
+
+      motionList.push_back(st);  // 動作リストに追加
     } else {                     // 未定義のコマンドの場合
       snprintf(buf, BUF_SIZE, "%s:%d: '%s' is undefined command", commandFilePath, lineNum,
                params[0]);
@@ -220,6 +224,8 @@ COMMAND MotionParser::convertCommand(char* str)
     return COMMAND::CM;
   } else if(strcmp(str, "PR") == 0) {  // 文字列がPRの場合
     return COMMAND::PR;
+  } else if(strcmp(str, "ST") == 0) {  // 文字列がSTの場合
+    return COMMAND::ST;
   } else {  // 想定していない文字列が来た場合
     return COMMAND::NONE;
   }

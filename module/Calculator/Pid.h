@@ -7,6 +7,8 @@
 #ifndef PID_H
 #define PID_H
 
+#include <math.h>
+
 // PIDゲインを保持する構造体
 struct PidGain {
  public:
@@ -30,8 +32,10 @@ class Pid {
    * @param _kd Dゲイン
    * @param _targetValue 目標値
    * @param _initDeviation 現在の偏差
+   * @param _timeConstant 一次遅れフィルタの時定数
    */
-  Pid(double _kp, double _ki, double _kd, double _targetValue, double _initDeviation = 0.0);
+  Pid(double _kp, double _ki, double _kd, double _targetValue, double _initDeviation = 0.0,
+      double _timeConstant = 0.0);
 
   /**
    * @brief PIDゲインを設定する
@@ -54,6 +58,7 @@ class Pid {
   double preDeviation;  // 前回の偏差
   double integral;      // 偏差の累積
   double targetValue;   // 目標値
+  double timeConstant;  // 一次遅れフィルタの時定数
 };
 
 #endif
