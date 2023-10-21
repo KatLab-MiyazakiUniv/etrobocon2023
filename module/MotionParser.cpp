@@ -108,13 +108,13 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
       ArmUpping* au = new ArmUpping(atoi(params[1]), atoi(params[2]));
 
       motionList.push_back(au);          // 動作リストに追加
-    } else if(command == COMMAND::AD) {  // アームを下げる
-      ArmDownning* ad = new ArmDownnig(atoi(params[1]), atoi(params[2]));
-
-      motionList.push_back(ad);          // 動作リストに追加
     }
     */
-    else if(command == COMMAND::XR) {  // 角度補正回頭の追加
+    else if(command == COMMAND::AM) {  // アーム動作の追加
+      ArmMotion* am = new ArmMotion(atoi(params[1]), atoi(params[2]));
+
+      motionList.push_back(am);          // 動作リストに追加
+    } else if(command == COMMAND::XR) {  // 角度補正回頭の追加
       CorrectingRotation* xr = new CorrectingRotation(atoi(params[1]),   // 目標角度
                                                       atof(params[2]));  // 目標速度
 

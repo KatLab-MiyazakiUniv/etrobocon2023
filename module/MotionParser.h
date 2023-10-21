@@ -30,6 +30,7 @@
 #include "CameraAction.h"
 #include "PwmRotation.h"
 #include "Stop.h"
+#include "ArmMotion.h"
 
 enum class COMMAND {
   DL,  // 指定距離ライントレース
@@ -40,8 +41,7 @@ enum class COMMAND {
   DT,  // 旋回
   EC,  // エッジ切り替え
   SL,  // 自タスクスリープ
-  AU,  // アームを上げる
-  AD,  // アームを下げる
+  AM,  // アーム動作
   XR,  // 角度補正回頭
   CA,  // 撮影動作
   IS,  // 交点内移動（直進）
