@@ -197,7 +197,7 @@ if __name__ == "__main__":
     work_dir_path = os.path.join(PROJECT_DIR_PATH, "work_image_data")
 
     # 画像ファイル名
-    image_name = "test.png"                # ダブルループ
+    image_name = "trans_test.png"                # ダブルループ
     # image_name = "2023-10-06_13-26-37.png"  # 赤の端点サークル
     # 画像ファイルパス
     image_path = os.path.join(work_dir_path, image_name)

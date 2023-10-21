@@ -135,50 +135,13 @@ class GetAreaInfo:
         save_path = os.path.join(self.image_dir_path, "changed_color_"+self.image_name)
         cv2.imwrite(save_path, changed_color_img)
 
-        ## 線分検出 ##
-        fast_line_detector = cv2.ximgproc.createFastLineDetector(
-            length_threshold=200,
-            distance_threshold=1.41421356,
-            canny_th1=50,
-            canny_th2=50,
-            canny_aperture_size=3,
-            do_merge=False)
+        # changed_color_img[np.min([y1, y2])-20:, :] = Color.BLACK.value  # 画像下側削除
+        # changed_color_img[:np.min([y1, y2])-220, :] = Color.BLACK.value  # 画像上側削除
 
-        # グレースケール
-        gray = cv2.cvtColor(changed_color_img, cv2.COLOR_BGR2GRAY)
-
-        lines = fast_line_detector.detect(gray)
-        if lines is None:
-            print("Error: lines are None")
-            exit()
-
-        # 赤線を引く
-        result_line_img = np.full((y_size, x_size, color_size), [255, 255, 255], dtype=np.uint8)
-        max_dist = 0
-        max_index = 0
-        for i, line in enumerate(lines):
-            x1, y1, x2, y2 = map(int, line[0])
-            dist = np.linalg.norm(np.array((x1, y1))-np.array((x2, y2)))
-            if np.linalg.norm(np.array((x1, y1))-np.array((x2, y2))) > max_dist:
-                max_dist = dist
-                max_index = i
-            red_line_img = cv2.line(result_line_img, (x1, y1), (x2, y2), (0, 0, 255), 3)
-        save_path = os.path.join(self.image_dir_path, "detected_line_"+self.image_name)
-        cv2.imwrite(save_path, red_line_img)
-
-        ## いらない場所の削除 ##
-        # 最も長い線だけを描画
-        result_long_line_img = np.full((y_size, x_size, color_size), [
-                                       255, 255, 255], dtype=np.uint8)
-        x1, y1, x2, y2 = map(int, lines[max_index][0])
-        red_line_img = cv2.line(result_long_line_img, (x1, y1), (x2, y2), (0, 0, 255), 3)
-        save_path = os.path.join(self.image_dir_path, "detected_long_line_"+self.image_name)
-        cv2.imwrite(save_path, red_line_img)
-
-        changed_color_img[np.min([y1, y2])-20:, :] = Color.BLACK.value  # 画像下側削除
-        changed_color_img[:np.min([y1, y2])-220, :] = Color.BLACK.value  # 画像上側削除
-        save_path = os.path.join(self.image_dir_path, "changed_color2_"+self.image_name)
-        cv2.imwrite(save_path, changed_color_img)
+        # game_area_img[np.min([y1, y2])-20:, :] = Color.BLACK.value  # 画像下側削除
+        # game_area_img[:np.min([y1, y2])-220, :] = Color.BLACK.value  # 画像上側削除
+        # save_path = os.path.join(self.image_dir_path, "changed_color2_"+self.image_name)
+        # cv2.imwrite(save_path, changed_color_img)
 
         # #"""
         # # 射影変換を行いたい！！
@@ -193,6 +156,38 @@ class GetAreaInfo:
         # gray_trans_img = cv2.cvtColor(trans_img, cv2.COLOR_BGR2GRAY)
         # save_path = os.path.join(self.image_dir_path, "gray_trans_"+self.image_name)
         # cv2.imwrite(save_path, gray_trans_img)
+        
+        ## 線分検出 ##
+        fast_line_detector = cv2.ximgproc.createFastLineDetector(
+            length_threshold=200,
+            distance_threshold=1.41421356,
+            canny_th1=50,
+            canny_th2=50,
+            canny_aperture_size=3,
+            do_merge=False)
+
+        # グレースケール
+        gray = cv2.cvtColor(trans_img, cv2.COLOR_BGR2GRAY)
+
+        lines = fast_line_detector.detect(gray)
+        if lines is None:
+            print("Error: lines are None")
+            exit()
+            
+        # 赤線を引く
+        result_line_img = np.full((y_size, x_size, color_size), [255, 255, 255], dtype=np.uint8)
+        max_dist = 0
+        max_index = 0
+        for i, line in enumerate(lines):
+            x1, y1, x2, y2 = map(int, line[0])
+            dist = np.linalg.norm(np.array((x1, y1))-np.array((x2, y2)))
+            if np.linalg.norm(np.array((x1, y1))-np.array((x2, y2))) > max_dist:
+                max_dist = dist
+                max_index = i
+            red_line_img = cv2.line(result_line_img, (x1, y1), (x2, y2), (0, 0, 255), 3)
+        save_path = os.path.join(self.image_dir_path, "detected_line_"+self.image_name)
+        cv2.imwrite(save_path, red_line_img)
+         
         
         # 青と赤の物体検知を行う閾値
         blue_lower = np.array([100, 100, 100])
@@ -250,14 +245,11 @@ class GetAreaInfo:
         cv2.imwrite(save_path, game_area_img)
         
         # 正方形のサイズ
-        square_size = 10
+        square_size = 15
         height, width, _ = trans_img.shape
         
         max_color_count = 0
         max_color_square = None
-        
-        # どれだけ離れているとひとつのサークルと認識するかの閾値
-        distance_threshold = square_size * 10
         
         # 各色の色の範囲を定義 (HSV形式)
         color_ranges = {
@@ -271,14 +263,39 @@ class GetAreaInfo:
         
         # 四角で表示する用の明るい色 (RGB形式)
         bright_colors = {
-            'red': (0, 0, 255),
-            'green': (0, 255, 0),
-            'blue': (255, 0, 0),
-            'yellow': (0, 255, 255),
+            'red': Color.RED.value,
+            'green': Color.GREEN.value,
+            'blue': Color.BLUE.value,
+            'yellow': Color.YELLOW.value,
         }
         
-        # 各色の最外矩形を計算するための辞書を作成
-        color_rectangles = {color: None for color in color_ranges}
+        # 各サークルにあたる正方形を格納する空のリストを保持した辞書
+        circles_data= {
+            'red': {
+                'upper_left': [],
+                'upper_right': [],
+                'lower_left': [],
+                'lower_right': []
+            },
+            'green': {
+                'upper_left': [],
+                'upper_right': [],
+                'lower_left': [],
+                'lower_right': []
+            },
+            'blue': {
+                'upper_left': [],
+                'upper_right': [],
+                'lower_left': [],
+                'lower_right': []
+            },
+            'yellow': {
+                'upper_left': [],
+                'upper_right': [],
+                'lower_left': [],
+                'lower_right': []
+            }
+        }
         
         for y in range(0, height, square_size):
             for x in range(0, width, square_size):
@@ -299,37 +316,42 @@ class GetAreaInfo:
                 if dominant_color == 'white' or dominant_color == 'black':
                     continue
                 
-                # 色ごとに最外矩形の座標を更新
-                if color_rectangles[dominant_color] is None:
-                    color_rectangles[dominant_color] = (x, y, x+square_size, y+square_size)
-                else:
-                    x1, y1, x2, y2 = color_rectangles[dominant_color]
-                    # 正方形の中心座標を計算
-                    square_center = (x + square_size // 2, y + square_size // 2)
-                    x1, y1, x2, y2 = min(x, x1), min(y, y1), max(x+square_size, x2), max(y+square_size, y2)
-                      
-                    # 最外矩形の中心座標を計算
-                    current_center = ((x1 + x2) // 2, (y1 + y2) // 2)
-                    
-                    # 正方形の中心と最外矩形の中心の距離を計算
-                    distance = math.sqrt((current_center[0] - square_center[0]) ** 2 + (current_center[1] - square_center[1]) ** 2)
-
-                    # 一定の距離内にある場合のみ最外矩形を更新
-                    if distance < distance_threshold:
-                        color_rectangles[dominant_color] = (x1, y1, x2, y2)
-
-                # 結果を表示（確認用）
-                # print(f"Square at ({x},{y}) has dominant color: {dominant_color}")
-
                 # 画像に色情報を描画
                 cv2.rectangle(trans_img, (x, y), (x+square_size, y+square_size), bright_colors[dominant_color], 2)
-        
-        # 色ごとに最外矩形を描画
-        for color, rectangle in color_rectangles.items():
-            if rectangle is not None:
-                x1, y1, x2, y2 = rectangle
-                cv2.rectangle(trans_img, (x1, y1), (x2, y2), bright_colors[color], 2)
-
+                
+                # 色の数だけ for 文を回す。正方形の座標をサークルの色の位置に対応するリストに格納
+                # 最も上の行は射影変換の歪みを考慮し、y 座標の基準を決めている
+                for key in circles_data.keys():
+                    if key == 'red':
+                        if x < width / 4 and y < height / 8:
+                            circles_data[key]['upper_left'].append((x, y))    
+                        elif x >= width / 4 and y < height / 8:
+                            circles_data[key]['upper_right'].append((x, y))
+                        elif x < width / 4 and y <= height / 2:
+                            circles_data[key]['lower_left'].append((x, y))
+                        else:
+                            circles_data[key]['lower_right'].append((x, y))
+                            
+                    # if key == 'yellow':
+                    #     if x < (3 * width / 4) and y < height / 8:
+                    #         circles_data[key]['upper_left'].append((x, y))    
+                    #     elif x >= (3 * width / 4) and y < height / 8:
+                    #         circles_data[key]['upper_right'].append((x, y))
+                    #     elif x < (3 * width / 4) and y <= height / 2:
+                    #         circles_data[key]['lower_left'].append((x, y))
+                    #     else:
+                    #         circles_data[key]['lower_right'].append((x, y))
+                            
+        for key, value in circles_data.items():
+            for region in value:
+                if not value[region]:
+                    print(f'{region}_{key}_circle is not detected')
+                else:
+                    min_x, min_y = min(circles_data[key][region], key=lambda item: (item[0], item[1]))
+                    max_x, max_y = max(circles_data[key][region], key=lambda item: (item[0], item[1]))
+                    print(f'({min_x}, {min_y}), ({max_x}, {max_y})')
+                    cv2.rectangle(trans_img, (min_x, min_y), (max_x, max_y), bright_colors[key], 2)
+                                    
         save_path = os.path.join(self.image_dir_path, "circles_"+self.image_name)
         cv2.imwrite(save_path, trans_img)        
 
