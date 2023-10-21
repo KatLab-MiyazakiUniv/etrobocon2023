@@ -269,7 +269,7 @@ class GetAreaInfo:
             'yellow': Color.YELLOW.value,
         }
         
-        # 各サークルにあたる正方形を格納する空のリストを保持した辞書
+        # 各サークルにあたる正方形の座標を格納する空のリストを保持した辞書
         circles_data= {
             'red': {
                 'upper_left': [],
@@ -306,6 +306,7 @@ class GetAreaInfo:
 
                 color_counts = {}
 
+                # 抽出した色をカウント
                 for color, (lower, upper) in color_ranges.items():
                     mask = cv2.inRange(square_hsv, np.array(lower), np.array(upper))
                     count = cv2.countNonZero(mask)
@@ -319,39 +320,63 @@ class GetAreaInfo:
                 # 画像に色情報を描画
                 cv2.rectangle(trans_img, (x, y), (x+square_size, y+square_size), bright_colors[dominant_color], 2)
                 
-                # 色の数だけ for 文を回す。正方形の座標をサークルの色の位置に対応するリストに格納
-                # 最も上の行は射影変換の歪みを考慮し、y 座標の基準を決めている
+                # サークルの色の数だけ for 文を回す。正方形の座標をサークルの色の位置に対応するリストに格納する
+                # 行と列の境界は射影変換の歪みを考慮し、基準を決めている
                 for key in circles_data.keys():
-                    if key == 'red':
+                    if key == 'red' and dominant_color == 'red':
                         if x < width / 4 and y < height / 8:
                             circles_data[key]['upper_left'].append((x, y))    
-                        elif x >= width / 4 and y < height / 8:
+                        elif x >= width / 4 and x <= width / 2 and y < height / 8:
                             circles_data[key]['upper_right'].append((x, y))
-                        elif x < width / 4 and y <= height / 2:
+                        elif x < width / 4 and y < height / 2:
                             circles_data[key]['lower_left'].append((x, y))
-                        else:
+                        elif x >= width / 4 and x <= width / 2 and y >= height / 8 and y <= height / 2:
                             circles_data[key]['lower_right'].append((x, y))
                             
-                    # if key == 'yellow':
-                    #     if x < (3 * width / 4) and y < height / 8:
-                    #         circles_data[key]['upper_left'].append((x, y))    
-                    #     elif x >= (3 * width / 4) and y < height / 8:
-                    #         circles_data[key]['upper_right'].append((x, y))
-                    #     elif x < (3 * width / 4) and y <= height / 2:
-                    #         circles_data[key]['lower_left'].append((x, y))
-                    #     else:
-                    #         circles_data[key]['lower_right'].append((x, y))
+                    if key == 'yellow' and dominant_color == 'yellow':
+                        if x > width / 2 and x < (3 * width / 4) and y < height / 8:
+                            circles_data[key]['upper_left'].append((x, y))    
+                        elif x >= (3 * width / 4) and y <= height / 8:
+                            circles_data[key]['upper_right'].append((x, y))
+                        elif x > width / 2 and x < (3 * width / 4) and y > height / 8 and y < height / 2:
+                            circles_data[key]['lower_left'].append((x, y))
+                        elif x >= (3 * width / 4) and y >= height / 8 and y <= height / 2:
+                            circles_data[key]['lower_right'].append((x, y))
+                            
+                    if key == 'blue' and dominant_color == 'blue':
+                        if x < width / 4 and y > height / 2 and y < (3 * height / 4):
+                            circles_data[key]['upper_left'].append((x, y))    
+                        elif x > width / 4 and x < width / 2 and y > height / 2 and y < (3 * height / 4):
+                            circles_data[key]['upper_right'].append((x, y))
+                        elif x < width / 4 and y > (3 * height / 4):
+                            circles_data[key]['lower_left'].append((x, y))
+                        elif x >= width / 4 and x <= width / 2 and y >= height / 2 and y >= (3 * height / 4):
+                            circles_data[key]['lower_right'].append((x, y))
+                            
+                    if key == 'green' and dominant_color == 'green':
+                        if x > width / 2 and x < (3 * width / 4) and y > height / 2 and y < (3 * height / 4):
+                            circles_data[key]['upper_left'].append((x, y))    
+                        elif x >= (3 * width / 4) and y >= height / 2 and y <= (3 * height / 4):
+                            circles_data[key]['upper_right'].append((x, y))
+                        elif x >= width / 2 and x < (3 * width / 4) and y > (3 * height / 4):
+                            circles_data[key]['lower_left'].append((x, y))
+                        elif x >= (3 * width / 4) and y >= (3 * height / 4):
+                            circles_data[key]['lower_right'].append((x, y))
                             
         for key, value in circles_data.items():
             for region in value:
                 if not value[region]:
-                    print(f'{region}_{key}_circle is not detected')
+                    # print(f'{region}_{key}_circle is not detected')
+                    continue
                 else:
-                    min_x, min_y = min(circles_data[key][region], key=lambda item: (item[0], item[1]))
-                    max_x, max_y = max(circles_data[key][region], key=lambda item: (item[0], item[1]))
-                    print(f'({min_x}, {min_y}), ({max_x}, {max_y})')
+                    min_x = min(circles_data[key][region], key=lambda item: item[0])[0]
+                    max_x = max(circles_data[key][region], key=lambda item: item[0])[0]
+                    min_y = min(circles_data[key][region], key=lambda item: item[1])[1]
+                    max_y = max(circles_data[key][region], key=lambda item: item[1])[1]
+                    # print(f'({min_x}, {min_y}), ({max_x}, {max_y})') # 確認用
                     cv2.rectangle(trans_img, (min_x, min_y), (max_x, max_y), bright_colors[key], 2)
-                                    
+                    # print(f'{key}_{region}: {circles_data[key][region]}') # 確認用
+                                  
         save_path = os.path.join(self.image_dir_path, "circles_"+self.image_name)
         cv2.imwrite(save_path, trans_img)        
 
