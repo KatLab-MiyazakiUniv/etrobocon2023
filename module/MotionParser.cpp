@@ -204,10 +204,8 @@ COMMAND MotionParser::convertCommand(char* str)
     return COMMAND::EC;
   } else if(strcmp(str, "SL") == 0) {  // 文字列がSLの場合
     return COMMAND::SL;
-  } else if(strcmp(str, "AU") == 0) {  // 文字列がAUの場合
-    return COMMAND::AU;
-  } else if(strcmp(str, "AD") == 0) {  // 文字列がADの場合
-    return COMMAND::AD;
+  } else if(strcmp(str, "AM") == 0) {  // 文字列がAMの場合
+    return COMMAND::AM;
   } else if(strcmp(str, "XR") == 0) {  // 文字列がXRの場合
     return COMMAND::XR;
   } else if(strcmp(str, "CA") == 0) {  // 文字列がCAの場合

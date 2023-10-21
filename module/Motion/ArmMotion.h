@@ -7,9 +7,12 @@
 #ifndef ARM_MOTION_H
 #define ARM_MOTION_H
 
-#include "CompositeMotion.h"
+#include "Motion.h"
+#include "Measurer.h"
+#include "Controller.h"
+#include "Timer.h"
 
-class ArmMotion : public CompositeMotion {
+class ArmMotion : public Motion {
  public:
   /**
    * コンストラクタ
@@ -31,6 +34,7 @@ class ArmMotion : public CompositeMotion {
  private:
   int angle;  // 回転角度(deg) -60~60
   int pwm;    // PWM値 0~40
+  Timer timer;
 };
 
 #endif

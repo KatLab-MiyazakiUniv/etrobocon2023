@@ -12,7 +12,7 @@ ArmMotion::ArmMotion(int _angle, int _pwm) : angle(_angle), pwm(_pwm) {}
 
 void ArmMotion::run()
 {
-  int initCount = measurer.getArmMotorCount();
+  int initCount = Measurer::getArmMotorCount();
 
   const int BUF_SIZE = 128;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
@@ -31,8 +31,8 @@ void ArmMotion::run()
     pwm = 40;
   }
 
-  // angleが0以下の場合はwarningを出して終了する
-  if(angle <= 0) {
+  // angleが0の場合はwarningを出して終了する
+  if(angle == 0) {
     snprintf(buf, BUF_SIZE, "The angle value passed to ArmMotion is %d", angle);
     logger.logWarning(buf);
     return;
@@ -53,25 +53,26 @@ void ArmMotion::run()
   }
 
   while(true) {
-    int currentCount = measurer.getArmMotorCount();
+    int currentCount = Measurer::getArmMotorCount();
 
     if(angle > 0) {
       if(currentCount < initCount - angle) {
         break;
       }
+      Controller::setArmMotorPwm(-pwm);
     }else {
       if(currentCount > initCount - angle) {
         break;
       }
+      Controller::setArmMotorPwm(pwm);
     }
     
-    controller.setArmMotorPwm(-pwm);
     // 10ミリ秒待機
-    controller.sleep();
+    timer.sleep(10);
   }
 
   //アームモータの停止
-  controller.stopArmMotor();
+  Controller::stopArmMotor();
 }
 
 void ArmMotion::logRunning()
