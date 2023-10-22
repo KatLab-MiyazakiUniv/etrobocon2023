@@ -69,8 +69,8 @@ class GetAreaInfo:
         x_size = game_area_img.shape[1]  # 入力画像の横サイズ
         color_size = game_area_img.shape[2]  # RGBの3次元
         
-        # 元画像で射影変換の結果を確認するための調整用動作
-        #""" 
+        # 元画像から射影変換を行う
+        # 試走時に確認、できるなら調整もした方がいい
         original = np.float32([(432, 676), (1360, 691), (0, 807), (1636, 846)]) # ダブルループ
         # original = np.float32([(11, 958), (542, 677), (1230, 986), (1412, 721)]) # 赤の端点サークル
         trans = np.float32([(0, 0), (1636, 0), (0, 1200), (1636, 1200)])
@@ -79,14 +79,10 @@ class GetAreaInfo:
         trans_img = cv2.warpPerspective(game_area_img, trans_mat, (x_size, y_size))
         save_path = os.path.join(self.image_dir_path, "trans_"+self.image_name)
         cv2.imwrite(save_path, trans_img)
-        #"""
         
-
         # # BGR色空間からHSV色空間への変換
         hsv = cv2.cvtColor(trans_img, cv2.COLOR_BGR2HSV)
 
-        # 処理結果を保持する配列を宣言(色を白で初期化)
-        # changed_color_img = np.full((y_size, x_size, color_size), [255, 255, 255], dtype=np.uint8)
         # 処理結果を保持する配列を宣言(色を黒で初期化)
         changed_color_img = np.zeros((y_size, x_size, color_size), dtype=np.uint8)
 
@@ -118,18 +114,6 @@ class GetAreaInfo:
                                    (self.BLUE[1][0] <= hsv[:, :, 1]) & (hsv[:, :, 1] <= self.BLUE[1][1]) &
                                    (self.BLUE[2][0] <= hsv[:, :, 2]) & (hsv[:, :, 2] <= self.BLUE[2][1]))
                           ] = Color.WHITE.value
-
-        # # 白
-        # changed_color_img[np.where(hsv[:,:,0] >= self.WHITE_threshold[0]) and \
-        #             np.where(hsv[:,:,1] <= self.WHITE_threshold[1]) and \
-        #             np.where(hsv[:,:,2] >= self.WHITE_threshold[2])] = Color.WHITE.value
-
-        # # 黒
-        # changed_color_img[np.where(hsv[:,:,2] <= self.BLACK_threshold)] = Color.BLACK.value
-        # changed_color_img[np.where(hsv[:,:,2] <= self.BLACK_threshold)] = Color.WHITE.value
-        # changed_color_img[np.where(hsv[:,:,0] >= self.BLACK_threshold[0]) and \
-        #             np.where(hsv[:,:,1] <= self.BLACK_threshold[1]) and \
-        #             np.where(hsv[:,:,2] >= self.BLACK_threshold[2])] = Color.WHITE.value
 
         # 6色画像を保存
         save_path = os.path.join(self.image_dir_path, "changed_color_"+self.image_name)
@@ -168,6 +152,7 @@ class GetAreaInfo:
         
         ## ブロック検知
         # 青と赤の物体検知を行う閾値
+        # 試走時に確認、できるなら調整もした方がいい
         blue_lower = np.array([100, 100, 100])
         blue_upper = np.array([130, 255, 255])
         red_lower = np.array([0, 100, 100])
@@ -233,6 +218,7 @@ class GetAreaInfo:
          
         ## サークル検知
         # 正方形のサイズ
+        # 試走時に確認、できるなら調整もした方がいい
         square_size = 15
         height, width, _ = trans_img.shape
         
@@ -306,6 +292,7 @@ class GetAreaInfo:
                     continue
                 
                 # 画像に正方形を描画
+                # 試走時に確認した方がいい
                 # cv2.rectangle(trans_img, (x, y), (x+square_size, y+square_size), bright_colors[dominant_color], 2)
                 
                 # サークルの色の数だけ for 文を回す。正方形の座標をサークルの色の位置に対応するリストに格納する
@@ -351,13 +338,9 @@ class GetAreaInfo:
                             circles_data[key]['lower_left'].append((x, y))
                         elif x >= (3 * width / 4) and y >= (3 * height / 4):
                             circles_data[key]['lower_right'].append((x, y))
-
         
+        ## 青いブロックが置かれているサークルの位置を推測
         blue_blocks_closest_circles = []
-        # red_blockの下辺のY座標を取得
-        red_block_bottom_y = red_block[1] + (red_block[3] - red_block[1])
-
-        # blue_blocksの各ブロックについて、最も近いサークルを探す
         for blue_block in blue_blocks:
             x1, y1, x2, y2 = blue_block
             # 検知したブロックについて、矩形の下の辺の中点を基準
@@ -378,9 +361,10 @@ class GetAreaInfo:
                     min_y = min(circles_data[key][region], key=lambda item: item[1])[1]
                     max_y = max(circles_data[key][region], key=lambda item: item[1])[1]
                     center_y = (min_y + max_y) / 2
-                    print(f'({center_x}, {center_y}) is {region}_{key}')
+                    # サークルの中心点の座標を出力
+                    # print(f'({center_x}, {center_y}) is {region}_{key}') # 確認用
 
-                    # ブロックの下辺とサークルの中心点との距離を計算
+                    # ブロックを検知した矩形の下辺の中点とサークルの中心点との距離を計算
                     distance = math.sqrt((block_bottom_midpoint[0] - center_x)**2 + (block_bottom_midpoint[1] - center_y)**2)
 
                     if distance < min_distance:
@@ -390,39 +374,50 @@ class GetAreaInfo:
                         closest_circle_info['region'] = region  # サークルの位置情報を保存
             blue_blocks_closest_circles.append(closest_circle_info)
 
-        # 各 blue_block に対して最も近いサークル情報を表示
+        # 各 blue_block に対して最も近いサークルの場所を表示
         for i, closest_circle_info in enumerate(blue_blocks_closest_circles):
-            closest_key = closest_circle_info['color']
-            closest_color = closest_circle_info['region']
-            print(f"Blue Block {i + 1}: The closest circle is '{closest_key}' of color '{closest_color}'")
+            closest_circle_color = closest_circle_info['color']
+            closest_circle_region = closest_circle_info['region']
+            print(f"Blue Block {i + 1}: The closest circle is '{closest_circle_color}' color in '{closest_circle_region}'")
+        
+        ## 赤いブロックが置かれているサークルの位置を推測
+        x1, y1, x2, y2 = red_block
+        block_bottom_midpoint = ( (x1 + x2) / 2, y2)
+        closest_circle_info = {'color': None, 'region': None}
+        min_distance = float('inf')
+        
+        for key, value in circles_data.items():
+            for region in value:
+                if not value[region]:
+                    # サークルの色を検知できなかった場合はスキップ
+                    continue
+                # サークルの中心点を計算
+                min_x = min(circles_data[key][region], key=lambda item: item[0])[0]
+                max_x = max(circles_data[key][region], key=lambda item: item[0])[0]
+                center_x = (min_x + max_x) / 2
+                min_y = min(circles_data[key][region], key=lambda item: item[1])[1]
+                max_y = max(circles_data[key][region], key=lambda item: item[1])[1]
+                center_y = (min_y + max_y) / 2
+                # サークルの中心点の座標を出力
+                # print(f'({center_x}, {center_y}) is {region}_{key}') # 確認用
+
+                # ブロックを検知した矩形の下辺の中点とサークルの中心点との距離を計算
+                distance = math.sqrt((block_bottom_midpoint[0] - center_x)**2 + (block_bottom_midpoint[1] - center_y)**2)
+
+                if distance < min_distance:
+                    # より近いサークルを見つけた場合、最小距離とそのサークルを更新
+                    min_distance = distance
+                    closest_circle_info['color'] = key  # サークルの色情報を保存
+                    closest_circle_info['region'] = region  # サークルの位置情報を保存
+
+        closest_circle_color = closest_circle_info['color']
+        closest_circle_region = closest_circle_info['region']
+        print(f"Red Block: The closest circle is '{closest_circle_color}' color in '{closest_circle_region}'")
                                             
         save_path = os.path.join(self.image_dir_path, "circles_"+self.image_name)
         cv2.imwrite(save_path, trans_img)
-      
 
-        """
-        
-        # サークルを見つけていく
-        circles = cv2.HoughCircles(gray_trans_img, cv2.HOUGH_GRADIENT, dp=1, minDist=20,
-                                   param1=100, param2=60, minRadius=0, maxRadius=0)
-        print("circles\n", circles)
-        if circles is None:
-            print("Error: circles is None")
-            exit()
 
-        circles = np.uint16(np.around(circles))
-
-        detect_circle_img = np.full((y_size, x_size, color_size), [255, 255, 255], dtype=np.uint8)
-
-        for circle in circles[0, :]:
-            # 円周を描画する
-            cv2.circle(detect_circle_img, (circle[0], circle[1]), circle[2], (0, 165, 255), 5)
-            # 中心点を描画する
-            cv2.circle(detect_circle_img, (circle[0], circle[1]), 2, (0, 0, 255), 3)
-
-        save_path = os.path.join(self.image_dir_path, "circles_changed_color2_"+self.image_name)
-        cv2.imwrite(save_path, detect_circle_img)
-        """
 
 if __name__ == "__main__":
     # 処理時間計測用
