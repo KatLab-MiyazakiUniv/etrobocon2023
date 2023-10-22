@@ -352,23 +352,50 @@ class GetAreaInfo:
                         elif x >= (3 * width / 4) and y >= (3 * height / 4):
                             circles_data[key]['lower_right'].append((x, y))
 
-        closest_circle = None
+        
+        blue_blocks_closest_circles = []
+        # red_blockの下辺のY座標を取得
+        red_block_bottom_y = red_block[1] + (red_block[3] - red_block[1])
+
+        # blue_blocksの各ブロックについて、最も近いサークルを探す
+        for blue_block in blue_blocks:
+            x1, y1, x2, y2 = blue_block
+            # 検知したブロックについて、矩形の下の辺の中点を基準
+            block_bottom_midpoint = ( (x1 + x2) / 2, y2)
+            
+            closest_circle_info = {'color': None, 'region': None}
+            min_distance = float('inf')
          
-        for key, value in circles_data.items():
-            for region in value:
-                if not value[region]:
-                    # サークルの色を検知できなかった場合はスキップ
-                    continue
-                else:
+            for key, value in circles_data.items():
+                for region in value:
+                    if not value[region]:
+                        # サークルの色を検知できなかった場合はスキップ
+                        continue
+                    # サークルの中心点を計算
                     min_x = min(circles_data[key][region], key=lambda item: item[0])[0]
                     max_x = max(circles_data[key][region], key=lambda item: item[0])[0]
+                    center_x = (min_x + max_x) / 2
                     min_y = min(circles_data[key][region], key=lambda item: item[1])[1]
                     max_y = max(circles_data[key][region], key=lambda item: item[1])[1]
-                    center_point = ((min_x + max_x) / 2, (min_y + max_y) / 2)
-                    print(center_point)
-                    cv2.rectangle(trans_img, (min_x, min_y), (max_x, max_y), bright_colors[key], 2) # 最外矩形の表示
-                    # print(f'{key}_{region}: {circles_data[key][region]}') # 確認用
-                                  
+                    center_y = (min_y + max_y) / 2
+                    print(f'({center_x}, {center_y}) is {region}_{key}')
+
+                    # ブロックの下辺とサークルの中心点との距離を計算
+                    distance = math.sqrt((block_bottom_midpoint[0] - center_x)**2 + (block_bottom_midpoint[1] - center_y)**2)
+
+                    if distance < min_distance:
+                        # より近いサークルを見つけた場合、最小距離とそのサークルを更新
+                        min_distance = distance
+                        closest_circle_info['color'] = key  # サークルの色情報を保存
+                        closest_circle_info['region'] = region  # サークルの位置情報を保存
+            blue_blocks_closest_circles.append(closest_circle_info)
+
+        # 各 blue_block に対して最も近いサークル情報を表示
+        for i, closest_circle_info in enumerate(blue_blocks_closest_circles):
+            closest_key = closest_circle_info['color']
+            closest_color = closest_circle_info['region']
+            print(f"Blue Block {i + 1}: The closest circle is '{closest_key}' of color '{closest_color}'")
+                                            
         save_path = os.path.join(self.image_dir_path, "circles_"+self.image_name)
         cv2.imwrite(save_path, trans_img)
       
@@ -406,7 +433,8 @@ if __name__ == "__main__":
     work_dir_path = os.path.join(PROJECT_DIR_PATH, "work_image_data")
 
     # 画像ファイル名
-    image_name = "2023-10-06_13-20-06.png" # ダブルループからの撮影画像
+    # image_name = "2023-10-06_13-20-06.png" # ダブルループからの撮影画像
+    image_name = "test.png"
     # 画像ファイルパス
     image_path = os.path.join(work_dir_path, image_name)
 
