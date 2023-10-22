@@ -83,7 +83,7 @@ class GetAreaInfo:
         
 
         # # BGR色空間からHSV色空間への変換
-        hsv = cv2.cvtColor(game_area_img, cv2.COLOR_BGR2HSV)
+        hsv = cv2.cvtColor(trans_img, cv2.COLOR_BGR2HSV)
 
         # 処理結果を保持する配列を宣言(色を白で初期化)
         # changed_color_img = np.full((y_size, x_size, color_size), [255, 255, 255], dtype=np.uint8)
@@ -134,28 +134,6 @@ class GetAreaInfo:
         # 6色画像を保存
         save_path = os.path.join(self.image_dir_path, "changed_color_"+self.image_name)
         cv2.imwrite(save_path, changed_color_img)
-
-        # changed_color_img[np.min([y1, y2])-20:, :] = Color.BLACK.value  # 画像下側削除
-        # changed_color_img[:np.min([y1, y2])-220, :] = Color.BLACK.value  # 画像上側削除
-
-        # game_area_img[np.min([y1, y2])-20:, :] = Color.BLACK.value  # 画像下側削除
-        # game_area_img[:np.min([y1, y2])-220, :] = Color.BLACK.value  # 画像上側削除
-        # save_path = os.path.join(self.image_dir_path, "changed_color2_"+self.image_name)
-        # cv2.imwrite(save_path, changed_color_img)
-
-        # #"""
-        # # 射影変換を行いたい！！
-        # original = np.float32([(432, 676), (1360, 691), (0, 807), (1636, 846)]) # ダブルループ
-        # # original = np.float32([(11, 958), (542, 677), (1230, 986), (1412, 721)]) # 赤の端点サークル
-        # trans = np.float32([(0, 0), (1636, 0), (0, 1200), (1636, 1200)])
-        
-        # row, column, _ = changed_color_img.shape
-
-        # trans_mat = cv2.getPerspectiveTransform(original, trans)
-        # trans_img = cv2.warpPerspective(changed_color_img, trans_mat, (column, row))
-        # gray_trans_img = cv2.cvtColor(trans_img, cv2.COLOR_BGR2GRAY)
-        # save_path = os.path.join(self.image_dir_path, "gray_trans_"+self.image_name)
-        # cv2.imwrite(save_path, gray_trans_img)
         
         ## 線分検出 ##
         fast_line_detector = cv2.ximgproc.createFastLineDetector(
@@ -187,63 +165,73 @@ class GetAreaInfo:
             red_line_img = cv2.line(result_line_img, (x1, y1), (x2, y2), (0, 0, 255), 3)
         save_path = os.path.join(self.image_dir_path, "detected_line_"+self.image_name)
         cv2.imwrite(save_path, red_line_img)
-         
         
+        ## ブロック検知
         # 青と赤の物体検知を行う閾値
         blue_lower = np.array([100, 100, 100])
         blue_upper = np.array([130, 255, 255])
         red_lower = np.array([0, 100, 100])
         red_upper = np.array([180, 255, 255])
 
-        red_mask = cv2.inRange(hsv, red_lower, red_upper)
         blue_mask = cv2.inRange(hsv, blue_lower, blue_upper)
+        red_mask = cv2.inRange(hsv, red_lower, red_upper)
 
         # 赤、青の物体を各色の矩形で囲む
         blue_contours, _ = cv2.findContours(blue_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         red_contours, _ = cv2.findContours(red_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        blue_blocks = []
-        red_blocks = []
-        for contour in blue_contours:
-            x, y, w, h = cv2.boundingRect(contour)
-            # 面積が小さすぎる矩形を除外
-            if(cv2.contourArea(contour) < 1000):
-                continue
-            
-            # アスペクト比が一定以上の場合を除外
-            aspect_ratio = float(w) / h if h > 0 else 0
-            if aspect_ratio > 2.0:
-                continue
+        # 面積に基づいて矩形をソート
+        blue_contours = sorted(blue_contours, key=lambda contour: cv2.contourArea(contour), reverse=True)
+        red_contours = sorted(red_contours, key=lambda contour: cv2.contourArea(contour), reverse=True)
 
-            blue_blocks.append((x, y, x + w, y + h))
-            cv2.rectangle(game_area_img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+        # 検知したブロックの座標を格納する空のリストと、最大の面積である赤のブロックの座標を代入する変数
+        blue_blocks = []
+        red_block = None
+        max_red_area = 0
+
+        # 青いブロックは面積が大きいもの2つを残す
+        for contour in blue_contours[:2]:
+            x, y, w, h = cv2.boundingRect(contour)
+            # 面積が大きいもの2つのみを blue_blocks に格納し、描画する
+            if cv2.contourArea(contour) >= 2000:
+                blue_blocks.append((x, y, x + w, y + h))
+                cv2.rectangle(trans_img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+
         print(f'blue_blocks: {blue_blocks}')
         
+        # 赤いブロックは面積が最大のもののみを残す
         for contour in red_contours:
             x, y, w, h = cv2.boundingRect(contour)
+            
             # 面積が小さすぎる矩形を除外
-            if(cv2.contourArea(contour) < 1000):
+            if cv2.contourArea(contour) < 2000:
                 continue
-            
-            # アスペクト比が一定以上の場合を除外
-            aspect_ratio = float(w) / h if h > 0 else 0
-            if aspect_ratio > 2.0:
-                continue
-            
+
+            # 青との重なりを削除
             skip_flag = False
             for i in range(len(blue_blocks)):
                 if abs(x - blue_blocks[i][0]) < 10:
                     skip_flag = True
                     break
-            if skip_flag == True:
+
+            if skip_flag:
                 continue
-            red_blocks.append((x, y, x + w, y + h))
-            cv2.rectangle(game_area_img, (x, y), (x + w, y + h), (0, 0, 255), 2)
-        print(f'red_blocks: {red_blocks}')
+            
+            # 面積が最大の赤いブロックを更新
+            if cv2.contourArea(contour) > max_red_area:
+                max_red_area = cv2.contourArea(contour)
+                red_block = (x, y, x + w, y + h)
+            
+        if red_block is not None:
+            x, y, x2, y2 = red_block
+            cv2.rectangle(trans_img, (x, y), (x2, y2), (0, 0, 255), 2)      
+            
+        print(f'red_block: {red_block}')
 
         save_path = os.path.join(self.image_dir_path, "blocks_"+self.image_name)
-        cv2.imwrite(save_path, game_area_img)
-        
+        cv2.imwrite(save_path, trans_img)
+         
+        ## サークル検知
         # 正方形のサイズ
         square_size = 15
         height, width, _ = trans_img.shape
@@ -317,16 +305,17 @@ class GetAreaInfo:
                 if dominant_color == 'white' or dominant_color == 'black':
                     continue
                 
-                # 画像に色情報を描画
-                cv2.rectangle(trans_img, (x, y), (x+square_size, y+square_size), bright_colors[dominant_color], 2)
+                # 画像に正方形を描画
+                # cv2.rectangle(trans_img, (x, y), (x+square_size, y+square_size), bright_colors[dominant_color], 2)
                 
                 # サークルの色の数だけ for 文を回す。正方形の座標をサークルの色の位置に対応するリストに格納する
                 # 行と列の境界は射影変換の歪みを考慮し、基準を決めている
                 for key in circles_data.keys():
+                    # 対応区間と正方形の色が一致すれば、辞書のリストに追加
                     if key == 'red' and dominant_color == 'red':
                         if x < width / 4 and y < height / 8:
                             circles_data[key]['upper_left'].append((x, y))    
-                        elif x >= width / 4 and x <= width / 2 and y < height / 8:
+                        elif x > width / 4 and x < width / 2 and y < height / 8:
                             circles_data[key]['upper_right'].append((x, y))
                         elif x < width / 4 and y < height / 2:
                             circles_data[key]['lower_left'].append((x, y))
@@ -336,7 +325,7 @@ class GetAreaInfo:
                     if key == 'yellow' and dominant_color == 'yellow':
                         if x > width / 2 and x < (3 * width / 4) and y < height / 8:
                             circles_data[key]['upper_left'].append((x, y))    
-                        elif x >= (3 * width / 4) and y <= height / 8:
+                        elif x > (3 * width / 4) and y < height / 8:
                             circles_data[key]['upper_right'].append((x, y))
                         elif x > width / 2 and x < (3 * width / 4) and y > height / 8 and y < height / 2:
                             circles_data[key]['lower_left'].append((x, y))
@@ -356,29 +345,33 @@ class GetAreaInfo:
                     if key == 'green' and dominant_color == 'green':
                         if x > width / 2 and x < (3 * width / 4) and y > height / 2 and y < (3 * height / 4):
                             circles_data[key]['upper_left'].append((x, y))    
-                        elif x >= (3 * width / 4) and y >= height / 2 and y <= (3 * height / 4):
+                        elif x > (3 * width / 4) and y > height / 2 and y < (3 * height / 4):
                             circles_data[key]['upper_right'].append((x, y))
                         elif x >= width / 2 and x < (3 * width / 4) and y > (3 * height / 4):
                             circles_data[key]['lower_left'].append((x, y))
                         elif x >= (3 * width / 4) and y >= (3 * height / 4):
                             circles_data[key]['lower_right'].append((x, y))
-                            
+
+        closest_circle = None
+         
         for key, value in circles_data.items():
             for region in value:
                 if not value[region]:
-                    # print(f'{region}_{key}_circle is not detected')
+                    # サークルの色を検知できなかった場合はスキップ
                     continue
                 else:
                     min_x = min(circles_data[key][region], key=lambda item: item[0])[0]
                     max_x = max(circles_data[key][region], key=lambda item: item[0])[0]
                     min_y = min(circles_data[key][region], key=lambda item: item[1])[1]
                     max_y = max(circles_data[key][region], key=lambda item: item[1])[1]
-                    # print(f'({min_x}, {min_y}), ({max_x}, {max_y})') # 確認用
-                    cv2.rectangle(trans_img, (min_x, min_y), (max_x, max_y), bright_colors[key], 2)
+                    center_point = ((min_x + max_x) / 2, (min_y + max_y) / 2)
+                    print(center_point)
+                    cv2.rectangle(trans_img, (min_x, min_y), (max_x, max_y), bright_colors[key], 2) # 最外矩形の表示
                     # print(f'{key}_{region}: {circles_data[key][region]}') # 確認用
                                   
         save_path = os.path.join(self.image_dir_path, "circles_"+self.image_name)
-        cv2.imwrite(save_path, trans_img)        
+        cv2.imwrite(save_path, trans_img)
+      
 
         """
         
@@ -413,8 +406,7 @@ if __name__ == "__main__":
     work_dir_path = os.path.join(PROJECT_DIR_PATH, "work_image_data")
 
     # 画像ファイル名
-    image_name = "test.png"                # ダブルループ
-    #image_name = "2023-10-06_13-26-37.png" # 赤の端点サークル
+    image_name = "2023-10-06_13-20-06.png" # ダブルループからの撮影画像
     # 画像ファイルパス
     image_path = os.path.join(work_dir_path, image_name)
 
