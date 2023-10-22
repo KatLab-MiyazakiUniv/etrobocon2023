@@ -104,10 +104,6 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
                                                 atoi(params[3]));  // 右モータのPWM値
 
       motionList.push_back(dt);                                    // 動作リストに追加
-    } else if(command == COMMAND::AU) {  // アームを上げる
-      ArmUpping* au = new ArmUpping(atoi(params[1]), atoi(params[2]));
-
-      motionList.push_back(au);          // 動作リストに追加
     }
     */
     else if(command == COMMAND::AM) {  // アーム動作の追加
