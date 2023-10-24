@@ -23,23 +23,65 @@ class Robot:
         self.motions = motions
         self.cost = cost
 
-    def get_transitionable_robots(self):
+    def __eq__(self, other) -> bool:
+        """同地比較(==)の定義.
+
+        Returns:
+            (bool): 2つのRobotが同値であるかどうか
+        """
+        # 座標、方角、コストが同じであることを同じRobotであることの条件とする.
+        return self.y == other.y and self.x == other.x \
+               and self.direction == other.direction \
+               and self.cost == other.cost
+    
+    def __hash__(self) -> int:
+        """ロボットの状態に対しユニークな値を返す."""
+        return hash(self.y + self.x * 10 + self.direction.value * 100 + self.cost * 1000)
+
+    def __lt__(self, other):
+        """"""
+        # self < other
+        return self.cost < other.cost
+
+    def get_coord(self) -> (int, int):
+        """自身の座標を返す.
+
+        Returns:
+            y (int): ロボットのマップ上のy座標
+            x (int): ロボットのマップ上のx座標
+        """
+        return (self.y, self.x)
+
+    def get_transitionable_robots(self, map_shape):
         """一つの動作で遷移可能なロボットの状態のリストを返す.
 
+        Args:
+            map_shape ([int]): マップ情報の次元
         Returns:
             transitionable_robots ([Robot]): 遷移可能なロボットのリスト
         """
         transitionable_robots = []
+        max_y, max_x, *_ = map_shape
         # 各方角に対する動作について
         for direct in Direction:
             if direct == self.direction:
                 # 進行方向の方角については、前進することを考慮する
                 forward_y, forward_x = self.get_forward_coord()
-                next_robot = Robot(forward_y, forward_x, self.direction)
+                ### TODO: マップから色情報を取得する ###
+                color = "BLUE"
+                comment = f"({forward_y} {forward_x} {self.direction.name})"
+                motion = Straight(color, comment)
+                next_robot = Robot(forward_y, forward_x, self.direction, self.motions + [motion], self.cost + motion.cost)
             else:
                 # 進行方向以外の方角については、方角を変えることを考慮する
-                next_robot = Robot(self.y, self.x, direct)
-            transitionable_robots.append(next_robot)
+                rotation_angle = self.direction - direct
+                comment = f"({self.y} {self.x} {direct.name})"
+                motion = Curve(rotation_angle, comment)
+                next_robot = Robot(self.y, self.x, direct, self.motions + [motion], self.cost + motion.cost)
+            # 座標がマップ上であれば
+            if 0 <= next_robot.y < max_y and 0 <= next_robot.x < max_x:
+                # 1つの動作を追加したロボットの状態を保持する
+                transitionable_robots += [next_robot]
         return transitionable_robots
 
     def get_forward_coord(self) -> (int, int):
@@ -68,10 +110,14 @@ class Direction(Enum):
     S = 2     # 南
     W = 3     # 西
 
-    def __sub__(self, other):
-        """方角間の角度の差を返す."""
+    def __sub__(self, other) -> int:
+        """差分(-)の定義.
+
+        Returns:
+            angle (int): 方角間の差を返す.
+        """
         diff = self.value - other.value
-        angle = diff * 90
+        angle = diff * 360 / len(Direction)
         return angle
 
 class Color(Enum):
@@ -104,7 +150,7 @@ class Motion:
 
 class Straight(Motion):
     """"交点の直進動作."""
-    def __init__(self, color):
+    def __init__(self, color, comment=""):
         self.params = {
             "command": "CC",
             "line_trace_color": color,
@@ -113,17 +159,19 @@ class Straight(Motion):
             "line_trace_kp": 0.33,
             "line_trace_ki": 0.12,
             "line_trace_kd": 0.12,
+            "comment": comment,
         }
         self.cost = 10  # TODO: 実際にかかる時間を計測する
 
 class Curve(Motion):
     """交点の右左折動作."""
-    def __init__(self, angle):
+    def __init__(self, angle, comment=""):
         self.params = {
             "command": "IR" if angle > 0 else "IL",
             "straight_distance": 65.0,
             "straight_speed": 200,
             "rotation_angle": abs(angle),
             "rotation_pwm": 100,
+            "comment": comment,
         }
         self.cost = 5 + abs(angle) * 0.1  # TODO: 実際にかかる時間を計測する

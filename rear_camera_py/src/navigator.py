@@ -43,8 +43,25 @@ class Navigator:
         close_list = []
         motions = []
 
-        ### TODO: A*か何かでMotionのリストを生成する ###
+        while len(open_list) > 0:
+            # 最有力な探索対象を取り出し
+            current_robot = open_list.pop(0)
+            # 目標座標に行き着いた場合、探索終了
+            if current_robot.get_coord() == target_coord:
+                self.robot = current_robot
+                return current_robot.motions
+            # 遷移可能なロボットの状態を探索対象に追加
+            open_list += current_robot.get_transitionable_robots(self.map.shape)
+            # 探索済みの状態を記録
+            close_list += [current_robot]
+            # 重複している or 探索終了済みのロボットの状態を除去
+            open_list = list(set(open_list) - set(close_list))
+            # 予測コスト + 実コストでソートする
+            ### 現状実コストしか見ていない ###
+            open_list = sorted(open_list)
 
+        # 経路発見不可
+        print("\nFailed navigate.\n")
         return motions
 
 
@@ -68,7 +85,7 @@ if __name__ == "__main__":
     ### TODO: サークルの色や開始位置・終了位置が変わるためLRどちらのコースなのかを認識する必要がある ###
 
     # ロボット初期化
-    robot = Robot(2,0, Direction.N)
+    robot = Robot(2, 0, Direction.N)
     # ナビゲーター初期化
     navigator = Navigator(map, robot)
 
@@ -78,7 +95,8 @@ if __name__ == "__main__":
     # block_coords = navigator.decide_blocks_order()
 
     # ブロック毎に経路探索
+    motions = []
     for block_coord in block_coords:
         motions = navigator.navigate(block_coord)
-        for motion in motions:
-            print(motion.make_command())
+    for motion in motions:
+        print(motion.make_command())
