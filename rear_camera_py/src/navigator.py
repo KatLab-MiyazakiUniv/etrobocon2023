@@ -19,17 +19,46 @@ class Navigator:
         """
         self.map = map
         self.robot = robot
+        
+    def calculate_distance(self, start, target):
+        """2点間のユークリッド距離を計算する.
+        
+        Args:
+            start (int): 初期地点
+            target (int): 対象ブロックの座標
+        
+        Returns:
+            distance (double): 2点間のユークリッド距離
+        """
+        
+        x1, y1 = start
+        x2, y2 = target
+        distance = ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
+        return distance
 
-    def decide_block_order(self) -> [(int, int)]:
+    def decide_blocks_order(self) -> [(int, int)]:
         """ブロックの運搬順序を決定する.
 
         Returns:
             block_order([(int, int)]): 運ぶ順にソートしたブロックの座標のリスト
         """
+        
+        # ブロックの運搬順を格納する空のリスト
+        block_order = []
+        
+        # 青 -> 赤の順で処理.
+        dummy_block_coords.sort(key=lambda pos: self.calculate_distance(start_coordinate, pos))
+        
+        for dummy_block in dummy_block_coords:
+            block_order.append(dummy_block)
+            
+        block_order.append(treasure_block_coord)
+        
+        # 赤いブロックが goal_corrdinate にない場合、移動順に追加する.
+        if not goal_coordinate == treasure_block_coord:
+            block_order.append(goal_coordinate)
 
-        ### TODO: 最適と思われるブロックの移動順を決定できるように実装する ###
-
-        return [(0,0),(1,1),(1,3)]
+        return block_order
 
     def navigate(self, target_coord) -> [Motion]:
         """ロボットが目標座標に移動するための経路を算出する.
@@ -73,6 +102,11 @@ if __name__ == "__main__":
     # ブロック設置
     dummy_block_coords = [(0,0), (1,1)]
     treasure_block_coord = (1,3)
+    
+    # TODO start_coordinate にブロックがある場合のコマンドと処理を連携する
+    start_coordinate = (2, 0) # 初期地点. 変更する可能性あり.
+    goal_coordinate = (0, 3) # 運搬終了地点. 変更する可能性あり.
+    
     for (y, x) in dummy_block_coords:
         map[y][x] = 1
     map[treasure_block_coord[0], treasure_block_coord[1]] = 2
@@ -89,10 +123,9 @@ if __name__ == "__main__":
     # ナビゲーター初期化
     navigator = Navigator(map, robot)
 
-    ### TODO: 最適と思われるブロックの移動順を決定できるように実装する ###
     # ブロックを探索する順番を決定(とりあえずトレジャーブロックが最後)
-    block_coords = dummy_block_coords + [treasure_block_coord]
-    # block_coords = navigator.decide_blocks_order()
+    block_coords = navigator.decide_blocks_order()
+    print(f'block_coords: {block_coords}')
 
     # ブロック毎に経路探索
     motions = []
