@@ -16,14 +16,20 @@
 class CameraAction : public CompositeMotion {
  public:
   /**
+   * 撮影対象判別の為の型
+   * @param subject A:ミニフィグA B:ミニフィグB BA:ブロックエリア
+   */
+  enum class subject { A, B, BA };
+
+  /**
    * コンストラクタ
-   * @param _isA 撮影対象　true:ミニフィグA false:ミニフィグB
+   * @param _subject 撮影対象　true:ミニフィグA false:ミニフィグB
    * @param _isClockwise リアカメラをミニフィグに向けるための回頭方向　true:時計回り,
    * false:反時計回り
    * @param _preTargetAngle 撮影のための回頭角度
    * @param _postTargetAngle 黒線復帰のための回頭角度
    */
-  CameraAction(bool _isA, bool _isClockwise, int _preTargetAngle, int _postTargetAngle);
+  CameraAction(subject _subject, bool _isClockwise, int _preTargetAngle, int _postTargetAngle);
 
   /**
    * @brief 撮影動作を行う
@@ -42,7 +48,8 @@ class CameraAction : public CompositeMotion {
 
  private:
   static constexpr char* SKIP_FLAG_PATH = "etrobocon2023/server/skip_camera_action.flag";
-  bool isA;  // フラグ確認を行うかの判断に用いる撮影対象(true:ミニフィグA, false:ミニフィグB)
+  subject sj;  // フラグ確認を行うかの判断に用いる撮影対象(A:ミニフィグA, B:ミニフィグB,
+               // BA:ブロックエリア)
   bool isClockwise;            // リアカメラをミニフィグに向けるための回頭方向
   int preTargetAngle;          // 撮影のための目標角度
   int postTargetAngle;         // 黒線復帰のための目標角度

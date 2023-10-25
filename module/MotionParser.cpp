@@ -90,7 +90,7 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
       motionList.push_back(sl);          // 動作リストに追加
     } else if(command == COMMAND::CA) {  // 距離指定旋回動作の生成
       CameraAction* ca = new CameraAction(
-          convertBool(params[0], params[1]),  // フラグ確認を行うかの判断に用いる撮影対象
+          convertSubject(params[0], params[1]),  // フラグ確認を行うかの判断に用いる撮影対象
           convertBool(params[0], params[2]),  // リアカメラをミニフィグに向けるための回頭方向
           atoi(params[3]),                    // 撮影のための目標角度
           atoi(params[4]));                   // 黒線復帰のための目標角度
@@ -266,10 +266,6 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
       return true;
     } else if(strcmp(param, "anticlockwise") == 0) {  // パラメータがanticlockwiseの場合
       return false;
-    } else if(strcmp(param, "A") == 0) {  // パラメータがAの場合
-      return true;
-    } else if(strcmp(param, "B") == 0) {  // パラメータがBの場合
-      return false;
     } else {  // 想定していないパラメータが来た場合
       logger.logWarning("Parameter before conversion must be 'clockwise' or 'anticlockwise'");
       return true;
@@ -277,4 +273,27 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
   }
   logger.logWarning("Using a command that is not defined in convertBool.");
   return true;
+}
+
+CameraAction::subject MotionParser::convertSubject(char* command, char* stringParameter)
+{
+  Logger logger;
+
+  // 末尾の改行を削除
+  char* param = StringOperator::removeEOL(stringParameter);
+
+  if(strcmp(command, "CA") == 0) {  //  コマンドがCAの場合
+    if(strcmp(param, "A") == 0) {   // パラメータがAの場合
+      return CameraAction::subject::A;
+    } else if(strcmp(param, "B") == 0) {  // パラメータがBの場合
+      return CameraAction::subject::B;
+    } else if(strcmp(param, "BA") == 0) {  // パラメータがBAの場合
+      return CameraAction::subject::BA;
+    } else {  // 想定していないパラメータが来た場合
+      logger.logWarning("Parameter before conversion must be 'A' or 'B' or 'BA'");
+      return CameraAction::subject::A;
+    }
+  }
+  logger.logWarning("Using a command that is not defined in convertSubject.");
+  return CameraAction::subject::A;
 }

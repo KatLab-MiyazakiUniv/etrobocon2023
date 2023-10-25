@@ -11,8 +11,9 @@ using namespace std;
 // countShootAの初期化
 int CameraAction::countShootA = 0;
 
-CameraAction::CameraAction(bool _isA, bool _isClockwise, int _preTargetAngle, int _postTargetAngle)
-  : isA(_isA),
+CameraAction::CameraAction(subject _subject, bool _isClockwise, int _preTargetAngle,
+                           int _postTargetAngle)
+  : sj(_subject),
     isClockwise(_isClockwise),
     preTargetAngle(_preTargetAngle),
     postTargetAngle(_postTargetAngle){};
@@ -35,18 +36,20 @@ void CameraAction::run()
   }
 
   // 撮影対象がBの場合は、前進でフィグから遠ざかる
-  if(isA == false) {
+  if(sj == CameraAction::subject::B) {
     DistanceStraight dsToFig(targetDistance, targetSpeed);
     dsToFig.run();
   }
 
   // リアカメラで画像を取得する
   // 画像のファイル名を指定
-  if(isA) {
+  if(sj == CameraAction::subject::A) {
     countShootA++;
     sprintf(imageName, "FigA_%d.png", countShootA);
-  } else {
+  } else if(sj == CameraAction::subject::B) {
     sprintf(imageName, "FigB.png");
+  } else {
+    sprintf(imageName, "BlockDeTreasure.png");
   }
 
   // 撮影に際してディレクトリ移動も行う
@@ -58,7 +61,7 @@ void CameraAction::run()
   printf("%s\n", cmd);
 
   // 撮影対象がBの場合は、バックで黒線へ復帰
-  if(isA == false) {
+  if(sj == CameraAction::subject::B) {
     DistanceStraight dsToLine((targetDistance - 25), -1.0 * targetSpeed);
     dsToLine.run();
   }
@@ -98,7 +101,7 @@ bool CameraAction::isMetPrecondition()
   }
 
   // 撮影対象がAの場合はフラグ確認を行う
-  if(isA == true) {
+  if(sj == CameraAction::subject::A) {
     // フラグファイルの存在確認(ファイルはWebサーバが生成する)
     FILE* fp = fopen(SKIP_FLAG_PATH, "r");
     // ファイルが存在する場合は、撮影をスキップする

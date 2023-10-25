@@ -83,6 +83,14 @@ class MotionParser {
    * @return bool値
    */
   static bool convertBool(char* command, char* stringParameter);
+
+  /**
+   * @brief 文字列をsubject型に変換する
+   * @param command 文字列のコマンド
+   * @param stringParameter 文字列のパラメータ
+   * @return subject値
+   */
+  static CameraAction::subject convertSubject(char* command, char* stringParameter);
 };
 
 #endif
