@@ -51,7 +51,7 @@ double Pid::calculatePid(double currentValue, double delta)
   // 時定数が0の時の無駄な計算を避ける
   if(timeConstant != 0.0 && gain.kp != 0.0) {
     // D値に一次遅れフィルタを適用
-    d = d / (0.1 + timeConstant * (fabs(d) / gain.kp));
+    d = d / (1.0 + timeConstant * (fabs(d) / gain.kp));
   }
 
   // 操作量 = P制御 + I制御 + D制御
