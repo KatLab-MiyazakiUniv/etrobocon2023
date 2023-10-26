@@ -7,6 +7,7 @@ import numpy as np
 ### TODO: robot.pyが色々持ちすぎなので追々分解する ###
 from robot import Robot, Direction
 from robot import Color, Motion, Straight, Curve
+import itertools as it
 
 
 class Navigator:
@@ -130,11 +131,16 @@ if __name__ == "__main__":
     block_coords = navigator.decide_blocks_order()
     print(f'block_coords: {block_coords}')
 
-    # ブロック毎に経路探索
-    current_robot = robot
-    for block_coord in block_coords:
-        current_robot = navigator.navigate(current_robot, block_coord)
-        if current_robot is None:
-            exit()
-    for motion in current_robot.motions:
+    # ブロック毎の組み合わせの実験
+    robots = []
+    for _block_coords in [list(coords) for coords in it.permutations(block_coords)]:
+        # ブロック毎に経路探索
+        current_robot = robot
+        _block_coords += [goal_coordinate]
+        for block_coord in _block_coords:
+            current_robot = navigator.navigate(current_robot, block_coord)
+            if current_robot is None:
+                exit()
+        robots += [current_robot]
+    for motion in sorted(robots)[0].motions:
         print(motion.make_command())

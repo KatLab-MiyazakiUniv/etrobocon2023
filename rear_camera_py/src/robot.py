@@ -187,7 +187,7 @@ class Straight(Motion):
             "line_trace_kd": 0.12,
             "comment": comment,
         }
-        self.cost = 10  # TODO: 実際にかかる時間を計測する
+        self.cost = 30  # TODO: 実際にかかる時間を計測する
 
 
 class Curve(Motion):
@@ -202,4 +202,4 @@ class Curve(Motion):
             "rotation_pwm": 100,
             "comment": comment,
         }
-        self.cost = 5 + abs(angle) * 0.1  # TODO: 実際にかかる時間を計測する
+        self.cost = 5 + abs(angle)  # TODO: 実際にかかる時間を計測する
