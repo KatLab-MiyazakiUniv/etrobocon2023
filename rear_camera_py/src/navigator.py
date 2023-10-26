@@ -6,6 +6,8 @@
 import numpy as np
 ### TODO: robot.pyが色々持ちすぎなので追々分解する ###
 from robot import Robot, Direction, Color
+from map import get_dummy_block_coords, get_treasure_block_coord
+from map import Map
 from motion import Motion
 import itertools as it
 
@@ -47,9 +49,6 @@ class Navigator:
         # ブロックの運搬順を格納する空のリスト
         block_order = []
 
-        # 青 -> 赤の順で処理.
-        dummy_block_coords.sort(key=lambda pos: self.calculate_distance(start_coordinate, pos))
-
         for dummy_block in dummy_block_coords:
             block_order.append(dummy_block)
 
@@ -58,6 +57,9 @@ class Navigator:
         # 赤いブロックが goal_corrdinate にない場合、移動順に追加する.
         if not goal_coordinate == treasure_block_coord:
             block_order.append(goal_coordinate)
+
+        # 距離が近い順にブロックに向かう（色の区別なし）
+        block_order.sort(key=lambda pos: self.calculate_distance(start_coordinate, pos))
 
         return block_order
 
@@ -95,34 +97,27 @@ class Navigator:
 
 
 if __name__ == "__main__":
-    # マップ初期化
-    length = 4
-    map = np.zeros(length**2)
-    map.shape = (length, length)
-    # ブロック設置
-    # dummy_block_coords = [(0, 0), (1, 1)]
-    # treasure_block_coord = (1, 3)
-    dummy_block_coords = [(0, 3), (3, 3)]
-    treasure_block_coord = (3, 0)
-
-    for (y, x) in dummy_block_coords:
-        map[y][x] = 1
-    map[treasure_block_coord[0], treasure_block_coord[1]] = 2
-    # マップ表示
-    print(map)
-
-    ### !!! この時点でのmapがコース情報取得から得られるはず                  !!! ###
-    ### !!!  => これより上に値について、map以外は使用できないことを前提とする !!! ###
-
+    ### TODO: CC(交点→交点)は色指定ライントレースであるためマップ上のサークルの色情報も付加する必要がある ###
+    
+    is_left_course = False
+    
     # TODO start_coordinate にブロックがある場合のコマンドと処理を連携する
     start_coordinate = (2, 0)  # 初期地点. 変更する可能性あり.
     goal_coordinate = (1, 3)  # 運搬終了地点. 変更する可能性あり.
 
-    ### TODO: CC(交点→交点)は色指定ライントレースであるためマップ上のサークルの色情報も付加する必要がある ###
-    ### TODO: サークルの色や開始位置・終了位置が変わるためLRどちらのコースなのかを認識する必要がある ###
-
+    if is_left_course:
+        start_coordinate = (2, 3)
+        goal_coordinate = (1, 0)
+    
     # ナビゲーター初期化
+    block_area_map = Map(is_left_course)
     navigator = Navigator(map)
+    
+    # TODO map.py から dummy_block_coords と treasure_block_coord を呼び出したい
+    dummy_block_coords = get_dummy_block_coords()
+    treasure_block_coord = get_treasure_block_coord()
+    print(dummy_block_coords)
+    print(treasure_block_coord)
 
     # ロボット初期化
     robot = Robot(*start_coordinate, Direction.N, [Motion({"comment": f"start = ({start_coordinate[0]} {start_coordinate[1]} {Direction.N.name})"})])

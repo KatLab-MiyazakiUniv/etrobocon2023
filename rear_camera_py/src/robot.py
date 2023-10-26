@@ -80,8 +80,14 @@ class Robot:
             if direct == self.direction:
                 # 進行方向の方角については、前進することを考慮する
                 forward_y, forward_x = self.get_forward_coord()
+                
+                next_circle = (forward_x, forward_y)
+                for target_color, circle_coords in navigator.circle_color_mapping.items():
+                    if next_circle in circle_coords:
+                        color = target_color
+                
                 ### TODO: マップから色情報を取得する ###
-                color = "BLUE"
+                #color = "BLUE"
                 comment = f"({forward_y} {forward_x} {self.direction.name})"
                 motion = Straight(color, comment)
                 next_robot = Robot(forward_y, forward_x, self.direction,
