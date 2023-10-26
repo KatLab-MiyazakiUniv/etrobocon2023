@@ -5,8 +5,10 @@
 
 from enum import Enum
 
+
 class Robot:
     """ロボットの状態を保持するクラス."""
+
     def __init__(self, y, x, direction, motions=[], cost=0):
         """コンストラクタ.
 
@@ -23,24 +25,35 @@ class Robot:
         self.motions = motions
         self.cost = cost
 
-    def __eq__(self, other) -> bool:
-        """同地比較(==)の定義.
+    def __hash__(self) -> int:
+        """ロボットの状態に対しユニークな値を返す.
 
+        Returns:
+            (int): 座標,方角,コストを用いたハッシュ値
+        """
+        return hash(self.y + self.x * 10 + self.direction.value * 100 + self.cost * 1000)
+
+    def __eq__(self, other) -> bool:
+        """同値(==)の定義.
+
+        Args:
+            other (Robot): 比較対象のロボット
         Returns:
             (bool): 2つのRobotが同値であるかどうか
         """
         # 座標、方角、コストが同じであることを同じRobotであることの条件とする.
         return self.y == other.y and self.x == other.x \
-               and self.direction == other.direction \
-               and self.cost == other.cost
-    
-    def __hash__(self) -> int:
-        """ロボットの状態に対しユニークな値を返す."""
-        return hash(self.y + self.x * 10 + self.direction.value * 100 + self.cost * 1000)
+            and self.direction == other.direction \
+            and self.cost == other.cost
 
-    def __lt__(self, other):
-        """"""
-        # self < other
+    def __lt__(self, other) -> None:
+        """より小さい(self < other)の定義.
+
+        Args:
+            other (Robot): 比較対象のロボット
+        Returns:
+            (bool): self < other かどうか
+        """
         return self.cost < other.cost
 
     def get_coord(self) -> (int, int):
@@ -71,13 +84,15 @@ class Robot:
                 color = "BLUE"
                 comment = f"({forward_y} {forward_x} {self.direction.name})"
                 motion = Straight(color, comment)
-                next_robot = Robot(forward_y, forward_x, self.direction, self.motions + [motion], self.cost + motion.cost)
+                next_robot = Robot(forward_y, forward_x, self.direction,
+                                   self.motions + [motion], self.cost + motion.cost)
             else:
                 # 進行方向以外の方角については、方角を変えることを考慮する
-                rotation_angle = self.direction - direct
+                rotation_angle = direct - self.direction
                 comment = f"({self.y} {self.x} {direct.name})"
                 motion = Curve(rotation_angle, comment)
-                next_robot = Robot(self.y, self.x, direct, self.motions + [motion], self.cost + motion.cost)
+                next_robot = Robot(self.y, self.x, direct,
+                                   self.motions + [motion], self.cost + motion.cost)
             # 座標がマップ上であれば
             if 0 <= next_robot.y < max_y and 0 <= next_robot.x < max_x:
                 # 1つの動作を追加したロボットの状態を保持する
@@ -103,6 +118,7 @@ class Robot:
             forward_x -= 1
         return forward_y, forward_x
 
+
 class Direction(Enum):
     """方角を保持するクラス."""
     N = 0     # 北
@@ -111,29 +127,37 @@ class Direction(Enum):
     W = 3     # 西
 
     def __sub__(self, other) -> int:
-        """差分(-)の定義.
+        """差(-)の定義.
 
         Returns:
-            angle (int): 方角間の差を返す.
+            angle (int): 方角間の角度の差
         """
-        diff = self.value - other.value
-        angle = diff * 360 / len(Direction)
+        diff = (self.value - other.value) % len(Direction)
+        if diff <= len(Direction) / 2:
+            # 右回りの場合
+            angle = diff * 360 / len(Direction)
+        else:
+            # 左周りの場合
+            angle = (diff - len(Direction)) * 360 / len(Direction)
         return angle
+
 
 class Color(Enum):
     """色を保持するクラス."""
-    RED    = 0  # 赤
-    GREEN  = 1  # 緑
-    BLUE   = 2  # 青
+    RED = 0  # 赤
+    GREEN = 1  # 緑
+    BLUE = 2  # 青
     YELLOW = 3  # 黄
+
 
 class Motion:
     """ロボットの動作を表わすクラス."""
+
     def __init__(self, params):
         """コンストラクタ.
 
         Args:
-            params ([key: value]): 動作のためのパラメータ.
+            params ([key: value]): 動作のパラメータ
         """
         self.params = params
 
@@ -148,8 +172,10 @@ class Motion:
             command += f"{self.params[key]}, "
         return command
 
+
 class Straight(Motion):
     """"交点の直進動作."""
+
     def __init__(self, color, comment=""):
         self.params = {
             "command": "CC",
@@ -163,8 +189,10 @@ class Straight(Motion):
         }
         self.cost = 10  # TODO: 実際にかかる時間を計測する
 
+
 class Curve(Motion):
     """交点の右左折動作."""
+
     def __init__(self, angle, comment=""):
         self.params = {
             "command": "IR" if angle > 0 else "IL",
