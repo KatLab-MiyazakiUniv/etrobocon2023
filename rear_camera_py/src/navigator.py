@@ -5,8 +5,8 @@
 
 import numpy as np
 ### TODO: robot.pyが色々持ちすぎなので追々分解する ###
-from robot import Robot, Direction
-from robot import Color, Motion, Straight, Curve
+from robot import Robot, Direction, Color
+from motion import Motion
 import itertools as it
 
 
@@ -121,11 +121,12 @@ if __name__ == "__main__":
     ### TODO: CC(交点→交点)は色指定ライントレースであるためマップ上のサークルの色情報も付加する必要がある ###
     ### TODO: サークルの色や開始位置・終了位置が変わるためLRどちらのコースなのかを認識する必要がある ###
 
-    # ロボット初期化
-    robot = Robot(*start_coordinate, Direction.N)
-    print(f"start = ({robot.y} {robot.x} {robot.direction.name})")
     # ナビゲーター初期化
     navigator = Navigator(map)
+
+    # ロボット初期化
+    robot = Robot(*start_coordinate, Direction.N, [Motion({"comment": f"start = ({start_coordinate[0]} {start_coordinate[1]} {Direction.N.name})"})])
+    robot2 = Robot(*start_coordinate, Direction.S, [Motion({"comment": f"start = ({start_coordinate[0]} {start_coordinate[1]} {Direction.S.name})"})])
 
     # ブロックを探索する順番を決定
     block_coords = navigator.decide_blocks_order()
@@ -133,9 +134,20 @@ if __name__ == "__main__":
 
     # ブロック毎の組み合わせの実験
     robots = []
+    # 初期状態が北を向いている場合
     for _block_coords in [list(coords) for coords in it.permutations(block_coords)]:
         # ブロック毎に経路探索
         current_robot = robot
+        _block_coords += [goal_coordinate]
+        for block_coord in _block_coords:
+            current_robot = navigator.navigate(current_robot, block_coord)
+            if current_robot is None:
+                exit()
+        robots += [current_robot]
+    # 初期状態が南を向いている場合
+    for _block_coords in [list(coords) for coords in it.permutations(block_coords)]:
+        # ブロック毎に経路探索
+        current_robot = robot2
         _block_coords += [goal_coordinate]
         for block_coord in _block_coords:
             current_robot = navigator.navigate(current_robot, block_coord)
