@@ -167,8 +167,8 @@ class LineAngleCalculator:
     def detect_line_segment(
         self,
         img,
-        length_threshold_mm: int = 125,
-        distance_threshold: float = 1.41421356,
+        length_threshold_mm: int = 80,
+        distance_threshold: float = 1,
         canny_th1: int = 50,
         canny_th2: int = 50,
         canny_aperture_size: int = 7,  # 3~7
