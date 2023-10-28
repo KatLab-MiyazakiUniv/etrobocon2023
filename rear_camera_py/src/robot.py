@@ -5,6 +5,7 @@
 
 from enum import Enum
 from motion import Motion, Straight, Curve
+from block_area_map import BlockAreaMap
 
 class Robot:
     """ロボットの状態を保持するクラス."""
@@ -87,7 +88,7 @@ class Robot:
                         color = target_color
                 
                 ### TODO: マップから色情報を取得する ###
-                #color = "BLUE"
+                color = "BLUE"
                 comment = f"({forward_y} {forward_x} {self.direction.name})"
                 motion = Straight(color, comment)
                 next_robot = Robot(forward_y, forward_x, self.direction,

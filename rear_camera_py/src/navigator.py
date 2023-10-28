@@ -6,8 +6,7 @@
 import numpy as np
 ### TODO: robot.pyが色々持ちすぎなので追々分解する ###
 from robot import Robot, Direction, Color
-from map import get_dummy_block_coords, get_treasure_block_coord
-from map import Map
+from block_area_map import BlockAreaMap
 from motion import Motion
 import itertools as it
 
@@ -15,13 +14,13 @@ import itertools as it
 class Navigator:
     """経路探索するクラス."""
 
-    def __init__(self, map):
+    def __init__(self, map_data):
         """コンストラクタ.
 
         Args:
-            map (np.array): コース情報
+            map_data (np.array): コース情報
         """
-        self.map = map
+        self.map_data = map_data
 
     def calculate_distance(self, start, target):
         """2点間のユークリッド距離を計算する.
@@ -55,8 +54,8 @@ class Navigator:
         block_order.append(treasure_block_coord)
 
         # 赤いブロックが goal_corrdinate にない場合、移動順に追加する.
-        if not goal_coordinate == treasure_block_coord:
-            block_order.append(goal_coordinate)
+        if not end_coordinate == treasure_block_coord:
+            block_order.append(end_coordinate)
 
         # 距離が近い順にブロックに向かう（色の区別なし）
         block_order.sort(key=lambda pos: self.calculate_distance(start_coordinate, pos))
@@ -82,7 +81,7 @@ class Navigator:
             if current_robot.get_coord() == target_coord:
                 return current_robot
             # 遷移可能なロボットの状態を探索対象に追加
-            open_list += current_robot.get_transitionable_robots(self.map.shape)
+            open_list += current_robot.get_transitionable_robots(self.map_data.shape)
             # 探索済みの状態を記録
             close_list += [current_robot]
             # 重複している or 探索終了済みのロボットの状態を除去
@@ -100,24 +99,23 @@ if __name__ == "__main__":
     ### TODO: CC(交点→交点)は色指定ライントレースであるためマップ上のサークルの色情報も付加する必要がある ###
     
     is_left_course = False
+        
+    # ナビゲーター初期化
+    block_area_map = BlockAreaMap(is_left_course)
+    
+    map_data = block_area_map.map_data
+    navigator = Navigator(map_data)
     
     # TODO start_coordinate にブロックがある場合のコマンドと処理を連携する
-    start_coordinate = (2, 0)  # 初期地点. 変更する可能性あり.
-    goal_coordinate = (1, 3)  # 運搬終了地点. 変更する可能性あり.
+    start_coordinate = block_area_map.start_coord  # 初期地点. 変更する可能性あり.
+    end_coordinate = block_area_map.end_coord  # 運搬終了地点. 変更する可能性あり.
+    circle_color_mapping = block_area_map.circle_color_mapping
 
-    if is_left_course:
-        start_coordinate = (2, 3)
-        goal_coordinate = (1, 0)
-    
-    # ナビゲーター初期化
-    block_area_map = Map(is_left_course)
-    navigator = Navigator(map)
-    
     # TODO map.py から dummy_block_coords と treasure_block_coord を呼び出したい
-    dummy_block_coords = get_dummy_block_coords()
-    treasure_block_coord = get_treasure_block_coord()
-    print(dummy_block_coords)
-    print(treasure_block_coord)
+    dummy_block_coords = block_area_map.dummy_block_coords
+    treasure_block_coord = block_area_map.treasure_block_coord
+    print(f'dummy_blocks are {dummy_block_coords}')
+    print(f'treasure_block is {treasure_block_coord}')
 
     # ロボット初期化
     robot = Robot(*start_coordinate, Direction.N, [Motion({"comment": f"start = ({start_coordinate[0]} {start_coordinate[1]} {Direction.N.name})"})])
@@ -133,7 +131,7 @@ if __name__ == "__main__":
     for _block_coords in [list(coords) for coords in it.permutations(block_coords)]:
         # ブロック毎に経路探索
         current_robot = robot
-        _block_coords += [goal_coordinate]
+        _block_coords += [end_coordinate]
         for block_coord in _block_coords:
             current_robot = navigator.navigate(current_robot, block_coord)
             if current_robot is None:
@@ -143,7 +141,7 @@ if __name__ == "__main__":
     for _block_coords in [list(coords) for coords in it.permutations(block_coords)]:
         # ブロック毎に経路探索
         current_robot = robot2
-        _block_coords += [goal_coordinate]
+        _block_coords += [end_coordinate]
         for block_coord in _block_coords:
             current_robot = navigator.navigate(current_robot, block_coord)
             if current_robot is None:
