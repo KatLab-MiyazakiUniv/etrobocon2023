@@ -62,12 +62,13 @@ class Navigator:
 
         return block_order
 
-    def navigate(self, initial_robot, target_coord) -> Robot:
+    def navigate(self, initial_robot, target_coord, circle_color_mapping) -> Robot:
         """ロボットが目標座標に移動するための経路を算出する.
 
         Args:
             initial_robot (Robot): ロボットの初期状態
             target_coord (int, int): 目標座標
+            circle_color_mapping ({(str):(int, int)}): サークルの色を示す辞書
         Returns:
             (Robot): 探索終了時のロボット
         """
@@ -81,7 +82,7 @@ class Navigator:
             if current_robot.get_coord() == target_coord:
                 return current_robot
             # 遷移可能なロボットの状態を探索対象に追加
-            open_list += current_robot.get_transitionable_robots(self.map_data.shape)
+            open_list += current_robot.get_transitionable_robots(self.map_data.shape, circle_color_mapping)
             # 探索済みの状態を記録
             close_list += [current_robot]
             # 重複している or 探索終了済みのロボットの状態を除去
@@ -96,26 +97,36 @@ class Navigator:
 
 
 if __name__ == "__main__":
-    ### TODO: CC(交点→交点)は色指定ライントレースであるためマップ上のサークルの色情報も付加する必要がある ###
     
-    is_left_course = False
-        
-    # ナビゲーター初期化
-    block_area_map = BlockAreaMap(is_left_course)
     
+    # マップ初期化 (TODO: ブロックエリア検知機能と連携次第、削除)
+    ### 削除対象箇所
+    length = 4
+    map_data = np.zeros((length, length))
+
+    dummy_block_coords = [(0, 3), (3, 3)]
+    treasure_block_coord = (3, 0)
+    for (y, x) in dummy_block_coords:
+        map_data[y][x] = 1
+    map_data[treasure_block_coord[0], treasure_block_coord[1]] = 2
+    ### 削除対象箇所
+    
+    
+    # マップデータ初期化
+    block_area_map = BlockAreaMap(map_data)
     map_data = block_area_map.map_data
+    block_area_map.display_map()
+    
+    # ナビゲーター初期化
     navigator = Navigator(map_data)
     
     # TODO start_coordinate にブロックがある場合のコマンドと処理を連携する
-    start_coordinate = block_area_map.start_coord  # 初期地点. 変更する可能性あり.
-    end_coordinate = block_area_map.end_coord  # 運搬終了地点. 変更する可能性あり.
-    circle_color_mapping = block_area_map.circle_color_mapping
+    start_coordinate = block_area_map.start_coord  # 初期地点
+    end_coordinate = block_area_map.end_coord  # 運搬終了地点
+    circle_color_mapping = block_area_map.circle_color_mapping # サークルの色情報を示す辞書
 
-    # TODO map.py から dummy_block_coords と treasure_block_coord を呼び出したい
     dummy_block_coords = block_area_map.dummy_block_coords
     treasure_block_coord = block_area_map.treasure_block_coord
-    print(f'dummy_blocks are {dummy_block_coords}')
-    print(f'treasure_block is {treasure_block_coord}')
 
     # ロボット初期化
     robot = Robot(*start_coordinate, Direction.N, [Motion({"comment": f"start = ({start_coordinate[0]} {start_coordinate[1]} {Direction.N.name})"})])
@@ -133,7 +144,7 @@ if __name__ == "__main__":
         current_robot = robot
         _block_coords += [end_coordinate]
         for block_coord in _block_coords:
-            current_robot = navigator.navigate(current_robot, block_coord)
+            current_robot = navigator.navigate(current_robot, block_coord, circle_color_mapping)
             if current_robot is None:
                 exit()
         robots += [current_robot]
@@ -143,7 +154,7 @@ if __name__ == "__main__":
         current_robot = robot2
         _block_coords += [end_coordinate]
         for block_coord in _block_coords:
-            current_robot = navigator.navigate(current_robot, block_coord)
+            current_robot = navigator.navigate(current_robot, block_coord, circle_color_mapping)
             if current_robot is None:
                 exit()
         robots += [current_robot]

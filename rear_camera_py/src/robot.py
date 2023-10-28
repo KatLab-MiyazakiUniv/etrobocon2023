@@ -66,29 +66,28 @@ class Robot:
         """
         return (self.y, self.x)
 
-    def get_transitionable_robots(self, map_shape):
+    def get_transitionable_robots(self, map_shape, circle_color_mapping):
         """一つの動作で遷移可能なロボットの状態のリストを返す.
 
         Args:
             map_shape ([int]): マップ情報の次元
+            circle_color_mapping ({(str):(int, int)}): サークルの色を示す辞書
         Returns:
             transitionable_robots ([Robot]): 遷移可能なロボットのリスト
         """
         transitionable_robots = []
         max_y, max_x, *_ = map_shape
+        color = None
         # 各方角に対する動作について
         for direct in Direction:
             if direct == self.direction:
                 # 進行方向の方角については、前進することを考慮する
                 forward_y, forward_x = self.get_forward_coord()
-                
                 next_circle = (forward_x, forward_y)
-                for target_color, circle_coords in navigator.circle_color_mapping.items():
+                for target_color, circle_coords in circle_color_mapping.items():
                     if next_circle in circle_coords:
                         color = target_color
                 
-                ### TODO: マップから色情報を取得する ###
-                color = "BLUE"
                 comment = f"({forward_y} {forward_x} {self.direction.name})"
                 motion = Straight(color, comment)
                 next_robot = Robot(forward_y, forward_x, self.direction,
