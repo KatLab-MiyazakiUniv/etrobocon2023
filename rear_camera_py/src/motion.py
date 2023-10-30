@@ -3,6 +3,7 @@
 @author: miyashita64 YKhm20020
 """
 
+
 class Motion:
     """ロボットの動作を表わすクラス."""
 
@@ -27,9 +28,15 @@ class Motion:
 
 
 class Straight(Motion):
-    """"交点の直進動作."""
+    """交点の直進動作."""
 
     def __init__(self, color, comment=""):
+        """コンストラクタ.
+
+        Args:
+            color (str): 直進でライントレースする際に目標とする色
+            comment (str): 動作のコメント
+        """
         self.params = {
             "command": "CC",
             "line_trace_color": color,
@@ -47,6 +54,12 @@ class Curve(Motion):
     """交点の右左折動作."""
 
     def __init__(self, angle, comment=""):
+        """コンストラクタ.
+
+        Args:
+            angle (int): 回頭角度[deg]
+            comment (str): 動作のコメント
+        """
         self.params = {
             "command": "IR" if angle > 0 else "IL",
             "straight_distance": 65.0,

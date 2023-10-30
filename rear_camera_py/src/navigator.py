@@ -4,71 +4,63 @@
 """
 
 import numpy as np
-### TODO: robot.pyが色々持ちすぎなので追々分解する ###
-from robot import Robot, Direction, Color
+from robot import Robot, Direction
 from block_area_map import BlockAreaMap
 from motion import Motion
-import itertools as it
 
 
 class Navigator:
     """経路探索するクラス."""
 
-    def __init__(self, map_data):
+    def __init__(self, block_area_map):
         """コンストラクタ.
 
         Args:
-            map_data (np.array): コース情報
+            block_area_map (BlockAreaMap): ブロックエリアのマップ
         """
-        self.map_data = map_data
+        self.block_area_map = block_area_map
 
-    def calculate_distance(self, start, target):
+    def calculate_distance(self, start_coord, target_coord):
         """2点間のユークリッド距離を計算する.
 
         Args:
-            start (int): 初期地点
-            target (int): 対象ブロックの座標
+            start_coord ((int, int)): 初期地点
+            target_coord ((int, int)): 対象ブロックの座標
 
         Returns:
             distance (double): 2点間のユークリッド距離
         """
-
-        x1, y1 = start
-        x2, y2 = target
+        x1, y1 = start_coord
+        x2, y2 = target_coord
         distance = ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
         return distance
 
-    def decide_blocks_order(self) -> [(int, int)]:
+    def decide_blocks_order(self, start_coord) -> [(int, int)]:
         """ブロックの運搬順序を決定する.
+
+        Args:
+            start_coord ((int,int)): スタート座標
 
         Returns:
             block_order([(int, int)]): 運ぶ順にソートしたブロックの座標のリスト
         """
-
-        # ブロックの運搬順を格納する空のリスト
-        block_order = []
-
-        for dummy_block in dummy_block_coords:
-            block_order.append(dummy_block)
-
-        block_order.append(treasure_block_coord)
-
-        # 赤いブロックが goal_corrdinate にない場合、移動順に追加する.
-        if not end_coordinate == treasure_block_coord:
-            block_order.append(end_coordinate)
+        # ブロックの座標のリスト
+        block_coords = np.transpose(np.nonzero(self.block_area_map.block_map))
+        # 型をタプルに統一する
+        block_coords = [tuple(coord) for coord in block_coords]
 
         # 距離が近い順にブロックに向かう（色の区別なし）
-        block_order.sort(key=lambda pos: self.calculate_distance(start_coordinate, pos))
+        block_order = sorted(
+            block_coords, key=lambda coord: self.calculate_distance(start_coord, coord))
 
         return block_order
 
-    def navigate(self, initial_robot, target_coord, circle_color_mapping) -> Robot:
+    def simulate_route(self, initial_robot, target_coord) -> Robot:
         """ロボットが目標座標に移動するための経路を算出する.
 
         Args:
             initial_robot (Robot): ロボットの初期状態
             target_coord (int, int): 目標座標
-            circle_color_mapping ({(str):(int, int)}): サークルの色を示す辞書
         Returns:
             (Robot): 探索終了時のロボット
         """
@@ -82,81 +74,53 @@ class Navigator:
             if current_robot.get_coord() == target_coord:
                 return current_robot
             # 遷移可能なロボットの状態を探索対象に追加
-            open_list += current_robot.get_transitionable_robots(self.map_data.shape, circle_color_mapping)
+            open_list += current_robot.get_transitionable_robots(
+                self.block_area_map.circle_color_map
+            )
             # 探索済みの状態を記録
             close_list += [current_robot]
             # 重複している or 探索終了済みのロボットの状態を除去
             open_list = list(set(open_list) - set(close_list))
-            # 予測コスト + 実コストでソートする
-            ### 現状実コストしか見ていない ###
+            # 実コストでソートする
             open_list = sorted(open_list)
 
-        # 経路発見不可
-        print("\nFailed navigate.\n")
+        # 経路未発見
+        print("\nFailed simulate.\n")
         return None
 
+    def navigate(self, start_robot, end_robot) -> None:
+        """ロボットの動作を計画する.
 
-if __name__ == "__main__":
-    
-    
-    # マップ初期化 (TODO: ブロックエリア検知機能と連携次第、削除)
-    ### 削除対象箇所
-    length = 4
-    map_data = np.zeros((length, length))
+        Args:
+            start_robot (Robot): ロボットの開始状態
+            end_robot (Robot): ロボットの終了状態
+        """
+        # ブロックの運搬順を決定
+        block_order = self.decide_blocks_order(start_robot.get_coord())
 
-    dummy_block_coords = [(0, 3), (3, 3)]
-    treasure_block_coord = (3, 0)
-    for (y, x) in dummy_block_coords:
-        map_data[y][x] = 1
-    map_data[treasure_block_coord[0], treasure_block_coord[1]] = 2
-    ### 削除対象箇所
-    
-    
-    # マップデータ初期化
-    block_area_map = BlockAreaMap(map_data)
-    map_data = block_area_map.map_data
-    block_area_map.display_map()
-    
-    # ナビゲーター初期化
-    navigator = Navigator(map_data)
-    
-    # TODO start_coordinate にブロックがある場合のコマンドと処理を連携する
-    start_coordinate = block_area_map.start_coord  # 初期地点
-    end_coordinate = block_area_map.end_coord  # 運搬終了地点
-    circle_color_mapping = block_area_map.circle_color_mapping # サークルの色情報を示す辞書
-
-    dummy_block_coords = block_area_map.dummy_block_coords
-    treasure_block_coord = block_area_map.treasure_block_coord
-
-    # ロボット初期化
-    robot = Robot(*start_coordinate, Direction.N, [Motion({"comment": f"start = ({start_coordinate[0]} {start_coordinate[1]} {Direction.N.name})"})])
-    robot2 = Robot(*start_coordinate, Direction.S, [Motion({"comment": f"start = ({start_coordinate[0]} {start_coordinate[1]} {Direction.S.name})"})])
-
-    # ブロックを探索する順番を決定
-    block_coords = navigator.decide_blocks_order()
-    print(f'block_coords: {block_coords}')
-
-    # ブロック毎の組み合わせの実験
-    robots = []
-    # 初期状態が北を向いている場合
-    for _block_coords in [list(coords) for coords in it.permutations(block_coords)]:
+        # ロボットの初期化
+        robot = start_robot
         # ブロック毎に経路探索
-        current_robot = robot
-        _block_coords += [end_coordinate]
-        for block_coord in _block_coords:
-            current_robot = navigator.navigate(current_robot, block_coord, circle_color_mapping)
-            if current_robot is None:
+        for block_coord in block_order:
+            robot = self.simulate_route(robot, block_coord)
+            # 探索に失敗した場合
+            if robot is None:
+                # 動作ファイルを書き換えずに処理を終了(デフォルトのファイルが使用されるはず)
                 exit()
-        robots += [current_robot]
-    # 初期状態が南を向いている場合
-    for _block_coords in [list(coords) for coords in it.permutations(block_coords)]:
-        # ブロック毎に経路探索
-        current_robot = robot2
-        _block_coords += [end_coordinate]
-        for block_coord in _block_coords:
-            current_robot = navigator.navigate(current_robot, block_coord, circle_color_mapping)
-            if current_robot is None:
-                exit()
-        robots += [current_robot]
-    for motion in sorted(robots)[0].motions:
-        print(motion.make_command())
+        # 終了状態の座標への経路探索
+        robot = self.simulate_route(robot, end_robot.get_coord())
+        # 終了状態に方角を合わせる
+        angle_diff = end_robot.direction - robot.direction
+        if angle_diff:
+            robot.direction = end_robot.direction
+            robot.motions.append(Motion({
+                "command": "PR",
+                "pwm": 75,
+                "angle": abs(angle_diff),
+                "direction": "clockwise" if angle_diff > 0 else "anticlockwise",
+                "comment": f"({robot.y} {robot.x} {robot.direction.name})",
+            }))
+
+        # コマンドを出力する
+        for motion in robot.motions:
+            print(motion.make_command())

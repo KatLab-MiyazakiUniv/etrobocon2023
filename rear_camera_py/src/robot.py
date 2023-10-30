@@ -7,6 +7,7 @@ from enum import Enum
 from motion import Motion, Straight, Curve
 from block_area_map import BlockAreaMap
 
+
 class Robot:
     """ロボットの状態を保持するクラス."""
 
@@ -66,28 +67,26 @@ class Robot:
         """
         return (self.y, self.x)
 
-    def get_transitionable_robots(self, map_shape, circle_color_mapping):
+    def get_transitionable_robots(self, circle_color_map):
         """一つの動作で遷移可能なロボットの状態のリストを返す.
 
         Args:
-            map_shape ([int]): マップ情報の次元
-            circle_color_mapping ({(str):(int, int)}): サークルの色を示す辞書
+            circle_color_map ([[str]]): マップ上のサークルの色
         Returns:
             transitionable_robots ([Robot]): 遷移可能なロボットのリスト
         """
         transitionable_robots = []
-        max_y, max_x, *_ = map_shape
-        color = None
+        max_y, max_x, *_ = circle_color_map.shape
         # 各方角に対する動作について
         for direct in Direction:
             if direct == self.direction:
                 # 進行方向の方角については、前進することを考慮する
                 forward_y, forward_x = self.get_forward_coord()
-                next_circle = (forward_x, forward_y)
-                for target_color, circle_coords in circle_color_mapping.items():
-                    if next_circle in circle_coords:
-                        color = target_color
-                
+                # 座標がマップ外であれば
+                if forward_y < 0 or max_y <= forward_y \
+                        or forward_x < 0 or max_x <= forward_x:
+                    continue
+                color = circle_color_map[forward_y][forward_x]
                 comment = f"({forward_y} {forward_x} {self.direction.name})"
                 motion = Straight(color, comment)
                 next_robot = Robot(forward_y, forward_x, self.direction,
@@ -99,10 +98,8 @@ class Robot:
                 motion = Curve(rotation_angle, comment)
                 next_robot = Robot(self.y, self.x, direct,
                                    self.motions + [motion], self.cost + motion.cost)
-            # 座標がマップ上であれば
-            if 0 <= next_robot.y < max_y and 0 <= next_robot.x < max_x:
-                # 1つの動作を追加したロボットの状態を保持する
-                transitionable_robots += [next_robot]
+            # 1つの動作を追加したロボットの状態を保持する
+            transitionable_robots += [next_robot]
         return transitionable_robots
 
     def get_forward_coord(self) -> (int, int):
@@ -127,6 +124,7 @@ class Robot:
 
 class Direction(Enum):
     """方角を保持するクラス."""
+
     N = 0     # 北
     E = 1     # 東
     S = 2     # 南
@@ -139,18 +137,11 @@ class Direction(Enum):
             angle (int): 方角間の角度の差
         """
         diff = (self.value - other.value) % len(Direction)
+        # 方角の差が180度以下相当の場合
         if diff <= len(Direction) / 2:
-            # 右回りの場合
+            # 右回り
             angle = diff * 360 / len(Direction)
         else:
-            # 左周りの場合
+            # 左周り
             angle = (diff - len(Direction)) * 360 / len(Direction)
         return angle
-
-
-class Color(Enum):
-    """色を保持するクラス."""
-    RED = 0  # 赤
-    GREEN = 1  # 緑
-    BLUE = 2  # 青
-    YELLOW = 3  # 黄
