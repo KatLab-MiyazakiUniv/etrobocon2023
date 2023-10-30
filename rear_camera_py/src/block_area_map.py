@@ -25,6 +25,11 @@ class BlockAreaMap:
         """
         self.block_map = block_map
 
+        # ブロックの座標のリスト
+        block_coords = np.transpose(np.nonzero(self.block_map))
+        # 型をタプルに統一する
+        self.block_coords = [tuple(coord) for coord in block_coords]
+
         # L/Rに合わせてサークルの色を設定
         if is_left_course:
             self.circle_color_map = BlockAreaMap.L_COURSE_CIRCLE_COLOR_MAP

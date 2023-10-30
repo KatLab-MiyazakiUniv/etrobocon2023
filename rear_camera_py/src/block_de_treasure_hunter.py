@@ -23,7 +23,7 @@ class BlockDeTreasureHunter:
         # TODO: ここから、マージする際に差し替える
         length = 4
         block_map = np.zeros((length, length))
-        dummy_block_coords = [(2, 0), (1, 3)]
+        dummy_block_coords = [(3, 3), (0, 3)]
         treasure_block_coord = (0, 0)
         for (y, x) in dummy_block_coords:
             block_map[y][x] = 1
