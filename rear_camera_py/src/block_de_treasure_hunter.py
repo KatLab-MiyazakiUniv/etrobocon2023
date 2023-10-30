@@ -3,6 +3,7 @@
 @author: miyashita64 YKhm20020
 """
 
+import sys
 import numpy as np
 from block_area_map import BlockAreaMap
 from navigator import Navigator
@@ -57,6 +58,13 @@ class BlockDeTreasureHunter:
 
 
 if __name__ == "__main__":
-    is_left_course = True
-    hunter = BlockDeTreasureHunter()
-    hunter.hunt(is_left_course)
+    args = sys.argv
+    if 2 <= len(args):
+        if args[1] == "true" or args[1] == "false":
+            is_left_course = args[1] == "true"
+            hunter = BlockDeTreasureHunter()
+            hunter.hunt(is_left_course)
+        else:
+            print("An invalid argument was given.")
+    else:
+        print("The argument is_left_course was not given.")
