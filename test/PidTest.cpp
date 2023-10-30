@@ -49,7 +49,7 @@ namespace etrobocon2023_test {
     double kd = 0.03;
     double targetValue = 70;
     double initDeviation = 0;      // 偏差の初期値
-    double timeConstant = 0.0012;  // 時定数
+    double timeConstant = 0.001;  // 時定数
     Pid actualPid(kp, ki, kd, targetValue, initDeviation, timeConstant);
     double currentValue = 20;
     double preDeviation = 0;
@@ -72,7 +72,7 @@ namespace etrobocon2023_test {
     double kd = 0.0;
     double targetValue = 0;
     double initDeviation = 0;      // 偏差の初期値
-    double timeConstant = 0.0012;  // 時定数
+    double timeConstant = 0.001;  // 時定数
     Pid actualPid(kp, ki, kd, targetValue, initDeviation, timeConstant);
     double currentValue = 40;
     double preDeviation = 0;
@@ -95,7 +95,7 @@ namespace etrobocon2023_test {
     double kd = -0.175;
     double targetValue = 100;
     double initDeviation = 0;      // 偏差の初期値
-    double timeConstant = 0.0012;  // 時定数
+    double timeConstant = 0.001;  // 時定数
     Pid actualPid(kp, ki, kd, targetValue, initDeviation, timeConstant);
     double currentValue = 0;
     double preDeviation = 0;
@@ -118,7 +118,7 @@ namespace etrobocon2023_test {
     double kd = 0.03;
     double targetValue = 70;
     double initDeviation = 0;      // 偏差の初期値
-    double timeConstant = 0.0012;  // 時定数
+    double timeConstant = 0.001;  // 時定数
     Pid actualPid(kp, ki, kd, targetValue, initDeviation, timeConstant);
     double currentValue = 55;
     double preDeviation = 0;
@@ -142,7 +142,7 @@ namespace etrobocon2023_test {
     double kd = 0.03;
     double targetValue = 70;
     double initDeviation = 0;      // 偏差の初期値
-    double timeConstant = 0.0012;  // 時定数
+    double timeConstant = 0.001;  // 時定数
     Pid actualPid(kp, ki, kd, targetValue, initDeviation, timeConstant);
     double currentValue = 55;
     double preDeviation = 0;
@@ -168,7 +168,7 @@ namespace etrobocon2023_test {
     double kd = 0.03;
     double targetValue = 70;
     double initDeviation = 0;      // 偏差の初期値
-    double timeConstant = 0.0012;  // 時定数
+    double timeConstant = 0.001;  // 時定数
     Pid actualPid(kp, ki, kd, targetValue, initDeviation, timeConstant);
     double currentValue = 55;
     double preDeviation = 0;
@@ -193,7 +193,7 @@ namespace etrobocon2023_test {
     double kd = 0.01;
     double targetValue = 70;
     double initDeviation = 0;      // 偏差の初期値
-    double timeConstant = 0.0012;  // 時定数
+    double timeConstant = 0.001;  // 時定数
     Pid actualPid(kp, ki, kd, targetValue, initDeviation, timeConstant);
     double currentValue = 60;
     double preDeviation = 0;
@@ -266,7 +266,7 @@ namespace etrobocon2023_test {
     double kd = 1.0;
     double targetValue = 70;
     double initDeviation = 0;      // 偏差の初期値
-    double timeConstant = 0.0012;  // 時定数
+    double timeConstant = 0.001;  // 時定数
     Pid actualPid(kp, ki, kd, targetValue, initDeviation, timeConstant);
     double currentValue = 60;
     double preDeviation = 0;
