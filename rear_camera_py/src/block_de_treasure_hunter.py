@@ -23,8 +23,8 @@ class BlockDeTreasureHunter:
         # TODO: ここから、マージする際に差し替える
         length = 4
         block_map = np.zeros((length, length))
-        dummy_block_coords = [(0, 3), (3, 3)]
-        treasure_block_coord = (3, 0)
+        dummy_block_coords = [(2, 0), (1, 3)]
+        treasure_block_coord = (0, 0)
         for (y, x) in dummy_block_coords:
             block_map[y][x] = 1
         block_map[treasure_block_coord[0], treasure_block_coord[1]] = 2
@@ -47,10 +47,9 @@ class BlockDeTreasureHunter:
             start_coord = (2, 3)
             end_coord = (1, 0)
         # ロボット初期化
+        comment = f"start = ({start_coord[0]} {start_coord[1]} {start_direction.name})"
         start_robot = Robot(*start_coord, start_direction,
-                            [Motion(
-                                {"comment": f"start = ({start_coord[0]} {start_coord[1]} \
-                                     {start_direction.name})"})])
+                            [Motion({"comment": comment})])
         end_robot = Robot(*end_coord, end_direction)
 
         # 動作を計画する
