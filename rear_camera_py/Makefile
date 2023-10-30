@@ -79,7 +79,16 @@ create-env-rear:
 
 ## 作業用 ##
 get_area:
-	python src/get_area_info.py
+	python src/get_area_info.py -develop
+
+get_area2:
+	python src/get_area_info2.py -develop
 
 coodinate:
 	python work/search_coodinate.py
+
+zikken:
+	python src/zikken.py
+
+make rm:
+	rm work_image_data/*.png
