@@ -54,12 +54,14 @@ class Navigator:
         print("\nFailed simulate.\n")
         return None
 
-    def navigate(self, start_robot, end_robot) -> None:
+    def navigate(self, start_robot, end_robot) -> Robot:
         """ロボットの動作を計画する.
 
         Args:
             start_robot (Robot): ロボットの開始状態
             end_robot (Robot): ロボットの終了状態
+        Returns:
+            best_robot (Robot): 最適な経路を走行したロボットの状態
         """
         robots = []
         # ブロックの運搬順の全ての組み合わせについて繰り返す
@@ -88,8 +90,6 @@ class Navigator:
                 }))
             robots += [robot]
 
-        # 動作コストが最も小さいロボットを抽出
+        # 動作コストが最も小さいロボットを返す
         best_robot = sorted(robots)[0]
-        # コマンドを出力する
-        for motion in best_robot.motions:
-            print(motion.make_command())
+        return best_robot

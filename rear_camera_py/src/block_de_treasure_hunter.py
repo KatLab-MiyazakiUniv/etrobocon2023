@@ -54,7 +54,15 @@ class BlockDeTreasureHunter:
         end_robot = Robot(*end_coord, end_direction)
 
         # 動作を計画する
-        navigator.navigate(start_robot, end_robot)
+        robot = navigator.navigate(start_robot, end_robot)
+        # コマンドを出力する
+        commands = ""
+        for motion in robot.motions:
+            commands += f"{motion.make_command()}\n"
+        # TODO: ブロックdeトレジャーハンター攻略の詳細が決まり次第パスを設定しなおす
+        # 既存のコマンドファイルを書き換えたくないので、Left/Rightはあえて入れていません。
+        with open("../../datafiles/BlockDeTreasure.csv", "w") as f:
+            f.write(commands)
 
 
 if __name__ == "__main__":
