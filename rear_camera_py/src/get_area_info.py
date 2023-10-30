@@ -295,88 +295,97 @@ class GetAreaInfo:
                             color_2_img,
                             color_5_circle_img,
                             coodinate,
+                            develop_img=None,
                             color=Color.RED.value):
-        """より細かなブロックの位置を特定."""
+        """ブロックの正確な位置を特定."""
         detect_flag = 0
         x_max, x_min, y_max, y_min = None, None, None, None
-        develop_img = color_2_img.copy()
+        if develop_img is None:
+            develop_img = color_2_img.copy()
 
-        try:
-            for y in range(coodinate[2], color_2_img.shape[0]):
-                develop_img[coodinate[2]:y, coodinate[1]:coodinate[1]+self.mask_width] = Color.BLACK.value
-                mask = color_2_img[y, coodinate[1]:coodinate[1]+self.mask_width]
-                count_pixcel_red = np.count_nonzero(np.all(mask == color, axis=-1))
-                if count_pixcel_red <= int(self.mask_width*0.3) and detect_flag == 1:
-                    y_max = y
-                    detect_flag = 0
-                    break
-                elif count_pixcel_red > int(self.mask_width*0.3):
-                    detect_flag = 1
-                if y == color_2_img.shape[0]-1:
-                    if detect_flag == 1:
-                        y_max = color_2_img.shape[0]-1
-                    else:
-                        raise ValueError("ブロック(色)が見つかりません")
+        # 下
+        for y in range(coodinate[2], color_2_img.shape[0]):
+            develop_img[coodinate[2]:y, coodinate[1]
+                :coodinate[1]+self.mask_width] = Color.BLACK.value
+            mask = color_2_img[y, coodinate[1]:coodinate[1]+self.mask_width]
+            count_pixcel_red = np.count_nonzero(np.all(mask == color, axis=-1))
+            if count_pixcel_red <= int(self.mask_width*0.3) and detect_flag == 1:
+                y_max = y
+                detect_flag = 0
+                break
+            elif count_pixcel_red > int(self.mask_width*0.3):
+                detect_flag = 1
+            if y == color_2_img.shape[0]-1:
+                if detect_flag == 1:
+                    y_max = color_2_img.shape[0]-1
+                else:
+                    raise ValueError("ブロック(色)が見つかりません")
 
-            for y in range(y_max, 0, -1):
-                mask = color_2_img[y, coodinate[1]:coodinate[1]+self.mask_width]
-                count_pixcel_red = np.count_nonzero(np.all(mask == color, axis=-1))
-                if count_pixcel_red <= int(self.mask_width*0.3) and detect_flag == 1:
-                    y_min = y
-                    detect_flag = 0
-                    break
-                elif count_pixcel_red > int(self.mask_width*0.3):
-                    detect_flag = 1
-                if y == 1:
-                    if detect_flag == 1:
-                        y_min = 1
-                    else:
-                        raise ValueError("ブロック(色)が見つかりません")
+        for y in range(y_max, 0, -1):
+            mask = color_2_img[y, coodinate[1]:coodinate[1]+self.mask_width]
+            count_pixcel_red = np.count_nonzero(np.all(mask == color, axis=-1))
+            if count_pixcel_red <= int(self.mask_width*0.3) and detect_flag == 1:
+                y_min = y
+                detect_flag = 0
+                break
+            elif count_pixcel_red > int(self.mask_width*0.3):
+                detect_flag = 1
+            if y == 1:
+                if detect_flag == 1:
+                    y_min = 1
+                else:
+                    raise ValueError("ブロック(色)が見つかりません")
 
-            for x in range(coodinate[1]-self.mask_width, color_2_img.shape[1]):
-                if x >= color_2_img.shape[1]:
-                    x_max = color_2_img.shape[1]
-                    break
-                mask = color_2_img[coodinate[2]:coodinate[2]+self.mask_height, x]
-                count_pixcel_red = np.count_nonzero(np.all(mask == color, axis=-1))
-                if count_pixcel_red <= int(self.mask_height*0.25) and detect_flag == 1:
-                    x_max = x
-                    detect_flag = 0
-                    break
-                elif count_pixcel_red > int(self.mask_height*0.25):
-                    detect_flag = 1
-                if x == color_2_img.shape[1]-1:
-                    if detect_flag == 1:
-                        x_max = color_2_img.shape[1]-1
-                    else:
-                        raise ValueError("ブロック(色)が見つかりません")
+        for x in range(coodinate[1]-self.mask_width, color_2_img.shape[1]):
+            if x >= color_2_img.shape[1]:
+                x_max = color_2_img.shape[1]
+                break
+            mask = color_2_img[coodinate[2]:coodinate[2]+self.mask_height, x]
+            count_pixcel_red = np.count_nonzero(np.all(mask == color, axis=-1))
+            if count_pixcel_red <= int(self.mask_height*0.25) and detect_flag == 1:
+                x_max = x
+                detect_flag = 0
+                break
+            elif count_pixcel_red > int(self.mask_height*0.25):
+                detect_flag = 1
+            if x == color_2_img.shape[1]-1:
+                if detect_flag == 1:
+                    x_max = color_2_img.shape[1]-1
+                else:
+                    raise ValueError("ブロック(色)が見つかりません")
 
-            for x in range(x_max, 0, -1):
-                mask = color_2_img[coodinate[2]:coodinate[2]+self.mask_height, x]
-                count_pixcel_red = np.count_nonzero(np.all(mask == color, axis=-1))
-                if count_pixcel_red <= int(self.mask_height*0.25) and detect_flag == 1:
-                    x_min = x
-                    break
-                elif count_pixcel_red > int(self.mask_height*0.25):
-                    detect_flag = 1
-                if x == 1:
-                    if detect_flag == 1:
-                        x_min = 1
-                    else:
-                        raise ValueError("ブロック(色)が見つかりません")
-        finally:
-            if self.develop:
-                save_path = os.path.join(self.save_dir_path, "search.png")
-                cv2.imwrite(save_path, develop_img)
+        for x in range(x_max, 0, -1):
+            mask = color_2_img[coodinate[2]:coodinate[2]+self.mask_height, x]
+            count_pixcel_red = np.count_nonzero(np.all(mask == color, axis=-1))
+            if count_pixcel_red <= int(self.mask_height*0.25) and detect_flag == 1:
+                x_min = x
+                break
+            elif count_pixcel_red > int(self.mask_height*0.25):
+                detect_flag = 1
+            if x == 1:
+                if detect_flag == 1:
+                    x_min = 1
+                else:
+                    raise ValueError("ブロック(色)が見つかりません")
+        if self.develop:
+            develop_img[y_min:y_min+2, :] = Color.BLACK.value
+            develop_img[y_max:y_max+2, :] = Color.BLACK.value
+            develop_img[:, x_min:x_min+2] = Color.BLACK.value
+            develop_img[:, x_max:x_max+2] = Color.BLACK.value
 
-        return x_max, x_min, y_max, y_min
+        return x_max, x_min, y_max, y_min, develop_img
 
-    def check_block_coordi(self, color_2_img, split_num_height, block_thre=100):
+    def check_block_coordi(self,
+                           color_2_img,
+                           develop_img=None,
+                           split_num_height=4,
+                           block_thre=100):
         """ブロックのおおまかな場所を特定する関数.
 
         TODO:ブロックが見つからなかった場合の処理を書く
         """
-        develop_block_coodi_img = color_2_img.copy()
+        if develop_img is None:
+            develop_img = color_2_img.copy()
 
         # (ピクセル数, x, y)
         block_coodi_red = np.array([0, 0, 0])
@@ -386,11 +395,11 @@ class GetAreaInfo:
         # おおまかなブロックの場所を特定
         for x in range(0, int(color_2_img.shape[1]-self.mask_width), self.mask_width):
             if self.develop:
-                develop_block_coodi_img[self.mask_height + 2, x] = Color.BLACK.value
-                develop_block_coodi_img[self.mask_height*2+2, x] = Color.BLACK.value
-                develop_block_coodi_img[self.mask_height*3+2, x] = Color.BLACK.value
-                develop_block_coodi_img[self.mask_height, :] = Color.BLACK.value
-                develop_block_coodi_img[:, self.mask_width] = Color.BLACK.value
+                develop_img[self.mask_height + 2, x] = Color.BLACK.value
+                develop_img[self.mask_height*2+2, x] = Color.BLACK.value
+                develop_img[self.mask_height*3+2, x] = Color.BLACK.value
+                develop_img[self.mask_height, :] = Color.BLACK.value
+                develop_img[:, self.mask_width] = Color.BLACK.value
             masks = []
             for i in range(split_num_height):
                 masks.append(color_2_img[self.mask_height *
@@ -412,16 +421,16 @@ class GetAreaInfo:
 
         if self.develop:
             if not np.all(block_coodi_red == 0):
-                develop_block_coodi_img[block_coodi_red[2]:block_coodi_red[2]+self.mask_height,
-                                        block_coodi_red[1]:block_coodi_red[1]+self.mask_width] = Color.BLACK.value
+                develop_img[block_coodi_red[2]:block_coodi_red[2]+self.mask_height,
+                            block_coodi_red[1]:block_coodi_red[1]+self.mask_width] = Color.BLACK.value
             if not np.all(block_coodi_blue[0] == 0):
-                develop_block_coodi_img[block_coodi_blue[0, 2]:block_coodi_blue[0, 2]+self.mask_height,
-                                        block_coodi_blue[0, 1]:block_coodi_blue[0, 1]+self.mask_width] = Color.GREEN.value
+                develop_img[block_coodi_blue[0, 2]:block_coodi_blue[0, 2]+self.mask_height,
+                            block_coodi_blue[0, 1]:block_coodi_blue[0, 1]+self.mask_width] = Color.GREEN.value
             if not np.all(block_coodi_blue[1] == 0):
-                develop_block_coodi_img[block_coodi_blue[1, 2]:block_coodi_blue[1, 2]+self.mask_height,
-                                        block_coodi_blue[1, 1]:block_coodi_blue[1, 1]+self.mask_width] = Color.YELLOW.value
+                develop_img[block_coodi_blue[1, 2]:block_coodi_blue[1, 2]+self.mask_height,
+                            block_coodi_blue[1, 1]:block_coodi_blue[1, 1]+self.mask_width] = Color.YELLOW.value
 
-        return block_coodi_red, block_coodi_blue, develop_block_coodi_img
+        return block_coodi_red, block_coodi_blue, develop_img
 
     def get_front_area(self, color_2_img, delete_front_color_5_img, binary_img, black_line_img):
         """エリア情報を生成する関数.
@@ -566,7 +575,8 @@ class GetAreaInfo:
                             self.block_count_blue += 1
                         if red_index_mask2 > circle_index_thred:  # ブロックが赤
                             self.course_info_block[3, 3] = self.red_block_num
-                            self.block_coordi_red = np.array([int(x+mask_width*0.25), y-mask_height*2])
+                            self.block_coordi_red = np.array(
+                                [int(x+mask_width*0.25), y-mask_height*2])
                             self.block_count_red += 1
                         break
 
@@ -725,92 +735,97 @@ class GetAreaInfo:
         split_num_width = 30
         self.mask_height = int(game_area_img.shape[0] / split_num_height)
         self.mask_width = int(game_area_img.shape[1] / split_num_width)
-        """
-        # block_coodi_red = [ピクセル数, x, y]
-        # block_coodi_blue = [[ピクセル数, x, y], [ピクセル数, x, y]]
-        block_coodi_red, block_coodi_blue, develop_block_coodi_img = \
-            self.check_block_coordi(color_2_img, split_num_height)
-        if self.develop:
-            save_path = os.path.join(self.save_dir_path, "block_coodi_img.png")
-            cv2.imwrite(save_path, develop_block_coodi_img)
 
-        # こまかな座標を特定
-        if not np.all(block_coodi_red == 0):
-            print("OK1")
-            x_max, x_min, y_max, y_min = self.check_coordi_ditail(color_2_img,
-                                                                  color_5_circle_img,
-                                                                  block_coodi_red,
-                                                                  color=Color.RED.value)
-            self.block_coordi_red_ditail = np.array([x_max, x_min, y_max, y_min])
-            color_5_circle_img[y_min:y_max, x_min:x_max] = Color.WHITE.value
+        ### コース手前の情報を取得 ###
+        develop_img = color_2_img.copy()
+        delete_front_color_5_img = color_5_img.copy()
+        self.get_front_area(color_2_img, delete_front_color_5_img, binary_img, black_line_img)
 
-        if not np.all(block_coodi_blue[0] == 0):
-            print("OK2")
-            x_max, x_min, y_max, y_min = self.check_coordi_ditail(color_2_img,
-                                                                  color_5_circle_img,
-                                                                  block_coodi_blue[0],
-                                                                  color=Color.BLUE.value)
+        if not np.all(self.block_coordi_red == 0):
+            print("red")
+            coordi = np.array([0, self.block_coordi_red[0], self.block_coordi_red[1]])
+            x_max, x_min, y_max, y_min, develop_img = self.check_coordi_ditail(color_2_img,
+                                                                               delete_front_color_5_img,
+                                                                               coordi,
+                                                                               develop_img,
+                                                                               color=Color.RED.value)
             self.block_coordi_blue_ditail[1] = np.array([x_max, x_min, y_max, y_min])
-            color_5_circle_img[y_min:y_max, x_min:x_max] = Color.WHITE.value
-
-        if not np.all(block_coodi_blue[1] == 0):
-            print("OK3")
-            x_max, x_min, y_max, y_min = self.check_coordi_ditail(color_2_img,
-                                                                  color_5_circle_img,
-                                                                  block_coodi_blue[1],
-                                                                  color=Color.BLUE.value)
-            self.block_coordi_blue_ditail[1] = np.array([x_max, x_min, y_max, y_min])
-            color_5_circle_img[y_min:y_max, x_min:x_max] = Color.WHITE.value
-        # """
-        try:
-
-            # コース手前の情報を取得
-            delete_front_color_5_img = color_5_img.copy()
-            self.get_front_area(color_2_img, delete_front_color_5_img, binary_img, black_line_img)
-            # if self.block_coordi_red == 1 and  self.block_coordi_blue == 2:
-            #     print("ブロックすべて発見")
-            #     return self.course_info_block
-
-            if not np.all(self.block_coordi_red == 0):
-                color_5_img[:, self.block_coordi_red[0]:self.block_coordi_red[0]+2] = Color.BLACK.value # 開発用
-                color_5_img[self.block_coordi_red[1]:self.block_coordi_red[1]+2, :] = Color.BLACK.value # 開発用
-                coordi = np.array([0, self.block_coordi_red[0], self.block_coordi_red[1]])
-                x_max, x_min, y_max, y_min = self.check_coordi_ditail(color_2_img,
-                                                                      delete_front_color_5_img,
-                                                                      coordi,
-                                                                      color=Color.RED.value)
-                self.block_coordi_blue_ditail[1] = np.array([x_max, x_min, y_max, y_min])
-                color_5_img[y_min:y_max, x_min:x_max] = Color.WHITE.value
-
-            if not np.all(self.block_coordi_blue[0] == 0):
-                color_5_img[:, self.block_coordi_blue[0, 0]:self.block_coordi_blue[0, 0]+2] = Color.BLUE.value # 開発用
-                color_5_img[self.block_coordi_blue[0, 1]:self.block_coordi_blue[0, 1]+2, :] = Color.BLUE.value # 開発用
-                coordi = np.array([0, self.block_coordi_blue[0, 0], self.block_coordi_blue[0, 1]])
-                x_max, x_min, y_max, y_min = self.check_coordi_ditail(color_2_img,
-                                                                      delete_front_color_5_img,
-                                                                      coordi,
-                                                                      color=Color.BLUE.value)
-                self.block_coordi_blue_ditail[1] = np.array([x_max, x_min, y_max, y_min])
-                color_5_img[y_min:y_max, x_min:x_max] = Color.WHITE.value
-
-            if not np.all(self.block_coordi_blue[1] == 0):
-                color_5_img[:, self.block_coordi_blue[1, 0]:self.block_coordi_blue[1, 0]+2] = Color.GREEN.value # 開発用
-                color_5_img[self.block_coordi_blue[1, 1]:self.block_coordi_blue[1, 1]+2, :] = Color.GREEN.value # 開発用
-                coordi = np.array([0, self.block_coordi_blue[1, 0], self.block_coordi_blue[1, 1]])
-                x_max, x_min, y_max, y_min = self.check_coordi_ditail(color_2_img,
-                                                                      delete_front_color_5_img,
-                                                                      coordi,
-                                                                      color=Color.BLUE.value)
-                self.block_coordi_blue_ditail[1] = np.array([x_max, x_min, y_max, y_min])
-                color_5_img[y_min:y_max, x_min:x_max] = Color.WHITE.value
-
-        finally:
             if self.develop:
-                save_path = os.path.join(self.save_dir_path, "binary_img.png")
-                cv2.imwrite(save_path, binary_img)
-                save_path = os.path.join(self.save_dir_path, "delete_front_color_5_img.png")
-                cv2.imwrite(save_path, color_5_img)
+                color_5_img[:, self.block_coordi_red[0]                            :self.block_coordi_red[0]+2] = Color.BLACK.value  # 開発用
+                color_5_img[self.block_coordi_red[1]                            :self.block_coordi_red[1]+2, :] = Color.BLACK.value  # 開発用
+                color_5_img[y_min:y_max, x_min:x_max] = Color.WHITE.value
+                save_path = os.path.join(self.save_dir_path, "search.png")
+                cv2.imwrite(save_path, develop_img)
 
+        if not np.all(self.block_coordi_blue[0] == 0):
+            print("blue1")
+            coordi = np.array([0, self.block_coordi_blue[0, 0], self.block_coordi_blue[0, 1]])
+            x_max, x_min, y_max, y_min, develop_img = self.check_coordi_ditail(color_2_img,
+                                                                               delete_front_color_5_img,
+                                                                               coordi,
+                                                                               develop_img,
+                                                                               color=Color.BLUE.value)
+            self.block_coordi_blue_ditail[1] = np.array([x_max, x_min, y_max, y_min])
+            if self.develop:
+                color_5_img[:, self.block_coordi_blue[0, 0]                            :self.block_coordi_blue[0, 0]+2] = Color.BLUE.value  # 開発用
+                color_5_img[self.block_coordi_blue[0, 1]                            :self.block_coordi_blue[0, 1]+2, :] = Color.BLUE.value  # 開発用
+                color_5_img[y_min:y_max, x_min:x_max] = Color.WHITE.value
+                save_path = os.path.join(self.save_dir_path, "search.png")
+                cv2.imwrite(save_path, develop_img)
+
+        if not np.all(self.block_coordi_blue[1] == 0):
+            print("blue2")
+            coordi = np.array([0, self.block_coordi_blue[1, 0], self.block_coordi_blue[1, 1]])
+            x_max, x_min, y_max, y_min, develop_img = self.check_coordi_ditail(color_2_img,
+                                                                               delete_front_color_5_img,
+                                                                               coordi,
+                                                                               develop_img,
+                                                                               color=Color.BLUE.value)
+            self.block_coordi_blue_ditail[1] = np.array([x_max, x_min, y_max, y_min])
+            if self.develop:
+                color_5_img[:, self.block_coordi_blue[1, 0]                            :self.block_coordi_blue[1, 0]+2] = Color.GREEN.value  # 開発用
+                color_5_img[self.block_coordi_blue[1, 1]                            :self.block_coordi_blue[1, 1]+2, :] = Color.GREEN.value  # 開発用
+                color_5_img[y_min:y_max, x_min:x_max] = Color.WHITE.value
+                save_path = os.path.join(self.save_dir_path, "search.png")
+                cv2.imwrite(save_path, develop_img)
+
+        # すべてのブロックを手前の列で見つけた場合、終了
+        if self.block_count_red + self.block_count_blue > 2:
+            print("ブロックすべて発見")
+            return self.course_info_block
+        # """
+
+        ### 後ろのブロックを探索 ###
+        # 赤がまだ未発見
+        if self.block_count_red == 0:
+            # 大まかなブロックンの場所を探索
+            block_coodi_red, _, develop_img = develop_block_coodi_img = \
+                self.check_block_coordi(color_2_img,
+                                        develop_img=None)
+            if self.develop:
+                save_path = os.path.join(self.save_dir_path, "search_red.png")
+                cv2.imwrite(save_path, develop_img)
+
+            if not np.all(block_coodi_red == 0):
+                # 細かなブロックの場所を探索
+                x_max, x_min, y_max, y_min, develop_img = self.check_coordi_ditail(color_2_img,
+                                                                                   delete_front_color_5_img,
+                                                                                   block_coodi_red,
+                                                                                   develop_img,
+                                                                                   color=Color.RED.value)
+                if self.develop:
+                    save_path = os.path.join(self.save_dir_path, "search_red_detail.png")
+                    cv2.imwrite(save_path, develop_img)
+
+                # ブロックの位置からコース情報を取得
+                block_coodi = np.array([x_max, x_min, y_max, y_min])
+                self.get_arround_block(block_coodi, search_block_number=1)
+
+        # 青がまだ未発見
+        if self.block_count_blue < 2:
+            pass
+
+        # """
         return self.course_info_block
 
 
@@ -831,13 +846,15 @@ if __name__ == "__main__":
     work_dir_path = os.path.join(PROJECT_DIR_PATH, "tests", "test_data", "block_area_img")
     save_dir_path = os.path.join(PROJECT_DIR_PATH, "work_image_data")
 
+    image_name = "0000_0002_0210_0000_1.png"
     # image_name = "0000_0002_0210_0000_6.png"
     # image_name = "0000_0002_0210_0000_8.png"
     # image_name = "0000_0020_0020_0010_10.png"
     # image_name = "0000_2000_0200_0010_12.png"
     # image_name = "0002_0100_0200_0000_13.png"
     # image_name = "1002_0000_0000_2000_15.png"
-    image_name = "2002_0000_0000_0001_18.png"
+    # image_name = "2002_0000_0000_0000_17.png"
+    # image_name = "2002_0000_0000_0001_18.png"
     # image_name = "2002_0000_0000_1000_19.png"
     # image_name = "0000_0000_0000_2012_20.png"
     info = GetAreaInfo(image_name, work_dir_path, save_dir_path, develop=args.develop)
@@ -845,10 +862,10 @@ if __name__ == "__main__":
         info.get_area_info(args.isR)
     finally:
         print(f"最終結果--------------------------------------------------------------")
-        print(f"self.block_count_red : {info.block_count_red}")
-        print(f"self.block_coordi_red : {info.block_coordi_red}")
-        print(f"self.block_count_blue: {info.block_count_blue}")
-        print(f"self.block_coordi_blue: {info.block_coordi_blue[0], info.block_coordi_blue[1]}")
+        # print(f"self.block_count_red : {info.block_count_red}")
+        # print(f"self.block_coordi_red : {info.block_coordi_red}")
+        # print(f"self.block_count_blue: {info.block_count_blue}")
+        # print(f"self.block_coordi_blue: {info.block_coordi_blue[0], info.block_coordi_blue[1]}")
         print(f"self.course_info_block:\n{info.course_info_block}")
         print(f"self.first_column_coordinate:\n{info.first_column_coordinate}")
         print(f"---------------------------------------------------------------------")
@@ -858,3 +875,41 @@ if __name__ == "__main__":
 
     print(f"実行時間: {str(execute_time)[:5]}s")
     print("完了！")
+
+    """
+    # block_coodi_red = [ピクセル数, x, y]
+    # block_coodi_blue = [[ピクセル数, x, y], [ピクセル数, x, y]]
+    block_coodi_red, block_coodi_blue, develop_block_coodi_img = \
+        self.check_block_coordi(color_2_img, split_num_height)
+    if self.develop:
+        save_path = os.path.join(self.save_dir_path, "block_coodi_img.png")
+        cv2.imwrite(save_path, develop_block_coodi_img)
+
+    # こまかな座標を特定
+    if not np.all(block_coodi_red == 0):
+        print("OK1")
+        x_max, x_min, y_max, y_min = self.check_coordi_ditail(color_2_img,
+                                                                color_5_circle_img,
+                                                                block_coodi_red,
+                                                                color=Color.RED.value)
+        self.block_coordi_red_ditail = np.array([x_max, x_min, y_max, y_min])
+        color_5_circle_img[y_min:y_max, x_min:x_max] = Color.WHITE.value
+
+    if not np.all(block_coodi_blue[0] == 0):
+        print("OK2")
+        x_max, x_min, y_max, y_min = self.check_coordi_ditail(color_2_img,
+                                                                color_5_circle_img,
+                                                                block_coodi_blue[0],
+                                                                color=Color.BLUE.value)
+        self.block_coordi_blue_ditail[1] = np.array([x_max, x_min, y_max, y_min])
+        color_5_circle_img[y_min:y_max, x_min:x_max] = Color.WHITE.value
+
+    if not np.all(block_coodi_blue[1] == 0):
+        print("OK3")
+        x_max, x_min, y_max, y_min = self.check_coordi_ditail(color_2_img,
+                                                                color_5_circle_img,
+                                                                block_coodi_blue[1],
+                                                                color=Color.BLUE.value)
+        self.block_coordi_blue_ditail[1] = np.array([x_max, x_min, y_max, y_min])
+        color_5_circle_img[y_min:y_max, x_min:x_max] = Color.WHITE.value
+    # """
