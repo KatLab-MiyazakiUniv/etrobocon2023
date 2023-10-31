@@ -73,12 +73,12 @@ class Measurer {
   /**
    * アームモータ角位置を更新
    */
-  void setArmMotorCount(int count);
+  static void setArmMotorCount(int count);
 
   /**
    * アームモータ角位置を初期化
    */
-  void resetArmMotorCount();
+  static void resetArmMotorCount();
 
   /**
    * 正面から見て左ボタンの押下状態を取得
