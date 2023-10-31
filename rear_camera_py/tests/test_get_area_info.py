@@ -36,6 +36,8 @@ class TestRoboSnap(unittest.TestCase):
             expect_info[:3, :] = 0  # 完成したらいらないはずの処理
             # expect_info[2, 3] = int(img[4*3-1])  # 完成したらいらないはずの処理
 
+        # """
+        
             info = GetAreaInfo(img_name, self.test_image_dir, develop=False)
             course_info = info.get_area_info(isR=True)
 
@@ -45,3 +47,4 @@ class TestRoboSnap(unittest.TestCase):
                 print(f"expect_info\n: {expect_info}")
                 print(f"course_info\n: {course_info}")
                 assert False
+        # """
