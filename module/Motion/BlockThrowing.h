@@ -34,6 +34,6 @@ class BlockThrowing : public CompositeMotion {
   const int preTargetAngle = 40;          // ブロック投げ入れのための目標回頭角度
   const int postTargetAngle = 38;         // 復帰するための目標回頭角度
   const int armPwm = 40;    // アーム動作のPWM
-  const int rotationPwm = 60;  // 回頭PWM
+  const int rotationPwm = 80;  // 回頭PWM
 };
 #endif

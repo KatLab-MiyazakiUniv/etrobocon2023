@@ -1,7 +1,7 @@
 /**
  * @file   MotionParser.cpp
  * @brief  動作コマンドファイルを解析するクラス
- * @author aridome222 bizyutyu
+ * @author aridome222 bizyutyu KakinokiKanta
  */
 
 #include "MotionParser.h"
@@ -168,6 +168,10 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
       Stop* st = new Stop();
 
       motionList.push_back(st);  // 動作リストに追加
+    } else if(command == COMMAND::BT) {  // ブロック投げ入れ
+      BlockThrowing* bt = new BlockThrowing();
+
+      motionList.push_back(bt);  // 動作リストに追加
     } else {                     // 未定義のコマンドの場合
       snprintf(buf, BUF_SIZE, "%s:%d: '%s' is undefined command", commandFilePath, lineNum,
                params[0]);
@@ -220,6 +224,8 @@ COMMAND MotionParser::convertCommand(char* str)
     return COMMAND::PR;
   } else if(strcmp(str, "ST") == 0) {  // 文字列がSTの場合
     return COMMAND::ST;
+  } else if(strcmp(str, "BT") == 0) {  // 文字列がBTの場合
+    return COMMAND::BT;
   } else {  // 想定していない文字列が来た場合
     return COMMAND::NONE;
   }

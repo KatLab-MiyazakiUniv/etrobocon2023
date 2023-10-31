@@ -1,7 +1,7 @@
 /**
  * @file   MotionParser.h
  * @brief  動作コマンドファイルを解析するクラス
- * @author aridome222 bizyutyu
+ * @author aridome222 bizyutyu KakinokiKanta
  */
 
 #ifndef MOTION_PARSER_H
@@ -31,6 +31,7 @@
 #include "PwmRotation.h"
 #include "Stop.h"
 #include "ArmMotion.h"
+#include "BlockThrowing.h"
 
 enum class COMMAND {
   DL,  // 指定距離ライントレース
@@ -51,6 +52,7 @@ enum class COMMAND {
   CM,  // 交点サークルから直線の中点
   PR,  // Pwm値指定回頭
   ST,  // 左右モーターストップ
+  BT,
   NONE
 };
 
