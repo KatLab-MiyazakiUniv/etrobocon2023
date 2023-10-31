@@ -167,7 +167,7 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
     } else if(command == COMMAND::ST) {  // 左右モーターストップ
       Stop* st = new Stop();
 
-      motionList.push_back(st);  // 動作リストに追加
+      motionList.push_back(st);          // 動作リストに追加
     } else if(command == COMMAND::BT) {  // ブロック投げ入れ
       BlockThrowing* bt = new BlockThrowing();
 

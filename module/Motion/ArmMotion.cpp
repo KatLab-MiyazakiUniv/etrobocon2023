@@ -60,13 +60,13 @@ void ArmMotion::run()
         break;
       }
       Controller::setArmMotorPwm(-pwm);
-    }else {
+    } else {
       if(currentCount > initCount - angle) {
         break;
       }
       Controller::setArmMotorPwm(pwm);
     }
-    
+
     // 10ミリ秒待機
     timer.sleep(10);
   }
