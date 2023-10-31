@@ -16,16 +16,20 @@ void BlockThrowing::run()
   ArmMotion lowerAM(-armTargetAngle, armPwm);
   PwmRotation prePR(preTargetAngle, rotationPwm, isClockwise);
   PwmRotation postPR(postTargetAngle, rotationPwm, !isClockwise);
+  DistanceStraight preDS(targetDistance, targetSpeed);
+  DistanceStraight postDS(targetDistance, -targetSpeed);
   Sleeping sl(500);
 
-  // ブロック投げ入れのための回頭をする
+  // ブロック投げ入れのための回頭と前進をする
   prePR.run();
   sl.run();
+  preDS.run();
 
-  // アームを上げてブロックを投げ入れる
+  // アームを上げてブロックを放す
   raiseAM.run();
 
-  // 復帰のための回頭をする
+  // 復帰のための後退と回頭をする
+  postDS.run();
   sl.run();
   postPR.run();
 
