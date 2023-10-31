@@ -34,7 +34,7 @@ class Straight(Motion):
         """コンストラクタ.
 
         Args:
-            color (str): 直進でライントレースする際に目標とする色
+            color (str): 交点サークルまでライントレースする際に目標とする色
             comment (str): 動作のコメント
         """
         self.params = {

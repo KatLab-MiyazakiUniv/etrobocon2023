@@ -67,6 +67,25 @@ class Robot:
         """
         return (self.y, self.x)
 
+    def get_forward_coord(self) -> (int, int):
+        """進行方向に進んだ座標を返す.
+
+        Returns:
+            forward_y (int): 進行方向に進んだ場合のy座標
+            forward_x (int): 進行方向に進んだ場合のx座標
+        """
+        forward_y = self.y
+        forward_x = self.x
+        if self.direction == Direction.N:
+            forward_y -= 1
+        elif self.direction == Direction.S:
+            forward_y += 1
+        elif self.direction == Direction.E:
+            forward_x += 1
+        elif self.direction == Direction.W:
+            forward_x -= 1
+        return forward_y, forward_x
+
     def get_transitionable_robots(self, circle_color_map):
         """一つの動作で遷移可能なロボットの状態のリストを返す.
 
@@ -102,25 +121,6 @@ class Robot:
             transitionable_robots += [next_robot]
         return transitionable_robots
 
-    def get_forward_coord(self) -> (int, int):
-        """進行方向に進んだ座標を返す.
-
-        Returns:
-            forward_y (int): 進行方向に進んだ場合のy座標
-            forward_x (int): 進行方向に進んだ場合のx座標
-        """
-        forward_y = self.y
-        forward_x = self.x
-        if self.direction == Direction.N:
-            forward_y -= 1
-        elif self.direction == Direction.S:
-            forward_y += 1
-        elif self.direction == Direction.E:
-            forward_x += 1
-        elif self.direction == Direction.W:
-            forward_x -= 1
-        return forward_y, forward_x
-
 
 class Direction(Enum):
     """方角を保持するクラス."""
@@ -136,6 +136,7 @@ class Direction(Enum):
         Returns:
             angle (int): 方角間の角度の差
         """
+        # 方角の差(右回り換算)
         diff = (self.value - other.value) % len(Direction)
         # 方角の差が180度以下相当の場合
         if diff <= len(Direction) / 2:

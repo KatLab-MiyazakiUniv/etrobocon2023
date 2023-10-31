@@ -30,25 +30,23 @@ class Navigator:
         Returns:
             (Robot): 探索終了時のロボット
         """
-        open_list = [initial_robot]
-        close_list = []
+        simulatable_robots = [initial_robot] # 探索候補のロボットの状態
+        simulated_robots = []                # 探索済みのロボット状態
 
-        while len(open_list) > 0:
-            # 最有力な探索対象を取り出し
-            current_robot = open_list.pop(0)
+        while len(simulatable_robots) > 0:
+            # コストが最小な探索対象
+            robot = min(simulatable_robots)
             # 目標座標に行き着いた場合、探索終了
-            if current_robot.get_coord() == target_coord:
-                return current_robot
+            if robot.get_coord() == target_coord:
+                return robot
             # 遷移可能なロボットの状態を探索対象に追加
-            open_list += current_robot.get_transitionable_robots(
+            simulatable_robots += robot.get_transitionable_robots(
                 self.block_area_map.circle_color_map
             )
             # 探索済みの状態を記録
-            close_list += [current_robot]
-            # 重複している or 探索終了済みのロボットの状態を除去
-            open_list = list(set(open_list) - set(close_list))
-            # 実コストでソートする
-            open_list = sorted(open_list)
+            simulated_robots += [robot]
+            # 集合として、重複している or 探索済みのロボットの状態を除去
+            simulatable_robots = list(set(simulatable_robots) - set(simulated_robots))
 
         # 経路未発見
         print("\nFailed simulate.\n")
@@ -81,6 +79,7 @@ class Navigator:
             angle_diff = end_robot.direction - robot.direction
             if angle_diff:
                 robot.direction = end_robot.direction
+                # 回頭動作を追加
                 robot.motions.append(Motion({
                     "command": "PR",
                     "pwm": 75,
@@ -91,5 +90,5 @@ class Navigator:
             robots += [robot]
 
         # 動作コストが最も小さいロボットを返す
-        best_robot = sorted(robots)[0]
+        best_robot = min(robots)
         return best_robot
