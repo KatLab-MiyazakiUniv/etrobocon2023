@@ -1,7 +1,7 @@
 /**
  *  @file   ArmMotionTest.cpp
  *  @brief  ArmMotionクラスのテスト
- *  @author Negimarge
+ *  @author bizyutyu
  */
 
 #include "ArmMotion.h"
