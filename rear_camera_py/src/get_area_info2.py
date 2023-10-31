@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """ブロックでとレジャーのエリア情報を取得するモジュール
 
 参考資料:
@@ -16,6 +15,8 @@ import numpy as np
 import cv2
 import os
 from enum import Enum
+
+from img_processing import ImageProcess as Image
 
 script_dir = os.path.dirname(os.path.abspath(__file__))  # /src
 PROJECT_DIR_PATH = os.path.dirname(script_dir)  # /rear_camera_py
@@ -62,7 +63,7 @@ class GetAreaInfo:
         self.block_area_height = 240
 
         # ベクトル関連
-        self.basis_vector = None # 緑の線の傾き
+        self.basis_vector = None  # 緑の線の傾き
         # self.basis_vector_b = None
         self.green_area_b = None
         self.angle_threshold = 4  # 同じ角度の線だと判断する閾値
@@ -83,24 +84,6 @@ class GetAreaInfo:
         self.first_column_coordinate = np.array([None, None, None, None])
         # 左上のxyを格納
         self.course_info_coordinate = np.full((4, 4), None)
-
-    def change_color(self, hsv_img, write_img, search_color, color_value):
-        """一定の範囲のHSV値を指定したHSV値に統一する関数.
-
-        Args:
-            hsv_img : HSV値に変換した画像
-            write_img: 統一した値を書き込む画像
-            search_color: 一定の範囲を示すHSV値 (self.RED1などを指定)
-            color_value: 統一するHSV値 (Color.RED.valueなど)
-        """
-        write_img[np.where((search_color[0][0] <= hsv_img[:, :, 0]) &
-                           (hsv_img[:, :, 0] <= search_color[0][1]) &
-                           (search_color[1][0] <= hsv_img[:, :, 1]) &
-                           (hsv_img[:, :, 1] <= search_color[1][1]) &
-                           (search_color[2][0] <= hsv_img[:, :, 2]) &
-                           (hsv_img[:, :, 2] <= search_color[2][1]))
-                  ] = color_value
-        return write_img
 
     def detect_line(self, img, save_img_name=None, length_threshold=200):
         """線分検出を行う関数.
@@ -176,7 +159,7 @@ class GetAreaInfo:
 
         ## コース下の緑(以下)の部分削除 & コース上側を削除 ##
         # 画像の緑の部分だけを抽出
-        self.change_color(game_area_img, green_area_img, self.GREEN, Color.GREEN.value)
+        Image.change_color(game_area_img, green_area_img, self.GREEN, Color.GREEN.value)
         if self.develop:
             save_path = os.path.join(self.save_dir_path, "green_area_img.png")
             cv2.imwrite(save_path, green_area_img)
@@ -219,7 +202,7 @@ class GetAreaInfo:
         blue_area_img = np.full_like(game_area_img, Color.WHITE.value, dtype=np.uint8)
 
         # 画像の青い部分だけを抽出
-        self.change_color(game_area_img, blue_area_img, self.BLUE, Color.BLUE.value)
+        Image.change_color(game_area_img, blue_area_img, self.BLUE, Color.BLUE.value)
 
         if self.develop:
             save_path = os.path.join(self.save_dir_path, "blue_area_img.png")
@@ -248,12 +231,12 @@ class GetAreaInfo:
                     break
                 if int(a * x + b) < course_img.shape[0]:
                     game_area_img2[int(a * x + b):, x] = Color.WHITE.value
-            self.change_color(game_area_img2, course_img, self.RED1, Color.WHITE.value)
-            self.change_color(game_area_img2, course_img, self.RED2, Color.WHITE.value)
-            self.change_color(game_area_img2, course_img, self.YELLOW, Color.WHITE.value)
-            self.change_color(game_area_img2, course_img, self.GREEN, Color.WHITE.value)
-            self.change_color(game_area_img2, course_img, self.BLUE, Color.WHITE.value)
-            self.change_color(game_area_img2, course_img, self.BLACK, Color.WHITE.value)
+            Image.change_color(game_area_img2, course_img, self.RED1, Color.WHITE.value)
+            Image.change_color(game_area_img2, course_img, self.RED2, Color.WHITE.value)
+            Image.change_color(game_area_img2, course_img, self.YELLOW, Color.WHITE.value)
+            Image.change_color(game_area_img2, course_img, self.GREEN, Color.WHITE.value)
+            Image.change_color(game_area_img2, course_img, self.BLUE, Color.WHITE.value)
+            Image.change_color(game_area_img2, course_img, self.BLACK, Color.WHITE.value)
 
         if self.develop:
             save_path = os.path.join(self.save_dir_path, "pre_processed_img.png")
@@ -518,7 +501,7 @@ class GetAreaInfo:
         ### サークル座標の作成 ###
         split_num_height = 10
         split_num_width = 10
-        
+
         circle_blue_coordi = np.array([[0, 0], [0, 0], [0, 0], [0, 0]])
         circle_count = 0
         # 青サークル1
@@ -526,7 +509,7 @@ class GetAreaInfo:
         if detail_coordi is not None:
             circle_blue_coordi[0, 0], circle_blue_coordi[0, 1] = detail_coordi[1], detail_coordi[3]
             color_img[detail_coordi[3]-4:detail_coordi[2]+4,
-                               detail_coordi[1]:detail_coordi[0]] = Color.WHITE.value
+                      detail_coordi[1]:detail_coordi[0]] = Color.WHITE.value
             circle_count += 1
             if self.develop:
                 save_path = os.path.join(self.save_dir_path, "detect_circle.png")
@@ -537,24 +520,24 @@ class GetAreaInfo:
         if detail_coordi is not None:
             circle_blue_coordi[1, 0], circle_blue_coordi[1, 1] = detail_coordi[1], detail_coordi[3]
             color_img[detail_coordi[3]-4:detail_coordi[2]+4,
-                               detail_coordi[1]:detail_coordi[0]] = Color.WHITE.value
+                      detail_coordi[1]:detail_coordi[0]] = Color.WHITE.value
             circle_count += 1
             if self.develop:
                 save_path = os.path.join(self.save_dir_path, "detect_circle.png")
                 cv2.imwrite(save_path, color_img)
-        
+
         # [0,0]があったら削除
         circle_blue_coordi = \
-            circle_blue_coordi[np.where(np.all(circle_blue_coordi != [0,0], axis=1))]
+            circle_blue_coordi[np.where(np.all(circle_blue_coordi != [0, 0], axis=1))]
 
         # yの値が大きい順にソート
         column_to_sort = circle_blue_coordi[:, 1]
         sorted_indices = np.argsort(column_to_sort)[::-1]
         circle_blue_coordi = circle_blue_coordi[sorted_indices]
-        
+
         if circle_blue_coordi.shape[0] == 4:
             pass
-        
+
         # if circle_count == 2:
         #     self.course_info_coordinate[3, 0] = \
         #         circle_blue_coordi[np.argmin(circle_blue_coordi[:, 0])]
@@ -563,26 +546,28 @@ class GetAreaInfo:
         # elif circle_count == 1:
         #     self.course_info_coordinate[3, 1] = \
         #         circle_blue_coordi[np.argmax(circle_blue_coordi[:, 0])]
-        
+
         circle_green_coordi = np.array([[0, 0], [0, 0]])
         circle_count = 0
         # 緑サークル1
         detail_coordi, _ = self.detect_circle(color_img, Color.GREEN.value, 10, 10)
         if detail_coordi is not None:
-            circle_green_coordi[0, 0], circle_green_coordi[0, 1] = detail_coordi[1], detail_coordi[3]
+            circle_green_coordi[0, 0], circle_green_coordi[0,
+                                                           1] = detail_coordi[1], detail_coordi[3]
             color_img[detail_coordi[3]-4:detail_coordi[2]+4,
-                               detail_coordi[1]:detail_coordi[0]] = Color.WHITE.value
+                      detail_coordi[1]:detail_coordi[0]] = Color.WHITE.value
             circle_count += 1
             if self.develop:
                 save_path = os.path.join(self.save_dir_path, "detect_circle.png")
                 cv2.imwrite(save_path, color_img)
-        
+
         # 緑サークル2
         detail_coordi, _ = self.detect_circle(color_img, Color.GREEN.value, 10, 10)
         if detail_coordi is not None:
-            circle_green_coordi[1, 0], circle_green_coordi[1, 1] = detail_coordi[1], detail_coordi[3]
+            circle_green_coordi[1, 0], circle_green_coordi[1,
+                                                           1] = detail_coordi[1], detail_coordi[3]
             color_img[detail_coordi[3]-4:detail_coordi[2]+4,
-                               detail_coordi[1]:detail_coordi[0]] = Color.WHITE.value
+                      detail_coordi[1]:detail_coordi[0]] = Color.WHITE.value
             circle_count += 1
             if self.develop:
                 save_path = os.path.join(self.save_dir_path, "detect_circle.png")
@@ -632,32 +617,32 @@ class GetAreaInfo:
 
         # 2色画像の作成(赤、青)
         color_2_img = np.full_like(game_area_img, Color.WHITE.value, dtype=np.uint8)
-        self.change_color(game_area_img, color_2_img, self.RED1, Color.RED.value)
-        self.change_color(game_area_img, color_2_img, self.RED2, Color.RED.value)
-        self.change_color(game_area_img, color_2_img, self.BLUE, Color.BLUE.value)
+        Image.change_color(game_area_img, color_2_img, self.RED1, Color.RED.value)
+        Image.change_color(game_area_img, color_2_img, self.RED2, Color.RED.value)
+        Image.change_color(game_area_img, color_2_img, self.BLUE, Color.BLUE.value)
         if self.develop:
             save_path = os.path.join(self.save_dir_path, "color_2_img.png")
             cv2.imwrite(save_path, color_2_img)
 
         # 5色画像の作成（黒以外）
         color_5_img = np.full_like(game_area_img, Color.WHITE.value, dtype=np.uint8)
-        self.change_color(game_area_img, color_5_img, self.RED1, Color.RED.value)
-        self.change_color(game_area_img, color_5_img, self.RED2, Color.RED.value)
-        self.change_color(game_area_img, color_5_img, self.YELLOW, Color.YELLOW.value)
-        self.change_color(game_area_img, color_5_img, self.GREEN, Color.GREEN.value)
-        self.change_color(game_area_img, color_5_img, self.BLUE, Color.BLUE.value)
+        Image.change_color(game_area_img, color_5_img, self.RED1, Color.RED.value)
+        Image.change_color(game_area_img, color_5_img, self.RED2, Color.RED.value)
+        Image.change_color(game_area_img, color_5_img, self.YELLOW, Color.YELLOW.value)
+        Image.change_color(game_area_img, color_5_img, self.GREEN, Color.GREEN.value)
+        Image.change_color(game_area_img, color_5_img, self.BLUE, Color.BLUE.value)
         if self.develop:
             save_path = os.path.join(self.save_dir_path, "color_5_img.png")
             cv2.imwrite(save_path, color_5_img)
 
         ### ブロックなしの画像を作成 ###
         color_5_circle_img = color_5_img.copy()
-        
+
         # 赤
         # 大まかな座標を取得
         about_coordi, about_coordi_img = self.check_coordi_about(
             color_2_img, Color.RED.value, 4, 30, 0.3, None, Color.BLACK.value)
-        
+
         # 細かな座標を取得 ([x_max, x_min, y_max, y_min])
         detail_coordi, detail_coordi_img = \
             self.check_coordi_detail(color_2_img, about_coordi, Color.RED.value, develop_flag=0)
@@ -701,13 +686,11 @@ class GetAreaInfo:
             cv2.imwrite(save_path, detail_coordi_img)
             save_path = os.path.join(self.save_dir_path, "circle.png")
             cv2.imwrite(save_path, color_5_circle_img)
-        
+
         print("ブロックOK!!!!")
 
         # """
         self.detect_front_circle(color_5_circle_img)
-
-
 
         # 保存
         if self.develop:
