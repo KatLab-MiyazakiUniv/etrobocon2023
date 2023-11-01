@@ -1175,6 +1175,11 @@ class GetAreaInfo:
             print("ブロックすべて発見3")
             return self.course_info_block
 
+        # Lコースの場合
+        if not isR:
+            # 画像を左右反転させる
+            self.course_info_block = cv2.flip(self.course_info_block, 1)
+
         # 終了
         return self.course_info_block
 
