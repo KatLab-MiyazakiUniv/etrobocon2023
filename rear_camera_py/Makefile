@@ -81,9 +81,6 @@ create-env-rear:
 get_area:
 	python src/get_area_info.py -develop
 
-get_area2:
-	python src/get_area_info2.py -develop
-
 coodinate:
 	python work/search_coodinate.py
 
@@ -92,3 +89,6 @@ zikken:
 
 make rm:
 	rm work_image_data/*.png
+
+test-get:
+	python -m unittest tests/test_get_area_info.py

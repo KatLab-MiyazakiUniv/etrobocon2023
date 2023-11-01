@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""ブロックでとレジャーのエリア情報を取得するモジュール
+"""ブロックでとレジャーのエリア情報を取得するモジュール.
 
 参考資料:
 NOTE:HSV空間についての参考ページ
@@ -22,9 +22,8 @@ PROJECT_DIR_PATH = os.path.dirname(script_dir)  # /rear_camera_py
 
 
 class Color(Enum):
-    """色クラス.
-    色はBGR
-    """
+    """色クラス."""
+
     BLACK = [0, 0, 0]
     RED = [0, 0, 255]
     YELLOW = [0, 255, 255]
@@ -35,15 +34,12 @@ class Color(Enum):
 
 class GetAreaInfo:
     """ブロックdeトレジャーのエリア情報を取得するクラス."""
+
     # OpenCVのHSV空間の上限はどれも255
     RED1 = [(0, 15), (90, 255), (100, 255)]
-
     YELLOW = [(16, 37), (50, 255), (120, 255)]
     GREEN = [(38, 95), (40, 255), (40, 255)]
-    # GREEN = [(38, 95), (60, 255), (40, 255)]
-
     BLUE = [(96, 150), (95, 255), (80, 255)]
-    # BLUE = [(101, 150), (110, 255), (70, 255)]
     RED2 = [(171, 190), (80, 255), (90, 255)]
 
     BLACK = [(0, 255), (0, 50), (0, 140)]
@@ -177,7 +173,7 @@ class GetAreaInfo:
         # 処理結果を保持する配列を宣言(色を白で初期化)
         green_area_img = np.full_like(game_area_img, Color.WHITE.value, dtype=np.uint8)
 
-        ## コース下の緑(以下)の部分削除 & コース上側を削除 ##
+        # コース下の緑(以下)の部分削除 & コース上側を削除
         # 画像の緑の部分だけを抽出
         self.change_color(game_area_img, green_area_img, self.GREEN, Color.GREEN.value)
         if self.develop:
@@ -210,13 +206,14 @@ class GetAreaInfo:
                 # TODO: 上側削除、パラメータが0.52でいいか検証すべき
                 course_img[:int(course_img.shape[0]*0.52), x] = Color.WHITE.value
             # トリミング
-            upper_delete_line = int(min(self.green_area_b - self.block_area_height,
-                                        a * course_img.shape[1] + self.green_area_b - self.block_area_height))
+            upper_delete_line = \
+                int(min(self.green_area_b - self.block_area_height,
+                        a * course_img.shape[1] + self.green_area_b - self.block_area_height))
             lower_delete_line = int(
                 max(self.green_area_b, a * course_img.shape[1] + self.green_area_b))
             course_img = course_img[upper_delete_line:lower_delete_line, :, :]
 
-        ## IoT列車のコースを含めた上側削除 ##
+        # IoT列車のコースを含めた上側削除
         # BGR色空間からHSV色空間への変換(下側削除Ver)
         game_area_img = cv2.cvtColor(course_img, cv2.COLOR_BGR2HSV)
 
@@ -352,7 +349,7 @@ class GetAreaInfo:
             develop_img = color_img.copy()
 
         if develop_flag == 1 and self.develop:
-            # develop_img[:, coordinate[0]:coordinate[0]+3] = Color.RED.value
+            develop_img[:, coordinate[0]:coordinate[0]+3] = Color.RED.value
             develop_img[coordinate[1]:coordinate[1]+3, :] = Color.RED.value
             save_path = os.path.join(self.save_dir_path, "detail_coordi_circle.png")
             cv2.imwrite(save_path, develop_img)
@@ -362,10 +359,6 @@ class GetAreaInfo:
             # 画像からはみ出したら終了
             if y == color_img.shape[0]-1 or y == end-1:
                 if detect_flag == 0:
-                    # develop_img[int(coordinate[1]+mask_height*1.5):int(coordinate[1]+mask_height*1.5)+2, :] = Color.BLUE.value
-                    # save_path = os.path.join(self.save_dir_path, "Error1.png")
-                    # cv2.imwrite(save_path, develop_img)
-                    # print(f"y: {y}, coordinate[1]:{coordinate[1]}")
                     break
                 elif y == color_img.shape[0]-1:
                     y_min = color_img.shape[0]-1
@@ -386,7 +379,6 @@ class GetAreaInfo:
             # ピクセル数検出
             mask = color_img[y, coordinate[0]:coordinate[0]+mask_width]
             count_pixcel = np.count_nonzero(np.all(mask == block_color, axis=-1))
-            # print(f"count_pixcel: {count_pixcel}")
 
             # 探している物体(ブロックなど)の領域に突入
             if count_pixcel > thre:
@@ -396,10 +388,6 @@ class GetAreaInfo:
             elif count_pixcel < thre and detect_flag == 1:
                 y_max = y
                 detect_flag = 0
-
-        # print(f"int(coordinate[1]-mask_height*0.5): {int(coordinate[1]-mask_height*0.5)}")
-        # print(f"int(coordinate[1]-mask_height): {int(coordinate[1]-mask_height)}")
-        # print(f"int(coordinate[1]-mask_height): {coordinate[1]}-{mask_height}")
 
         # 上
         end = int(coordinate[1]-mask_height*0.75)
@@ -539,7 +527,7 @@ class GetAreaInfo:
                       split_num_width=10
                       ):
         """サークルの位置を発見する関数."""
-        ### サークル座標の作成 ###
+        # サークル座標の作成
         # 大まかな座標を取得
         about_coordi, about_coordi_img = self.check_coordi_about(
             color_2_img=color_5_circle_img,
@@ -577,6 +565,7 @@ class GetAreaInfo:
 
     def check_block_exist(self, circle_coordi, thre_x=100, thre_y=50, exist_block_develop_img=None):
         """サークル上にブロックがあるかチェックする関数.
+
         Args:
             circle_coordi: サークル座標([x_max, x_min, y_max, y_min])
         Return:
@@ -606,14 +595,7 @@ class GetAreaInfo:
             diff_x = abs(circle_posi_x - block_posi_x)
             diff_y = abs(circle_posi_y - block_posi_y)
 
-            # if exist_block_develop_img is not None:
-            # exist_block_develop_img[block_posi_y:block_posi_y+2, :] = Color.BLUE.value
-            # exist_block_develop_img[:, block_posi_x:block_posi_x+2] = Color.BLUE.value
-
             if diff_x < thre_x and diff_y < thre_y:
-                # print(f"circle_coordi: {circle_coordi}")
-                # print(f"BBB: {circle_posi_x}")
-                # print(f"diff_x < thre_x and diff_y < thre_y: {diff_x} < {thre_x} and {diff_y} < {thre_y}")
                 self.block_count_blue += 1
                 return self.blue_block_num
         # 青2
@@ -623,10 +605,6 @@ class GetAreaInfo:
             block_posi_y = self.block_coordi_blue2[2]
             diff_x = abs(circle_posi_x - block_posi_x)
             diff_y = abs(circle_posi_y - block_posi_y)
-
-            # if exist_block_develop_img is not None:
-            # exist_block_develop_img[block_posi_y:block_posi_y+2, :] = Color.GREEN.value
-            # exist_block_develop_img[:, block_posi_x:block_posi_x+2] = Color.GREEN.value
 
             if diff_x < thre_x and diff_y < thre_y:
                 self.block_count_blue += 1
@@ -650,7 +628,6 @@ class GetAreaInfo:
         """
         # 下準備
         image_path = os.path.join(self.image_dir_path, self.image_name)
-        print(f"image_name: {self.image_name}")
         if not os.path.exists(image_path):
             raise (f"{image_path} is not exist")
         course_img = cv2.imread(image_path)
@@ -693,8 +670,7 @@ class GetAreaInfo:
             save_path = os.path.join(self.save_dir_path, "color_5_img.png")
             cv2.imwrite(save_path, color_5_img)
 
-        ### ブロックの位置を特定する ###
-
+        # ブロックの位置を特定する
         # ブロック特定用の画像を生成
         color_2_img_detect_block = color_2_img.copy()
         for x in range(color_2_img_detect_block.shape[1]):
@@ -716,37 +692,45 @@ class GetAreaInfo:
         self.block_coordi_red, detail_coordi_img = self.check_coordi_detail(
             color_2_img, about_coordi, Color.RED.value, develop_flag=1)
         if self.block_coordi_red is not None:
-            color_5_circle_img[self.block_coordi_red[3]:self.block_coordi_red[2],
-                               self.block_coordi_red[1]:self.block_coordi_red[0]] = Color.WHITE.value
+            color_5_circle_img[
+                self.block_coordi_red[3]:self.block_coordi_red[2],
+                self.block_coordi_red[1]:self.block_coordi_red[0]] = Color.WHITE.value
         else:
             print("赤ブロックが見つかりません")
 
         # 青1
         # 大まかな座標を取得
         about_coordi, about_coordi_img = self.check_coordi_about(
-            color_2_img_detect_block, Color.BLUE.value, 4, 30, 50, about_coordi_img, Color.YELLOW.value)
+            color_2_img_detect_block,
+            Color.BLUE.value,
+            4, 30, 50,
+            about_coordi_img,
+            Color.YELLOW.value)
         # 細かな座標を取得
         self.block_coordi_blue1, detail_coordi_img = self.check_coordi_detail(
             color_2_img, about_coordi, Color.BLUE.value, thre=20, develop_img=detail_coordi_img)
         if self.block_coordi_blue1 is not None:
-            color_5_circle_img[self.block_coordi_blue1[3]:self.block_coordi_blue1[2],
-                               self.block_coordi_blue1[1]:self.block_coordi_blue1[0]] = Color.WHITE.value
-            color_2_img_detect_block[self.block_coordi_blue1[3]:self.block_coordi_blue1[2],
-                                     self.block_coordi_blue1[1]:self.block_coordi_blue1[0]] = Color.WHITE.value
+            color_5_circle_img[
+                self.block_coordi_blue1[3]:self.block_coordi_blue1[2],
+                self.block_coordi_blue1[1]:self.block_coordi_blue1[0]] = Color.WHITE.value
+            color_2_img_detect_block[
+                self.block_coordi_blue1[3]:self.block_coordi_blue1[2],
+                self.block_coordi_blue1[1]:self.block_coordi_blue1[0]] = Color.WHITE.value
         else:
             print("青ブロックが見つかりません")
 
         # 青2
         # 大まかな座標を取得
-        # color_2_img = color_5_circle_img.copy()
         about_coordi, about_coordi_img = self.check_coordi_about(
-            color_2_img_detect_block, Color.BLUE.value, 4, 30, 50, about_coordi_img, Color.GREEN.value)
+            color_2_img_detect_block, Color.BLUE.value,
+            4, 30, 50, about_coordi_img, Color.GREEN.value)
         # 細かな座標を取得
         self.block_coordi_blue2, detail_coordi_img = self.check_coordi_detail(
-            color_2_img, about_coordi, Color.BLUE.value, thre=20, develop_img=detail_coordi_img)
+            color_2_img, about_coordi, Color.BLUE.value, thre=20)
         if self.block_coordi_blue2 is not None:
-            color_5_circle_img[self.block_coordi_blue2[3]:self.block_coordi_blue2[2],
-                               self.block_coordi_blue2[1]:self.block_coordi_blue2[0]] = Color.WHITE.value
+            color_5_circle_img[
+                self.block_coordi_blue2[3]:self.block_coordi_blue2[2],
+                self.block_coordi_blue2[1]:self.block_coordi_blue2[0]] = Color.WHITE.value
         else:
             print("青ブロックが見つかりません")
 
@@ -772,26 +756,25 @@ class GetAreaInfo:
             save_path = os.path.join(self.save_dir_path, "front_course_img.png")
             cv2.imwrite(save_path, front_course_img)
 
-        ### サークル座標の作成とブロックの存在確認###
+        # サークル座標の作成とブロックの存在確認
         # 青サークル1
         exist_block_develop_img = front_course_img.copy()
         coordi_circle = color_5_circle_img.copy()
 
         # サークル検出
         circle_blue_coordi1, _ = self.detect_circle(front_course_img, Color.BLUE.value, 10, 10)
-        # print(f"circle_blue_coordi1: {circle_blue_coordi1}")
         if circle_blue_coordi1 is not None:
             # ブロックの存在確認
             self.course_info_block[3, 1] = self.check_block_exist(circle_blue_coordi1)
-            # self.course_info_block[3, 1] = self.check_block_exist(
-            #     circle_blue_coordi1, exist_block_develop_img)
             # 座標の追加
             self.course_info_coordinate[3, 1] = circle_blue_coordi1
             # 画像上のサークル削除
-            front_course_img[circle_blue_coordi1[3]-5:circle_blue_coordi1[2]+5,
-                             circle_blue_coordi1[1]-30:circle_blue_coordi1[0]+30] = Color.WHITE.value
-            second_from_front_img[circle_blue_coordi1[3]-5:circle_blue_coordi1[2]+5,
-                                  circle_blue_coordi1[1]-30:circle_blue_coordi1[0]+30] = Color.WHITE.value
+            front_course_img[
+                circle_blue_coordi1[3]-5:circle_blue_coordi1[2]+5,
+                circle_blue_coordi1[1]-30:circle_blue_coordi1[0]+30] = Color.WHITE.value
+            second_from_front_img[
+                circle_blue_coordi1[3]-5:circle_blue_coordi1[2]+5,
+                circle_blue_coordi1[1]-30:circle_blue_coordi1[0]+30] = Color.WHITE.value
             if self.develop:
                 coordi_circle[circle_blue_coordi1[3]:circle_blue_coordi1[3]+2,
                               circle_blue_coordi1[1]:circle_blue_coordi1[0]] = Color.BLACK.value
@@ -808,19 +791,18 @@ class GetAreaInfo:
 
         # 青サークル2
         circle_blue_coordi2, _ = self.detect_circle(front_course_img, Color.BLUE.value, 10, 10)
-        # print(f"circle_blue_coordi2: {circle_blue_coordi2}")
         if circle_blue_coordi2 is not None:
             # ブロックの存在確認
             self.course_info_block[3, 0] = self.check_block_exist(circle_blue_coordi2)
-            # self.course_info_block[3, 0] = self.check_block_exist(
-            #     circle_blue_coordi2, exist_block_develop_img=exist_block_develop_img)
             # 座標の追加
             self.course_info_coordinate[3, 0] = circle_blue_coordi2
             # 画像上のサークル削除
-            front_course_img[circle_blue_coordi2[3]-5:circle_blue_coordi2[2]+5,
-                             circle_blue_coordi2[1]-30:circle_blue_coordi2[0]+30] = Color.WHITE.value
-            second_from_front_img[circle_blue_coordi2[3]-5:circle_blue_coordi2[2]+5,
-                                  circle_blue_coordi2[1]-30:circle_blue_coordi2[0]+30] = Color.WHITE.value
+            front_course_img[
+                circle_blue_coordi2[3]-5:circle_blue_coordi2[2]+5,
+                circle_blue_coordi2[1]-30:circle_blue_coordi2[0]+30] = Color.WHITE.value
+            second_from_front_img[
+                circle_blue_coordi2[3]-5:circle_blue_coordi2[2]+5,
+                circle_blue_coordi2[1]-30:circle_blue_coordi2[0]+30] = Color.WHITE.value
             if self.develop:
                 coordi_circle[circle_blue_coordi2[3]:circle_blue_coordi2[3]+2,
                               circle_blue_coordi2[1]:circle_blue_coordi2[0]] = Color.BLACK.value
@@ -845,19 +827,19 @@ class GetAreaInfo:
 
         # 緑サークル1
         circle_green_coordi1, _ = self.detect_circle(front_course_img, Color.GREEN.value, 10, 8)
-        # print(f"circle_green_coordi1: {circle_green_coordi1}")
         if circle_green_coordi1 is not None:
             # ブロックの存在確認
-            # self.course_info_block[3,3] = self.check_block_exist(circle_green_coordi1)
             self.course_info_block[3, 2] = self.check_block_exist(
                 circle_green_coordi1, exist_block_develop_img=exist_block_develop_img)
             # 座標の追加
             self.course_info_coordinate[3, 2] = circle_green_coordi1
             # 画像上のサークル削除
-            front_course_img[circle_green_coordi1[3]-5:circle_green_coordi1[2]+5,
-                             circle_green_coordi1[1]-30:circle_green_coordi1[0]+30] = Color.WHITE.value
-            second_from_front_img[circle_green_coordi1[3]-5:circle_green_coordi1[2]+5,
-                                  circle_green_coordi1[1]-30:circle_green_coordi1[0]+30] = Color.WHITE.value
+            front_course_img[
+                circle_green_coordi1[3]-5:circle_green_coordi1[2]+5,
+                circle_green_coordi1[1]-30:circle_green_coordi1[0]+30] = Color.WHITE.value
+            second_from_front_img[
+                circle_green_coordi1[3]-5:circle_green_coordi1[2]+5,
+                circle_green_coordi1[1]-30:circle_green_coordi1[0]+30] = Color.WHITE.value
             if self.develop:
                 coordi_circle[circle_green_coordi1[3]:circle_green_coordi1[3]+2,
                               circle_green_coordi1[1]:circle_green_coordi1[0]] = Color.BLACK.value
@@ -875,19 +857,19 @@ class GetAreaInfo:
 
         # 緑サークル2
         circle_green_coordi2, _ = self.detect_circle(front_course_img, Color.GREEN.value, 10, 8)
-        # print(f"circle_green_coordi2: {circle_green_coordi2}")
         if circle_green_coordi2 is not None:
             # ブロックの存在確認
-            # self.course_info_block[3,2] = self.check_block_exist(circle_green_coordi2, None)
             self.course_info_block[3, 3] = self.check_block_exist(
                 circle_green_coordi2, exist_block_develop_img=exist_block_develop_img)
             # 座標の追加
             self.course_info_coordinate[3, 3] = circle_green_coordi2
             # 画像上のサークル削除
-            front_course_img[circle_green_coordi2[3]-5:circle_green_coordi2[2]+5,
-                             circle_green_coordi2[1]-30:circle_green_coordi2[0]+30] = Color.WHITE.value
-            second_from_front_img[circle_green_coordi2[3]-5:circle_green_coordi2[2]+5,
-                                  circle_green_coordi2[1]-30:circle_green_coordi2[0]+30] = Color.WHITE.value
+            front_course_img[
+                circle_green_coordi2[3]-5:circle_green_coordi2[2]+5,
+                circle_green_coordi2[1]-30:circle_green_coordi2[0]+30] = Color.WHITE.value
+            second_from_front_img[
+                circle_green_coordi2[3]-5:circle_green_coordi2[2]+5,
+                circle_green_coordi2[1]-30:circle_green_coordi2[0]+30] = Color.WHITE.value
             if self.develop:
                 coordi_circle[circle_green_coordi2[3]:circle_green_coordi2[3]+2,
                               circle_green_coordi2[1]:circle_green_coordi2[0]] = Color.BLACK.value
@@ -905,8 +887,6 @@ class GetAreaInfo:
                 cv2.imwrite(save_path, second_from_front_img)
 
         # 座標が逆だった場合
-        # print(f"circle_green_coordi1: {circle_green_coordi1}")
-        # print(f"circle_green_coordi2: {circle_green_coordi2}")
         if circle_green_coordi1 is not None and circle_green_coordi2 is not None and \
                 circle_green_coordi1[0] > circle_green_coordi2[0]:
             self.course_info_block[3, 2], self.course_info_block[3, 3] = \
@@ -919,13 +899,12 @@ class GetAreaInfo:
             print("ブロックすべて発見1")
             return self.course_info_block
 
-        ### 2列目のサークルを見つけていく ###
+        # 2列目のサークルを見つけていく
         """NOTE
         1列目の場合は2列目以降を削除していたので後ろのサークルを誤検知することはなかったが、
         2列目と3列目は近いため、3列目以降を削除することは危険。
         よって、誤検知も考慮しなければならない
         """
-        # """
         # 2列目のサークル検出のための画像作成(いらない場所を白で埋めて、誤検出のリスクを減らす)
         second_are_img = second_from_front_img.copy()
 
@@ -955,7 +934,6 @@ class GetAreaInfo:
         # コース3,4列以外の範囲
         range_2_left = int(self.course_info_coordinate[3, 1, 0])  # 右青のx_maxより左側
         range_2_right = int(self.course_info_coordinate[3, 3, 0])  # 右緑のx_maxより右側
-        # print(f"range_2_right {range_2_right}")
         # 色条件
         condition3_1 = np.all(second_are_img[:, range_2_right:]
                               == Color.GREEN.value, axis=-1, keepdims=True)
@@ -979,13 +957,10 @@ class GetAreaInfo:
         y_list = [y for y in self.course_info_coordinate[3, :, 3] if y > 0]
         if len(y_list) > 0:
             range_upper = int(min(y_list)) - 60
-            # second_are_img[range_upper:range_upper+5,:] = Color.BLACK.value
-
             condition5 = np.all(second_are_img[:range_upper, :] ==
                                 Color.BLUE.value, axis=-1, keepdims=True)
             condition6 = np.all(second_are_img[:range_upper, :] ==
                                 Color.GREEN.value, axis=-1, keepdims=True)
-
             second_are_img[:range_upper, :] = \
                 np.where(condition5, Color.WHITE.value, second_are_img[:range_upper, :])
             second_are_img[:range_upper, :] = \
@@ -1024,21 +999,33 @@ class GetAreaInfo:
             # 座標の追加
             self.course_info_coordinate[2, 1] = second_circle_blue_coordi1
             # 画像上のサークル削除
-            front_course_img[second_circle_blue_coordi1[3]-5:second_circle_blue_coordi1[2]+5,
-                             second_circle_blue_coordi1[1]-30:second_circle_blue_coordi1[0]+30] = Color.WHITE.value
-            second_are_img[second_circle_blue_coordi1[3]-5:second_circle_blue_coordi1[2]+5,
-                           second_circle_blue_coordi1[1]-30:second_circle_blue_coordi1[0]+30] = Color.WHITE.value
+            front_course_img[
+                second_circle_blue_coordi1[3]-5:second_circle_blue_coordi1[2]+5,
+                second_circle_blue_coordi1[1]-30:second_circle_blue_coordi1[0]+30] \
+                = Color.WHITE.value
+            second_are_img[
+                second_circle_blue_coordi1[3]-5:second_circle_blue_coordi1[2]+5,
+                second_circle_blue_coordi1[1]-30:second_circle_blue_coordi1[0]+30] \
+                = Color.WHITE.value
             # 2つめのサークルを見つけた時点で。上側に青があるのがおかしいので、上側の青を削除
             y = second_circle_blue_coordi1[2] - 30  # 30は補正値
             if self.develop:
-                develop_img[second_circle_blue_coordi1[3]:second_circle_blue_coordi1[3]+2,
-                            second_circle_blue_coordi1[1]:second_circle_blue_coordi1[0]] = Color.BLACK.value
-                develop_img[second_circle_blue_coordi1[3]:second_circle_blue_coordi1[2],
-                            second_circle_blue_coordi1[0]:second_circle_blue_coordi1[0]+2] = Color.BLACK.value
-                develop_img[second_circle_blue_coordi1[2]:second_circle_blue_coordi1[2]+2,
-                            second_circle_blue_coordi1[1]:second_circle_blue_coordi1[0]] = Color.BLACK.value
-                develop_img[second_circle_blue_coordi1[3]:second_circle_blue_coordi1[2],
-                            second_circle_blue_coordi1[1]:second_circle_blue_coordi1[1]+2] = Color.BLACK.value
+                develop_img[
+                    second_circle_blue_coordi1[3]:second_circle_blue_coordi1[3]+2,
+                    second_circle_blue_coordi1[1]:second_circle_blue_coordi1[0]] \
+                    = Color.BLACK.value
+                develop_img[
+                    second_circle_blue_coordi1[3]:second_circle_blue_coordi1[2],
+                    second_circle_blue_coordi1[0]:second_circle_blue_coordi1[0]+2] \
+                    = Color.BLACK.value
+                develop_img[
+                    second_circle_blue_coordi1[2]:second_circle_blue_coordi1[2]+2,
+                    second_circle_blue_coordi1[1]:second_circle_blue_coordi1[0]] \
+                    = Color.BLACK.value
+                develop_img[
+                    second_circle_blue_coordi1[3]:second_circle_blue_coordi1[2],
+                    second_circle_blue_coordi1[1]:second_circle_blue_coordi1[1]+2] \
+                    = Color.BLACK.value
                 save_path = os.path.join(self.save_dir_path, "second_detect_circle.png")
                 cv2.imwrite(save_path, develop_img)
                 save_path = os.path.join(self.save_dir_path, "second_delete_circle.png")
@@ -1058,18 +1045,24 @@ class GetAreaInfo:
             self.course_info_coordinate[2, 0] = second_circle_blue_coordi2
             # 画像上のサークル削除
             front_course_img[second_circle_blue_coordi2[3]-5:second_circle_blue_coordi2[2]+5,
-                             second_circle_blue_coordi2[1]-30:second_circle_blue_coordi2[0]+30] = Color.WHITE.value
+                             second_circle_blue_coordi2[1]-30:second_circle_blue_coordi2[0]+30] \
+                = Color.WHITE.value
             second_are_img[second_circle_blue_coordi2[3]-5:second_circle_blue_coordi2[2]+5,
-                           second_circle_blue_coordi2[1]-30:second_circle_blue_coordi2[0]+30] = Color.WHITE.value
+                           second_circle_blue_coordi2[1]-30:second_circle_blue_coordi2[0]+30] \
+                = Color.WHITE.value
             if self.develop:
                 develop_img[second_circle_blue_coordi2[3]:second_circle_blue_coordi2[3]+2,
-                            second_circle_blue_coordi2[1]:second_circle_blue_coordi2[0]] = Color.BLACK.value
+                            second_circle_blue_coordi2[1]:second_circle_blue_coordi2[0]] \
+                    = Color.BLACK.value
                 develop_img[second_circle_blue_coordi2[3]:second_circle_blue_coordi2[2],
-                            second_circle_blue_coordi2[0]:second_circle_blue_coordi2[0]+2] = Color.BLACK.value
+                            second_circle_blue_coordi2[0]:second_circle_blue_coordi2[0]+2] \
+                    = Color.BLACK.value
                 develop_img[second_circle_blue_coordi2[2]:second_circle_blue_coordi2[2]+2,
-                            second_circle_blue_coordi2[1]:second_circle_blue_coordi2[0]] = Color.BLACK.value
+                            second_circle_blue_coordi2[1]:second_circle_blue_coordi2[0]] \
+                    = Color.BLACK.value
                 develop_img[second_circle_blue_coordi2[3]:second_circle_blue_coordi2[2],
-                            second_circle_blue_coordi2[1]:second_circle_blue_coordi2[1]+2] = Color.BLACK.value
+                            second_circle_blue_coordi2[1]:second_circle_blue_coordi2[1]+2] \
+                    = Color.BLACK.value
                 save_path = os.path.join(self.save_dir_path, "second_detect_circle.png")
                 cv2.imwrite(save_path, develop_img)
                 save_path = os.path.join(self.save_dir_path, "second_delete_circle.png")
@@ -1104,20 +1097,26 @@ class GetAreaInfo:
             self.course_info_coordinate[2, 2] = second_circle_green_coordi1
             # 画像上のサークル削除
             front_course_img[second_circle_green_coordi1[3]-5:second_circle_green_coordi1[2]+5,
-                             second_circle_green_coordi1[1]-30:second_circle_green_coordi1[0]+30] = Color.WHITE.value
+                             second_circle_green_coordi1[1]-30:second_circle_green_coordi1[0]+30] \
+                = Color.WHITE.value
             second_are_img[second_circle_green_coordi1[3]-5:second_circle_green_coordi1[2]+5,
-                           second_circle_green_coordi1[1]-30:second_circle_green_coordi1[0]+30] = Color.WHITE.value
+                           second_circle_green_coordi1[1]-30:second_circle_green_coordi1[0]+30] \
+                = Color.WHITE.value
             # 2つめのサークルを見つけた時点で。上側に青があるのがおかしいので、上側の青を削除
             y = second_circle_green_coordi1[2] - 30  # 30は補正値
             if self.develop:
                 develop_img[second_circle_green_coordi1[3]:second_circle_green_coordi1[3]+2,
-                            second_circle_green_coordi1[1]:second_circle_green_coordi1[0]] = Color.BLACK.value
+                            second_circle_green_coordi1[1]:second_circle_green_coordi1[0]] \
+                    = Color.BLACK.value
                 develop_img[second_circle_green_coordi1[3]:second_circle_green_coordi1[2],
-                            second_circle_green_coordi1[0]:second_circle_green_coordi1[0]+2] = Color.BLACK.value
+                            second_circle_green_coordi1[0]:second_circle_green_coordi1[0]+2] \
+                    = Color.BLACK.value
                 develop_img[second_circle_green_coordi1[2]:second_circle_green_coordi1[2]+2,
-                            second_circle_green_coordi1[1]:second_circle_green_coordi1[0]] = Color.BLACK.value
+                            second_circle_green_coordi1[1]:second_circle_green_coordi1[0]] \
+                    = Color.BLACK.value
                 develop_img[second_circle_green_coordi1[3]:second_circle_green_coordi1[2],
-                            second_circle_green_coordi1[1]:second_circle_green_coordi1[1]+2] = Color.BLACK.value
+                            second_circle_green_coordi1[1]:second_circle_green_coordi1[1]+2] \
+                    = Color.BLACK.value
                 save_path = os.path.join(self.save_dir_path, "second_detect_circle.png")
                 cv2.imwrite(save_path, develop_img)
                 save_path = os.path.join(self.save_dir_path, "second_delete_circle.png")
@@ -1137,18 +1136,24 @@ class GetAreaInfo:
             self.course_info_coordinate[2, 3] = second_circle_green_coordi2
             # 画像上のサークル削除
             front_course_img[second_circle_green_coordi2[3]-5:second_circle_green_coordi2[2]+5,
-                             second_circle_green_coordi2[1]-30:second_circle_green_coordi2[0]+30] = Color.WHITE.value
+                             second_circle_green_coordi2[1]-30:second_circle_green_coordi2[0]+30] \
+                = Color.WHITE.value
             second_are_img[second_circle_green_coordi2[3]-5:second_circle_green_coordi2[2]+5,
-                           second_circle_green_coordi2[1]-30:second_circle_green_coordi2[0]+30] = Color.WHITE.value
+                           second_circle_green_coordi2[1]-30:second_circle_green_coordi2[0]+30] \
+                = Color.WHITE.value
             if self.develop:
                 develop_img[second_circle_green_coordi2[3]:second_circle_green_coordi2[3]+2,
-                            second_circle_green_coordi2[1]:second_circle_green_coordi2[0]] = Color.BLACK.value
+                            second_circle_green_coordi2[1]:second_circle_green_coordi2[0]] \
+                    = Color.BLACK.value
                 develop_img[second_circle_green_coordi2[3]:second_circle_green_coordi2[2],
-                            second_circle_green_coordi2[0]:second_circle_green_coordi2[0]+2] = Color.BLACK.value
+                            second_circle_green_coordi2[0]:second_circle_green_coordi2[0]+2] \
+                    = Color.BLACK.value
                 develop_img[second_circle_green_coordi2[2]:second_circle_green_coordi2[2]+2,
-                            second_circle_green_coordi2[1]:second_circle_green_coordi2[0]] = Color.BLACK.value
+                            second_circle_green_coordi2[1]:second_circle_green_coordi2[0]] \
+                    = Color.BLACK.value
                 develop_img[second_circle_green_coordi2[3]:second_circle_green_coordi2[2],
-                            second_circle_green_coordi2[1]:second_circle_green_coordi2[1]+2] = Color.BLACK.value
+                            second_circle_green_coordi2[1]:second_circle_green_coordi2[1]+2] \
+                    = Color.BLACK.value
                 save_path = os.path.join(self.save_dir_path, "second_detect_circle.png")
                 cv2.imwrite(save_path, develop_img)
                 save_path = os.path.join(self.save_dir_path, "second_delete_circle.png")
@@ -1170,7 +1175,7 @@ class GetAreaInfo:
             print("ブロックすべて発見3")
             return self.course_info_block
 
-        # """
+        # 終了
         return self.course_info_block
 
 
@@ -1211,8 +1216,8 @@ if __name__ == "__main__":
         print(f"block_coordi_blue2 : {info.block_coordi_blue2}")
         print(f"block_count_red    : {info.block_count_red}")
         print(f"block_count_blue   : {info.block_count_blue}")
-        print(
-            f"course_info_coordinate :\n[[x_max, x_min, y_max, y_min]]\n{info.course_info_coordinate[2:]}")
+        # print(f"course_info_coordinate :\n[[x_max, x_min, y_max, y_min]]\n\
+        #       {info.course_info_coordinate[2:]}")
         print(f"course_info_block :\n{info.course_info_block}")
         print(f"---------------------------------------------------------------------")
         # """

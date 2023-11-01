@@ -163,8 +163,8 @@ if __name__ == "__main__":
 
     test_images = os.listdir(work_dir_path)
 
-    image_number = "_7"
-    image_number = "20"
+    image_number = "_9"
+    # image_number = "20"
     for img in test_images:
         if img[-6:-4] == image_number:
             image_name = img

@@ -44,6 +44,7 @@ class TestRoboSnap(unittest.TestCase):
             if np.array_equal(expect_info, course_info):
                 assert True
             else:
+                print(f"image name is {img_name}")
                 print(f"expect_info\n: {expect_info}")
                 print(f"course_info\n: {course_info}")
                 assert False
