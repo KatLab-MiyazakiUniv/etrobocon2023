@@ -68,8 +68,8 @@ class BlockDeTreasureHunter:
 if __name__ == "__main__":
     args = sys.argv
     if 2 <= len(args):
-        if args[1] == "true" or args[1] == "false":
-            is_left_course = args[1] == "true"
+        if args[1] == "left" or args[1] == "right":
+            is_left_course = args[1] == "left"
             hunter = BlockDeTreasureHunter()
             hunter.hunt(is_left_course)
         else:

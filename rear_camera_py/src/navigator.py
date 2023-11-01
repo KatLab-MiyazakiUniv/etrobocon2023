@@ -83,7 +83,7 @@ class Navigator:
                 robot.motions.append(Motion({
                     "command": "PR",
                     "pwm": 75,
-                    "angle": abs(angle_diff),
+                    "angle": Motion.calc_rotate_angle(abs(angle_diff)),
                     "direction": "clockwise" if angle_diff > 0 else "anticlockwise",
                     "comment": f"({robot.y} {robot.x} {robot.direction.name})",
                 }))
