@@ -55,8 +55,19 @@ class Turn(Motion):
             angle (int): 回頭角度[deg]
             comment (str): 動作のコメント
         """
+        command = ""
+        if abs(angle) == 180:
+            # 後ろを向く
+            command = "BR"
+        else if angle > 0:
+            # 右折
+            command = "IR"
+        else:
+            # 左折
+            command = "IL"
+
         self.params = {
-            "command": "IR" if angle > 0 else "IL",
+            "command": command,
             "comment": comment,
         }
         self.cost = 5 + abs(angle)  # TODO: 実際にかかる時間を計測する

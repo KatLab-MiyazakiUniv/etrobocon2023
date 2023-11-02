@@ -24,6 +24,7 @@
 #include "InCrossStraight.h"
 #include "InCrossLeft.h"
 #include "InCrossRight.h"
+#include "BackRotation.h"
 #include "CrossToCross.h"
 #include "StringOperator.h"
 #include "CameraAction.h"
@@ -46,6 +47,7 @@ enum class COMMAND {
   IS,  // 交点内移動（直進）
   IL,  // 交点内移動（左折）
   IR,  // 交点内移動（右折）
+  BR,  // 後ろを向く
   CC,  // 交点サークルから交点サークル
   CM,  // 交点サークルから直線の中点
   PR,  // Pwm値指定回頭

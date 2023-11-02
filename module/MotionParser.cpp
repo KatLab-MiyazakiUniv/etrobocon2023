@@ -131,6 +131,10 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
       InCrossRight* ir = new InCrossRight();
 
       motionList.push_back(ir);          // 動作リストに追加
+    } else if(command == COMMAND::BR) {  // 後ろを向く
+      BackRotation* br = new BackRotation();
+
+      motionList.push_back(br);          // 動作リストに追加
     } else if(command == COMMAND::CC) {  // 交点サークルから交点サークル
       CrossToCross* cc = new CrossToCross(ColorJudge::stringToColor(params[1]),  // 目標色
                                           isLeftEdge);                           // エッジ
@@ -192,6 +196,8 @@ COMMAND MotionParser::convertCommand(char* str)
     return COMMAND::IL;
   } else if(strcmp(str, "IR") == 0) {  // 文字列がIRの場合
     return COMMAND::IR;
+  } else if(strcmp(str, "BR") == 0) {  // 文字列がBRの場合
+    return COMMAND::BR;
   } else if(strcmp(str, "CC") == 0) {  // 文字列がCCの場合
     return COMMAND::CC;
   } else if(strcmp(str, "CM") == 0) {  // 文字列がCMの場合
