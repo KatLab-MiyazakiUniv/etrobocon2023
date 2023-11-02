@@ -471,9 +471,6 @@ class GetAreaInfo:
             elif count_pixcel < thre and detect_flag == 1:
                 x_max = x
                 detect_flag = 0
-                develop_img[:, x_max:x_max+2] = Color.GREEN.value
-                develop_img[:, coordinate[0]+mask_width *
-                            2:coordinate[0]+mask_width*2+2] = Color.GREEN.value
 
         # 左
         end = coordinate[0]-mask_width
@@ -545,7 +542,6 @@ class GetAreaInfo:
 
         # 細かな座標を取得
         if about_coordi is not None:
-            # x_max, x_min, y_max, y_min
             detail_coordi, detail_coordi_img = self.check_coordi_detail(
                 color_img=color_5_circle_img,
                 coordinate=about_coordi,
@@ -690,7 +686,7 @@ class GetAreaInfo:
 
         # 細かな座標を取得 ([x_max, x_min, y_max, y_min])
         self.block_coordi_red, detail_coordi_img = self.check_coordi_detail(
-            color_2_img, about_coordi, Color.RED.value, develop_flag=1)
+            color_2_img, about_coordi, Color.RED.value)
         if self.block_coordi_red is not None:
             color_5_circle_img[
                 self.block_coordi_red[3]:self.block_coordi_red[2],
@@ -726,7 +722,7 @@ class GetAreaInfo:
             4, 30, 50, about_coordi_img, Color.GREEN.value)
         # 細かな座標を取得
         self.block_coordi_blue2, detail_coordi_img = self.check_coordi_detail(
-            color_2_img, about_coordi, Color.BLUE.value, thre=20)
+            color_2_img, about_coordi, Color.BLUE.value, thre=20, develop_img=detail_coordi_img)
         if self.block_coordi_blue2 is not None:
             color_5_circle_img[
                 self.block_coordi_blue2[3]:self.block_coordi_blue2[2],
@@ -748,7 +744,6 @@ class GetAreaInfo:
         # 手間のサークルの領域だけの画像を作成
         front_course_img = color_5_circle_img.copy()
         for x in range(front_course_img.shape[1]):
-            # y = (self.basis_vector[1] / self.basis_vector[0] * x * 0.6 + 160)
             y = (self.basis_vector[1] / self.basis_vector[0] * x * 0.6 + 175)
             front_course_img[:int(y), x] = Color.WHITE.value
 
@@ -1203,8 +1198,8 @@ if __name__ == "__main__":
 
     test_images = os.listdir(work_dir_path)
 
-    image_number = "20"
-    image_number = "_9"
+    image_number = "11"
+    image_number = "_0"
 
     for img in test_images:
         if img[-6:-4] == image_number:
@@ -1221,8 +1216,8 @@ if __name__ == "__main__":
         print(f"block_coordi_blue2 : {info.block_coordi_blue2}")
         print(f"block_count_red    : {info.block_count_red}")
         print(f"block_count_blue   : {info.block_count_blue}")
-        # print(f"course_info_coordinate :\n[[x_max, x_min, y_max, y_min]]\n\
-        #       {info.course_info_coordinate[2:]}")
+        print(f"[[x_max, x_min, y_max, y_min]]")
+        print(f"course_info_coordinate :\n{info.course_info_coordinate[2:]}")
         print(f"course_info_block :\n{info.course_info_block}")
         print(f"---------------------------------------------------------------------")
         # """
