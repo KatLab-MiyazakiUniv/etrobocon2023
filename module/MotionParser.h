@@ -25,7 +25,6 @@
 #include "InCrossLeft.h"
 #include "InCrossRight.h"
 #include "CrossToCross.h"
-#include "CrossToMid.h"
 #include "StringOperator.h"
 #include "CameraAction.h"
 #include "PwmRotation.h"

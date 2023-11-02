@@ -8,27 +8,12 @@
 #define BLOCK_MOTION_H
 
 #include "CompositeMotion.h"
+#include "Pid.h"
 
 class BlockAreaMotion : public CompositeMotion {
  public:
   // コンストラクタ
-  BlockAreaMotion(double time = 0, double risk = 0);
-
-  /**
-   * @brief 動作時間を取得する
-   * @return 動作時間
-   */
-  double getMotionTime(void);
-
-  /**
-   * @brief 失敗リスクを取得する
-   * @return 失敗リスク
-   */
-  double getFailureRisk(void);
-
- private:
-  double MOTION_TIME;
-  double FAILURE_RISK;
+  BlockAreaMotion(){};
 };
 
 #endif

@@ -8,13 +8,7 @@
 
 using namespace std;
 
-InCrossRight::InCrossRight(double _targetDistance, double _dsTargetSpeed, int _targetAngle,
-                           int _prPwm)
-  : BlockAreaMotion(1.23, 1.09),  // 動作時間, 失敗リスク TODO: 測定し直す
-    targetDistance(_targetDistance),
-    dsTargetSpeed(_dsTargetSpeed),
-    targetAngle(_targetAngle),
-    prPwm(_prPwm){};
+InCrossRight::InCrossRight(){};
 
 void InCrossRight::run()
 {
