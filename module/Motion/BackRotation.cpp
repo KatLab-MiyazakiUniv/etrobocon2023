@@ -50,8 +50,6 @@ void BackRotation::logRunning()
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
 
-  snprintf(buf, BUF_SIZE,
-           "Run BackRotation (targetAngle: %d, prPwm: %d)",
-           targetAngle, prPwm);
+  snprintf(buf, BUF_SIZE, "Run BackRotation (targetAngle: %d, prPwm: %d)", targetAngle, prPwm);
   logger.log(buf);
 }

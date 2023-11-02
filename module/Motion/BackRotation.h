@@ -34,9 +34,9 @@ class BackRotation : public BlockAreaMotion {
   void logRunning() override;
 
  private:
-  int targetAngle = 120;        // 目標回頭角度(180度回頭したい。90度が60指定なので暫定で120)
-  int prPwm = 100;              // 角度指定回頭の目標PWM
-  bool isClockwise = true;      // 回頭の方向は左回り
+  int targetAngle = 120;  // 目標回頭角度(180度回頭したい。90度が60指定なので暫定で120)
+  int prPwm = 100;          // 角度指定回頭の目標PWM
+  bool isClockwise = true;  // 回頭の方向は左回り
 };
 
 #endif
