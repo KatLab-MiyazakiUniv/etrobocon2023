@@ -13,6 +13,11 @@ help:
 	@echo "取得した画像を一括削除"
 	@echo " $$ make rm-img"
 
+	@echo "Lコースのブロックでトレジャー攻略を計画する"
+	@echo " $$ make hunt-l"
+	@echo "Rコースのブロックでトレジャー攻略を計画する"
+	@echo " $$ make hunt-r"
+
 	@echo "テストを実行する"
 	@echo " $$ make test"
 	@echo "フォーマットする"
@@ -59,6 +64,13 @@ kill:
 
 rm-img:
 	sudo rm -rf image_data/
+
+## ブロックエリア攻略関連 ##
+hunt-l:
+	cd src && python3 block_de_treasure_hunter.py left
+
+hunt-r:
+	cd src && python3 block_de_treasure_hunter.py right
 
 ## 開発関連 ##
 test:

@@ -59,7 +59,7 @@ class Turn(Motion):
         if abs(angle) == 180:
             # 後ろを向く
             command = "BR"
-        else if angle > 0:
+        elif angle > 0:
             # 右折
             command = "IR"
         else:
@@ -69,5 +69,9 @@ class Turn(Motion):
         self.params = {
             "command": command,
             "comment": comment,
+            "xr_command": "\nXR",
+            "xr_target_angle": 0,
+            "xr_spped": 100,
+            "xr_comment": "回頭補正",
         }
         self.cost = 5 + abs(angle)  # TODO: 実際にかかる時間を計測する
