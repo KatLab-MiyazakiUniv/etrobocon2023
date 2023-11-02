@@ -118,25 +118,24 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
       CorrectingRotation* xr = new CorrectingRotation(atoi(params[1]),   // 目標角度
                                                       atof(params[2]));  // 目標速度
 
-      motionList.push_back(xr);                                    // 動作リストに追加
-    } else if(command == COMMAND::IS) {                            // 交点内移動（直進）
+      motionList.push_back(xr);                     // 動作リストに追加
+    } else if(command == COMMAND::IS) {             // 交点内移動（直進）
       InCrossStraight* is = new InCrossStraight();  // 目標速度 [mm/s]
 
-      motionList.push_back(is);                           // 動作リストに追加
-    } else if(command == COMMAND::IL) {                   // 交点内移動（左折）
+      motionList.push_back(is);          // 動作リストに追加
+    } else if(command == COMMAND::IL) {  // 交点内移動（左折）
       InCrossLeft* il = new InCrossLeft();
 
-      motionList.push_back(il);                             // 動作リストに追加
-    } else if(command == COMMAND::IR) {                     // 交点内移動（右折）
+      motionList.push_back(il);          // 動作リストに追加
+    } else if(command == COMMAND::IR) {  // 交点内移動（右折）
       InCrossRight* ir = new InCrossRight();
 
       motionList.push_back(ir);          // 動作リストに追加
     } else if(command == COMMAND::CC) {  // 交点サークルから交点サークル
-      CrossToCross* cc = new CrossToCross(
-          ColorJudge::stringToColor(params[1]),                        // 目標色
-          isLeftEdge);                                                 // エッジ
+      CrossToCross* cc = new CrossToCross(ColorJudge::stringToColor(params[1]),  // 目標色
+                                          isLeftEdge);                           // エッジ
 
-      motionList.push_back(cc);          // 動作リストに追加
+      motionList.push_back(cc);                           // 動作リストに追加
     } else if(command == COMMAND::PR) {                   // Pwm値指定回頭動作
       PwmRotation* pr = new PwmRotation(atoi(params[1]),  // 目標角度
                                         atoi(params[2]),  // Pwm値

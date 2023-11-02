@@ -9,8 +9,7 @@
 using namespace std;
 
 CrossToCross::CrossToCross(COLOR _targetColor, bool& _isLeftEdge)
-  : targetColor(_targetColor),
-    isLeftEdge(_isLeftEdge){};
+  : targetColor(_targetColor), isLeftEdge(_isLeftEdge){};
 
 void CrossToCross::run()
 {

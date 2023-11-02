@@ -26,20 +26,6 @@ class Motion:
             command += f"{self.params[key]}, "
         return command
 
-    @staticmethod
-    def calc_rotate_angle(target_real_angle) -> int:
-        """回頭角度に対する指定角度を返す.
-
-        Args:
-            target_real_angle (int): 実際に回頭したい角度
-        Returns:
-            target_rotate_angle (int): 回頭に指定する角度
-        """
-        # TODO: 要調整
-        # (暫定で、90度を指定されたときに60を返すようにしている(過去のコマンドファイル参照))
-        target_rotate_angle = target_real_angle * 2 / 3
-        return target_rotate_angle
-
 
 class Straight(Motion):
     """交点の直進動作."""
@@ -54,18 +40,13 @@ class Straight(Motion):
         self.params = {
             "command": "CC",
             "line_trace_color": color,
-            "line_trace_speed": 200,
-            "line_trace_brightness": -10,
-            "line_trace_kp": 0.33,
-            "line_trace_ki": 0.12,
-            "line_trace_kd": 0.12,
             "comment": comment,
         }
         self.cost = 30  # TODO: 実際にかかる時間を計測する
 
 
-class Curve(Motion):
-    """交点の右左折動作."""
+class Turn(Motion):
+    """交点の方向転換動作."""
 
     def __init__(self, angle, comment=""):
         """コンストラクタ.
@@ -76,10 +57,6 @@ class Curve(Motion):
         """
         self.params = {
             "command": "IR" if angle > 0 else "IL",
-            "straight_distance": 65.0,
-            "straight_speed": 200,
-            "rotation_angle": Motion.calc_rotate_angle(abs(angle)),
-            "rotation_pwm": 100,
             "comment": comment,
         }
         self.cost = 5 + abs(angle)  # TODO: 実際にかかる時間を計測する

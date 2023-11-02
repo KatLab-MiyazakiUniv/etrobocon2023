@@ -4,7 +4,7 @@
 """
 
 from enum import Enum
-from motion import Motion, Straight, Curve
+from motion import Motion, Straight, Turn
 from block_area_map import BlockAreaMap
 
 
@@ -114,7 +114,7 @@ class Robot:
                 # 進行方向以外の方角については、方角を変えることを考慮する
                 rotation_angle = direct - self.direction
                 comment = f"({self.y} {self.x} {direct.name})"
-                motion = Curve(rotation_angle, comment)
+                motion = Turn(rotation_angle, comment)
                 next_robot = Robot(self.y, self.x, direct,
                                    self.motions + [motion], self.cost + motion.cost)
             # 1つの動作を追加したロボットの状態を保持する
