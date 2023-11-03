@@ -1,7 +1,7 @@
 /**
  * @file   MotionParser.cpp
  * @brief  動作コマンドファイルを解析するクラス
- * @author aridome222 bizyutyu
+ * @author aridome222 bizyutyu KakinokiKanta
  */
 
 #include "MotionParser.h"
@@ -90,7 +90,7 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
       motionList.push_back(sl);          // 動作リストに追加
     } else if(command == COMMAND::CA) {  // 距離指定旋回動作の生成
       CameraAction* ca = new CameraAction(
-          convertBool(params[0], params[1]),  // フラグ確認を行うかの判断に用いる撮影対象
+          convertSubject(params[1]),  // フラグ確認を行うかの判断に用いる撮影対象
           convertBool(params[0], params[2]),  // リアカメラをミニフィグに向けるための回頭方向
           atoi(params[3]),                    // 撮影のための目標角度
           atoi(params[4]));                   // 黒線復帰のための目標角度
@@ -104,17 +104,13 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
                                                 atoi(params[3]));  // 右モータのPWM値
 
       motionList.push_back(dt);                                    // 動作リストに追加
-    } else if(command == COMMAND::AU) {  // アームを上げる
-      ArmUpping* au = new ArmUpping(atoi(params[1]), atoi(params[2]));
-
-      motionList.push_back(au);          // 動作リストに追加
-    } else if(command == COMMAND::AD) {  // アームを下げる
-      ArmDownning* ad = new ArmDownnig(atoi(params[1]), atoi(params[2]));
-
-      motionList.push_back(ad);          // 動作リストに追加
     }
     */
-    else if(command == COMMAND::XR) {  // 角度補正回頭の追加
+    else if(command == COMMAND::AM) {  // アーム動作の追加
+      ArmMotion* am = new ArmMotion(atoi(params[1]), atoi(params[2]));
+
+      motionList.push_back(am);          // 動作リストに追加
+    } else if(command == COMMAND::XR) {  // 角度補正回頭の追加
       CorrectingRotation* xr = new CorrectingRotation(atoi(params[1]),   // 目標角度
                                                       atof(params[2]));  // 目標速度
 
@@ -171,7 +167,11 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
     } else if(command == COMMAND::ST) {  // 左右モーターストップ
       Stop* st = new Stop();
 
-      motionList.push_back(st);  // 動作リストに追加
+      motionList.push_back(st);          // 動作リストに追加
+    } else if(command == COMMAND::BT) {  // ブロック投げ入れ
+      BlockThrowing* bt = new BlockThrowing();
+
+      motionList.push_back(bt);  // 動作リストに追加
     } else {                     // 未定義のコマンドの場合
       snprintf(buf, BUF_SIZE, "%s:%d: '%s' is undefined command", commandFilePath, lineNum,
                params[0]);
@@ -204,10 +204,8 @@ COMMAND MotionParser::convertCommand(char* str)
     return COMMAND::EC;
   } else if(strcmp(str, "SL") == 0) {  // 文字列がSLの場合
     return COMMAND::SL;
-  } else if(strcmp(str, "AU") == 0) {  // 文字列がAUの場合
-    return COMMAND::AU;
-  } else if(strcmp(str, "AD") == 0) {  // 文字列がADの場合
-    return COMMAND::AD;
+  } else if(strcmp(str, "AM") == 0) {  // 文字列がAMの場合
+    return COMMAND::AM;
   } else if(strcmp(str, "XR") == 0) {  // 文字列がXRの場合
     return COMMAND::XR;
   } else if(strcmp(str, "CA") == 0) {  // 文字列がCAの場合
@@ -226,6 +224,8 @@ COMMAND MotionParser::convertCommand(char* str)
     return COMMAND::PR;
   } else if(strcmp(str, "ST") == 0) {  // 文字列がSTの場合
     return COMMAND::ST;
+  } else if(strcmp(str, "BT") == 0) {  // 文字列がBTの場合
+    return COMMAND::BT;
   } else {  // 想定していない文字列が来た場合
     return COMMAND::NONE;
   }
@@ -266,10 +266,6 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
       return true;
     } else if(strcmp(param, "anticlockwise") == 0) {  // パラメータがanticlockwiseの場合
       return false;
-    } else if(strcmp(param, "A") == 0) {  // パラメータがAの場合
-      return true;
-    } else if(strcmp(param, "B") == 0) {  // パラメータがBの場合
-      return false;
     } else {  // 想定していないパラメータが来た場合
       logger.logWarning("Parameter before conversion must be 'clockwise' or 'anticlockwise'");
       return true;
@@ -277,4 +273,23 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
   }
   logger.logWarning("Using a command that is not defined in convertBool.");
   return true;
+}
+
+CameraAction::Subject MotionParser::convertSubject(char* stringParameter)
+{
+  Logger logger;
+
+  // 末尾の改行を削除
+  char* param = StringOperator::removeEOL(stringParameter);
+
+  if(strcmp(param, "A") == 0) {  // パラメータがAの場合
+    return CameraAction::Subject::A;
+  } else if(strcmp(param, "B") == 0) {  // パラメータがBの場合
+    return CameraAction::Subject::B;
+  } else if(strcmp(param, "BA") == 0) {  // パラメータがBAの場合
+    return CameraAction::Subject::BLOCK_AREA;
+  } else {  // 想定していないパラメータが来た場合
+    logger.logWarning("Parameter before conversion must be 'A' or 'B' or 'BA'");
+    return CameraAction::Subject::UNDEFINED;
+  }
 }

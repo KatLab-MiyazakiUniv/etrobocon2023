@@ -78,7 +78,8 @@ void CorrectingRotation::run()
   // 補正角度をログに出力
   const int BUF_SIZE = 256;
   char buf[BUF_SIZE];  // log用にメッセージを一時保持する領域
-  snprintf(buf, BUF_SIZE, "%d degree angle correction", (int)correctionAngle);
+  snprintf(buf, BUF_SIZE, "%d degree angle correction %s", (int)correctionAngle,
+           isClockwise ? "clockwise" : "anticlockwise");
   logger.log(buf);
 
   // 算出された補正角度だけ回頭する
