@@ -1004,7 +1004,6 @@ class GetAreaInfo:
             save_path = os.path.join(self.save_dir_path, "processed_course.png")
             cv2.imwrite(save_path, processed_course_img)
         
-        # exit()
         # 2色画像の作成(赤、青)
         color_2_img = np.full_like(game_area_img, Color.WHITE.value, dtype=np.uint8)
         self.change_color(game_area_img, color_2_img, self.RED1, Color.RED.value)
@@ -1221,20 +1220,18 @@ class GetAreaInfo:
         range_1_left = int(self.course_info_coordinate[2, 0, 1])  # 左青のx_min
         range_1_right = int(self.course_info_coordinate[2, 2, 1])  # 左緑のx_min
         condition1_1 = np.all(back_area_img[:, :range_1_left]
-                              == Color.WHITE.value, axis=-1, keepdims=True)
+                              == Color.RED.value, axis=-1, keepdims=True)
         condition1_2 = np.all(back_area_img[:, range_1_right:]
-                              == Color.WHITE.value, axis=-1, keepdims=True)
+                              == Color.RED.value, axis=-1, keepdims=True)
         if range_1_left != 0:
             back_area_img[:, :range_1_left] = \
-                np.where(condition1_1, Color.BLACK.value,
+                np.where(condition1_1, Color.WHITE.value,
                          back_area_img[:, :range_1_left])
-
         if range_1_right != 0:
             back_area_img[:, range_1_right:] = \
-                np.where(condition1_2, Color.BLACK.value,
+                np.where(condition1_2, Color.WHITE.value,
                          back_area_img[:, range_1_right:])
 
-        """
         # 黄 
         range_2_left = int(self.course_info_coordinate[2, 1, 0])  # 右青のx_max
         range_2_right = int(self.course_info_coordinate[2, 3, 0])  # 右緑のx_max
@@ -1246,14 +1243,71 @@ class GetAreaInfo:
             back_area_img[:, :range_2_left] = \
                 np.where(condition2_1, Color.WHITE.value,
                          back_area_img[:, :range_2_left])
-                
         if range_2_right != 0:
             back_area_img[:, range_2_right:] = \
                 np.where(condition2_2, Color.WHITE.value,
                          back_area_img[:, range_2_right:])
-        # """
+
+
+        # 2列目のサークルの平均y座標を求める
+        # self.course_info_coordinate[2,]
+        row_area_img = color_5_img.copy()
+        # row_area_img = color_5_circle_img.copy()
+        
+        
+        # 1列目のサークルの直線の式を求める
+        x = (self.course_info_coordinate[3, :, 0]+self.course_info_coordinate[3, :, 1])/2
+        y = (self.course_info_coordinate[3, :, 2]+self.course_info_coordinate[3, :, 3])/2
+        coordi = np.column_stack([x,y])
+        # 傾きと切片を求める(a:傾き, b:切片)
+        a1, b1 = np.linalg.lstsq(np.c_[coordi[:, 0], np.ones(4)], coordi[:, 1], rcond=None)[0]
+        # 線を記述する
+        cv2.line(row_area_img,
+                 pt1=(0,int(b1)), # 始点
+                 pt2=(row_area_img.shape[1],int(a1*row_area_img.shape[1]+b1)), # 終点
+                 color=Color.BLACK.value,
+                 thickness=2)
+        
+        # 2列目のサークルの直線の式を求める
+        x = (self.course_info_coordinate[2, :, 0]+self.course_info_coordinate[2, :, 1])/2
+        y = (self.course_info_coordinate[2, :, 2]+self.course_info_coordinate[2, :, 3])/2
+        coordi = np.column_stack([x,y])
+        # 傾きと切片を求める(a:傾き, b:切片)
+        a2, b2 = np.linalg.lstsq(np.c_[coordi[:, 0], np.ones(4)], coordi[:, 1], rcond=None)[0]
+        # 線を記述する
+        cv2.line(row_area_img,
+                 pt1=(0,int(b2)),
+                 pt2=(row_area_img.shape[1],int(a2*row_area_img.shape[1]+b2)),
+                 color=Color.BLACK.value,
+                 thickness=2)
+        
+        # 3列目のサークルの直線の式を予想する
+        a3 = ((a1 + a2) / 2)* 0.9 # 0.9は補正値
+        b3 = b2 - ((b1 - b2) * 0.5) # 0.5は補正値
+        # 線を記述する
+        cv2.line(row_area_img,
+                 pt1=(0,int(b3)),
+                 pt2=(row_area_img.shape[1],int(a3*row_area_img.shape[1]+b3)),
+                 color=Color.BLACK.value,
+                 thickness=2)
+
+        # 4列目のサークルの直線の式を予想する
+        a4 = a3 * 0.9 # 0.9は補正値 
+        b4 = b2 - ((b1 - b2) * 0.7) # 0.7は補正値
+        # 線を記述する
+        cv2.line(row_area_img,
+                 pt1=(0,int(b4)),
+                 pt2=(row_area_img.shape[1],int(a4*row_area_img.shape[1]+b4)),
+                 color=Color.RED.value,
+                 thickness=2)
+
+
+
+
 
         if self.develop:
+            save_path = os.path.join(self.save_dir_path, "row_area.png")
+            cv2.imwrite(save_path, row_area_img)
             save_path = os.path.join(self.save_dir_path, "back_area.png")
             cv2.imwrite(save_path, back_area_img)
 
