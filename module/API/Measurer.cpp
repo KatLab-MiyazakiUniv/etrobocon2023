@@ -55,7 +55,7 @@ void Measurer::setRightCount(int count)
   rightMotor->setCount(count);
 }
 
-// モータ角位置の初期化
+// 左右モータ角位置の初期化
 void Measurer::resetCount()
 {
   Measurer::setLeftCount(0);
@@ -66,6 +66,18 @@ void Measurer::resetCount()
 int Measurer::getArmMotorCount()
 {
   return armMotor->getCount();
+}
+
+// アームモータ角位置更新
+void Measurer::setArmMotorCount(int count)
+{
+  return armMotor->setCount(count);
+}
+
+// アームモータ角位置の初期化
+void Measurer::resetArmMotorCount()
+{
+  return armMotor->setCount(0);
 }
 
 // 正面から見て左ボタンの押下状態を取得
