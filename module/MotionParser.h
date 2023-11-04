@@ -1,7 +1,7 @@
 /**
  * @file   MotionParser.h
  * @brief  動作コマンドファイルを解析するクラス
- * @author aridome222 bizyutyu
+ * @author aridome222 bizyutyu KakinokiKanta
  */
 
 #ifndef MOTION_PARSER_H
@@ -30,6 +30,8 @@
 #include "CameraAction.h"
 #include "PwmRotation.h"
 #include "Stop.h"
+#include "ArmMotion.h"
+#include "BlockThrowing.h"
 
 enum class COMMAND {
   DL,  // 指定距離ライントレース
@@ -40,8 +42,7 @@ enum class COMMAND {
   DT,  // 旋回
   EC,  // エッジ切り替え
   SL,  // 自タスクスリープ
-  AU,  // アームを上げる
-  AD,  // アームを下げる
+  AM,  // アーム動作
   XR,  // 角度補正回頭
   CA,  // 撮影動作
   IS,  // 交点内移動（直進）
@@ -52,6 +53,7 @@ enum class COMMAND {
   CM,  // 交点サークルから直線の中点
   PR,  // Pwm値指定回頭
   ST,  // 左右モーターストップ
+  BT,
   NONE
 };
 

@@ -60,7 +60,7 @@ class Measurer {
   static void setRightCount(int count);
 
   /**
-   * モータ角位置を初期化
+   * 左右モータ角位置を初期化
    */
   static void resetCount();
 
@@ -69,6 +69,16 @@ class Measurer {
    * @return アームモータ角位置[deg]
    */
   static int getArmMotorCount();
+
+  /**
+   * アームモータ角位置を更新
+   */
+  static void setArmMotorCount(int count);
+
+  /**
+   * アームモータ角位置を初期化
+   */
+  static void resetArmMotorCount();
 
   /**
    * 正面から見て左ボタンの押下状態を取得
