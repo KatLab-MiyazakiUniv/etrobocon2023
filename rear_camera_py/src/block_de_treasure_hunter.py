@@ -66,9 +66,8 @@ class BlockDeTreasureHunter:
         commands = ""
         for motion in robot.motions:
             commands += f"{motion.make_command()}\n"
-        # TODO: ブロックdeトレジャーハンター攻略の詳細が決まり次第パスを設定しなおす
-        # 既存のコマンドファイルを書き換えたくないので、Left/Rightはあえて入れていません。
-        with open("../../datafiles/BlockDeTreasure.csv", "w") as f:
+        cource_string = "Left" if is_left_course else "Right"
+        with open(f"../../datafiles/BlockDeTreasure{cource_string}.csv", "w") as f:
             f.write(commands)
 
 
