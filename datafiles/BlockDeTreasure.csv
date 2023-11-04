@@ -1,11 +1,18 @@
-start = (2 0 N), 
+PR,65,60,clockwise,右回頭
+DS,80,250,直進
+CS,BLACK,150,黒まで直進、ブロックエリア侵入
+DS,50,150,黒線から外れるよう直進
+PR,85,60,anticlockwise,左回頭
+CL,BLUE,200,-10,0.4,0.22,0.1,青サークルまで移動(2 0 N), 
 CC, RED, (1 0 N), 
 CC, RED, (0 0 N), 
+BT, ブロック移動, 
 IR, (0 0 E), 
 XR, 0, 100, 回頭補正, 
 CC, RED, (0 1 E), 
 CC, YELLOW, (0 2 E), 
 CC, YELLOW, (0 3 E), 
+BT, ブロック移動, 
 IR, (0 3 S), 
 XR, 0, 100, 回頭補正, 
 CC, YELLOW, (1 3 S), 
