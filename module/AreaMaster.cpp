@@ -41,6 +41,8 @@ void AreaMaster::run()
   for(const auto& motion : motionList) {
     Measurer::resetCount();
     motion->logRunning();
+    snprintf(buf, BUF_SIZE, "isLeftEdge=%s\n", isLeftEdge);
+    logger.logHighlight(buf);
     motion->run();
   }
 }

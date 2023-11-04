@@ -78,14 +78,14 @@ void EtRobocon2023::start()
   logger.logHighlight(buf);
 
   // 各エリアを走行する
-  AreaMaster lineTraceAreaMaster(Area::LineTrace, isLeftCourse, isLeftEdge, targetBrightness);
-  AreaMaster doubleLoopAreaMaster(Area::DoubleLoop, isLeftCourse, isLeftEdge, targetBrightness);
+  // AreaMaster lineTraceAreaMaster(Area::LineTrace, isLeftCourse, isLeftEdge, targetBrightness);
+  // AreaMaster doubleLoopAreaMaster(Area::DoubleLoop, isLeftCourse, isLeftEdge, targetBrightness);
   AreaMaster blockDeTreasureAreaMaster(Area::BlockDeTreasure, isLeftCourse, isLeftEdge,
                                        targetBrightness);
-  lineTraceAreaMaster.run();
+  // lineTraceAreaMaster.run();
   // 走行状態をlap(LAPゲート通過)に変更
   setState("lap");
-  doubleLoopAreaMaster.run();
+  // doubleLoopAreaMaster.run();
   blockDeTreasureAreaMaster.run();
 
   // 走行状態をfinish(ゴールライン通過(処理停止))に変更

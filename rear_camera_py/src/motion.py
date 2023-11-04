@@ -23,7 +23,7 @@ class Motion:
         """
         command = ""
         for key in self.params:
-            command += f"{self.params[key]}, "
+            command += f"{self.params[key]},"
         return command
 
 
@@ -38,7 +38,9 @@ class Straight(Motion):
             comment (str): 動作のコメント
         """
         self.params = {
-            "command": "CC",
+            "IS_command": "IS",
+            "IS_comment": "交点内直進",
+            "command": "\nCC",
             "line_trace_color": color,
             "comment": comment,
         }

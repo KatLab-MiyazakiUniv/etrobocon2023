@@ -198,8 +198,6 @@ COMMAND MotionParser::convertCommand(char* str)
     return COMMAND::BR;
   } else if(strcmp(str, "CC") == 0) {  // 文字列がCCの場合
     return COMMAND::CC;
-  } else if(strcmp(str, "CM") == 0) {  // 文字列がCMの場合
-    return COMMAND::CM;
   } else if(strcmp(str, "PR") == 0) {  // 文字列がPRの場合
     return COMMAND::PR;
   } else if(strcmp(str, "ST") == 0) {  // 文字列がSTの場合
@@ -230,7 +228,7 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
     }
   }
 
-  if(strcmp(command, "EC") == 0 || strcmp(command, "CM") == 0) {  //  コマンドがEC, CMの場合
+  if(strcmp(command, "EC") == 0) {  //  コマンドがEC, CMの場合
     if(strcmp(param, "left") == 0) {                              // パラメータがleftの場合
       return true;
     } else if(strcmp(param, "right") == 0) {  // パラメータがrightの場合
