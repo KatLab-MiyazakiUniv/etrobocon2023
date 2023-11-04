@@ -73,6 +73,14 @@ class Navigator:
                 if robot is None:
                     # 動作ファイルを書き換えずに処理を終了(デフォルトのファイルが使用されるはず)
                     exit()
+                # 最後以外のブロックについて
+                if block_coord != block_order[-1]:
+                    # ブロック移動用の動作を追加
+                    # (BTの動作を状況によって変える場合は、コストにも反映する必要がある)
+                    robot.motions.append(Motion({
+                        "command": "BT",
+                        "comment": "ブロック移動",
+                    }))
             # 終了状態の座標への経路探索
             robot = self.simulate_route(robot, end_robot.get_coord())
             # 終了状態に方角を合わせる
