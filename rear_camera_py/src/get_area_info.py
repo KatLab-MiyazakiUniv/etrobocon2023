@@ -17,6 +17,8 @@ import cv2
 import os
 from enum import Enum
 
+from calculator import Calculator
+
 script_dir = os.path.dirname(os.path.abspath(__file__))  # /src
 PROJECT_DIR_PATH = os.path.dirname(script_dir)  # /rear_camera_py
 
@@ -72,17 +74,23 @@ class GetAreaInfo:
         self.block_count_red = 0
         self.block_count_blue = 0
 
-        # ブロックの座標 [x_min, y_max, y_min,y_max]
+        # ブロック情報
         self.block_coordi_red = np.zeros(4)
         self.block_coordi_blue1 = np.zeros(4)
         self.block_coordi_blue2 = np.zeros(4)
-
-        # 手前のサークル
         self.course_info_block = np.zeros(16).reshape(4, 4)
-        # self.course_info_coordi = np.zeros(4*4*2).reshape(4, 4, 2)
-        # self.first_column_coordinate = np.array([None, None, None, None])
-        # 左上のxyを格納
+
+        # サークル関連
         self.course_info_coordinate = np.zeros((4, 4, 4))
+
+        # コース情報関連
+        # [傾き, 切片]
+        self.column_verctor_0 = np.array([None, None])
+        self.column_verctor_1 = np.array([None, None])
+        self.column_verctor_2 = np.array([None, None])
+        self.column_verctor_3 = np.array([None, None])
+        self.row_verctor_2 = np.array([None, None])
+        self.row_verctor_3 = np.array([None, None])
 
     def change_color(self, hsv_img, write_img, search_color, color_value):
         """一定の範囲のHSV値を指定したHSV値に統一する関数.
@@ -212,7 +220,7 @@ class GetAreaInfo:
             lower_delete_line = int(
                 max(self.green_area_b, a * course_img.shape[1] + self.green_area_b))
             course_img = course_img[upper_delete_line:lower_delete_line, :, :]
-        
+
         """
         IoT列車のコースを含めた上側削除
         """
@@ -1003,7 +1011,7 @@ class GetAreaInfo:
             cv2.imwrite(save_path, course_img)
             save_path = os.path.join(self.save_dir_path, "processed_course.png")
             cv2.imwrite(save_path, processed_course_img)
-        
+
         # 2色画像の作成(赤、青)
         color_2_img = np.full_like(game_area_img, Color.WHITE.value, dtype=np.uint8)
         self.change_color(game_area_img, color_2_img, self.RED1, Color.RED.value)
@@ -1033,7 +1041,6 @@ class GetAreaInfo:
         # ブロック特定用の画像を生成
         color_2_img_detect_block = color_2_img.copy()
         for x in range(color_2_img_detect_block.shape[1]):
-            # 0.7は補正値
             y = int((self.basis_vector[1] / self.basis_vector[0]) * x * 0.5 + 200)
             color_2_img_detect_block[y:y+30, x] = Color.WHITE.value
         if self.develop:
@@ -1232,7 +1239,7 @@ class GetAreaInfo:
                 np.where(condition1_2, Color.WHITE.value,
                          back_area_img[:, range_1_right:])
 
-        # 黄 
+        # 黄
         range_2_left = int(self.course_info_coordinate[2, 1, 0])  # 右青のx_max
         range_2_right = int(self.course_info_coordinate[2, 3, 0])  # 右緑のx_max
         condition2_1 = np.all(back_area_img[:, :range_2_left]
@@ -1248,68 +1255,197 @@ class GetAreaInfo:
                 np.where(condition2_2, Color.WHITE.value,
                          back_area_img[:, range_2_right:])
 
-
         # 2列目のサークルの平均y座標を求める
         # self.course_info_coordinate[2,]
         row_area_img = color_5_img.copy()
         # row_area_img = color_5_circle_img.copy()
-        
-        
-        # 1列目のサークルの直線の式を求める
-        x = (self.course_info_coordinate[3, :, 0]+self.course_info_coordinate[3, :, 1])/2
-        y = (self.course_info_coordinate[3, :, 2]+self.course_info_coordinate[3, :, 3])/2
-        coordi = np.column_stack([x,y])
+
+        """
+        サークルの直線を求める
+        """
+        """行の直線を求める"""
+        # 1行目(手前)のサークルの直線の式を求める
+        x = (self.course_info_coordinate[3, :, 0] +
+             self.course_info_coordinate[3, :, 1])/2
+        y = (self.course_info_coordinate[3, :, 2] +
+             self.course_info_coordinate[3, :, 3])/2
         # 傾きと切片を求める(a:傾き, b:切片)
-        a1, b1 = np.linalg.lstsq(np.c_[coordi[:, 0], np.ones(4)], coordi[:, 1], rcond=None)[0]
+        self.row_verctor_3[0], self.row_verctor_3[1] = \
+            Calculator.calculate_line_coordi_4(
+                x[0], y[0], x[1], y[1], x[2], y[2], x[3], y[3])
+
+
         # 線を記述する
         cv2.line(row_area_img,
-                 pt1=(0,int(b1)), # 始点
-                 pt2=(row_area_img.shape[1],int(a1*row_area_img.shape[1]+b1)), # 終点
+                 pt1=(0, int(self.row_verctor_3[1])),  # 始点
+                 pt2=(row_area_img.shape[1],
+                      int(self.row_verctor_3[0]*row_area_img.shape[1]+self.row_verctor_3[1])),  # 終点
                  color=Color.BLACK.value,
                  thickness=2)
-        
-        # 2列目のサークルの直線の式を求める
-        x = (self.course_info_coordinate[2, :, 0]+self.course_info_coordinate[2, :, 1])/2
-        y = (self.course_info_coordinate[2, :, 2]+self.course_info_coordinate[2, :, 3])/2
-        coordi = np.column_stack([x,y])
+
+        # 2行目のサークルの直線の式を求める
+        x = (self.course_info_coordinate[2, :, 0]
+             + self.course_info_coordinate[2, :, 1])/2
+        y = (self.course_info_coordinate[2, :, 2]
+             + self.course_info_coordinate[2, :, 3])/2
         # 傾きと切片を求める(a:傾き, b:切片)
-        a2, b2 = np.linalg.lstsq(np.c_[coordi[:, 0], np.ones(4)], coordi[:, 1], rcond=None)[0]
+        self.row_verctor_2[0], self.row_verctor_2[1] \
+            = Calculator.calculate_line_coordi_4(
+                x[0], y[0], x[1], y[1], x[2], y[2], x[3], y[3])
+
         # 線を記述する
-        cv2.line(row_area_img,
-                 pt1=(0,int(b2)),
-                 pt2=(row_area_img.shape[1],int(a2*row_area_img.shape[1]+b2)),
-                 color=Color.BLACK.value,
-                 thickness=2)
-        
-        # 3列目のサークルの直線の式を予想する
-        a3 = ((a1 + a2) / 2)* 0.9 # 0.9は補正値
-        b3 = b2 - ((b1 - b2) * 0.5) # 0.5は補正値
+        if self.develop:
+            cv2.line(row_area_img,
+                     pt1=(0, int(self.row_verctor_2[1])),
+                     pt2=(row_area_img.shape[1],
+                          int(self.row_verctor_2[0]*row_area_img.shape[1]+self.row_verctor_2[1])),
+                     color=Color.BLACK.value,
+                     thickness=2)
+
+        # 3行目のサークルの直線の式を予想する
+        a3 = ((self.row_verctor_3[0] + self.row_verctor_2[0]) / 2) * 0.9  # 0.9は補正値
+        b3 = self.row_verctor_2[1] - ((self.row_verctor_3[1] - self.row_verctor_2[1]) * 0.5)  # 0.5は補正値
         # 線を記述する
-        cv2.line(row_area_img,
-                 pt1=(0,int(b3)),
-                 pt2=(row_area_img.shape[1],int(a3*row_area_img.shape[1]+b3)),
-                 color=Color.BLACK.value,
-                 thickness=2)
+        if self.develop:
+            cv2.line(row_area_img,
+                     pt1=(0, int(b3)),
+                     pt2=(row_area_img.shape[1], int(a3*row_area_img.shape[1]+b3)),
+                     color=Color.BLACK.value,
+                     thickness=2)
 
-        # 4列目のサークルの直線の式を予想する
-        a4 = a3 * 0.9 # 0.9は補正値 
-        b4 = b2 - ((b1 - b2) * 0.7) # 0.7は補正値
+        # 4行目のサークルの直線の式を予想する(横)
+        a4 = a3 * 0.9  # 0.9は補正値
+        b4 = self.row_verctor_2[1] - ((self.row_verctor_3[1] - self.row_verctor_2[1]) * 0.7)  # 0.7は補正値
         # 線を記述する
-        cv2.line(row_area_img,
-                 pt1=(0,int(b4)),
-                 pt2=(row_area_img.shape[1],int(a4*row_area_img.shape[1]+b4)),
-                 color=Color.RED.value,
-                 thickness=2)
+        if self.develop:
+            cv2.line(row_area_img,
+                     pt1=(0, int(b4)),
+                     pt2=(row_area_img.shape[1], int(a4*row_area_img.shape[1]+b4)),
+                     color=Color.BLACK.value,
+                     thickness=2)
 
+        """列の直線を求める"""
+        # 0列目(左)のサークルの直線の式を算出する
+        x1 = np.average(self.course_info_coordinate[3, 0, [0, 1]])
+        y1 = np.average(self.course_info_coordinate[3, 0, [2, 3]])
+        x2 = np.average(self.course_info_coordinate[2, 0, [0, 1]])
+        y2 = np.average(self.course_info_coordinate[2, 0, [2, 3]])
 
+        self.column_verctor_0[0], self.column_verctor_0[1] = \
+            Calculator.calculate_line_coordi_2(x1, y1, x2, y2)
+        # 線を記述する
+        if self.develop:
+            cv2.line(row_area_img,
+                     pt1=(0, int(self.column_verctor_0[1])),
+                     pt2=(row_area_img.shape[1],
+                          int(self.column_verctor_0[0]*row_area_img.shape[1]+self.column_verctor_0[1])),
+                     color=Color.RED.value,
+                     thickness=2)
 
+        # 1列目(左)のサークルの直線の式を算出する
+        x1 = np.average(self.course_info_coordinate[3, 1, [0, 1]])
+        y1 = np.average(self.course_info_coordinate[3, 1, [2, 3]])
+        x2 = np.average(self.course_info_coordinate[2, 1, [0, 1]])
+        y2 = np.average(self.course_info_coordinate[2, 1, [2, 3]])
+        self.column_verctor_1[0], self.column_verctor_1[1] = \
+            Calculator.calculate_line_coordi_2(x1, y1, x2, y2)
+        # 線を記述する
+        if self.develop:
+            cv2.line(row_area_img,
+                     pt1=(0, int(self.column_verctor_1[1])),
+                     pt2=(row_area_img.shape[1],
+                          int(self.column_verctor_1[0]*row_area_img.shape[1]+self.column_verctor_1[1])),
+                     color=Color.RED.value,
+                     thickness=2)
 
+        # 2列目(左)のサークルの直線の式を算出する
+        x1 = np.average(self.course_info_coordinate[3, 2, [0, 1]])
+        y1 = np.average(self.course_info_coordinate[3, 2, [2, 3]])
+        x2 = np.average(self.course_info_coordinate[2, 2, [0, 1]])
+        y2 = np.average(self.course_info_coordinate[2, 2, [2, 3]])
+        self.column_verctor_2[0], self.column_verctor_2[1] = \
+            Calculator.calculate_line_coordi_2(x1, y1, x2, y2)
+        # 線を記述する
+        if self.develop:
+            cv2.line(row_area_img,
+                     pt1=(0, int(self.column_verctor_2[1])),
+                     pt2=(row_area_img.shape[1],
+                          int(self.column_verctor_2[0]*row_area_img.shape[1]+self.column_verctor_2[1])),
+                     color=Color.RED.value,
+                     thickness=2)
+
+        # 3列目(左)のサークルの直線の式を算出する
+        x1 = np.average(self.course_info_coordinate[3, 3, [0, 1]])
+        y1 = np.average(self.course_info_coordinate[3, 3, [2, 3]])
+        x2 = np.average(self.course_info_coordinate[2, 3, [0, 1]])
+        y2 = np.average(self.course_info_coordinate[2, 3, [2, 3]])
+        self.column_verctor_3[0], self.column_verctor_3[1] = \
+            Calculator.calculate_line_coordi_2(x1, y1, x2, y2)
+        # 線を記述する
+        if self.develop:
+            cv2.line(row_area_img,
+                     pt1=(0, int(self.column_verctor_3[1])),
+                     pt2=(row_area_img.shape[1], 
+                          int(self.column_verctor_3[0]*row_area_img.shape[1]+self.column_verctor_3[1])),
+                     color=Color.RED.value,
+                     thickness=2)
 
         if self.develop:
             save_path = os.path.join(self.save_dir_path, "row_area.png")
             cv2.imwrite(save_path, row_area_img)
             save_path = os.path.join(self.save_dir_path, "back_area.png")
             cv2.imwrite(save_path, back_area_img)
+
+        """
+        見つかっていないブロックの座標を確認していく
+        # """
+
+        # 赤ブロックが見つかっていない場合
+        if self.block_count_red == 0:
+            red_x = int(np.average(self.block_coordi_red[:2]))
+            red_y = int(self.block_coordi_red[2])
+            cv2.line(row_area_img,
+                     pt1=(red_x, 0),  # 始点
+                     pt2=(red_x, row_area_img.shape[0]),  # 終点
+                     color=Color.RED.value,
+                     thickness=2)
+            cv2.line(row_area_img,
+                     pt1=(0, red_y),  # 始点
+                     pt2=(row_area_img.shape[1], red_y),  # 終点
+                     color=Color.RED.value,
+                     thickness=2)
+
+        # 青ブロックが見つかっていない場合
+        if self.block_count_blue == 0:
+            blue1_x = int(np.average(self.block_coordi_blue1[:2]))
+            blue1_y = int(self.block_coordi_blue1[2])
+            cv2.line(row_area_img,
+                     pt1=(blue1_x, 0),  # 始点
+                     pt2=(blue1_x, row_area_img.shape[0]),  # 終点
+                     color=Color.BLUE.value,
+                     thickness=2)
+            cv2.line(row_area_img,
+                     pt1=(0, blue1_y),  # 始点
+                     pt2=(row_area_img.shape[1], blue1_y),  # 終点
+                     color=Color.BLUE.value,
+                     thickness=2)
+
+            blue2_x = int(np.average(self.block_coordi_blue2[:2]))
+            blue2_y = int(self.block_coordi_blue2[2])
+            cv2.line(row_area_img,
+                     pt1=(blue2_x, 0),  # 始点
+                     pt2=(blue2_x, row_area_img.shape[0]),  # 終点
+                     color=Color.BLUE.value,
+                     thickness=2)
+            cv2.line(row_area_img,
+                     pt1=(0, blue2_y),  # 始点
+                     pt2=(row_area_img.shape[1], blue2_y),  # 終点
+                     color=Color.BLUE.value,
+                     thickness=2)
+
+            if self.develop:
+                save_path = os.path.join(self.save_dir_path, "row_area2.png")
+                cv2.imwrite(save_path, row_area_img)
 
         # Lコースの場合
         if not isR:
