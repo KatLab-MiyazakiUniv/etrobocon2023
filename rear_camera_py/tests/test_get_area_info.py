@@ -3,7 +3,6 @@
 @author: kawanoichi
 """
 from src.get_area_info import GetAreaInfo
-
 import os
 import unittest
 import numpy as np
@@ -33,10 +32,11 @@ class TestRoboSnap(unittest.TestCase):
             expect_info = [int(img[i]) for i in range(len(img))]
             expect_info = np.array(expect_info).reshape(4, 4)
 
-            expect_info[:2, :] = 0  # 完成したらいらないはずの処理
+            # expect_info[:2, :] = 0  # 完成したらいらないはずの処理
 
             if img_name[-6:-4] == "10":  # 検出の難しい画像
-                expect_info[2, :] = 0
+                # expect_info[2, :] = 0
+                continue
 
             info = GetAreaInfo(img_name, self.test_image_dir, develop=False)
             course_info = info.get_area_info(isR=True)

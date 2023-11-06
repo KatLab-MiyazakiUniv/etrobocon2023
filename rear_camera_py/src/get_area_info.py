@@ -84,13 +84,16 @@ class GetAreaInfo:
         self.course_info_coordinate = np.zeros((4, 4, 4))
 
         # コース情報関連
-        # [傾き, 切片]
-        self.column_verctor_0 = np.array([None, None])
+        # 行
+        self.row_verctor_0 = np.array([None, None])
+        self.row_verctor_1 = np.array([None, None])
+        self.row_verctor_2 = np.array([None, None])
+        self.row_verctor_3 = np.array([None, None])
+        # 列
+        self.column_verctor_0 = np.array([None, None])  # [傾き, 切片]
         self.column_verctor_1 = np.array([None, None])
         self.column_verctor_2 = np.array([None, None])
         self.column_verctor_3 = np.array([None, None])
-        self.row_verctor_2 = np.array([None, None])
-        self.row_verctor_3 = np.array([None, None])
 
     def change_color(self, hsv_img, write_img, search_color, color_value):
         """一定の範囲のHSV値を指定したHSV値に統一する関数.
@@ -975,6 +978,45 @@ class GetAreaInfo:
             self.course_info_coordinate[2, 2] = second_circle_green_coordi1
             self.course_info_coordinate[2, 3] = second_circle_green_coordi2
 
+    def predict_block_locate(self, block_coordi):
+        """ブロックと直線の距離を判別する.
+
+        Args:
+            block_coordi: 調べるブロックの座標
+        """
+        # 0行目 or 1行目
+        _, diff_y_row_0 = Calculator.calc_dis_line_to_coordi(
+            block_coordi, self.row_verctor_0)
+        _, diff_y_row_1 = Calculator.calc_dis_line_to_coordi(
+            block_coordi, self.row_verctor_0)
+
+        if diff_y_row_0 < diff_y_row_1:
+            row = 0
+        else:
+            row = 1
+
+        # 列
+        diff_x_column_0, _ = Calculator.calc_dis_line_to_coordi(
+            block_coordi, self.column_verctor_0)
+        diff_x_column_1, _ = Calculator.calc_dis_line_to_coordi(
+            block_coordi, self.column_verctor_1)
+        diff_x_column_2, _ = Calculator.calc_dis_line_to_coordi(
+            block_coordi, self.column_verctor_2)
+        diff_x_column_3, _ = Calculator.calc_dis_line_to_coordi(
+            block_coordi, self.column_verctor_3)
+
+        if diff_x_column_1 < diff_x_column_2:
+            if diff_x_column_0 < diff_x_column_1:
+                column = 0
+            else:
+                column = 1
+        else:
+            if diff_x_column_2 < diff_x_column_3:
+                column = 2
+            else:
+                column = 3
+        return row, column
+
     def get_area_info(self, isR=True) -> None:
         """画像を6色画像に変換する関数.
 
@@ -1263,8 +1305,9 @@ class GetAreaInfo:
         """
         サークルの直線を求める
         """
+
         """行の直線を求める"""
-        # 1行目(手前)のサークルの直線の式を求める
+        # 3行目(手前)のサークルの直線の式を求める
         x = (self.course_info_coordinate[3, :, 0] +
              self.course_info_coordinate[3, :, 1])/2
         y = (self.course_info_coordinate[3, :, 2] +
@@ -1273,7 +1316,6 @@ class GetAreaInfo:
         self.row_verctor_3[0], self.row_verctor_3[1] = \
             Calculator.calculate_line_coordi_4(
                 x[0], y[0], x[1], y[1], x[2], y[2], x[3], y[3])
-
 
         # 線を記述する
         cv2.line(row_area_img,
@@ -1302,25 +1344,30 @@ class GetAreaInfo:
                      color=Color.BLACK.value,
                      thickness=2)
 
-        # 3行目のサークルの直線の式を予想する
-        a3 = ((self.row_verctor_3[0] + self.row_verctor_2[0]) / 2) * 0.9  # 0.9は補正値
-        b3 = self.row_verctor_2[1] - ((self.row_verctor_3[1] - self.row_verctor_2[1]) * 0.5)  # 0.5は補正値
+        # 1行目のサークルの直線の式を予想する
+        self.row_verctor_1[0] = \
+            ((self.row_verctor_3[0] + self.row_verctor_2[0]) / 2) * 0.9  # 0.9は補正値
+        self.row_verctor_1[1] = self.row_verctor_2[1] - \
+            ((self.row_verctor_3[1] - self.row_verctor_2[1]) * 0.5)  # 0.5は補正値
         # 線を記述する
         if self.develop:
             cv2.line(row_area_img,
-                     pt1=(0, int(b3)),
-                     pt2=(row_area_img.shape[1], int(a3*row_area_img.shape[1]+b3)),
+                     pt1=(0, int(self.row_verctor_1[1])),
+                     pt2=(row_area_img.shape[1],
+                          int(self.row_verctor_1[0]*row_area_img.shape[1]+self.row_verctor_1[1])),
                      color=Color.BLACK.value,
                      thickness=2)
 
-        # 4行目のサークルの直線の式を予想する(横)
-        a4 = a3 * 0.9  # 0.9は補正値
-        b4 = self.row_verctor_2[1] - ((self.row_verctor_3[1] - self.row_verctor_2[1]) * 0.7)  # 0.7は補正値
+        # 0行目のサークルの直線の式を予想する(横)
+        self.row_verctor_0[0] = self.row_verctor_1[0] * 0.9  # 0.9は補正値
+        self.row_verctor_0[1] = self.row_verctor_2[1] - \
+            ((self.row_verctor_3[1] - self.row_verctor_2[1]) * 0.7)  # 0.7は補正値
         # 線を記述する
         if self.develop:
             cv2.line(row_area_img,
-                     pt1=(0, int(b4)),
-                     pt2=(row_area_img.shape[1], int(a4*row_area_img.shape[1]+b4)),
+                     pt1=(0, int(self.row_verctor_0[1])),
+                     pt2=(row_area_img.shape[1],
+                          int(self.row_verctor_0[0]*row_area_img.shape[1]+self.row_verctor_0[1])),
                      color=Color.BLACK.value,
                      thickness=2)
 
@@ -1385,67 +1432,84 @@ class GetAreaInfo:
         if self.develop:
             cv2.line(row_area_img,
                      pt1=(0, int(self.column_verctor_3[1])),
-                     pt2=(row_area_img.shape[1], 
+                     pt2=(row_area_img.shape[1],
                           int(self.column_verctor_3[0]*row_area_img.shape[1]+self.column_verctor_3[1])),
                      color=Color.RED.value,
                      thickness=2)
-
-        if self.develop:
             save_path = os.path.join(self.save_dir_path, "row_area.png")
             cv2.imwrite(save_path, row_area_img)
-            save_path = os.path.join(self.save_dir_path, "back_area.png")
-            cv2.imwrite(save_path, back_area_img)
 
         """
         見つかっていないブロックの座標を確認していく
         # """
-
         # 赤ブロックが見つかっていない場合
         if self.block_count_red == 0:
-            red_x = int(np.average(self.block_coordi_red[:2]))
-            red_y = int(self.block_coordi_red[2])
-            cv2.line(row_area_img,
-                     pt1=(red_x, 0),  # 始点
-                     pt2=(red_x, row_area_img.shape[0]),  # 終点
-                     color=Color.RED.value,
-                     thickness=2)
-            cv2.line(row_area_img,
-                     pt1=(0, red_y),  # 始点
-                     pt2=(row_area_img.shape[1], red_y),  # 終点
-                     color=Color.RED.value,
-                     thickness=2)
+            red_x = np.average(self.block_coordi_red[:2])
+            red_y = self.block_coordi_red[2]
+            row, column = self.predict_block_locate(np.array([red_x, red_y]))
+            if self.course_info_block[row, column] == 0:
+                self.course_info_block[row, column] = 1
+            if self.develop:
+                cv2.line(row_area_img,
+                         pt1=(int(red_x), 0),  # 始点
+                         pt2=(int(red_x), row_area_img.shape[0]),  # 終点
+                         color=Color.BLUE.value,
+                         thickness=2)
+                cv2.line(row_area_img,
+                         pt1=(0, int(red_y)),  # 始点
+                         pt2=(row_area_img.shape[1], int(red_y)),  # 終点
+                         color=Color.BLUE.value,
+                         thickness=2)
 
         # 青ブロックが見つかっていない場合
-        if self.block_count_blue == 0:
+        if self.block_count_blue < 2:
             blue1_x = int(np.average(self.block_coordi_blue1[:2]))
             blue1_y = int(self.block_coordi_blue1[2])
-            cv2.line(row_area_img,
-                     pt1=(blue1_x, 0),  # 始点
-                     pt2=(blue1_x, row_area_img.shape[0]),  # 終点
-                     color=Color.BLUE.value,
-                     thickness=2)
-            cv2.line(row_area_img,
-                     pt1=(0, blue1_y),  # 始点
-                     pt2=(row_area_img.shape[1], blue1_y),  # 終点
-                     color=Color.BLUE.value,
-                     thickness=2)
+            if self.develop:
+                cv2.line(row_area_img,
+                         pt1=(blue1_x, 0),  # 始点
+                         pt2=(blue1_x, row_area_img.shape[0]),  # 終点
+                         color=Color.BLUE.value,
+                         thickness=2)
+                cv2.line(row_area_img,
+                         pt1=(0, blue1_y),  # 始点
+                         pt2=(row_area_img.shape[1], blue1_y),  # 終点
+                         color=Color.BLUE.value,
+                         thickness=2)
 
             blue2_x = int(np.average(self.block_coordi_blue2[:2]))
             blue2_y = int(self.block_coordi_blue2[2])
-            cv2.line(row_area_img,
-                     pt1=(blue2_x, 0),  # 始点
-                     pt2=(blue2_x, row_area_img.shape[0]),  # 終点
-                     color=Color.BLUE.value,
-                     thickness=2)
-            cv2.line(row_area_img,
-                     pt1=(0, blue2_y),  # 始点
-                     pt2=(row_area_img.shape[1], blue2_y),  # 終点
-                     color=Color.BLUE.value,
-                     thickness=2)
+            if self.develop:
+                cv2.line(row_area_img,
+                         pt1=(blue2_x, 0),  # 始点
+                         pt2=(blue2_x, row_area_img.shape[0]),  # 終点
+                         color=Color.BLUE.value,
+                         thickness=2)
+                cv2.line(row_area_img,
+                         pt1=(0, blue2_y),  # 始点
+                         pt2=(row_area_img.shape[1], blue2_y),  # 終点
+                         color=Color.BLUE.value,
+                         thickness=2)
+
+            # 青1が未確認の場合
+            if self.block_count_blue == 0 or blue1_y < blue2_y:
+                row, column = self.predict_block_locate(np.array([blue1_x, blue1_y]))
+                if self.course_info_block[row, column] == 0:
+                    self.course_info_block[row, column] = 2
+
+            # 青1が未確認の場合
+            if self.block_count_blue == 0 or blue1_y > blue2_y:
+                row, column = self.predict_block_locate(np.array([blue2_x, blue2_y]))
+                if self.course_info_block[row, column] == 0:
+                    self.course_info_block[row, column] = 2
 
             if self.develop:
                 save_path = os.path.join(self.save_dir_path, "row_area2.png")
                 cv2.imwrite(save_path, row_area_img)
+
+        if self.develop:
+            save_path = os.path.join(self.save_dir_path, "back_area.png")
+            cv2.imwrite(save_path, back_area_img)
 
         # Lコースの場合
         if not isR:
@@ -1476,6 +1540,7 @@ if __name__ == "__main__":
     test_images = os.listdir(work_dir_path)
 
     image_number = "14"
+    image_number = "19"
     # image_number = "_0"
 
     for img in test_images:
