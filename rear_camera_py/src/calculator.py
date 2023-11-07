@@ -1,9 +1,14 @@
-"""計算を実行するモジュール."""
+"""計算を実行するモジュール(ブロックエリア情報取得用).
+
+@author: kawanoichi
+"""
 
 import numpy as np
 
 
 class Calculator:
+    """計算を行うクラス(ブロックエリア情報取得用)."""
+
     @staticmethod
     def calculate_line_coordi_2(x1, y1, x2, y2):
         """2点から直線の傾きと切片を求める関数."""
