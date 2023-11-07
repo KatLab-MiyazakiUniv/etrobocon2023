@@ -228,8 +228,8 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
     }
   }
 
-  if(strcmp(command, "EC") == 0) {  //  コマンドがEC, CMの場合
-    if(strcmp(param, "left") == 0) {                              // パラメータがleftの場合
+  if(strcmp(command, "EC") == 0) {    //  コマンドがEC, CMの場合
+    if(strcmp(param, "left") == 0) {  // パラメータがleftの場合
       return true;
     } else if(strcmp(param, "right") == 0) {  // パラメータがrightの場合
       return false;

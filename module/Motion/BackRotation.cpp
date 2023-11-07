@@ -8,7 +8,7 @@
 
 using namespace std;
 
-BackRotation::BackRotation(bool& _isLeftEdge):isLeftEdge(_isLeftEdge){};
+BackRotation::BackRotation(bool& _isLeftEdge) : isLeftEdge(_isLeftEdge){};
 
 void BackRotation::run()
 {
