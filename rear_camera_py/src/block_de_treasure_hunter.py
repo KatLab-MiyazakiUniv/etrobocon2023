@@ -52,14 +52,15 @@ class BlockDeTreasureHunter:
         second_rotate = "anticlockwise,左回頭" if is_left_course else "clockwise,右回頭"
         enter_edge = "right" if is_left_course else "left"
         enter_motions = f"PR,60,60,{first_rotate}\n" \
-                      + "DS,80,250,直進\n" \
-                      + "CS,BLACK,150,黒まで直進、ブロックエリア侵入\n" \
-                      + "DS,50,150,黒線から外れるよう直進\n" \
-                      + f"EC,{enter_edge},エッジ切替\n" \
-                      + f"PR,60,60,{second_rotate}\n" \
-                      + f"CL,BLUE,200,-10,0.4,0.22,0.1,青サークルまで移動({start_coord[0]} {start_coord[1]} {start_direction.name})"
+            + "DS,80,250,直進\n" \
+            + "CS,BLACK,150,黒まで直進、ブロックエリア侵入\n" \
+            + "DS,50,150,黒線から外れるよう直進\n" \
+            + f"EC,{enter_edge},エッジ切替\n" \
+            + f"PR,60,60,{second_rotate}\n" \
+            + f"CL,BLUE,200,-10,0.4,0.22,0.1,青サークルまで移動({start_coord[0]} {start_coord[1]} {start_direction.name})"
         # ロボット初期化
-        start_robot = Robot(*start_coord, start_direction, [Motion({"enter_motions": enter_motions})])
+        start_robot = Robot(*start_coord, start_direction,
+                            [Motion({"enter_motions": enter_motions})])
         end_robot = Robot(*end_coord, end_direction)
 
         # 動作を計画する

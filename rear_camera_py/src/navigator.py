@@ -30,7 +30,7 @@ class Navigator:
         Returns:
             (Robot): 探索終了時のロボット
         """
-        simulatable_robots = [initial_robot] # 探索候補のロボットの状態
+        simulatable_robots = [initial_robot]  # 探索候補のロボットの状態
         simulated_robots = []                # 探索済みのロボット状態
 
         while len(simulatable_robots) > 0:
@@ -91,7 +91,7 @@ class Navigator:
                 robot.motions.append(Motion({
                     "command": "PR",
                     "pwm": 75,
-                    "angle": 60.0, # 90度回頭
+                    "angle": 60.0,  # 90度回頭
                     "direction": "clockwise" if angle_diff > 0 else "anticlockwise",
                     "comment": f"({robot.y} {robot.x} {robot.direction.name})",
                 }))

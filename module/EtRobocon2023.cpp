@@ -92,7 +92,7 @@ void EtRobocon2023::start()
   doubleLoopAreaMaster.run();
 
   // ブロックdeトレジャーを攻略する
-  snprintf(buf, BUF_SIZE, "cd rear_camera_py && make hunt-%c", isLeftCourse? 'l' : 'r');
+  snprintf(buf, BUF_SIZE, "cd rear_camera_py && make hunt-%c", isLeftCourse ? 'l' : 'r');
   system(buf);
   blockDeTreasureAreaMaster.run();
 
