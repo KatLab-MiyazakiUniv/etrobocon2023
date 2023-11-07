@@ -21,11 +21,13 @@ class Calculator:
                                 x3, y3,
                                 x4, y4):
         """4点から直線の傾きと切片を求める関数."""
-        # 傾きを計算
         coordi = np.array([[x1, y1], [x2, y2], [x3, y3], [x4, y4]])
-        # y切片を計算
+        coordi = coordi[np.any(coordi != [0, 0], axis=1)]  # [0, 0]は削除
+
+        # 傾きと切片を算出
         a, b = np.linalg.lstsq(
-            np.c_[coordi[:, 0], np.ones(4)], coordi[:, 1], rcond=None)[0]
+            np.c_[coordi[:, 0], np.ones(coordi.shape[0])], coordi[:, 1], rcond=None)[0]
+
         return a, b
 
     @staticmethod
