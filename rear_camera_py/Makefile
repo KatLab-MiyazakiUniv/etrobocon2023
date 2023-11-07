@@ -15,15 +15,15 @@ help:
 
 	@echo "テストを実行する"
 	@echo " $$ make test"
-	@echo "フォーマットする"
+	@echo "フォーマットを実行する"
 	@echo " $$ make format"
-	@echo "フォーマットチェックをする"
-	@echo " $$ make format-check"
-	@echo "スタイルチェックを行う"
+	@echo "スタイルチェックを実行する"
 	@echo " $$ make check_style"
+	@echo "フォーマットとスタイルチェックを実行する"
+	@echo " $$ make format-check"
 	@echo "ソースコードチェックとテストを実行する"
 	@echo " $$ make all-check"
-	@echo "デバッグを行う"
+	@echo "デバッグを実行する"
 	@echo " $$ make debug"
 	@echo "デバッグフォルダを削除する"
 	@echo " $$ make clean"
@@ -68,13 +68,13 @@ format:
 	autopep8 --in-place --recursive src/
 	python -m autopep8 -i -r src/ tests/
 
-format-check:
+check_style:
 	python -m pycodestyle src/ tests/
 	python -m pydocstyle src/ tests/
 
-check_style:
-	pycodestyle src/
-	pydocstyle src/
+format-check:
+	@${make} format
+	@${make} format-check
 
 all-check:
 	@${make} format
@@ -96,9 +96,6 @@ get_area:
 
 coodinate:
 	python work/search_coodinate.py
-
-zikken:
-	python src/zikken.py
 
 make rm:
 	rm work_image_data/*.png
