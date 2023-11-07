@@ -82,10 +82,18 @@ void EtRobocon2023::start()
   AreaMaster doubleLoopAreaMaster(Area::DoubleLoop, isLeftCourse, isLeftEdge, targetBrightness);
   AreaMaster blockDeTreasureAreaMaster(Area::BlockDeTreasure, isLeftCourse, isLeftEdge,
                                        targetBrightness);
+
+  // LAPゲートを通過する
   lineTraceAreaMaster.run();
   // 走行状態をlap(LAPゲート通過)に変更
   setState("lap");
+
+  // ダブルループエリアを走行する
   doubleLoopAreaMaster.run();
+
+  // ブロックdeトレジャーを攻略する
+  snprintf(buf, BUF_SIZE, "cd rear_camera_py && make hunt-%c", isLeftCourse? 'l' : 'r');
+  system(buf);
   blockDeTreasureAreaMaster.run();
 
   // 走行状態をfinish(ゴールライン通過(処理停止))に変更
