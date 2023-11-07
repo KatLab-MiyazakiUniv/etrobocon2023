@@ -128,7 +128,7 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
 
       motionList.push_back(ir);          // 動作リストに追加
     } else if(command == COMMAND::BR) {  // 後ろを向く
-      BackRotation* br = new BackRotation();
+      BackRotation* br = new BackRotation(isLeftEdge);
 
       motionList.push_back(br);          // 動作リストに追加
     } else if(command == COMMAND::CC) {  // 交点サークルから交点サークル

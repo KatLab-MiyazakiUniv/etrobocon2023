@@ -8,7 +8,7 @@
 
 using namespace std;
 
-BackRotation::BackRotation(){};
+BackRotation::BackRotation(bool& _isLeftEdge):isLeftEdge(_isLeftEdge){};
 
 void BackRotation::run()
 {
@@ -18,9 +18,11 @@ void BackRotation::run()
   }
 
   PwmRotation rotation(targetAngle, prPwm, isClockwise);
+  EdgeChanging edgeChange(isLeftEdge, !isLeftEdge);
 
   // 右に180度回頭する
   rotation.run();
+  edgeChange.run();
 }
 
 bool BackRotation::isMetPrecondition()

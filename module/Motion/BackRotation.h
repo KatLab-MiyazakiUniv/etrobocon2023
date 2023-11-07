@@ -16,7 +16,7 @@ class BackRotation : public BlockAreaMotion {
   /**
    * コンストラクタ
    */
-  BackRotation();
+  BackRotation(bool& _isLeftEdge);
 
   /**
    * @brief 交点サークルから後ろを見る
@@ -37,6 +37,7 @@ class BackRotation : public BlockAreaMotion {
   int targetAngle = 120;  // 目標回頭角度(180度回頭したい。90度が60指定なので暫定で120)
   int prPwm = 100;          // 角度指定回頭の目標PWM
   bool isClockwise = true;  // 回頭の方向は左回り
+  bool& isLeftEdge;
 };
 
 #endif
