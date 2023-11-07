@@ -648,7 +648,7 @@ class GetAreaInfo:
                                   circle_blue_coordi2[1]:circle_blue_coordi2[1]+2]\
                     = Color.BLACK.value
 
-        # 座標が逆だった場合
+        # 座標が逆だった場合(3行目青)
         if circle_blue_coordi1 is not None and circle_blue_coordi2 is not None and \
                 circle_blue_coordi2[0] > circle_blue_coordi1[0]:
             self.course_info_block[3, 0], self.course_info_block[3, 1] = \
@@ -711,8 +711,9 @@ class GetAreaInfo:
                                   circle_green_coordi2[1]:circle_green_coordi2[1]+2]\
                     = Color.BLACK.value
 
-        # 座標が逆だった場合
-        if circle_green_coordi1 is not None and circle_green_coordi2 is not None and \
+        # 座標が逆だった場合(3行目緑)
+        if circle_green_coordi1 is not None and \
+            circle_green_coordi2 is not None and \
                 circle_green_coordi1[0] > circle_green_coordi2[0]:
             self.course_info_block[3, 2], self.course_info_block[3, 3] = \
                 self.course_info_block[3, 3], self.course_info_block[3, 2]
@@ -796,7 +797,7 @@ class GetAreaInfo:
             if self.develop:
                 print("サークルなし2")
 
-        # 座標が逆だった場合
+        # 座標が逆だった場合(2行目青)
         if second_circle_blue_coordi1 is not None and second_circle_blue_coordi2 is not None and \
                 second_circle_blue_coordi2[0] > second_circle_blue_coordi1[0]:
             self.course_info_block[2, 0], self.course_info_block[2, 1] = \
@@ -881,14 +882,14 @@ class GetAreaInfo:
             if self.develop:
                 print("サークルなし4")
 
-        # 座標が逆だった場合
+        # 座標が逆だった場合(2行目緑)
         if second_circle_green_coordi1 is not None and \
             second_circle_green_coordi2 is not None and \
                 second_circle_green_coordi1[0] > second_circle_green_coordi2[0]:
             self.course_info_block[2, 2], self.course_info_block[2, 3] = \
                 self.course_info_block[2, 3], self.course_info_block[2, 2]
-            self.course_info_coordinate[2, 2] = second_circle_green_coordi1
-            self.course_info_coordinate[2, 3] = second_circle_green_coordi2
+            self.course_info_coordinate[2, 2] = second_circle_green_coordi2
+            self.course_info_coordinate[2, 3] = second_circle_green_coordi1
 
     def predict_block_locate(self, block_coordi) -> (int, int):
         """ブロックと直線の距離を判別する.
@@ -1565,11 +1566,8 @@ if __name__ == "__main__":
     test_images = os.listdir(work_dir_path)
 
     # NOTE:画像番号が一桁は"_"をつける
-    image_number = "22"
-    image_number = "_8"
-    image_number = "_0"
-    image_number = "_9"
-    image_number = "_4"
+    image_number = "20"
+    # image_number = "_1"
 
     for img in test_images:
         if img[-6:-4] == image_number:

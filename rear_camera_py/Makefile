@@ -74,12 +74,12 @@ check_style:
 
 format-check:
 	@${make} format
-	@${make} format-check
+	@${make} check_style
 
 all-check:
 	@${make} format
 	@${make} test
-	@${make} format-check
+	@${make} check_style
 
 debug:
 	python -m src --debug
@@ -90,7 +90,7 @@ clean:
 create-env-rear:	
 	pip install -r ../requirements.txt
 
-## 作業用 ##
+## get_area_info.py用 ##
 get_area:
 	python src/get_area_info.py -develop
 
