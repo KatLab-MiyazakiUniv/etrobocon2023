@@ -2,10 +2,11 @@
 
 @author: kawanoichi
 """
-from src.get_area_info import GetAreaInfo
 import os
 import unittest
 import numpy as np
+
+from src.get_area_info import GetAreaInfo
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 # PROJECT_DIR_PATH = os.path.dirname(script_dir)

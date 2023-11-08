@@ -1476,7 +1476,7 @@ if __name__ == "__main__":
 
     # NOTE:画像番号が一桁は"_"をつける
     image_number = "16"
-    # image_number = "_1"
+    image_number = "_1"
 
     for img in test_images:
         if img[-6:-4] == image_number:

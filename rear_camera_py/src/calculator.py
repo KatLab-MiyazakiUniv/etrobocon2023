@@ -11,7 +11,14 @@ class Calculator:
 
     @staticmethod
     def calculate_line_coordi_2(x1, y1, x2, y2) -> (np.float64, np.float64):
-        """2点から直線の傾きと切片を求める関数."""
+        """2点から直線の傾きと切片を求める関数.
+
+        Args:
+            2点の座標
+        """
+        if x1 == x2 or y1 == y2:
+            return None, None
+
         # 傾きを計算
         a = (y2 - y1) / (x2 - x1)
 
@@ -23,9 +30,15 @@ class Calculator:
     @staticmethod
     def calculate_line_coordi_4(x1, y1, x2, y2, x3, y3, x4, y4) \
             -> (np.float64, np.float64):
-        """4点から直線の傾きと切片を求める関数."""
+        """4点から直線の傾きと切片を求める関数.
+
+        Args:
+            4点の座標
+        """
         coordi = np.array([[x1, y1], [x2, y2], [x3, y3], [x4, y4]])
         coordi = coordi[np.any(coordi != [0, 0], axis=1)]  # [0, 0]は削除
+        if coordi.shape == (0, 2):
+            return None, None
 
         # 傾きと切片を算出
         a, b = np.linalg.lstsq(
