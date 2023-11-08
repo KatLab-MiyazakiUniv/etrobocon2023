@@ -565,7 +565,7 @@ class GetAreaInfo:
 
         return 0
 
-    def get_first_line(self, front_course_img, second_from_front_img, coordi_circle_img) -> None:
+    def get_info_row_3(self, front_course_img, second_from_front_img, coordi_circle_img) -> None:
         """ブロックエリアの1行目の情報を取得する関数.
 
         Args:
@@ -671,7 +671,7 @@ class GetAreaInfo:
             self.course_info_coordinate[3, 2] = circle_green_coordi2
             self.course_info_coordinate[3, 3] = circle_green_coordi1
 
-    def get_second_line(self, second_are_img, second_detect_circle_img) -> None:
+    def get_info_row_2(self, second_are_img, second_detect_circle_img) -> None:
         """2列目のサークル情報を取得する関数.
 
         Args:
@@ -862,7 +862,6 @@ class GetAreaInfo:
         Return:
             np.ndarray: コース情報 (Noneは取得失敗)
         """
-        print(self.image_name)
         # 開発用変数
         img_count = 0
 
@@ -871,7 +870,8 @@ class GetAreaInfo:
         course_img = cv2.imread(image_path)
 
         if course_img is None:
-            print("[Error] 画像読み込み失敗")
+            if self.develop:
+                print("[Error] 画像読み込み失敗")
             return self.course_info_block
 
         if self.develop:
@@ -888,7 +888,8 @@ class GetAreaInfo:
         processed_course_img, train_area_img = self.pre_process_img(course_img)
 
         if processed_course_img is None:
-            print("[Error]緑のエリアの線分を取得失敗")
+            if self.develop:
+                print("[Error]緑のエリアの線分を取得失敗")
             return self.course_info_block
 
         # BGR色空間からHSV色空間への変換
@@ -1029,7 +1030,7 @@ class GetAreaInfo:
             front_course_img[:int(y), x] = Color.WHITE.value
 
         # 1列目のサークル情報を取得する
-        self.get_first_line(front_course_img, second_from_front_img, coordi_circle_img)
+        self.get_info_row_3(front_course_img, second_from_front_img, coordi_circle_img)
 
         if self.develop:
             img_count += 1
@@ -1042,7 +1043,7 @@ class GetAreaInfo:
         # 使わない変数(画像)を削除
         del front_course_img, coordi_circle_img
 
-        # すべてのブロックを手前の列で見つけた場合、終了
+        # すべてのブロックを3行目で見つけた場合、終了
         if self.block_count_red + self.block_count_blue >= \
                 self.block_max_count_red + self.block_max_count_blue:
             if self.develop:
@@ -1133,7 +1134,7 @@ class GetAreaInfo:
 
         # 2列目のサークル情報を取得する
         second_detect_circle_img = color_5_circle_img.copy()
-        self.get_second_line(second_are_img, second_detect_circle_img)
+        self.get_info_row_2(second_are_img, second_detect_circle_img)
 
         if self.develop:
             img_count += 1
@@ -1145,7 +1146,7 @@ class GetAreaInfo:
 
         del second_detect_circle_img
 
-        # すべてのブロックを手前の列で見つけた場合、終了
+        # すべてのブロックを2行目で見つけた場合、終了
         if self.block_count_red + self.block_count_blue >= \
                 self.block_max_count_red + self.block_max_count_blue:
             if self.develop:
@@ -1377,13 +1378,13 @@ class GetAreaInfo:
                          color=Color.BLUE.value,
                          thickness=2)
 
-        # すべてのブロックを手前の列で見つけた場合、終了
-        if self.block_count_red + self.block_count_blue >= \
-            self.block_max_count_red + self.block_max_count_blue or \
-                (np.all(self.block_coordi_blue1 == 0) and np.all(self.block_coordi_blue2 == 0)):
-            if self.develop:
-                print("ブロックすべて発見3")
-            return self.course_info_block
+            # 赤ブロックが最後のブロックだった場合、終了
+            if self.block_count_red + self.block_count_blue >= \
+                self.block_max_count_red + self.block_max_count_blue or \
+                    (np.all(self.block_coordi_blue1 == 0) and np.all(self.block_coordi_blue2 == 0)):
+                if self.develop:
+                    print("ブロックすべて発見3")
+                return self.course_info_block
 
         """青ブロックが見つかっていない場合"""
         # """
