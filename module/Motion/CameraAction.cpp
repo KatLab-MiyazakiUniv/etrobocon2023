@@ -43,8 +43,8 @@ void CameraAction::run()
 
   // リアカメラで画像を取得する
   // 画像のファイル名と撮影コマンドを指定
-  char imageName[20];        // 画像のファイル名
-  char makeImageCommand[10]; // 撮影に用いるmakeコマンド名
+  char imageName[20];         // 画像のファイル名
+  char makeImageCommand[10];  // 撮影に用いるmakeコマンド名
   if(subject == CameraAction::Subject::A) {
     countShootA++;
     sprintf(imageName, "FigA_%d.png", countShootA);
