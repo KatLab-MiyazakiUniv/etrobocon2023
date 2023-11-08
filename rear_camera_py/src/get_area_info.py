@@ -198,6 +198,9 @@ class GetAreaInfo:
                 max(self.green_area_b, a * course_img.shape[1] + self.green_area_b))
             course_img = course_img[upper_delete_line:lower_delete_line, :, :]
 
+        else:
+            return None, None
+
         """
         IoT列車のコースを含めた上側削除
         """
@@ -865,9 +868,12 @@ class GetAreaInfo:
 
         # 下準備
         image_path = os.path.join(self.image_dir_path, self.image_name)
-        if not os.path.exists(image_path):
-            raise (f"{image_path} is not exist")
         course_img = cv2.imread(image_path)
+
+        if course_img is None:
+            print("[Error] 画像読み込み失敗")
+            return self.course_info_block
+
         if self.develop:
             img_count += 1
             save_path = os.path.join(self.save_dir_path, str(img_count)+"_"+self.image_name)
@@ -880,6 +886,10 @@ class GetAreaInfo:
 
         # 画像上のいらない領域を削除
         processed_course_img, train_area_img = self.pre_process_img(course_img)
+
+        if processed_course_img is None:
+            print("[Error]緑のエリアの線分を取得失敗")
+            return self.course_info_block
 
         # BGR色空間からHSV色空間への変換
         game_area_img = cv2.cvtColor(processed_course_img, cv2.COLOR_BGR2HSV)
@@ -1464,8 +1474,8 @@ if __name__ == "__main__":
     test_images = os.listdir(work_dir_path)
 
     # NOTE:画像番号が一桁は"_"をつける
-    image_number = "20"
-    image_number = "_1"
+    image_number = "16"
+    # image_number = "_1"
 
     for img in test_images:
         if img[-6:-4] == image_number:
@@ -1485,6 +1495,11 @@ if __name__ == "__main__":
         print(f"course_info_coordinate :\n{info.course_info_coordinate[2:]}")
         print(f"course_info_block :\n{info.course_info_block}")
         print(f"---------------------------------------------------------------------")
+
+    # info.course_info_coordinate
+    print(f"info.course_info_coordinate[2:, :, 0]: {info.course_info_coordinate[2, :, 0]}")
+    sorted_indices = np.sort(info.course_info_coordinate[2, :, 0])
+    print(sorted_indices)
 
     # 処理時間計測用
     execute_time = time.time() - start
