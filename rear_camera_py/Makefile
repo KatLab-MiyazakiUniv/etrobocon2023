@@ -101,5 +101,5 @@ make rm:
 	rm work_image_data/*.png
 
 test-get:
-	python -m unittest tests/test_calculator.py
-# python -m unittest tests/test_get_area_info.py
+	python -m unittest tests/test_get_area_info.py
+# python -m unittest tests/test_calculator.py

@@ -244,7 +244,7 @@ class GetAreaInfo:
         return course_img, train_area_img
 
     def check_coordi_about(self,
-                           color_2_img,
+                           color_3_img,
                            search_color=Color.RED.value,
                            split_num_height=4,
                            split_num_width=30,
@@ -254,7 +254,7 @@ class GetAreaInfo:
         """色(ブロックやサークル)のおおまかな場所を特定する関数.
 
         Args:
-            color_2_img (np.ndarray): コース画像
+            color_3_img (np.ndarray): コース画像
             search_color (list): 探すブロックの色
             split_num_height (int): 画像の縦を何等分するかの値
             split_num_width (int): 画像の横を何等分するかの値
@@ -265,18 +265,18 @@ class GetAreaInfo:
             mask_coordi: ブロックの位置の大まかな座標(x, y)
             develop_img: ブロックの位置を描画した画像(開発用)
         """
-        mask_height = int(color_2_img.shape[0] / split_num_height)
-        mask_width = int(color_2_img.shape[1] / split_num_width)
+        mask_height = int(color_3_img.shape[0] / split_num_height)
+        mask_width = int(color_3_img.shape[1] / split_num_width)
 
         # (ピクセル数, x, y)
         mask_coordi = np.array([0, 0])
         max_pixcel = 0
 
         # おおまかなブロックの場所を特定
-        for x in range(0, int(color_2_img.shape[1]), mask_width):
+        for x in range(0, int(color_3_img.shape[1]), mask_width):
             masks = []
             for y in range(split_num_height):
-                masks.append(color_2_img[mask_height *
+                masks.append(color_3_img[mask_height *
                              y:mask_height*(y+1), x:x+mask_width])
 
             # 画素数のカウント
@@ -493,7 +493,7 @@ class GetAreaInfo:
         # サークル座標の作成
         # 大まかな座標を取得
         about_coordi = self.check_coordi_about(
-            color_2_img=color_5_circle_img,
+            color_3_img=color_5_circle_img,
             search_color=circle_color,
             split_num_height=split_num_height,
             split_num_width=split_num_width,
@@ -810,10 +810,14 @@ class GetAreaInfo:
         _, diff_y_row_1 = Calculator.calc_dis_line_to_coordi(
             block_coordi, self.row_verctor_1)
 
-        if diff_y_row_0 < diff_y_row_1:
+        if (diff_y_row_0 is not None and diff_y_row_1 is None) or \
+                diff_y_row_0 <= diff_y_row_1:
             row = 0
-        else:
+        elif (diff_y_row_0 is None and diff_y_row_1 is not None) or \
+                diff_y_row_0 > diff_y_row_1:
             row = 1
+        else:
+            return None, None
 
         x_arr = np.array([])
         # 列
@@ -889,17 +893,17 @@ class GetAreaInfo:
 
         if processed_course_img is None:
             if self.develop:
-                print("[Error]緑のエリアの線分を取得失敗")
+                print("[Error] 緑のエリアの線分を取得失敗")
             return self.course_info_block
 
         # BGR色空間からHSV色空間への変換
         game_area_img = cv2.cvtColor(processed_course_img, cv2.COLOR_BGR2HSV)
 
-        # 2色画像の作成(赤、青)
-        color_2_img = np.full_like(game_area_img, Color.WHITE.value, dtype=np.uint8)
-        self.change_color(game_area_img, color_2_img, self.RED1, Color.RED.value)
-        self.change_color(game_area_img, color_2_img, self.RED2, Color.RED.value)
-        self.change_color(game_area_img, color_2_img, self.BLUE, Color.BLUE.value)
+        # 3色画像の作成(赤、青、白)
+        color_3_img = np.full_like(game_area_img, Color.WHITE.value, dtype=np.uint8)
+        self.change_color(game_area_img, color_3_img, self.RED1, Color.RED.value)
+        self.change_color(game_area_img, color_3_img, self.RED2, Color.RED.value)
+        self.change_color(game_area_img, color_3_img, self.BLUE, Color.BLUE.value)
 
         # 5色画像の作成（黒以外）
         color_5_img = np.full_like(game_area_img, Color.WHITE.value, dtype=np.uint8)
@@ -925,8 +929,8 @@ class GetAreaInfo:
             cv2.imwrite(save_path, processed_course_img)
             img_count += 1
             save_path = os.path.join(self.save_dir_path,
-                                     str(img_count)+"_color_2_img.png")
-            cv2.imwrite(save_path, color_2_img)
+                                     str(img_count)+"_color_3_img.png")
+            cv2.imwrite(save_path, color_3_img)
             img_count += 1
             save_path = os.path.join(self.save_dir_path,
                                      str(img_count)+"_color_5_img.png")
@@ -936,7 +940,7 @@ class GetAreaInfo:
         ブロックの位置を特定する
         """
         # ブロック特定用の画像を生成
-        color_2_under_delete_img = color_2_img.copy()
+        color_2_under_delete_img = color_3_img.copy()
         # 下側削除
         for x in range(color_2_under_delete_img.shape[1]):
             y = int((self.basis_vector[1] / self.basis_vector[0]) * x * 0.5 + 200)
@@ -956,9 +960,9 @@ class GetAreaInfo:
             color_2_under_delete_img, Color.RED.value, 4, 30, 10, block_location_about_img)
 
         # 細かな座標を取得 ([x_max, x_min, y_max, y_min])
-        block_location_img = color_2_img.copy()
+        block_location_img = color_3_img.copy()
         self.block_coordi_red = self.check_coordi_detail(
-            color_2_img, about_coordi, Color.RED.value, thre=10, develop_img=block_location_img)
+            color_3_img, about_coordi, Color.RED.value, thre=10, develop_img=block_location_img)
         if self.block_coordi_red is not None:
             color_5_circle_img[
                 self.block_coordi_red[3]:self.block_coordi_red[2],
@@ -977,7 +981,7 @@ class GetAreaInfo:
             block_location_about_img)
         # 細かな座標を取得
         self.block_coordi_blue1 = self.check_coordi_detail(
-            color_2_img, about_coordi, Color.BLUE.value, thre=20, develop_img=block_location_img)
+            color_3_img, about_coordi, Color.BLUE.value, thre=20, develop_img=block_location_img)
         if self.block_coordi_blue1 is not None:
             color_5_circle_img[
                 self.block_coordi_blue1[3]:self.block_coordi_blue1[2],
@@ -997,7 +1001,7 @@ class GetAreaInfo:
             4, 30, 50, block_location_about_img)
         # 細かな座標を取得
         self.block_coordi_blue2 = self.check_coordi_detail(
-            color_2_img, about_coordi, Color.BLUE.value, thre=20, develop_img=block_location_img)
+            color_3_img, about_coordi, Color.BLUE.value, thre=20, develop_img=block_location_img)
         if self.block_coordi_blue2 is not None:
             color_5_circle_img[
                 self.block_coordi_blue2[3]:self.block_coordi_blue2[2],
@@ -1204,9 +1208,8 @@ class GetAreaInfo:
         row_area_img = color_5_img.copy()
 
         """
-        サークルの直線を求める
+        行の直線を求める
         """
-        """行の直線を求める"""
         # 3行目(手前)のサークルの直線の式を求める
         x = (self.course_info_coordinate[3, :, 0] +
              self.course_info_coordinate[3, :, 1])/2
@@ -1274,7 +1277,9 @@ class GetAreaInfo:
                      color=Color.BLUE.value,
                      thickness=2)
 
-        """列の直線を求める"""
+        """
+        列の直線を求める
+        """
         # 0列目(左)のサークルの直線の式を算出する
         if np.all(self.course_info_coordinate[3, 0] != 0) and \
                 np.all(self.course_info_coordinate[2, 0] != 0):
@@ -1356,35 +1361,39 @@ class GetAreaInfo:
                 cv2.imwrite(save_path, row_area_img)
 
         """
-        見つかっていないブロックの座標を確認していく
+        見つかっていないブロックの座標を確認していく(0,1行目)
         """
         """赤ブロックが見つかっていない場合"""
         if self.block_coordi_red is not None and self.block_count_red < self.block_max_count_red:
             red_x = np.average(self.block_coordi_red[:2])
             red_y = self.block_coordi_red[2]
             row, column = self.predict_block_locate(np.array([red_x, red_y]))
-            if self.course_info_block[row, column] == 0:
-                self.course_info_block[row, column] = 1
-                self.block_count_red += 1
-            if self.develop:
-                cv2.line(row_area_img,
-                         pt1=(int(red_x), 0),  # 始点
-                         pt2=(int(red_x), row_area_img.shape[0]),  # 終点
-                         color=Color.BLUE.value,
-                         thickness=2)
-                cv2.line(row_area_img,
-                         pt1=(0, int(red_y)),  # 始点
-                         pt2=(row_area_img.shape[1], int(red_y)),  # 終点
-                         color=Color.BLUE.value,
-                         thickness=2)
-
-            # 赤ブロックが最後のブロックだった場合、終了
-            if self.block_count_red + self.block_count_blue >= \
-                self.block_max_count_red + self.block_max_count_blue or \
-                    (np.all(self.block_coordi_blue1 == 0) and np.all(self.block_coordi_blue2 == 0)):
+            if row is None:
+                pass
+            else:
+                if self.course_info_block[row, column] == 0:
+                    self.course_info_block[row, column] = 1
+                    self.block_count_red += 1
                 if self.develop:
-                    print("ブロックすべて発見3")
-                return self.course_info_block
+                    cv2.line(row_area_img,
+                             pt1=(int(red_x), 0),  # 始点
+                             pt2=(int(red_x), row_area_img.shape[0]),  # 終点
+                             color=Color.BLUE.value,
+                             thickness=2)
+                    cv2.line(row_area_img,
+                             pt1=(0, int(red_y)),  # 始点
+                             pt2=(row_area_img.shape[1], int(red_y)),  # 終点
+                             color=Color.BLUE.value,
+                             thickness=2)
+
+                # 赤ブロックが最後のブロックだった場合、終了
+                if self.block_count_red + self.block_count_blue >= \
+                    self.block_max_count_red + self.block_max_count_blue or \
+                        (np.all(self.block_coordi_blue1 == 0) and
+                         np.all(self.block_coordi_blue2 == 0)):
+                    if self.develop:
+                        print("ブロックすべて発見3")
+                    return self.course_info_block
 
         """青ブロックが見つかっていない場合"""
         # """
@@ -1432,9 +1441,11 @@ class GetAreaInfo:
                 break
 
             row, column = self.predict_block_locate(coordi)
+            if row is None:
+                continue
 
             # 手前のサークルが画像上になくて、サークルのベクトルを求めることができなかった場合を考慮
-            if column is None:
+            elif column is None:
                 index = np.where(np.all(self.course_info_coordinate[3] == [0, 0, 0, 0], axis=1))
                 # 要素が見つかった場合
                 if len(index[0]) > 0:
@@ -1487,6 +1498,7 @@ if __name__ == "__main__":
         info.get_area_info(args.isR)
     finally:
         print(f"最終結果--------------------------------------------------------------")
+        print(f"image_name         : {image_name}")
         print(f"block_coordi_red   : {info.block_coordi_red}")
         print(f"block_coordi_blue1 : {info.block_coordi_blue1}")
         print(f"block_coordi_blue2 : {info.block_coordi_blue2}")
@@ -1496,11 +1508,6 @@ if __name__ == "__main__":
         print(f"course_info_coordinate :\n{info.course_info_coordinate[2:]}")
         print(f"course_info_block :\n{info.course_info_block}")
         print(f"---------------------------------------------------------------------")
-
-    # info.course_info_coordinate
-    print(f"info.course_info_coordinate[2:, :, 0]: {info.course_info_coordinate[2, :, 0]}")
-    sorted_indices = np.sort(info.course_info_coordinate[2, :, 0])
-    print(sorted_indices)
 
     # 処理時間計測用
     execute_time = time.time() - start
