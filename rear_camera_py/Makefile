@@ -67,6 +67,7 @@ rm-img:
 
 ## ブロックエリア攻略関連 ##
 hunt-l:
+	echo "hoge"
 	cd src && python3 block_de_treasure_hunter.py left
 
 hunt-r:

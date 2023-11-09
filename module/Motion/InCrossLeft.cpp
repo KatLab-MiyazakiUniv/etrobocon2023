@@ -18,8 +18,8 @@ void InCrossLeft::run()
   }
 
   DistanceStraight ds(targetDistance, dsTargetSpeed);
-
   PwmRotation rotation(targetAngle, prPwm, isClockwise);
+  EdgeChanging ec(isLeftEdge, false);
 
   // 回頭後の位置を調整するため、直進する
   ds.run();
@@ -27,6 +27,8 @@ void InCrossLeft::run()
   rotation.run();
   // 円外へ出る
   ds.run();
+  // 右エッジに切替
+  ec.run();
 }
 
 bool InCrossLeft::isMetPrecondition()

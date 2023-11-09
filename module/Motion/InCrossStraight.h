@@ -34,7 +34,7 @@ class InCrossStraight : public BlockAreaMotion {
 
  private:
   double targetDistance = 100;  // 交点サークルの外径 (100.0mm)
-  double targetSpeed = 200;     // 目標速度[mm/s]
+  double targetSpeed = 100;     // 目標速度[mm/s]
 };
 
 #endif

@@ -84,15 +84,15 @@ void EtRobocon2023::start()
                                        targetBrightness);
 
   // LAPゲートを通過する
-  lineTraceAreaMaster.run();
-  // 走行状態をlap(LAPゲート通過)に変更
-  setState("lap");
+  // lineTraceAreaMaster.run();
+  // // 走行状態をlap(LAPゲート通過)に変更
+  // setState("lap");
 
-  // ダブルループエリアを走行する
-  doubleLoopAreaMaster.run();
+  // // ダブルループエリアを走行する
+  // doubleLoopAreaMaster.run();
 
   // ブロックdeトレジャーを攻略する
-  snprintf(buf, BUF_SIZE, "cd rear_camera_py && make hunt-%c", isLeftCourse ? 'l' : 'r');
+  snprintf(buf, BUF_SIZE, "cd etrobocon2023/rear_camera_py && make hunt-%c", isLeftCourse ? 'l' : 'r');
   system(buf);
   blockDeTreasureAreaMaster.run();
 

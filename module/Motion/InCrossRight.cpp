@@ -19,6 +19,7 @@ void InCrossRight::run()
 
   DistanceStraight ds(targetDistance, dsTargetSpeed);
   PwmRotation rotation(targetAngle, prPwm, isClockwise);
+  EdgeChanging ec(isLeftEdge, true);
 
   // 回頭後の位置を調整するため、直進する
   ds.run();
@@ -26,6 +27,8 @@ void InCrossRight::run()
   rotation.run();
   // 円外へ出る
   ds.run();
+  // 左エッジに切替
+  ec.run();
 }
 
 bool InCrossRight::isMetPrecondition()
