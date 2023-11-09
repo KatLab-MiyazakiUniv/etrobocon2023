@@ -76,7 +76,7 @@ class GetAreaInfo:
         self.block_coordi_red = np.zeros(4)
         self.block_coordi_blue1 = np.zeros(4)
         self.block_coordi_blue2 = np.zeros(4)
-        self.course_info_block = np.zeros((4,4))
+        self.course_info_block = np.zeros((4, 4))
 
         # サークル関連
         self.course_info_coordinate = np.zeros((4, 4, 4))
@@ -290,7 +290,6 @@ class GetAreaInfo:
         if np.all(mask_coordi == 0):
             return None
 
-        # if self.develop:
         if self.develop and develop_img is not None:
             # マスクの大きさを表す線
             develop_img[mask_height, :] = Color.BLACK.value
@@ -1456,7 +1455,6 @@ class GetAreaInfo:
             if self.course_info_block[row, column] == 0:
                 self.course_info_block[row, column] = 2
                 self.block_count_blue += 1
-
 
         # 終了
         return self.course_info_block

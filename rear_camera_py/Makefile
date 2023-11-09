@@ -17,9 +17,7 @@ help:
 	@echo " $$ make test"
 	@echo "フォーマットを実行する"
 	@echo " $$ make format"
-	@echo "スタイルチェックを実行する"
-	@echo " $$ make check_style"
-	@echo "フォーマットとスタイルチェックを実行する"
+	@echo "フォーマットとチェックを実行する"
 	@echo " $$ make format-check"
 	@echo "ソースコードチェックとテストを実行する"
 	@echo " $$ make all-check"
@@ -65,21 +63,17 @@ test:
 	python -m unittest
 
 format:
-	autopep8 --in-place --recursive src/
+	autopep8 --in-place --recursive src/ tests/
 	python -m autopep8 -i -r src/ tests/
-
-check_style:
-	python -m pycodestyle src/ tests/
-	python -m pydocstyle src/ tests/
 
 format-check:
 	@${make} format
-	@${make} check_style
+	python -m pycodestyle src/ tests/
+	python -m pydocstyle src/ tests/
 
 all-check:
-	@${make} format
 	@${make} test
-	@${make} check_style
+	@${make} format-check
 
 debug:
 	python -m src --debug
