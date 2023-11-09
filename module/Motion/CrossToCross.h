@@ -17,7 +17,7 @@ class CrossToCross : public BlockAreaMotion {
   /**
    * コンストラクタ
    */
-  CrossToCross(COLOR _targetColor, bool& _isLeftEdge);
+  CrossToCross(COLOR _targetColor, int _targetBrightness, bool& _isLeftEdge);
 
   /**
    * @brief 交点間を移動する
@@ -35,10 +35,10 @@ class CrossToCross : public BlockAreaMotion {
   void logRunning() override;
 
  private:
-  COLOR targetColor;                         // 目標色
-  double targetSpeed = 200;                  // 目標速度 [mm/s]
-  int targetBrightness = 50;                  // 目標輝度
-  PidGain gain = PidGain(0.1, 0.0, 0.0);  // PIDゲイン
+  COLOR targetColor;                      // 目標色
+  double targetSpeed = 200;               // 目標速度 [mm/s]
+  int targetBrightness;                   // 目標輝度
+  PidGain gain = PidGain(0.1, 0.08, 0.05);  // PIDゲイン
   bool& isLeftEdge;  // エッジの左右判定(true:左エッジ, false:右エッジ)};
 };
 

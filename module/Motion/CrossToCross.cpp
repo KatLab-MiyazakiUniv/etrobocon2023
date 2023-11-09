@@ -8,8 +8,8 @@
 
 using namespace std;
 
-CrossToCross::CrossToCross(COLOR _targetColor, bool& _isLeftEdge)
-  : targetColor(_targetColor), isLeftEdge(_isLeftEdge){};
+CrossToCross::CrossToCross(COLOR _targetColor, int _targetBrightness, bool& _isLeftEdge)
+  : targetColor(_targetColor), targetBrightness(_targetBrightness), isLeftEdge(_isLeftEdge){};
 
 void CrossToCross::run()
 {

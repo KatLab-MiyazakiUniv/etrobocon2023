@@ -24,7 +24,7 @@ class BlockDeTreasureHunter:
         # TODO: ここから、マージする際に差し替える
         length = 4
         block_map = np.zeros((length, length))
-        dummy_block_coords = [(3, 3), (0, 3)]
+        dummy_block_coords = [(0, 3), (3, 3)]
         treasure_block_coord = (0, 0)
         for (y, x) in dummy_block_coords:
             block_map[y][x] = 1
@@ -51,7 +51,7 @@ class BlockDeTreasureHunter:
         first_rotate = "clockwise,右回頭" if is_left_course else "anticlockwise,左回頭"
         second_rotate = "anticlockwise,左回頭" if is_left_course else "clockwise,右回頭"
         enter_edge = "right" if is_left_course else "left"
-        enter_motions = f"PR,60,60,{first_rotate}\n" \
+        enter_motions = f"PR,60,55,{first_rotate}\n" \
             + "DS,80,250,直進\n" \
             + "CS,BLACK,150,黒まで直進、ブロックエリア侵入\n" \
             + "DS,50,150,黒線から外れるよう直進\n" \

@@ -120,11 +120,11 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
 
       motionList.push_back(is);          // 動作リストに追加
     } else if(command == COMMAND::IL) {  // 交点内移動（左折）
-      InCrossLeft* il = new InCrossLeft();
+      InCrossLeft* il = new InCrossLeft(isLeftEdge);
 
       motionList.push_back(il);          // 動作リストに追加
     } else if(command == COMMAND::IR) {  // 交点内移動（右折）
-      InCrossRight* ir = new InCrossRight();
+      InCrossRight* ir = new InCrossRight(isLeftEdge);
 
       motionList.push_back(ir);          // 動作リストに追加
     } else if(command == COMMAND::BR) {  // 後ろを向く
@@ -133,6 +133,7 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
       motionList.push_back(br);          // 動作リストに追加
     } else if(command == COMMAND::CC) {  // 交点サークルから交点サークル
       CrossToCross* cc = new CrossToCross(ColorJudge::stringToColor(params[1]),  // 目標色
+                                          targetBrightness + atoi(params[2]),    // 目標輝度
                                           isLeftEdge);                           // エッジ
 
       motionList.push_back(cc);                           // 動作リストに追加

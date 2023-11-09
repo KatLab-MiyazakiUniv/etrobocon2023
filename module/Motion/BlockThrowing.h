@@ -32,11 +32,11 @@ class BlockThrowing : public CompositeMotion {
  private:
   const bool isClockwise = true;      // ブロック投げ入れの回頭方向
   const int armTargetAngle = 60;      // アームの目標回転角度
-  const int preTargetAngle = 35;      // ブロック投げ入れのための目標回頭角度
-  const int postTargetAngle = 32;     // 復帰するための目標回頭角度
+  const int preTargetAngle = 28;      // ブロック投げ入れのための目標回頭角度
+  const int postTargetAngle = 23;     // 復帰するための目標回頭角度
   const int armPwm = 40;              // アーム動作のPWM
   const int rotationPwm = 80;         // 回頭PWM
-  const double targetDistance = 100;  // ブロック投げ入れのための目標距離
+  const double targetDistance = 150;  // ブロック投げ入れのための目標距離
   const double targetSpeed = 150;     // ブロック投げ入れのための目標速度
 };
 #endif

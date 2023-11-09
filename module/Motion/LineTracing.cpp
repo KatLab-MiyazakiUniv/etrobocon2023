@@ -34,8 +34,6 @@ void LineTracing::run()
     return;
   }
 
-  printf("%s in LT\n", isLeftEdge ? "true" : "false");
-
   // 左右で符号を変える
   edgeSign = isLeftEdge ? -1 : 1;
 

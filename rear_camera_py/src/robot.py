@@ -114,13 +114,31 @@ class Robot:
                 # 進行方向以外の方角については、方角を変えることを考慮する
                 rotation_angle = direct - self.direction
                 comment = f"({self.y} {self.x} {direct.name})"
-                motion = Turn(rotation_angle, comment)
+                # 向いた方角で回頭補正可能かを判定する
+                can_xr = self.get_can_xr(self.y, self.x, direct)
+                motion = Turn(rotation_angle, can_xr, comment)
                 next_robot = Robot(self.y, self.x, direct,
                                    self.motions + [motion], self.cost + motion.cost)
             # 1つの動作を追加したロボットの状態を保持する
             transitionable_robots += [next_robot]
         return transitionable_robots
 
+    def get_can_xr(self, y, x, direction):
+        """回頭補正ができるか判定する.
+        
+        Args:
+            y (int): y座標
+            x (int): x座標
+            direction (Direction): 方角
+        Returns:
+            (bool): 回頭補正できるか
+        """
+        if (direction == Direction.N and y >= 2) or \
+            (direction == Direction.S and y <= 1) or \
+            (direction == Direction.E and x <= 1) or \
+            (direction == Direction.W and x >= 2):
+            return False
+        return True
 
 class Direction(Enum):
     """方角を保持するクラス."""
