@@ -46,13 +46,13 @@ ifeq ($(SAVE_NAME),)
 endif
 snap_image:
 	@${make} kill
-	sudo python3 src/capture_snap_image.py  --save_path $(SAVE_NAME)
+	sudo python3 src/capture_snap_image.py --save_path $(SAVE_NAME)
 	@echo "$(SAVE_NAME) 画像取得！！！！！！！"
 
 image:
 	@${make} kill
-	sudo python3 src/camera_interface.py
-	@echo "画像取得！！！！！！！"
+	sudo python3 src/camera_interface.py --save_path $(SAVE_NAME)
+	@echo "$(SAVE_NAME) 画像取得！！！！！！！"
 
 
 images:
@@ -67,11 +67,10 @@ rm-img:
 
 ## ブロックエリア攻略関連 ##
 hunt-l:
-	echo "hoge"
-	cd src && python3 block_de_treasure_hunter.py left
+	python3 src/block_de_treasure_hunter.py left
 
 hunt-r:
-	cd src && python3 block_de_treasure_hunter.py right
+	python3 src/block_de_treasure_hunter.py right
 
 ## 開発関連 ##
 test:
