@@ -7,7 +7,7 @@ import cv2
 import os
 from enum import Enum
 
-from calculator import Calculator
+from line_calculator import LineCalculator
 
 script_dir = os.path.dirname(os.path.abspath(__file__))  # /src
 PROJECT_DIR_PATH = os.path.dirname(script_dir)  # /rear_camera_py
@@ -27,6 +27,7 @@ class Color(Enum):
 class GetAreaInfo:
     """ブロックdeトレジャーのエリア情報を取得するクラス."""
 
+    # 色統一のための各色のHSV値の範囲
     # OpenCVのHSV空間の上限はどれも255
     RED1 = [(0, 15), (90, 255), (100, 255)]
     YELLOW = [(16, 37), (50, 255), (120, 255)]
@@ -40,7 +41,7 @@ class GetAreaInfo:
                  image_name,
                  image_dir_path,
                  save_dir_path=None,
-                 develop=None) -> None:
+                 develop=None):
         """GetAreaInfoのコンストラクタ.
 
         Args:
@@ -52,7 +53,7 @@ class GetAreaInfo:
         # 画像パス・保存関連
         self.image_name = image_name
         self.image_dir_path = image_dir_path
-        self.save_dir_path = image_dir_path if save_dir_path is None else save_dir_path
+        self.save_dir_path = save_dir_path if save_dir_path is not None else image_dir_path
         self.develop = develop
 
         # ベクトル関連
@@ -75,14 +76,14 @@ class GetAreaInfo:
         self.block_coordi_red = np.zeros(4)
         self.block_coordi_blue1 = np.zeros(4)
         self.block_coordi_blue2 = np.zeros(4)
-        self.course_info_block = np.zeros(16).reshape(4, 4)
+        self.course_info_block = np.zeros((4,4))
 
         # サークル関連
         self.course_info_coordinate = np.zeros((4, 4, 4))
 
         # コース情報関連
         # 行
-        self.row_verctor_0 = np.array([None, None])
+        self.row_verctor_0 = np.array([None, None])  # [傾き, 切片]
         self.row_verctor_1 = np.array([None, None])
         self.row_verctor_2 = np.array([None, None])
         self.row_verctor_3 = np.array([None, None])
@@ -287,7 +288,6 @@ class GetAreaInfo:
                     max_pixcel = count_pixcel
 
         if np.all(mask_coordi == 0):
-            # return None, develop_img
             return None
 
         # if self.develop:
@@ -805,9 +805,9 @@ class GetAreaInfo:
             column: ブロックの存在する列
         """
         # 0行目 or 1行目
-        _, diff_y_row_0 = Calculator.calc_dis_line_to_coordi(
+        _, diff_y_row_0 = LineCalculator.calc_distance_line_to_coordi(
             block_coordi, self.row_verctor_0)
-        _, diff_y_row_1 = Calculator.calc_dis_line_to_coordi(
+        _, diff_y_row_1 = LineCalculator.calc_distance_line_to_coordi(
             block_coordi, self.row_verctor_1)
 
         if (diff_y_row_0 is not None and diff_y_row_1 is None) or \
@@ -823,28 +823,28 @@ class GetAreaInfo:
         # 列
         # NOTE: noquにしないとpycodestyleでエラー
         if np.all(self.column_verctor_0 != None):  # noqa
-            diff_x_column_0, _ = Calculator.calc_dis_line_to_coordi(
+            diff_x_column_0, _ = LineCalculator.calc_distance_line_to_coordi(
                 block_coordi, self.column_verctor_0)
             x_arr = np.append(x_arr, diff_x_column_0)
         else:
             x_arr = np.append(x_arr, 2000)  # 画像横サイズより大きい数
 
         if np.all(self.column_verctor_1 != None):  # noqa
-            diff_x_column_1, _ = Calculator.calc_dis_line_to_coordi(
+            diff_x_column_1, _ = LineCalculator.calc_distance_line_to_coordi(
                 block_coordi, self.column_verctor_1)
             x_arr = np.append(x_arr, diff_x_column_1)
         else:
             x_arr = np.append(x_arr, 2000)  # 画像横サイズより大きい数
 
         if np.all(self.column_verctor_2 != None):  # noqa
-            diff_x_column_2, _ = Calculator.calc_dis_line_to_coordi(
+            diff_x_column_2, _ = LineCalculator.calc_distance_line_to_coordi(
                 block_coordi, self.column_verctor_2)
             x_arr = np.append(x_arr, diff_x_column_2)
         else:
             x_arr = np.append(x_arr, 2000)  # 画像横サイズより大きい数
 
         if np.all(self.column_verctor_3 != None):  # noqa
-            diff_x_column_3, _ = Calculator.calc_dis_line_to_coordi(
+            diff_x_column_3, _ = LineCalculator.calc_distance_line_to_coordi(
                 block_coordi, self.column_verctor_3)
             x_arr = np.append(x_arr, diff_x_column_3)
         else:
@@ -856,7 +856,7 @@ class GetAreaInfo:
         else:
             return row, min_index  # min_index(=column)
 
-    def get_area_info(self, isR=True) -> None:
+    def get_area_info(self, isL=True) -> None:
         """画像を6色画像に変換する関数.
 
         Args:
@@ -883,8 +883,8 @@ class GetAreaInfo:
             save_path = os.path.join(self.save_dir_path, str(img_count)+"_"+self.image_name)
             cv2.imwrite(save_path, course_img)
 
-        # Lコースの場合
-        if not isR:
+        # Rコースの場合
+        if not isL:
             # 画像を左右反転させる
             course_img = cv2.flip(course_img, 1)
 
@@ -1217,7 +1217,7 @@ class GetAreaInfo:
              self.course_info_coordinate[3, :, 3])/2
         # 傾きと切片を求める(a:傾き, b:切片)
         self.row_verctor_3[0], self.row_verctor_3[1] = \
-            Calculator.calculate_line_coordi_4(
+            LineCalculator.calc_from_coordi_4(
                 x[0], y[0], x[1], y[1], x[2], y[2], x[3], y[3])
         # 線を記述する
         if self.develop:
@@ -1236,7 +1236,7 @@ class GetAreaInfo:
              + self.course_info_coordinate[2, :, 3])/2
         # 傾きと切片を求める(a:傾き, b:切片)
         self.row_verctor_2[0], self.row_verctor_2[1] \
-            = Calculator.calculate_line_coordi_4(
+            = LineCalculator.calc_from_coordi_4(
                 x[0], y[0], x[1], y[1], x[2], y[2], x[3], y[3])
         # 線を記述する
         if self.develop:
@@ -1289,7 +1289,7 @@ class GetAreaInfo:
             y2 = np.average(self.course_info_coordinate[2, 0, [2, 3]])
 
             self.column_verctor_0[0], self.column_verctor_0[1] = \
-                Calculator.calculate_line_coordi_2(x1, y1, x2, y2)
+                LineCalculator.calc_from_coordi_2(x1, y1, x2, y2)
             # 線を記述する
             if self.develop:
                 y1 = int(self.column_verctor_0[1])
@@ -1308,7 +1308,7 @@ class GetAreaInfo:
             x2 = np.average(self.course_info_coordinate[2, 1, [0, 1]])
             y2 = np.average(self.course_info_coordinate[2, 1, [2, 3]])
             self.column_verctor_1[0], self.column_verctor_1[1] = \
-                Calculator.calculate_line_coordi_2(x1, y1, x2, y2)
+                LineCalculator.calc_from_coordi_2(x1, y1, x2, y2)
             # 線を記述する
             if self.develop:
                 y1 = int(self.column_verctor_1[1])
@@ -1327,7 +1327,7 @@ class GetAreaInfo:
             x2 = np.average(self.course_info_coordinate[2, 2, [0, 1]])
             y2 = np.average(self.course_info_coordinate[2, 2, [2, 3]])
             self.column_verctor_2[0], self.column_verctor_2[1] = \
-                Calculator.calculate_line_coordi_2(x1, y1, x2, y2)
+                LineCalculator.calc_from_coordi_2(x1, y1, x2, y2)
             # 線を記述する
             if self.develop:
                 y1 = int(self.column_verctor_2[1])
@@ -1346,7 +1346,7 @@ class GetAreaInfo:
             x2 = np.average(self.course_info_coordinate[2, 3, [0, 1]])
             y2 = np.average(self.course_info_coordinate[2, 3, [2, 3]])
             self.column_verctor_3[0], self.column_verctor_3[1] = \
-                Calculator.calculate_line_coordi_2(x1, y1, x2, y2)
+                LineCalculator.calc_from_coordi_2(x1, y1, x2, y2)
             # 線を記述する
             if self.develop:
                 y1 = int(self.column_verctor_3[1])
@@ -1457,10 +1457,6 @@ class GetAreaInfo:
                 self.course_info_block[row, column] = 2
                 self.block_count_blue += 1
 
-        # Lコースの場合
-        if not isR:
-            # 画像を左右反転させる
-            self.course_info_block = cv2.flip(self.course_info_block, 1)
 
         # 終了
         return self.course_info_block
@@ -1473,7 +1469,7 @@ if __name__ == "__main__":
     start = time.time()
 
     parser = argparse.ArgumentParser(description="リアカメラに関するプログラム")
-    parser.add_argument("-isR", "--isR", default=True, type=bool,
+    parser.add_argument("-isR", "--isL", default=True, type=bool,
                         help='コースが右(True)か左か(False)')
     parser.add_argument("-develop", "--develop", action='store_true',
                         help='開発モード')
@@ -1495,7 +1491,7 @@ if __name__ == "__main__":
 
     info = GetAreaInfo(image_name, work_dir_path, save_dir_path, develop=args.develop)
     try:
-        info.get_area_info(args.isR)
+        info.get_area_info(args.isL)
     finally:
         print(f"最終結果--------------------------------------------------------------")
         print(f"image_name         : {image_name}")

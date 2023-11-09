@@ -34,7 +34,7 @@ class TestRoboSnap(unittest.TestCase):
             expect_info = np.array(expect_info).reshape(4, 4)
 
             info = GetAreaInfo(img_name, self.test_image_dir, develop=False)
-            course_info = info.get_area_info(isR=True)
+            course_info = info.get_area_info(isL=True)
 
             if img_name[-6:-4] == "10":
                 # 検出の難しい画像は手前の列のみ検証

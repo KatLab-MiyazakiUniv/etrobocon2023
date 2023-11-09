@@ -102,4 +102,3 @@ make rm:
 
 test-get:
 	python -m unittest tests/test_get_area_info.py
-# python -m unittest tests/test_calculator.py

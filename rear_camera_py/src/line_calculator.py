@@ -6,15 +6,18 @@
 import numpy as np
 
 
-class Calculator:
+class LineCalculator:
     """計算を行うクラス(ブロックエリア情報取得用)."""
 
     @staticmethod
-    def calculate_line_coordi_2(x1, y1, x2, y2) -> (np.float64, np.float64):
+    def calc_from_coordi_2(x1, y1, x2, y2) -> (np.float64, np.float64):
         """2点から直線の傾きと切片を求める関数.
 
         Args:
             2点の座標
+        Return:
+            a: 傾き
+            b: 切片
         """
         if x1 == x2 or y1 == y2:
             return None, None
@@ -28,12 +31,15 @@ class Calculator:
         return a, b
 
     @staticmethod
-    def calculate_line_coordi_4(x1, y1, x2, y2, x3, y3, x4, y4) \
+    def calc_from_coordi_4(x1, y1, x2, y2, x3, y3, x4, y4) \
             -> (np.float64, np.float64):
         """4点から直線の傾きと切片を求める関数.
 
         Args:
             4点の座標
+        Return:
+            a: 傾き
+            b: 切片
         """
         coordi = np.array([[x1, y1], [x2, y2], [x3, y3], [x4, y4]])
         coordi = coordi[np.any(coordi != [0, 0], axis=1)]  # [0, 0]は削除
@@ -47,7 +53,7 @@ class Calculator:
         return a, b
 
     @staticmethod
-    def calc_dis_line_to_coordi(coordi: np.ndarray, line: np.ndarray) \
+    def calc_distance_line_to_coordi(coordi: np.ndarray, line: np.ndarray) \
             -> (np.float64, np.float64):
         """直線と点のx,y座標それぞれで距離を求める関数.
 
@@ -60,6 +66,10 @@ class Calculator:
         """
         a, b = line  # 傾き, 切片
         x, y = coordi
+
+        if a == 0:
+            diff_y = np.abs(b - y)
+            return None, diff_y
 
         # x座標の差
         line_x = (y - b) / a
