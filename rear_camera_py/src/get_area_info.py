@@ -856,7 +856,7 @@ class GetAreaInfo:
             return row, min_index  # min_index(=column)
 
     def get_area_info(self, isL=True) -> None:
-        """画像を6色画像に変換する関数.
+        """画像からコース情報を取得する関数.
 
         Args:
             game_area_img (np.ndarray): ゲームエリア画像

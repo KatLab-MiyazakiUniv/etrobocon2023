@@ -26,17 +26,6 @@ class BlockDeTreasureHunter:
         Args:
             is_left_course (bool): Lコースであるかどうか
         """
-        # コース情報取得
-        # TODO: ここから、マージする際に差し替える
-        length = 4
-        block_map = np.zeros((length, length))
-        dummy_block_coords = [(3, 3), (0, 3)]
-        treasure_block_coord = (0, 0)
-        for (y, x) in dummy_block_coords:
-            block_map[y][x] = 1
-        block_map[treasure_block_coord[0], treasure_block_coord[1]] = 2
-        # TODO: ここまで、マージする際に差し替える
-
         # ブロックエリア情報の取得
         image_name = "BlockDeTreasure.png"
         image_dir_path = os.path.join(PROJECT_DIR_PATH, "image_data")
