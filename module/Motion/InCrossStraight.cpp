@@ -8,10 +8,7 @@
 
 using namespace std;
 
-InCrossStraight::InCrossStraight(double _targetDistance, double _targetSpeed)
-  : BlockAreaMotion(1.0, 1.12),  // 動作時間, 失敗リスク TODO: 測定し直す
-    targetDistance(_targetDistance),
-    targetSpeed(_targetSpeed){};
+InCrossStraight::InCrossStraight(){};
 
 void InCrossStraight::run()
 {

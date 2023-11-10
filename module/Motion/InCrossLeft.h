@@ -17,7 +17,7 @@ class InCrossLeft : public BlockAreaMotion {
   /**
    * コンストラクタ
    */
-  InCrossLeft(double _targetDistance, double _dsTargetSpeed, int _targetAngle, int _prPwm);
+  InCrossLeft(bool& _isLeftEdge);
 
   /**
    * @brief 交点サークル上を左に進む
@@ -35,11 +35,12 @@ class InCrossLeft : public BlockAreaMotion {
   void logRunning() override;
 
  private:
-  double targetDistance;     // 目標距離 (25.0mm)
-  double dsTargetSpeed;      // 距離指定直進の目標速度 [mm/s]
-  int targetAngle;           // 目標回頭角度 (74°)
-  int prPwm;                 // 角度指定回頭の目標PWM
-  bool isClockwise = false;  // 回頭の方向は左回り
+  double targetDistance = 65.0;  // 目標距離
+  double dsTargetSpeed = 200;    // 距離指定直進の目標速度 [mm/s]
+  int targetAngle = 74;          // 目標回頭角度
+  int prPwm = 70;                // 角度指定回頭の目標PWM
+  bool isClockwise = false;      // 回頭の方向は左回り
+  bool& isLeftEdge;
 };
 
 #endif

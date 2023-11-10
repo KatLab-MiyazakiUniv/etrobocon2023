@@ -13,6 +13,11 @@ help:
 	@echo "取得した画像を一括削除"
 	@echo " $$ make rm-img"
 
+	@echo "Lコースのブロックでトレジャー攻略を計画する"
+	@echo " $$ make hunt-l"
+	@echo "Rコースのブロックでトレジャー攻略を計画する"
+	@echo " $$ make hunt-r"
+
 	@echo "テストを実行する"
 	@echo " $$ make test"
 	@echo "フォーマットを実行する"
@@ -39,13 +44,13 @@ ifeq ($(SAVE_NAME),)
 endif
 snap_image:
 	@${make} kill
-	sudo python3 src/capture_snap_image.py  --save_path $(SAVE_NAME)
+	sudo python3 src/capture_snap_image.py --save_path $(SAVE_NAME)
 	@echo "$(SAVE_NAME) 画像取得！！！！！！！"
 
 image:
 	@${make} kill
-	sudo python3 src/camera_interface.py
-	@echo "画像取得！！！！！！！"
+	sudo python3 src/camera_interface.py --save_path $(SAVE_NAME)
+	@echo "$(SAVE_NAME) 画像取得！！！！！！！"
 
 
 images:
@@ -57,6 +62,13 @@ kill:
 
 rm-img:
 	sudo rm -rf image_data/
+
+## ブロックエリア攻略関連 ##
+hunt-l:
+	python3 src/block_de_treasure_hunter.py left
+
+hunt-r:
+	python3 src/block_de_treasure_hunter.py right
 
 ## 開発関連 ##
 test:

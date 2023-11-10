@@ -15,7 +15,7 @@ class InCrossStraight : public BlockAreaMotion {
   /**
    * コンストラクタ
    */
-  InCrossStraight(double _targetDistance, double _targetSpeed);
+  InCrossStraight();
 
   /**
    * @brief 交点サークル上を前に進む
@@ -33,8 +33,8 @@ class InCrossStraight : public BlockAreaMotion {
   void logRunning() override;
 
  private:
-  double targetDistance;  // 交点サークルの外径 (100.0mm)
-  double targetSpeed;     // 目標速度[mm/s]
+  double targetDistance = 100;  // 交点サークルの外径 (100.0mm)
+  double targetSpeed = 100;     // 目標速度[mm/s]
 };
 
 #endif

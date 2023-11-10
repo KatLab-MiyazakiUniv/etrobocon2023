@@ -48,10 +48,20 @@ class BlockDeTreasureHunter:
             end_direction = Direction.W
             start_coord = (2, 3)
             end_coord = (1, 0)
+        # ロボット侵入動作
+        first_rotate = "clockwise,右回頭" if is_left_course else "anticlockwise,左回頭"
+        second_rotate = "anticlockwise,左回頭" if is_left_course else "clockwise,右回頭"
+        enter_edge = "right" if is_left_course else "left"
+        enter_motions = f"PR,60,55,{first_rotate}\n" \
+            + "DS,80,250,直進\n" \
+            + "CS,BLACK,150,黒まで直進、ブロックエリア侵入\n" \
+            + "DS,50,150,黒線から外れるよう直進\n" \
+            + f"EC,{enter_edge},エッジ切替\n" \
+            + f"PR,60,60,{second_rotate}\n" \
+            + f"CL,BLUE,200,-10,0.4,0.22,0.1,青サークルまで移動({start_coord[0]} {start_coord[1]} {start_direction.name})"
         # ロボット初期化
-        comment = f"start = ({start_coord[0]} {start_coord[1]} {start_direction.name})"
         start_robot = Robot(*start_coord, start_direction,
-                            [Motion({"comment": comment})])
+                            [Motion({"enter_motions": enter_motions})])
         end_robot = Robot(*end_coord, end_direction)
 
         # 動作を計画する
@@ -60,9 +70,8 @@ class BlockDeTreasureHunter:
         commands = ""
         for motion in robot.motions:
             commands += f"{motion.make_command()}\n"
-        # TODO: ブロックdeトレジャーハンター攻略の詳細が決まり次第パスを設定しなおす
-        # 既存のコマンドファイルを書き換えたくないので、Left/Rightはあえて入れていません。
-        with open("../../datafiles/BlockDeTreasure.csv", "w") as f:
+        cource_string = "Left" if is_left_course else "Right"
+        with open(f"../../datafiles/BlockDeTreasure{cource_string}.csv", "w") as f:
             f.write(commands)
 
 

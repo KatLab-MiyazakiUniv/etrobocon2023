@@ -114,50 +114,29 @@ vector<Motion*> MotionParser::createMotions(const char* commandFilePath, int tar
       CorrectingRotation* xr = new CorrectingRotation(atoi(params[1]),   // 目標角度
                                                       atof(params[2]));  // 目標速度
 
-      motionList.push_back(xr);                                    // 動作リストに追加
-    } else if(command == COMMAND::IS) {                            // 交点内移動（直進）
-      InCrossStraight* is = new InCrossStraight(atof(params[1]),   // 目標距離
-                                                atof(params[2]));  // 目標速度 [mm/s]
+      motionList.push_back(xr);                     // 動作リストに追加
+    } else if(command == COMMAND::IS) {             // 交点内移動（直進）
+      InCrossStraight* is = new InCrossStraight();  // 目標速度 [mm/s]
 
-      motionList.push_back(is);                           // 動作リストに追加
-    } else if(command == COMMAND::IL) {                   // 交点内移動（左折）
-      InCrossLeft* il = new InCrossLeft(atof(params[1]),  // 目標距離
-                                        atof(params[2]),  // 距離指定直進の目標速度 [mm/s]
-                                        atoi(params[3]),   // 目標回頭角度
-                                        atoi(params[4]));  // 角度指定回頭の目標PWM
+      motionList.push_back(is);          // 動作リストに追加
+    } else if(command == COMMAND::IL) {  // 交点内移動（左折）
+      InCrossLeft* il = new InCrossLeft(isLeftEdge);
 
-      motionList.push_back(il);                             // 動作リストに追加
-    } else if(command == COMMAND::IR) {                     // 交点内移動（右折）
-      InCrossRight* ir = new InCrossRight(atof(params[1]),  // 目標距離
-                                          atof(params[2]),  // 距離指定直進の目標速度 [mm/s]
-                                          atoi(params[3]),   // 目標回頭角度
-                                          atoi(params[4]));  // 角度指定回頭の目標PWM
+      motionList.push_back(il);          // 動作リストに追加
+    } else if(command == COMMAND::IR) {  // 交点内移動（右折）
+      InCrossRight* ir = new InCrossRight(isLeftEdge);
 
       motionList.push_back(ir);          // 動作リストに追加
+    } else if(command == COMMAND::BR) {  // 後ろを向く
+      BackRotation* br = new BackRotation(isLeftEdge);
+
+      motionList.push_back(br);          // 動作リストに追加
     } else if(command == COMMAND::CC) {  // 交点サークルから交点サークル
-      CrossToCross* cc = new CrossToCross(
-          ColorJudge::stringToColor(params[1]),                        // 目標色
-          atof(params[2]),                                             // 目標速度 [mm/s]
-          targetBrightness + atoi(params[3]),                          // 目標輝度 + 調整
-          PidGain(atof(params[4]), atof(params[5]), atof(params[6])),  // PIDゲイン
-          isLeftEdge);                                                 // エッジ
+      CrossToCross* cc = new CrossToCross(ColorJudge::stringToColor(params[1]),  // 目標色
+                                          targetBrightness + atoi(params[2]),    // 目標輝度
+                                          isLeftEdge);                           // エッジ
 
-      motionList.push_back(cc);          // 動作リストに追加
-    } else if(command == COMMAND::CM) {  // 交点サークルから直線の中点
-      CrossToMid* cm = new CrossToMid(
-          atof(params[1]),  // 交点から中点までの目標距離
-          atof(params[2]),  // サークル内半径の目標距離
-          atof(params[3]),  // 距離指定ライントレースの目標速度 [mm/s]
-          atof(params[4]),  // 距離指定直進の目標速度 [mm/s]
-          atoi(params[5]),  // 目標回頭角度
-          atoi(params[6]),  // 角度指定回頭の目標PWM
-          targetBrightness + atoi(params[7]),                           // 目標輝度 + 調整
-          PidGain(atof(params[8]), atof(params[9]), atof(params[10])),  // PIDゲイン
-          convertBool(params[0], params[11]),  // 回頭方向 (true:時計回り, false:反時計回り)
-          isLeftEdge,                          // エッジ
-          convertBool(params[0], params[12]));  // 切り替え後のエッジ
-
-      motionList.push_back(cm);                           // 動作リストに追加
+      motionList.push_back(cc);                           // 動作リストに追加
     } else if(command == COMMAND::PR) {                   // Pwm値指定回頭動作
       PwmRotation* pr = new PwmRotation(atoi(params[1]),  // 目標角度
                                         atoi(params[2]),  // Pwm値
@@ -216,10 +195,10 @@ COMMAND MotionParser::convertCommand(char* str)
     return COMMAND::IL;
   } else if(strcmp(str, "IR") == 0) {  // 文字列がIRの場合
     return COMMAND::IR;
+  } else if(strcmp(str, "BR") == 0) {  // 文字列がBRの場合
+    return COMMAND::BR;
   } else if(strcmp(str, "CC") == 0) {  // 文字列がCCの場合
     return COMMAND::CC;
-  } else if(strcmp(str, "CM") == 0) {  // 文字列がCMの場合
-    return COMMAND::CM;
   } else if(strcmp(str, "PR") == 0) {  // 文字列がPRの場合
     return COMMAND::PR;
   } else if(strcmp(str, "ST") == 0) {  // 文字列がSTの場合
@@ -250,8 +229,8 @@ bool MotionParser::convertBool(char* command, char* stringParameter)
     }
   }
 
-  if(strcmp(command, "EC") == 0 || strcmp(command, "CM") == 0) {  //  コマンドがEC, CMの場合
-    if(strcmp(param, "left") == 0) {                              // パラメータがleftの場合
+  if(strcmp(command, "EC") == 0) {    //  コマンドがEC, CMの場合
+    if(strcmp(param, "left") == 0) {  // パラメータがleftの場合
       return true;
     } else if(strcmp(param, "right") == 0) {  // パラメータがrightの場合
       return false;

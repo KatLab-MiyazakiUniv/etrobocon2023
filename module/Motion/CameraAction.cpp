@@ -42,20 +42,25 @@ void CameraAction::run()
   }
 
   // リアカメラで画像を取得する
-  // 画像のファイル名を指定
+  // 画像のファイル名と撮影コマンドを指定
+  char imageName[20];         // 画像のファイル名
+  char makeImageCommand[10];  // 撮影に用いるmakeコマンド名
   if(subject == CameraAction::Subject::A) {
     countShootA++;
     sprintf(imageName, "FigA_%d.png", countShootA);
+    sprintf(makeImageCommand, "image");
   } else if(subject == CameraAction::Subject::B) {
     sprintf(imageName, "FigB.png");
+    sprintf(makeImageCommand, "snap_image");
   } else if(subject == CameraAction::Subject::BLOCK_AREA) {
     sprintf(imageName, "BlockDeTreasure.png");
+    sprintf(makeImageCommand, "snap_image");
   }
 
   // 撮影に際してディレクトリ移動も行う
   char cmd[256];
-  snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make snap_image SAVE_NAME=%s && cd ../..",
-           imageName);
+  snprintf(cmd, 256, "cd etrobocon2023/rear_camera_py && make %s SAVE_NAME=%s && cd ../..",
+           makeImageCommand, imageName);
   system(cmd);
 
   printf("%s\n", cmd);
