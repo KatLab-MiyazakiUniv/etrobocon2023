@@ -35,9 +35,9 @@ class CrossToCross : public BlockAreaMotion {
   void logRunning() override;
 
  private:
-  COLOR targetColor;                      // 目標色
-  double targetSpeed = 200;               // 目標速度 [mm/s]
-  int targetBrightness;                   // 目標輝度
+  COLOR targetColor;                        // 目標色
+  double targetSpeed = 200;                 // 目標速度 [mm/s]
+  int targetBrightness;                     // 目標輝度
   PidGain gain = PidGain(0.1, 0.08, 0.05);  // PIDゲイン
   bool& isLeftEdge;  // エッジの左右判定(true:左エッジ, false:右エッジ)};
 };

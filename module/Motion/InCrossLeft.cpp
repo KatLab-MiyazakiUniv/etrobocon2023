@@ -8,7 +8,7 @@
 
 using namespace std;
 
-InCrossLeft::InCrossLeft(bool& _isLeftEdge):isLeftEdge(_isLeftEdge){};
+InCrossLeft::InCrossLeft(bool& _isLeftEdge) : isLeftEdge(_isLeftEdge){};
 
 void InCrossLeft::run()
 {

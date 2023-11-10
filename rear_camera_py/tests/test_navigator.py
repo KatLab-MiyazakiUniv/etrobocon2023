@@ -41,34 +41,38 @@ class TestNavigator(unittest.TestCase):
         actual_commands = ""
         for motion in robot.motions:
             actual_commands += f"{motion.make_command()}\n"
-        expected_commands = """IS,交点内直進,
-CC,RED,(1 0 N),
+        expected_commands = """PR,60,55,clockwise,右回頭
+DS,80,250,直進
+CS,BLACK,150,黒まで直進、ブロックエリア侵入
+DS,50,150,黒線から外れるよう直進
+EC,right,エッジ切替
+PR,60,60,anticlockwise,左回頭
+CL,BLUE,200,-10,0.4,0.22,0.1,青サークルまで移動(2 0 N),
 IS,交点内直進,
-CC,RED,(0 0 N),
+CC,RED,0,(1 0 N),
+IS,交点内直進,
+CC,RED,0,(0 0 N),
 BT,ブロック移動,
 IR,(0 0 E),
-XR,0,100,回頭補正,
 IS,交点内直進,
-CC,RED,(0 1 E),
+CC,RED,0,(0 1 E),
 IS,交点内直進,
-CC,YELLOW,(0 2 E),
+CC,YELLOW,0,(0 2 E),
 IS,交点内直進,
-CC,YELLOW,(0 3 E),
+CC,YELLOW,0,(0 3 E),
 BT,ブロック移動,
 IR,(0 3 S),
-XR,0,100,回頭補正,
 IS,交点内直進,
-CC,YELLOW,(1 3 S),
+CC,YELLOW,0,(1 3 S),
 IS,交点内直進,
-CC,GREEN,(2 3 S),
+CC,GREEN,0,(2 3 S),
 IS,交点内直進,
-CC,GREEN,(3 3 S),
+CC,GREEN,0,(3 3 S),
 BR,(3 3 N),
-XR,0,100,回頭補正,
 IS,交点内直進,
-CC,GREEN,(2 3 N),
+CC,GREEN,0,(2 3 N),
 IS,交点内直進,
-CC,YELLOW,(1 3 N),
+CC,YELLOW,0,(1 3 N),
 PR,75,60.0,clockwise,(1 3 E),
 """
         self.assertEqual(actual_commands, expected_commands)
@@ -100,32 +104,36 @@ PR,75,60.0,clockwise,(1 3 E),
         actual_commands = ""
         for motion in robot.motions:
             actual_commands += f"{motion.make_command()}\n"
-        expected_commands = """BR,(2 3 S),
+        expected_commands = """PR,60,55,anticlockwise,左回頭
+DS,80,250,直進
+CS,BLACK,150,黒まで直進、ブロックエリア侵入
+DS,50,150,黒線から外れるよう直進
+EC,left,エッジ切替
+PR,60,60,clockwise,右回頭
+CL,BLUE,200,-10,0.4,0.22,0.1,青サークルまで移動(2 3 N),
+BR,(2 3 S),
 XR,0,100,回頭補正,
 IS,交点内直進,
-CC,BLUE,(3 3 S),
+CC,BLUE,0,(3 3 S),
 BT,ブロック移動,
 BR,(3 3 N),
-XR,0,100,回頭補正,
 IS,交点内直進,
-CC,BLUE,(2 3 N),
+CC,BLUE,0,(2 3 N),
 IS,交点内直進,
-CC,RED,(1 3 N),
+CC,RED,0,(1 3 N),
 IS,交点内直進,
-CC,RED,(0 3 N),
+CC,RED,0,(0 3 N),
 BT,ブロック移動,
 IL,(0 3 W),
-XR,0,100,回頭補正,
 IS,交点内直進,
-CC,RED,(0 2 W),
+CC,RED,0,(0 2 W),
 IS,交点内直進,
-CC,YELLOW,(0 1 W),
+CC,YELLOW,0,(0 1 W),
 IS,交点内直進,
-CC,YELLOW,(0 0 W),
+CC,YELLOW,0,(0 0 W),
 IL,(0 0 S),
-XR,0,100,回頭補正,
 IS,交点内直進,
-CC,YELLOW,(1 0 S),
+CC,YELLOW,0,(1 0 S),
 PR,75,60.0,clockwise,(1 0 W),
 """
         self.assertEqual(actual_commands, expected_commands)

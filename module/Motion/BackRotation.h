@@ -34,7 +34,7 @@ class BackRotation : public BlockAreaMotion {
   void logRunning() override;
 
  private:
-  int targetAngle = 140;  // 目標回頭角度
+  int targetAngle = 140;    // 目標回頭角度
   int prPwm = 100;          // 角度指定回頭の目標PWM
   bool isClockwise = true;  // 回頭の方向は左回り
   bool& isLeftEdge;

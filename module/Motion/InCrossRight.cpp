@@ -8,7 +8,7 @@
 
 using namespace std;
 
-InCrossRight::InCrossRight(bool& _isLeftEdge):isLeftEdge(_isLeftEdge){};
+InCrossRight::InCrossRight(bool& _isLeftEdge) : isLeftEdge(_isLeftEdge){};
 
 void InCrossRight::run()
 {

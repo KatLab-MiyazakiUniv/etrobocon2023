@@ -38,7 +38,7 @@ class InCrossLeft : public BlockAreaMotion {
   double targetDistance = 65.0;  // 目標距離
   double dsTargetSpeed = 200;    // 距離指定直進の目標速度 [mm/s]
   int targetAngle = 74;          // 目標回頭角度
-  int prPwm = 70;               // 角度指定回頭の目標PWM
+  int prPwm = 70;                // 角度指定回頭の目標PWM
   bool isClockwise = false;      // 回頭の方向は左回り
   bool& isLeftEdge;
 };
