@@ -15,15 +15,13 @@ help:
 
 	@echo "テストを実行する"
 	@echo " $$ make test"
-	@echo "フォーマットする"
+	@echo "フォーマットを実行する"
 	@echo " $$ make format"
-	@echo "フォーマットチェックをする"
+	@echo "フォーマットとチェックを実行する"
 	@echo " $$ make format-check"
-	@echo "スタイルチェックを行う"
-	@echo " $$ make check_style"
 	@echo "ソースコードチェックとテストを実行する"
 	@echo " $$ make all-check"
-	@echo "デバッグを行う"
+	@echo "デバッグを実行する"
 	@echo " $$ make debug"
 	@echo "デバッグフォルダを削除する"
 	@echo " $$ make clean"
@@ -65,19 +63,15 @@ test:
 	python -m unittest
 
 format:
-	autopep8 --in-place --recursive src/
+	autopep8 --in-place --recursive src/ tests/
 	python -m autopep8 -i -r src/ tests/
 
 format-check:
+	@${make} format
 	python -m pycodestyle src/ tests/
 	python -m pydocstyle src/ tests/
 
-check_style:
-	pycodestyle src/
-	pydocstyle src/
-
 all-check:
-	@${make} format
 	@${make} test
 	@${make} format-check
 
@@ -89,3 +83,16 @@ clean:
 	
 create-env-rear:	
 	pip install -r ../requirements.txt
+
+## get_area_info.py用 ##
+get_area:
+	python src/get_area_info.py -develop
+
+coodinate:
+	python work/search_coodinate.py
+
+make rm:
+	rm work_image_data/*.png
+
+test-get:
+	python -m unittest tests/test_get_area_info.py

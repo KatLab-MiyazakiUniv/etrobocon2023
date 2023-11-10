@@ -1,14 +1,20 @@
 """ブロックdeトレジャーハンター攻略クラス.
 
-@author: miyashita64 YKhm20020
+@author: miyashita64 YKhm20020 kawanoichi
 """
 
 import sys
 import numpy as np
+import os
+
 from block_area_map import BlockAreaMap
 from navigator import Navigator
 from robot import Robot, Direction
 from motion import Motion
+from get_area_info import GetAreaInfo
+
+script_dir = os.path.dirname(os.path.abspath(__file__))  # /src
+PROJECT_DIR_PATH = os.path.dirname(script_dir)  # /rear_camera_py
 
 
 class BlockDeTreasureHunter:
@@ -20,16 +26,11 @@ class BlockDeTreasureHunter:
         Args:
             is_left_course (bool): Lコースであるかどうか
         """
-        # コース情報取得
-        # TODO: ここから、マージする際に差し替える
-        length = 4
-        block_map = np.zeros((length, length))
-        dummy_block_coords = [(3, 3), (0, 3)]
-        treasure_block_coord = (0, 0)
-        for (y, x) in dummy_block_coords:
-            block_map[y][x] = 1
-        block_map[treasure_block_coord[0], treasure_block_coord[1]] = 2
-        # TODO: ここまで、マージする際に差し替える
+        # ブロックエリア情報の取得
+        image_name = "BlockDeTreasure.png"
+        image_dir_path = os.path.join(PROJECT_DIR_PATH, "image_data")
+        area_info = GetAreaInfo(image_name=image_name, image_dir_path=image_dir_path)
+        block_map = area_info.get_area_info(isL=is_left_course)
         print(block_map)
 
         # ブロックエリアのマップ初期化

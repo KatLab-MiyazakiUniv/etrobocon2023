@@ -30,7 +30,7 @@ class Navigator:
         Returns:
             (Robot): 探索終了時のロボット
         """
-        simulatable_robots = [initial_robot] # 探索候補のロボットの状態
+        simulatable_robots = [initial_robot]  # 探索候補のロボットの状態
         simulated_robots = []                # 探索済みのロボット状態
 
         while len(simulatable_robots) > 0:

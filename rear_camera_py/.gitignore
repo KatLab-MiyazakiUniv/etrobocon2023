@@ -2,9 +2,14 @@
 command_files/*
 *.png
 !tests/test_data/*
+!tests/test_data/block_area_img/*.png
 tests/test_data/test_binary_image.png
 *.json
 *.npy
+
+### 作業用 ###
+!work_image_data/test.png
+
 
 #### macOS ####
 # General
