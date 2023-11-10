@@ -8,13 +8,7 @@
 
 using namespace std;
 
-InCrossRight::InCrossRight(double _targetDistance, double _dsTargetSpeed, int _targetAngle,
-                           int _prPwm)
-  : BlockAreaMotion(1.23, 1.09),  // 動作時間, 失敗リスク TODO: 測定し直す
-    targetDistance(_targetDistance),
-    dsTargetSpeed(_dsTargetSpeed),
-    targetAngle(_targetAngle),
-    prPwm(_prPwm){};
+InCrossRight::InCrossRight(bool& _isLeftEdge) : isLeftEdge(_isLeftEdge){};
 
 void InCrossRight::run()
 {
@@ -25,6 +19,7 @@ void InCrossRight::run()
 
   DistanceStraight ds(targetDistance, dsTargetSpeed);
   PwmRotation rotation(targetAngle, prPwm, isClockwise);
+  EdgeChanging ec(isLeftEdge, true);
 
   // 回頭後の位置を調整するため、直進する
   ds.run();
@@ -32,6 +27,8 @@ void InCrossRight::run()
   rotation.run();
   // 円外へ出る
   ds.run();
+  // 左エッジに切替
+  ec.run();
 }
 
 bool InCrossRight::isMetPrecondition()

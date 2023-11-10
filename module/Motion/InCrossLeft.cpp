@@ -8,13 +8,7 @@
 
 using namespace std;
 
-InCrossLeft::InCrossLeft(double _targetDistance, double _dsTargetSpeed, int _targetAngle,
-                         int _prPwm)
-  : BlockAreaMotion(1.23, 1.09),  // 動作時間, 失敗リスク TODO: 測定し直す
-    targetDistance(_targetDistance),
-    dsTargetSpeed(_dsTargetSpeed),
-    targetAngle(_targetAngle),
-    prPwm(_prPwm){};
+InCrossLeft::InCrossLeft(bool& _isLeftEdge) : isLeftEdge(_isLeftEdge){};
 
 void InCrossLeft::run()
 {
@@ -24,8 +18,8 @@ void InCrossLeft::run()
   }
 
   DistanceStraight ds(targetDistance, dsTargetSpeed);
-
   PwmRotation rotation(targetAngle, prPwm, isClockwise);
+  EdgeChanging ec(isLeftEdge, false);
 
   // 回頭後の位置を調整するため、直進する
   ds.run();
@@ -33,6 +27,8 @@ void InCrossLeft::run()
   rotation.run();
   // 円外へ出る
   ds.run();
+  // 右エッジに切替
+  ec.run();
 }
 
 bool InCrossLeft::isMetPrecondition()

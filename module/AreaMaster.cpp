@@ -33,7 +33,7 @@ void AreaMaster::run()
   // 動作インスタンスのリストを生成する
   motionList = MotionParser::createMotions(commandFilePath, targetBrightness, isLeftEdge);
 
-  // 動作実行のメッセージログを出す
+  // エリア動作実行開始のメッセージログを出す
   snprintf(buf, BUF_SIZE, "\nRun the commands in '%s'\n", commandFilePath);
   logger.logHighlight(buf);
 

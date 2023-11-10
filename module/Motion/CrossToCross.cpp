@@ -8,14 +8,8 @@
 
 using namespace std;
 
-CrossToCross::CrossToCross(COLOR _targetColor, double _targetSpeed, int _targetBrightness,
-                           const PidGain& _gain, bool& _isLeftEdge)
-  : BlockAreaMotion(1.02, 1.01),  // 動作時間, 失敗リスク TODO: 測定し直す
-    targetColor(_targetColor),
-    targetSpeed(_targetSpeed),
-    targetBrightness(_targetBrightness),
-    gain(_gain),
-    isLeftEdge(_isLeftEdge){};
+CrossToCross::CrossToCross(COLOR _targetColor, int _targetBrightness, bool& _isLeftEdge)
+  : targetColor(_targetColor), targetBrightness(_targetBrightness), isLeftEdge(_isLeftEdge){};
 
 void CrossToCross::run()
 {
