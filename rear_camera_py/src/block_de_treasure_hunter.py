@@ -26,9 +26,9 @@ class BlockDeTreasureHunter:
         block_map = np.zeros((length, length))
         dummy_block_coords = [(0, 3), (3, 3)]
         treasure_block_coord = (0, 0)
+        block_map[treasure_block_coord[0], treasure_block_coord[1]] = 1
         for (y, x) in dummy_block_coords:
-            block_map[y][x] = 1
-        block_map[treasure_block_coord[0], treasure_block_coord[1]] = 2
+            block_map[y][x] = 2
         # TODO: ここまで、マージする際に差し替える
         print(block_map)
 
