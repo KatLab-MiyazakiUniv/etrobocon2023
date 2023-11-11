@@ -13,8 +13,9 @@ from robot import Robot, Direction
 from motion import Motion
 from get_area_info import GetAreaInfo
 
-script_dir = os.path.dirname(os.path.abspath(__file__))  # /src
+script_dir = os.path.dirname(os.path.abspath(__file__))  # /rear_camera_py/src
 PROJECT_DIR_PATH = os.path.dirname(script_dir)  # /rear_camera_py
+COMAND_FILE_DIR_PATH = os.path.normpath(os.path.join(PROJECT_DIR_PATH, "../datafiles")) # /datafiles
 
 
 class BlockDeTreasureHunter:
@@ -70,8 +71,13 @@ class BlockDeTreasureHunter:
         commands = ""
         for motion in robot.motions:
             commands += f"{motion.make_command()}\n"
+        # 出力ファイルのパスを設定
         cource_string = "Left" if is_left_course else "Right"
-        with open(f"../../datafiles/BlockDeTreasure{cource_string}.csv", "w") as f:
+        command_file_name = f"BlockDeTreasure{cource_string}.csv"
+        command_file_path = os.path.join(COMAND_FILE_DIR_PATH, command_file_name)
+        # コマンドをファイル書き込み
+        print(f"Write command to \"{command_file_path}\".")
+        with open(command_file_path, "w") as f:
             f.write(commands)
 
 
