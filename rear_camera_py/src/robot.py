@@ -136,7 +136,7 @@ class Robot:
         if (direction == Direction.N and y >= 2) or \
             (direction == Direction.S and y <= 1) or \
             (direction == Direction.E and x <= 1) or \
-            (direction == Direction.W and x >= 2):
+                (direction == Direction.W and x >= 2):
             return False
         return True
 

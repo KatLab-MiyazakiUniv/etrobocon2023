@@ -76,11 +76,11 @@ class BlockDeTreasureHunter:
         exit_rotation_direction = "anticlockwise" if is_left_course else "clockwise"
         # ゴールまでの動作を記述
         commands += "DS,80,250,直進\n" \
-                  + "CS,BLACK,150,黒まで直進、ブロックエリア侵入\n" \
-                  + "DS,50,150,黒線から外れるよう直進\n" \
-                  + f"EC,{exit_edge},エッジ切替\n" \
-                  + f"PR,60,60,{exit_rotation_direction},回頭\n" \
-                  + "CL,BLUE,200,-10,0.4,0.22,0.1,青線まで移動"
+            + "CS,BLACK,150,黒まで直進、ブロックエリア侵入\n" \
+            + "DS,50,150,黒線から外れるよう直進\n" \
+            + f"EC,{exit_edge},エッジ切替\n" \
+            + f"PR,60,60,{exit_rotation_direction},回頭\n" \
+            + "CL,BLUE,200,-10,0.4,0.22,0.1,青線まで移動"
         # 出力ファイルのパスを設定
         cource_string = "Left" if is_left_course else "Right"
         command_file_name = f"BlockDeTreasure{cource_string}.csv"
