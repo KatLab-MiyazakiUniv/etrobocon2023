@@ -6,6 +6,7 @@ import numpy as np
 import cv2
 import os
 from enum import Enum
+import sys
 
 from line_calculator import LineCalculator
 
@@ -123,14 +124,23 @@ class GetAreaInfo:
         # グレースケール化
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-        # 線分検出
+        length_threshold_pix = length_threshold
+        distance_threshold = 1.41421356
+        canny_th1 = 50
+        canny_th2 = 50
+        canny_aperture_size = 3
+        do_merge = False
+
+        # 線分検出モジュールのインスタンス化
         fast_line_detector = cv2.ximgproc.createFastLineDetector(
-            length_threshold=length_threshold,
-            distance_threshold=1.41421356,
-            canny_th1=50,
-            canny_th2=50,
-            canny_aperture_size=3,
-            do_merge=False)
+            length_threshold_pix,
+            distance_threshold,
+            canny_th1,
+            canny_th2,
+            canny_aperture_size,
+            do_merge
+        )
+
         lines = fast_line_detector.detect(gray)
         if lines is None:
             return None, None
@@ -1473,9 +1483,11 @@ if __name__ == "__main__":
                         help='開発モード')
     args = parser.parse_args()
 
+    """
     # 作業用の読み込みや保存用のディレクトリパス
     work_dir_path = os.path.join(PROJECT_DIR_PATH, "tests", "test_data", "block_area_img")
     save_dir_path = os.path.join(PROJECT_DIR_PATH, "work_image_data")
+
 
     test_images = os.listdir(work_dir_path)
 
@@ -1486,7 +1498,11 @@ if __name__ == "__main__":
     for img in test_images:
         if img[-6:-4] == image_number:
             image_name = img
+    # """
 
+    work_dir_path = os.path.join(PROJECT_DIR_PATH, "image_data")
+    save_dir_path = os.path.join(PROJECT_DIR_PATH, "image_data")
+    image_name = "BlockDeTreasure.png"
     info = GetAreaInfo(image_name, work_dir_path, save_dir_path, develop=args.develop)
     try:
         info.get_area_info(args.isL)

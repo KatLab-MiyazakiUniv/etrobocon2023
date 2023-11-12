@@ -48,13 +48,13 @@ void CameraAction::run()
   if(subject == CameraAction::Subject::A) {
     countShootA++;
     sprintf(imageName, "FigA_%d.png", countShootA);
-    sprintf(makeImageCommand, "image");
+    sprintf(makeImageCommand, "snap_image");
   } else if(subject == CameraAction::Subject::B) {
     sprintf(imageName, "FigB.png");
     sprintf(makeImageCommand, "snap_image");
   } else if(subject == CameraAction::Subject::BLOCK_AREA) {
     sprintf(imageName, "BlockDeTreasure.png");
-    sprintf(makeImageCommand, "snap_image");
+    sprintf(makeImageCommand, "image");
   }
 
   // 撮影に際してディレクトリ移動も行う

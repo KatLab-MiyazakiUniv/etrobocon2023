@@ -125,7 +125,7 @@ class Robot:
 
     def get_can_xr(self, y, x, direction):
         """回頭補正ができるか判定する.
-        
+
         Args:
             y (int): y座標
             x (int): x座標
@@ -139,6 +139,7 @@ class Robot:
             (direction == Direction.W and x >= 2):
             return False
         return True
+
 
 class Direction(Enum):
     """方角を保持するクラス."""

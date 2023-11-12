@@ -15,7 +15,8 @@ from get_area_info import GetAreaInfo
 
 script_dir = os.path.dirname(os.path.abspath(__file__))  # /rear_camera_py/src
 PROJECT_DIR_PATH = os.path.dirname(script_dir)  # /rear_camera_py
-COMAND_FILE_DIR_PATH = os.path.normpath(os.path.join(PROJECT_DIR_PATH, "../datafiles")) # /datafiles
+COMAND_FILE_DIR_PATH = os.path.normpath(os.path.join(
+    PROJECT_DIR_PATH, "../datafiles"))  # /datafiles
 
 
 class BlockDeTreasureHunter:
