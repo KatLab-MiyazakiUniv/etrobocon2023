@@ -68,7 +68,7 @@ class Turn(Motion):
         else:
             # 左折
             command = "IL"
-        
+
         self.params = {
             "command": command,
             "comment": comment,

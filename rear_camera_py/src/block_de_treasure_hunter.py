@@ -13,8 +13,10 @@ from robot import Robot, Direction
 from motion import Motion
 from get_area_info import GetAreaInfo
 
-script_dir = os.path.dirname(os.path.abspath(__file__))  # /src
+script_dir = os.path.dirname(os.path.abspath(__file__))  # /rear_camera_py/src
 PROJECT_DIR_PATH = os.path.dirname(script_dir)  # /rear_camera_py
+COMAND_FILE_DIR_PATH = os.path.normpath(os.path.join(
+    PROJECT_DIR_PATH, "../datafiles"))  # /datafiles
 
 
 class BlockDeTreasureHunter:
@@ -70,8 +72,22 @@ class BlockDeTreasureHunter:
         commands = ""
         for motion in robot.motions:
             commands += f"{motion.make_command()}\n"
+        exit_edge = "right" if is_left_course else "left"
+        exit_rotation_direction = "anticlockwise" if is_left_course else "clockwise"
+        # ゴールまでの動作を記述
+        commands += "DS,80,250,直進\n" \
+            + "CS,BLACK,150,黒まで直進、ブロックエリア侵入\n" \
+            + "DS,50,150,黒線から外れるよう直進\n" \
+            + f"EC,{exit_edge},エッジ切替\n" \
+            + f"PR,60,60,{exit_rotation_direction},回頭\n" \
+            + "CL,BLUE,200,-10,0.4,0.22,0.1,青線まで移動"
+        # 出力ファイルのパスを設定
         cource_string = "Left" if is_left_course else "Right"
-        with open(f"../../datafiles/BlockDeTreasure{cource_string}.csv", "w") as f:
+        command_file_name = f"BlockDeTreasure{cource_string}.csv"
+        command_file_path = os.path.join(COMAND_FILE_DIR_PATH, command_file_name)
+        # コマンドをファイル書き込み
+        print(f"Write command to \"{command_file_path}\".")
+        with open(command_file_path, "w") as f:
             f.write(commands)
 
 
