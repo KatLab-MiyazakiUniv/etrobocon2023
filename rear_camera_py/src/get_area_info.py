@@ -157,11 +157,21 @@ class GetAreaInfo:
 
         return lines[:, 0], max_length_index
 
-    def change_coordi_color(self, img, coordi, color=RgbColor.WHITE.value, padding_value_x=0, padding_value_y=0):
+    def change_coordi_color(self,
+                            img,
+                            coordi,
+                            color=RgbColor.WHITE.value,
+                            padding_value_x=0,
+                            padding_value_y=0
+                            ):
         """指定した座標(ブロック状)の色を変換する関数.
 
         Args:
-            coordi: 消したい場所の範囲を示す座標
+            img: 変換対象画像
+            coordi: 変換する座標
+            color: 変換後の色
+            padding_value_x: パディング(x方向)の大きさ
+            padding_value_y: パディング(y方向)の大きさ
         """
         mask = coordi.copy()
         mask[0] += padding_value_x
